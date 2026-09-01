@@ -101,6 +101,45 @@ for (const path of trackedWebsiteMarkdown) {
   }
 }
 
+// Cause/effect design for the managed-runtime evolution article:
+// C1: one locale loses either the task-continuity or execution-boundary axis.
+// C2: an axis keeps its label but loses the mechanisms that make it concrete.
+// C3: the two static paths no longer converge on Managed Agent Runtime.
+// C4: the static overview survives but the permission-to-Hand execution
+//     sequence disappears.
+// E1: both locales preserve the same two-axis architecture and convergence.
+// E2: the article retains both a static ownership view and a dynamic behavior
+//     view instead of reducing the argument to a product timeline.
+// Decision table: R1 both axes + mechanisms + convergence + sequence -> pass;
+// R2 any required element absent in either locale -> fail. Locale absence is
+// already covered by the canonical blog route and Markdown inventory checks.
+const managedRuntimeArticles = [
+  {
+    path: join(root, 'src/content/blog/en/2026-09-agent-loop-to-managed-runtime.md'),
+    patterns: [
+      [/Task continuity \(Control & Continuity\)/, 'managed-runtime article must name the task-continuity axis'],
+      [/Execution boundary \(Authority & Isolation\)/, 'managed-runtime article must name the execution-boundary axis'],
+      [/State, Graph, Checkpoint, Thread, Queue, Session, Recovery/, 'managed-runtime article must make continuity mechanisms concrete'],
+      [/Capability, Permission Gate, Hand, Environment, Sandbox, Effect Commit/, 'managed-runtime article must make execution mechanisms concrete'],
+      [/C3 --> M\["Managed Agent Runtime"\][\s\S]*E3 --> M/, 'managed-runtime article must converge both static paths'],
+      [/B->>G: proposed Tool Call[\s\S]*G->>H: approved Tool Call[\s\S]*G-->>S: commit the observed outcome/, 'managed-runtime article must retain the Brain-to-Hand dynamic sequence'],
+    ],
+  },
+  {
+    path: join(root, 'src/content/blog/zh/2026-09-agent-loop-to-managed-runtime.md'),
+    patterns: [
+      [/任务连续性（Control & Continuity）/, 'Chinese managed-runtime article must name the task-continuity axis'],
+      [/执行边界（Authority & Isolation）/, 'Chinese managed-runtime article must name the execution-boundary axis'],
+      [/State、Graph、Checkpoint、Thread、Queue、Session、Recovery/, 'Chinese managed-runtime article must make continuity mechanisms concrete'],
+      [/Capability、Permission Gate、Hand、Environment、Sandbox、Effect Commit/, 'Chinese managed-runtime article must make execution mechanisms concrete'],
+      [/C3 --> M\["Managed Agent Runtime"\][\s\S]*E3 --> M/, 'Chinese managed-runtime article must converge both static paths'],
+      [/B->>G: proposed Tool Call[\s\S]*G->>H: approved Tool Call[\s\S]*G-->>S: commit the observed outcome/, 'Chinese managed-runtime article must retain the Brain-to-Hand dynamic sequence'],
+    ],
+  },
+];
+
+for (const article of managedRuntimeArticles) requireText(article.path, article.patterns);
+
 function recordScopedValue(index, key, path) {
   index.set(key, [...(index.get(key) ?? []), path]);
 }
