@@ -14,7 +14,7 @@ export const content = {
     meta: {
       title: 'AwakenWorks | Ship and operate self-hosted Agent applications',
       description:
-        'Awaken Agents provides a reusable, self-hosted platform for building, running, and operating Agent applications beyond the first demo.',
+        'Awaken Agents provides self-hosted Sessions, permissions, isolated execution, and recovery so teams can turn a working Agent into an application customers can keep using.',
     },
     nav: {
       awaken: 'Awaken internals',
@@ -61,22 +61,22 @@ export const content = {
     },
     home: {
       hero: {
-        eyebrow: 'Awaken Agents · reusable Agent application platform',
-        title: 'Turn an Agent prototype into a shippable, operable, reusable product.',
+        eyebrow: 'Awaken Agents · self-hostable Agent application platform',
+        title: 'Turn a working Agent into an application customers can keep using.',
         subtitle:
-          'Awaken Agents packages the platform work repeated as Agent applications move from prototype to release: publication, Sessions, files and memory, permissions, isolated execution, recovery, and operations. Keep the customer experience and business logic; reuse the same foundation across products, deployments, and customer projects.',
-        ctaPrimary: 'Evaluate Awaken Agents',
-        ctaSecondary: 'Plan an enterprise deployment',
+          'Stop rebuilding the Session, permission, file and memory, isolated execution, and recovery backend behind every Agent application. Keep your product experience, business logic, and customer relationship, then carry the same foundation into the next application and customer deployment.',
+        ctaPrimary: 'Run the first durable Session',
+        ctaSecondary: 'Review enterprise deployment boundaries',
       },
       advantages: {
         eyebrow: 'Why adopt Awaken',
-        title: 'Build the differentiated Agent product once. Stop rebuilding its platform for every release.',
-        body: 'A demo proves that a model can respond. A product still needs durable state, permissions, resources, isolated execution, recovery, and an operating owner. Awaken turns that repeated engineering into one reusable platform while your team keeps the experience, business logic, and customer relationship.',
+        title: 'Put engineering into the Agent product customers see, not another backend.',
+        body: 'A working Agent proves the behavior. Shipping means the same application can reconnect to durable state, stay inside approved permissions, recover from interruption, and remain operable after release. Awaken owns those repeatable platform paths while your team owns the product and customer relationship.',
         items: [
-          { key: 'launch', value: 'Shorten the path from prototype to release', label: 'Start with working publication, Session, resource, permission, execution, and recovery paths instead of discovering each one after the demo.', proof: 'See the product path', href: '/agents' },
-          { key: 'private', value: 'Pass enterprise architecture and security review', label: 'Place control, Session data, credentials, model routes, Workers, and Sandboxes inside the approved infrastructure and responsibility boundary.', proof: 'Compare deployment choices', href: '/agents#deployment' },
-          { key: 'reuse', value: 'Reuse one foundation across applications', label: 'Keep each product\'s UX and domain model independent while sharing Agent publication, Sessions, resources, policies, and operations underneath.', proof: 'See first-party application shapes', href: '/cases' },
-          { key: 'delivery', value: 'Turn custom delivery into repeatable engineering', label: 'Change the vertical experience, tools, and rules for each customer while retaining one platform model for execution, security, upgrades, and support.', proof: 'Discuss an implementation', href: '/enterprise' },
+          { key: 'launch', value: 'Ship the first real application', label: 'Use working publication, Session, resource, permission, execution, and recovery paths so one application can run, reconnect, and reopen committed state.', proof: 'See the product path', href: '/agents' },
+          { key: 'private', value: 'Run inside the approved boundary', label: 'Keep control, Session data, credentials, model routes, Workers, and Sandboxes inside the approved infrastructure and responsibility boundary.', proof: 'Compare deployment choices', href: '/agents#deployment' },
+          { key: 'reuse', value: 'Deliver the next application on the same foundation', label: 'Keep each product\'s UX and domain model independent while sharing Agent publication, Sessions, resources, policies, and operations underneath.', proof: 'See first-party application shapes', href: '/cases' },
+          { key: 'delivery', value: 'Deliver customer solutions without copying platform code', label: 'Change the vertical experience, tools, and rules for each customer while retaining one platform model for execution, security, upgrades, and support.', proof: 'Discuss an implementation', href: '/enterprise' },
         ],
       },
       scenarios: {
@@ -94,9 +94,9 @@ export const content = {
       },
       cta: {
         eyebrow: 'One next step',
-        title: 'Evaluate the product yourself, or scope one enterprise implementation.',
-        body: 'Use the current Agents path when your team can evaluate independently. Talk with us when an application needs self-hosted or dedicated infrastructure, migration work, customer-specific integration, or an explicit operating handoff.',
-        primary: 'Evaluate Awaken Agents',
+        title: 'Run one complete Agent path, or scope one enterprise deployment.',
+        body: 'Start independently by publishing an Agent and reopening its durable Session. Talk with us when control, data, credentials, models, Workers, or Sandboxes must stay inside a dedicated boundary.',
+        primary: 'Run the Agents quickstart',
         secondary: 'Discuss enterprise implementation',
       },
     },
@@ -444,21 +444,21 @@ export const content = {
         tone: 'iris',
         eyebrow: 'Awaken Agents · tested with the official Anthropic SDK',
         status: { label: publicVersionLabel('platform', 'en'), tone: 'iris' },
-        title: 'Make Agents shippable, operable, and reusable.',
+        title: 'Use one Agent platform from first run to enterprise deployment.',
         subtitle:
-          'Your first Agent proves the behavior. Awaken adds durable Sessions, permissions, isolated execution, recovery, and operating boundaries so you can release it and reuse the same foundation for the next application.',
-        ctaPrimary: { label: 'Run the verified quickstart', href: '/docs/agents/get-started' },
+          'Publish an Agent, keep one durable Session, control resources and permissions, resume after interruption, and place control, data, and execution inside infrastructure you operate.',
+        ctaPrimary: { label: 'Run the Agents quickstart', href: '/docs/agents/get-started' },
         audience:
-          'Create an Agent, adopt a supported one, or connect existing behavior. If the second application still requires another Session backend, file path, permission layer, Worker, Sandbox, and recovery system, the team needs one reusable application platform.',
+          'Create an Agent, adopt a supported one, or connect existing behavior, then make one application create, run, reconnect, and reopen the same Session. When you build the next application, reuse the Agent, Session, resource, permission, Worker, Sandbox, and recovery foundation instead of creating another backend.',
         outcomes: {
           eyebrow: 'What changes for your team',
           title: 'Build the Agent product your customers see. Reuse the platform work behind it.',
           body: 'Your application keeps its experience, domain state, workflow, acceptance, and commercial relationship. Awaken supplies the reusable Agent lifecycle underneath.',
           items: [
-            { title: 'Move beyond the first demo', body: 'Publish an Agent, create and reopen the same Session, connect resources and permissions, and operate execution without assembling another backend.', proof: 'Agent publication · Session and events · resources · Worker and Sandbox' },
+            { title: 'Ship one real Agent application', body: 'Publish an Agent, create and reopen the same Session, connect resources and permissions, and operate execution without assembling another backend.', proof: 'Agent publication · Session and events · resources · Worker and Sandbox' },
             { title: 'Keep existing application investment', body: 'Retain the tested official SDK model and connect web, copilot, or Agent-to-Agent surfaces to the same published Agent instead of copying it.', proof: 'Managed Agents · AI SDK · AG-UI · A2A' },
             { title: 'Keep differentiated Agent behavior', body: 'Choose Awaken Native execution, a supported ACP runtime, or a remote A2A Agent without creating another Session authority.', proof: 'Native · ACP · outbound A2A' },
-            { title: 'Pass enterprise deployment review', body: 'Place control, Session data, credentials, model routes, Workers, and Sandboxes inside the approved infrastructure and responsibility boundary.', proof: 'Self-hosted · enterprise delivery · hosted preview' },
+            { title: 'Run inside enterprise boundaries', body: 'Place control, Session data, credentials, model routes, Workers, and Sandboxes inside the approved infrastructure and responsibility boundary.', proof: 'Self-hosted · enterprise delivery · hosted preview' },
           ],
         },
         advantage: {
@@ -661,7 +661,7 @@ export const content = {
     meta: {
       title: 'AwakenWorks｜交付并运营自托管 Agent 应用',
       description:
-        'Awaken Agents 提供一套可复用、自托管的平台，让 Agent 应用越过 Demo，进入可交付和可运营阶段。',
+        'Awaken Agents 提供可自托管的 Session、权限、隔离执行与恢复底座，让团队把能运行的 Agent 交付成客户可以持续使用的应用。',
     },
     nav: {
       awaken: 'Awaken 内部机制',
@@ -708,22 +708,22 @@ export const content = {
     },
     home: {
       hero: {
-        eyebrow: 'Awaken Agents · 可复用的 Agent 应用平台',
-        title: '让 Agent 原型，变成可交付、可运营、可复用的产品。',
+        eyebrow: 'Awaken Agents · 可自托管的 Agent 应用平台',
+        title: '把能运行的 Agent，交付成客户可以持续使用的应用。',
         subtitle:
-          'Awaken Agents 把 Agent 应用从原型走向发布时反复需要的平台工程打包成产品：发布、Session、文件与记忆、权限、隔离执行、恢复和运营。产品体验与业务逻辑仍由您掌握，同一底座可复用于不同产品、部署和客户项目。',
-        ctaPrimary: '评估 Awaken Agents',
-        ctaSecondary: '规划企业部署',
+          '不必为每个 Agent 应用从零开发 Session、权限、文件与记忆、隔离执行和故障恢复后台。团队继续掌握产品体验、业务逻辑和客户关系，并把同一套底座用于下一个应用和客户部署。',
+        ctaPrimary: '运行第一个持久 Session',
+        ctaSecondary: '检查企业部署边界',
       },
       advantages: {
         eyebrow: '为什么选择 Awaken',
-        title: '把有差异的 Agent 产品做好一次，不要每次发布都重造底层平台。',
-        body: 'Demo 只能证明模型会回答。真正发布还需要持久状态、权限、资源、隔离执行、失败恢复和明确的运营责任。Awaken 把这些重复工程收敛为一套可复用平台，您的团队继续掌握产品体验、业务逻辑和客户关系。',
+        title: '把工程投入留给客户看得见的 Agent 产品，不再重做另一套后台。',
+        body: '能运行的 Agent 证明了行为可行。真正发布还要让同一个应用能够重连持久状态、遵守权限、中断后继续，并在上线后由团队持续负责。Awaken 承担这些可重复的平台路径，您的团队继续掌握产品与客户关系。',
         items: [
-          { key: 'launch', value: '缩短从原型到发布的路径', label: '直接使用发布、Session、资源、权限、执行与恢复路径，不必等 Demo 完成后再逐项补后台。', proof: '查看产品路径', href: '/agents' },
-          { key: 'private', value: '通过企业架构与安全评审', label: '把控制、Session 数据、凭据、模型路由、Worker 与 Sandbox 放进获准的基础设施和责任边界。', proof: '对比部署方式', href: '/agents#deployment' },
-          { key: 'reuse', value: '多个应用复用同一底座', label: '每个产品保持独立体验与领域模型，底层共享 Agent 发布、Session、资源、策略与运维能力。', proof: '查看第一方应用形态', href: '/cases' },
-          { key: 'delivery', value: '把定制交付变成可重复工程', label: '针对客户改变垂直体验、工具和规则，同时保留同一套执行、安全、升级与支持模型。', proof: '沟通实施服务', href: '/enterprise' },
+          { key: 'launch', value: '交付第一个真实应用', label: '使用现成的发布、Session、资源、权限、执行与恢复路径，让一个应用可以运行、重连并重新打开已提交状态。', proof: '查看产品路径', href: '/agents' },
+          { key: 'private', value: '在获准边界内运行', label: '把控制、Session 数据、凭据、模型路由、Worker 与 Sandbox 留在获准的基础设施和责任边界内。', proof: '对比部署方式', href: '/agents#deployment' },
+          { key: 'reuse', value: '下一个应用继续复用同一底座', label: '每个产品保持独立体验与领域模型，底层共享 Agent 发布、Session、资源、策略与运维能力。', proof: '查看第一方应用形态', href: '/cases' },
+          { key: 'delivery', value: '交付客户方案，不复制平台代码', label: '针对客户改变垂直体验、工具和规则，同时保留同一套执行、安全、升级与支持模型。', proof: '沟通实施服务', href: '/enterprise' },
         ],
       },
       scenarios: {
@@ -741,9 +741,9 @@ export const content = {
       },
       cta: {
         eyebrow: '只选一个下一步',
-        title: '自行评估产品，或界定一期企业实施。',
-        body: '如果团队可以独立评估，请直接进入当前 Agents 路径；如果应用涉及自托管或专属基础设施、迁移、客户特定集成或明确的运维交接，再与我们沟通。',
-        primary: '评估 Awaken Agents',
+        title: '运行一条完整 Agent 路径，或界定一期企业部署。',
+        body: '自行发布一个 Agent，并重新打开它的持久 Session；当控制、数据、凭据、模型、Worker 或 Sandbox 必须留在专属边界内时，再与我们沟通。',
+        primary: '运行 Agents 快速开始',
         secondary: '沟通企业实施',
       },
     },
@@ -1082,21 +1082,21 @@ export const content = {
         tone: 'iris',
         eyebrow: 'Awaken Agents · 已通过官方 Anthropic SDK 测试',
         status: { label: publicVersionLabel('platform', 'zh'), tone: 'iris' },
-        title: '让 Agent 可交付、可运营、可复用。',
+        title: '用一套 Agent 平台，支撑从首次运行到企业部署。',
         subtitle:
-          '第一个 Agent 已经证明行为可行。Awaken 补齐发布所需的持久 Session、资源、权限、隔离执行、恢复与运营边界，并让同一套底座继续服务下一个应用。',
-        ctaPrimary: { label: '按实测路径快速开始', href: '/docs/agents/get-started' },
+          '发布 Agent，保持同一个持久 Session，控制资源与权限，在中断后继续执行，并把控制、数据和执行环境部署在自己的基础设施中。',
+        ctaPrimary: { label: '运行 Agents 快速开始', href: '/docs/agents/get-started' },
         audience:
-          '创建 Agent、采用受支持的 Agent，或接入已有行为。如果第二个应用仍要重新开发 Session 后台、文件路径、权限层、Worker、Sandbox 和恢复系统，团队需要的是一套可复用的应用平台。',
+          '创建 Agent、采用受支持的 Agent，或接入已有行为，再让一个应用能够创建、运行、重连并重新打开同一个 Session。开发下一个应用时，继续复用 Agent、Session、资源、权限、Worker、Sandbox 与恢复底座，而不是再建另一套后台。',
         outcomes: {
           eyebrow: '您的团队会发生什么变化',
           title: '把工程投入用在客户看得见的 Agent 产品上，复用背后的平台工作。',
           body: '应用继续掌握产品体验、领域状态、工作流、结果验收与商业关系；Awaken 提供可复用的 Agent 生命周期底座。',
           items: [
-            { title: '让 Agent 越过第一个 Demo', body: '发布 Agent，创建并重新打开同一个 Session，接入资源与权限并运营执行路径，不必再拼装一套后台。', proof: 'Agent 发布 · Session 与事件 · 资源 · Worker 与 Sandbox' },
+            { title: '交付一个真实 Agent 应用', body: '发布 Agent，创建并重新打开同一个 Session，接入资源与权限并运营执行路径，不必再拼装一套后台。', proof: 'Agent 发布 · Session 与事件 · 资源 · Worker 与 Sandbox' },
             { title: '保留现有应用投入', body: '保留经过测试的官方 SDK 模型，让 Web、Copilot 或 Agent-to-Agent 界面接入同一个已发布 Agent，而不是复制一份。', proof: 'Managed Agents · AI SDK · AG-UI · A2A' },
             { title: '保留有差异的 Agent 行为', body: '选择 Awaken Native、受支持的 ACP Runtime 或远端 A2A Agent，不建立第二套 Session 权威。', proof: 'Native · ACP · outbound A2A' },
-            { title: '通过企业部署评审', body: '把控制、Session 数据、凭据、模型路由、Worker 与 Sandbox 放进获准的基础设施和责任边界。', proof: '自托管 · 企业交付 · 托管预览' },
+            { title: '在企业边界内运行', body: '把控制、Session 数据、凭据、模型路由、Worker 与 Sandbox 放进获准的基础设施和责任边界。', proof: '自托管 · 企业交付 · 托管预览' },
           ],
         },
         advantage: {

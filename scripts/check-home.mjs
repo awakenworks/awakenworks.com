@@ -534,14 +534,15 @@ requireOccurrenceCount(siteHeaderPath, 'aria-current=', 6, 'desktop and mobile n
 const rules = [
   {
     path: resolve(root, 'dist/index.html'),
-    primary: 'Evaluate Awaken Agents',
+    primary: 'Run the first durable Session',
     primaryHref: '/docs/agents/get-started',
-    secondary: 'Plan an enterprise deployment',
+    secondary: 'Review enterprise deployment boundaries',
     secondaryHref: '/enterprise',
     agentsHref: '/docs/agents/get-started',
     casePrefix: '/cases/',
     releaseStatus: 'Open source · stable release coming soon',
-    advantages: ['Shorten the path from prototype to release', 'Pass enterprise architecture and security review', 'Reuse one foundation across applications', 'Turn custom delivery into repeatable engineering'],
+    firstResult: 'One real application creates, runs, reconnects, and reopens the same Session',
+    advantages: ['Ship the first real application', 'Run inside the approved boundary', 'Deliver the next application on the same foundation', 'Deliver customer solutions without copying platform code'],
     proofHrefs: ['/agents', '/agents#deployment', '/cases', '/enterprise'],
     featuredScenario: 'AI-native product team',
     featuredScenarioHref: '/docs/agents/get-started',
@@ -549,14 +550,15 @@ const rules = [
   },
   {
     path: resolve(root, 'dist/zh/index.html'),
-    primary: '评估 Awaken Agents',
+    primary: '运行第一个持久 Session',
     primaryHref: '/zh/docs/agents/get-started',
-    secondary: '规划企业部署',
+    secondary: '检查企业部署边界',
     secondaryHref: '/zh/enterprise',
     agentsHref: '/zh/docs/agents/get-started',
     casePrefix: '/zh/cases/',
     releaseStatus: '已开源 · 稳定版即将发布',
-    advantages: ['缩短从原型到发布的路径', '通过企业架构与安全评审', '多个应用复用同一底座', '把定制交付变成可重复工程'],
+    firstResult: '一个真实应用创建、运行、重连并重新打开同一个 Session',
+    advantages: ['交付第一个真实应用', '在获准边界内运行', '下一个应用继续复用同一底座', '交付客户方案，不复制平台代码'],
     proofHrefs: ['/zh/agents', '/zh/agents#deployment', '/zh/cases', '/zh/enterprise'],
     featuredScenario: 'AI 原生产品团队',
     featuredScenarioHref: '/zh/docs/agents/get-started',
@@ -585,6 +587,8 @@ for (const rule of rules) {
   );
   requireOccurrenceCount(rule.path, '<h1', 1, 'home must have one primary heading');
   requireSectionOccurrenceCount(rule.path, 'id="home-hero"', '</section>', '<a ', 2, 'home hero must expose exactly the two intent actions');
+  requireOccurrenceCount(rule.path, 'data-home-first-result', 1, 'home hero must expose one observable first result');
+  requirePattern(rule.path, new RegExp(`data-home-first-result[\\s\\S]*${rule.firstResult}`), 'home hero must state the recommended scenario result before its actions');
   for (const product of ['agents', 'objects', 'workforce']) {
     requireOccurrenceCount(rule.path, `data-umami-event="home-${product}-details"`, 1, `home must expose one ${product} product path`);
   }
@@ -645,6 +649,8 @@ rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-
 //     fund product launch, enterprise deployment, platform reuse, or delivery leverage.
 // C6: an internal sales label can address the reader as "the customer" instead
 //     of explaining the practical consequence in the page's existing voice.
+// C7: lifecycle adjectives can occupy the headline without showing the first
+//     observable result a buyer can run and inspect.
 // E1: both locales lead with shipping an Agent product without rebuilding its
 //     platform while supporting copy stays inside verified Agents responsibilities.
 // E2: the promise reads as one sentence on wide screens and remains responsive.
@@ -654,18 +660,22 @@ rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-
 //     claiming measured customer ROI or available Workforce outcomes.
 // E5: comparison rows connect capability to consequence with natural reader-facing
 //     labels and contain no third-person "customer gets" drafting language.
+// E6: the hero reuses the recommended scenario's finish condition before its
+//     two actions, avoiding a second result authority.
 // Decision table:
-// | Rule | current value | evidence | renderer | reader-facing consequence | Outcome |
-// | H1   | equivalent    | preserved | string | present                   | accept  |
-// | H2   | mechanism-led | any       | any    | any                       | reject  |
-// | H3   | equivalent    | missing   | any    | any                       | reject  |
-// | H4   | equivalent    | preserved | array  | any                       | reject  |
-// | H5   | equivalent    | preserved | string | draft marker              | reject  |
-// | H6   | equivalent    | preserved | string | third-person customer label| reject  |
+// | Rule | customer result | evidence | renderer | result owner | Outcome |
+// | H1   | observable      | present  | string   | scenario     | accept  |
+// | H2   | adjectives only | any      | any      | any          | reject  |
+// | H3   | observable      | missing  | any      | any          | reject  |
+// | H4   | observable      | present  | array    | any          | reject  |
+// | H5   | observable      | present  | string   | duplicate    | reject  |
+// | H6   | observable      | present  | string   | draft marker | reject  |
 requirePattern(homeSourcePath, /\{home\.hero\.title\}/, 'home must render the vision as one responsive sentence');
 rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the vision');
+requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as its first result');
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
-requirePattern(contentSourcePath, /title: 'Turn an Agent prototype into a shippable, operable, reusable product\.'[\s\S]*title: '让 Agent 原型，变成可交付、可运营、可复用的产品。'/, 'both locales must express the current Agents customer value in finished language');
+requirePattern(contentSourcePath, /title: 'Turn a working Agent into an application customers can keep using\.'[\s\S]*title: '把能运行的 Agent，交付成客户可以持续使用的应用。'/, 'both locales must lead with the application result a buyer can recognize');
+rejectPattern(contentSourcePath, /Turn an Agent prototype into a shippable, operable, reusable product|让 Agent 原型，变成可交付、可运营、可复用的产品|Make Agents shippable, operable, and reusable|让 Agent 可交付、可运营、可复用/, 'result headlines must not regress to lifecycle adjectives');
 requirePattern(contentSourcePath, /experience, business logic, and customer relationship[\s\S]*产品体验、业务逻辑和客户关系/, 'both locales must state what the adopting product team keeps');
 requirePattern(contentSourcePath, /Objects and Workforce remain early product directions, not prerequisites[\s\S]*Objects 与 Workforce 仍是早期产品方向，不是采用 Agents 的前置条件/, 'both locales must keep future products out of the current adoption prerequisite');
 requirePattern(contentSourcePath, /proofLabel: 'What this changes'[\s\S]*proofLabel: '这意味着'/, 'Agents comparison must connect each capability to its consequence in both locales');
@@ -677,17 +687,21 @@ rejectPattern(homeSourcePath, /home-display-title-zh[\s\S]{0,120}white-space: no
 // C1 full Agents pages need all verified captures; C2 home needs one compact
 // capture; C3 JavaScript may be absent; C4 reduced motion can be requested;
 // C5 keyboard users need a native close path.
+// C6 the same Quickstart href can carry one CTA label in product content and a
+//    second label in UI copy, allowing the two placements to drift.
 // E1 compact and full modes reuse one renderer; E2 every image remains visible
 // without JS; E3 enhancement opens one native dialog; E4 native Escape/form
 // close works; E5 decorative motion is disabled for reduced motion.
-// Decision table: compact -> overview only; full -> overview + details; JS off ->
-// static proof; JS on -> zoom dialog; reduced motion -> no sheen animation.
+// E6 the primary CTA object owns both the href and label in hero, Quickstart,
+// and closing placements. Decision table: compact -> overview only; full ->
+// overview + details; JS off -> static proof; JS on -> zoom dialog; reduced
+// motion -> no sheen animation; duplicate CTA label -> reject.
 const productRules = [
   {
     path: resolve(root, 'dist/agents/index.html'),
-    title: 'Make Agents shippable, operable, and reusable.',
+    title: 'Use one Agent platform from first run to enterprise deployment.',
     agentsHref: '/docs/agents/get-started',
-    outcomes: ['Move beyond the first demo', 'Keep existing application investment', 'Keep differentiated Agent behavior', 'Pass enterprise deployment review'],
+    outcomes: ['Ship one real Agent application', 'Keep existing application investment', 'Keep differentiated Agent behavior', 'Run inside enterprise boundaries'],
     decisions: [
       ['/docs/agents/compatibility', 'Migrate an existing client'],
       ['/docs/agents/concepts/architecture', 'Review authority and recovery'],
@@ -697,9 +711,9 @@ const productRules = [
   },
   {
     path: resolve(root, 'dist/zh/agents/index.html'),
-    title: '让 Agent 可交付、可运营、可复用。',
+    title: '用一套 Agent 平台，支撑从首次运行到企业部署。',
     agentsHref: '/zh/docs/agents/get-started',
-    outcomes: ['让 Agent 越过第一个 Demo', '保留现有应用投入', '保留有差异的 Agent 行为', '通过企业部署评审'],
+    outcomes: ['交付一个真实 Agent 应用', '保留现有应用投入', '保留有差异的 Agent 行为', '在企业边界内运行'],
     decisions: [
       ['/zh/docs/agents/compatibility', '迁移已有客户端'],
       ['/zh/docs/agents/concepts/architecture', '审阅权威与恢复'],
@@ -735,6 +749,10 @@ for (const rule of productRules) {
   requirePattern(rule.path, /data-umami-event="developer_evaluation_selected"/, 'Awaken task-first entry must retain a measurable independent-evaluation exit');
   requirePattern(rule.path, /data-umami-event="github_star_selected"/, 'Awaken product page must retain a measurable GitHub Star exit');
 }
+const productLandingSourcePath = resolve(root, 'src/components/ProductLanding.astro');
+const uiSourcePath = resolve(root, 'src/i18n/ui.ts');
+requirePattern(productLandingSourcePath, /id="agents-quickstart"[\s\S]*\{p\.ctaPrimary\.label\}/, 'Agents Quickstart must reuse the primary CTA label authority');
+rejectPattern(uiSourcePath, /quickstartCta:/, 'UI copy must not maintain a second Agents Quickstart CTA label');
 
 // Cause-effect design for the Objects product boundary:
 // C1: repository, crate, or package layout can leak into public copy and make an

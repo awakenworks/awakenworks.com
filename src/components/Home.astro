@@ -21,6 +21,7 @@ const productCards = [
   { key: 'objects', product: t.products.objects, tone: 'text-amber-400', border: 'hover:border-amber-500' },
   { key: 'workforce', product: t.products.workforce, tone: 'text-rust-400', border: 'hover:border-rust-500' },
 ] as const;
+const featuredScenario = home.scenarios.items.find((item) => item.featured);
 const copy = ui[lang].home;
 ---
 
@@ -38,6 +39,12 @@ const copy = ui[lang].home;
         <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300 sm:text-xl">
           {home.hero.subtitle}
         </p>
+        {featuredScenario && (
+          <p data-home-first-result class="mt-6 max-w-3xl border-l-2 border-accent-500/70 pl-4 text-sm leading-7 text-fog-300">
+            <span class="font-mono text-[0.68rem] tracking-wider text-accent-400 uppercase">{home.scenarios.labels.finish}</span>
+            <span class="mt-1 block">{featuredScenario.finish}</span>
+          </p>
+        )}
         <div class="mt-9 flex flex-wrap items-center gap-3">
           <a
             href={agentsDocsHref}
