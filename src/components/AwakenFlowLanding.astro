@@ -1,0 +1,143 @@
+---
+import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import ProductMark from './ProductMark.astro';
+import ProductShowcase from './ProductShowcase.astro';
+import AdvantageSection from './AdvantageSection.astro';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = content[lang];
+const o = t.landing.workforce;
+const copy = ui[lang].landing;
+---
+
+<SiteHeader lang={lang} path="/workforce" />
+
+<main>
+  <section id="workforce-hero" class="relative overflow-hidden">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-4xl px-6 py-16 sm:py-32">
+      <ProductMark product="flow" class="mb-5 h-10 w-10 text-accent-500" />
+      <div class="flex flex-wrap items-center gap-3">
+        <p class="eyebrow text-accent-500">{o.eyebrow}</p>
+        <span class="rounded-full border border-accent-600/50 bg-accent-500/10 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-accent-500 uppercase">
+          {o.status.label}
+        </span>
+        <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-fog-400 uppercase">
+          {t.products.workforce.license}
+        </span>
+      </div>
+      <h1 class="hero-title mt-6 max-w-3xl font-semibold text-fog-100">{o.title}</h1>
+      <p class="mt-6 max-w-2xl text-lg text-fog-300 sm:text-xl">{o.subtitle}</p>
+      <div class="mt-9 flex flex-wrap items-center gap-4">
+        <a href={localePath(lang, o.ctaPrimary.href)} data-umami-event="workforce_workspace_selected" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-semibold text-ink-950 hover:bg-accent-400">
+          {o.ctaPrimary.label}
+        </a>
+        <a href={localePath(lang, o.ctaSecondary.href)} data-umami-event="paid_validation_selected" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-semibold text-fog-200 hover:border-fog-500">
+          {o.ctaSecondary.label}
+        </a>
+      </div>
+      <p class="mt-5 max-w-2xl text-sm leading-7 text-fog-500">{o.audience}</p>
+    </div>
+  </section>
+
+  <ProductShowcase
+    lang={lang}
+    product="workforce"
+    caption={copy.workforceCaption}
+  />
+
+  <section id="workforce-how-it-works" class="border-t border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class="eyebrow text-rust-400">{o.loop.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.loop.title}</h2>
+      <p class="mt-6 max-w-3xl text-lg leading-8 text-fog-300">{o.loop.body}</p>
+      <div class="mt-10 grid gap-3 md:grid-cols-4">
+        {o.loop.stages.map(([title, body], index) => (
+          <details data-workforce-stage class="rounded-2xl border border-ink-700 bg-ink-850 p-5 first:border-rust-600/50" open={index === 0}>
+            <summary class="cursor-pointer list-none">
+              <span class="font-mono text-xs text-rust-400">{String(index + 1).padStart(2, '0')}</span>
+              <h3 class="mt-3 font-semibold text-fog-100">{title}</h3>
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-fog-500">{body}</p>
+          </details>
+        ))}
+      </div>
+      <p class="mt-8 rounded-2xl border border-rust-600/40 bg-rust-500/5 px-6 py-5 text-sm leading-7 text-fog-300">{o.loop.rule}</p>
+    </div>
+  </section>
+
+  <section id="workforce-products" class="border-t border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class="eyebrow text-rust-400">{o.products.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.products.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-8 text-fog-300">{o.products.body}</p>
+      <div class="mt-10 grid gap-4 lg:grid-cols-3">
+        {o.products.items.map((item, index) => (
+          <article data-workforce-product-card class="relative rounded-2xl border border-ink-700 bg-ink-850 p-6">
+            <p class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">0{index + 1} · {item.role}</p>
+            <h3 class="mt-3 text-xl font-semibold text-fog-100">{item.name}</h3>
+            <p class="mt-3 text-sm leading-7 text-fog-300">{item.body}</p>
+            <p class="mt-5 border-t border-ink-700 pt-4 font-mono text-[0.68rem] leading-5 text-rust-400">{item.proof}</p>
+          </article>
+        ))}
+      </div>
+      <p data-workforce-composition-path class="mt-6 rounded-2xl border border-rust-600/45 bg-rust-500/5 px-6 py-5 text-center text-sm font-medium leading-7 text-fog-100">{o.products.path}</p>
+      <p class="mt-4 text-sm leading-7 text-fog-500">{o.products.rule}</p>
+    </div>
+  </section>
+
+  <section id="workforce-scenarios" class="border-t border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class="eyebrow text-rust-400">{o.scenarios.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.scenarios.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-8 text-fog-300">{o.scenarios.body}</p>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        {o.scenarios.items.map((item) => (
+          <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+            <p class="font-mono text-xs tracking-wider text-rust-400 uppercase">{item.label}</p>
+            <h3 class="mt-3 text-lg font-semibold text-fog-100">{item.title}</h3>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <AdvantageSection
+    eyebrow={o.advantage.eyebrow}
+    title={o.advantage.title}
+    body={o.advantage.body}
+    commonLabel={o.advantage.commonLabel}
+    awakenLabel={o.advantage.awakenLabel}
+    proofLabel={o.advantage.proofLabel}
+    items={o.advantage.items}
+    tone="rust"
+  />
+
+  <section class="relative overflow-hidden border-t border-ink-800">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-3xl px-6 py-24 text-center">
+      <h2 class="text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">
+        {copy.workforceCloseTitle}
+      </h2>
+      <p class="mx-auto mt-4 max-w-xl text-lg text-fog-300">
+        {copy.workforceCloseBody}
+      </p>
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a href={localePath(lang, o.ctaPrimary.href)} data-umami-event="workforce_workspace_selected" class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-ink-950 transition hover:bg-accent-400">{o.ctaPrimary.label}</a>
+        <a href={localePath(lang, o.ctaSecondary.href)} data-umami-event="paid_validation_selected" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.ctaSecondary.label}</a>
+        <a href={localePath(lang, o.ctaDocs.href)} data-umami-event="developer_evaluation_selected" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400">{o.ctaDocs.label} →</a>
+        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="workforce-close" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400">★ {copy.workforceStar}</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

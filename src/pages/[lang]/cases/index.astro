@@ -1,0 +1,14 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CasesIndex from '../../../components/CasesIndex.astro';
+import { content } from '../../../i18n/content';
+import { localizedStaticPaths, type Lang } from '../../../i18n/locales';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const t = content[lang];
+---
+
+<Base title={t.cases.meta.title} description={t.cases.meta.description}>
+  <CasesIndex lang={lang} />
+</Base>

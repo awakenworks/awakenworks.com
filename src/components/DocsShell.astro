@@ -1,0 +1,357 @@
+---
+import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
+import {
+  versionsFor,
+  currentVersion,
+  statusLabel,
+  devBanner,
+  archivedBanner,
+} from '../i18n/docsVersions';
+import ProductMark from './ProductMark.astro';
+import DocsNavigation from './DocsNavigation.astro';
+import { docAudienceLabel, docSectionLabel, docsProductName, type DocsAudience } from '../lib/docsTaxonomy';
+import type { NavGroup } from '../lib/docsRoutes';
+import { LANGS, localeRegistry, unlocalizedPath } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+interface TocItem { href: string; label: string }
+interface Props {
+  lang: Lang;
+  product?: 'docs' | 'agents' | 'objects' | 'workforce';
+  versionProduct?: 'flow' | 'harness' | 'platform';
+  section?: string;
+  audience?: DocsAudience;
+  title?: string;
+  otherPath?: string;
+  toc?: TocItem[];
+  // Product sidebars are generated from the docs collection. The docs hub is
+  // the only caller that omits this because its adoption links are not a
+  // second product documentation tree.
+  navGroups?: NavGroup[];
+  // Page slug after product+version (e.g. 'concepts/issues'); lets the version
+  // selector switch versions while keeping the same page.
+  versionBaseSlug?: string;
+}
+
+const { lang, product = 'docs', versionProduct, section, audience, title, otherPath, toc = [], navGroups, versionBaseSlug } = Astro.props;
+const copy = ui[lang].docsShell;
+const home = localePath(lang, '/');
+const docsHome = localePath(lang, '/docs');
+const searchIndex = localePath(lang, '/docs/search-index.json');
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const alternateLang = LANGS.find((candidate) => candidate !== lang);
+const otherHref = alternateLang ? localePath(alternateLang, otherPath || unlocalizedPath(current) || '/docs') : undefined;
+
+const allProducts = [
+  { key: 'agents', label: docsProductName('agents'), href: '/docs/agents', tone: 'text-iris-400' },
+  { key: 'objects', label: docsProductName('objects'), href: '/docs/objects', tone: 'text-amber-400' },
+  { key: 'workforce', label: docsProductName('workforce'), href: '/docs/workforce', tone: 'text-rust-400' },
+] as const;
+const products = allProducts;
+
+const docsHubItems = [
+  { product: 'agents', label: 'Awaken Agents', href: '/docs/agents' },
+  { product: 'objects', label: 'Awaken Objects', href: '/docs/objects' },
+  { product: 'workforce', label: 'Awaken Workforce', href: '/docs/workforce' },
+];
+const docsHubNav = [{ group: 'Products', nodes: docsHubItems.map((item) => ({ kind: 'item' as const, ...item })) }];
+const nav = navGroups ?? docsHubNav;
+
+// Localize canonical section keys used by generated nav groups; pass through
+// the already-localized documentation-hub label.
+const groupLabel = (g: string) => docSectionLabel(g, lang);
+const productLabel = product === 'docs'
+  ? 'Docs'
+  : products.find((p) => p.key === product)?.label || 'Docs';
+
+// Versioned docs: registry-driven selector + status banner for the product.
+const sourceVersionProduct = versionProduct
+  ?? (product === 'agents' ? 'platform' : product === 'objects' || product === 'workforce' ? 'flow' : undefined);
+const versions = sourceVersionProduct ? versionsFor(sourceVersionProduct) : [];
+const curVer = sourceVersionProduct ? currentVersion(sourceVersionProduct) : undefined;
+function versionHref(v: { id: string; latest?: boolean }) {
+  const seg = v.latest ? '' : `/${v.id}`;
+  const page = versionBaseSlug ? `/${versionBaseSlug}` : '';
+  return localePath(lang, `/docs/${product}${seg}${page}`);
+}
+const banner =
+  curVer?.status === 'dev'
+    ? devBanner[lang](curVer.label)
+    : curVer?.status === 'archived'
+      ? archivedBanner[lang](curVer.label)
+      : null;
+---
+<header class="sticky top-0 z-50 border-b border-ink-700/60 bg-ink-950/85 backdrop-blur-md">
+  <nav class="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-4 sm:px-6" aria-label={copy.header}>
+    <div class="flex items-center gap-4">
+      <a href={home} class="flex items-center gap-2 font-semibold text-fog-100">
+        <ProductMark product="works" class="h-5 w-5" />
+        AwakenWorks
+      </a>
+      <span class="hidden h-5 w-px bg-ink-600 md:block"></span>
+      <a href={docsHome} class="hidden font-mono text-xs text-fog-500 hover:text-fog-100 md:block">Docs</a>
+    </div>
+    <div class="flex min-w-0 items-center gap-2 text-sm sm:gap-3">
+      <details class="relative">
+        <summary class="list-none rounded-full border border-ink-600 px-2 py-1 font-mono text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100 sm:px-3">
+          <span class="sm:hidden">{product === 'agents' ? 'Agents' : product === 'objects' ? 'Objects' : product === 'workforce' ? 'Workforce' : 'Docs'}</span>
+          <span class="hidden sm:inline">{productLabel}</span> ▾
+        </summary>
+        <div class="absolute right-0 mt-2 w-56 rounded-xl border border-ink-700 bg-ink-900 p-2 shadow-2xl">
+          {products.map((p) => <a href={localePath(lang, p.href)} class={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm hover:bg-ink-850 ${product === p.key ? p.tone : 'text-fog-300'}`}><ProductMark product={p.key} class={`h-4 w-4 ${p.tone}`} />{p.label}</a>)}
+        </div>
+      </details>
+      {curVer && (
+        <details class="relative hidden md:block">
+          <summary class="list-none rounded-full border border-ink-600 px-3 py-1 font-mono text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100">{curVer.label} ▾</summary>
+          <div class="absolute right-0 mt-2 w-60 rounded-xl border border-ink-700 bg-ink-900 p-2 shadow-2xl">
+            <p class="px-3 pt-1 pb-2 font-mono text-[0.62rem] uppercase tracking-wider text-fog-600">{copy.version}</p>
+            {versions.map((v) => (
+              <a href={versionHref(v)} class={`flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm hover:bg-ink-850 ${v.id === curVer.id ? 'text-accent-400' : 'text-fog-300'}`}>
+                <span>{v.label}</span>
+                <span class="font-mono text-[0.6rem] uppercase tracking-wider text-fog-600">{statusLabel[v.status][lang]}</span>
+              </a>
+            ))}
+          </div>
+        </details>
+      )}
+      <button
+        type="button"
+        data-docs-search-open
+        class="flex items-center gap-1.5 rounded-full border border-ink-600 px-3 py-1 font-mono text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100"
+        aria-haspopup="dialog"
+      >
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <span class="hidden sm:inline">{copy.search}</span>
+        <kbd class="hidden text-[0.62rem] text-fog-600 md:inline">/</kbd>
+      </button>
+      <a
+        href={AWAKEN_GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-umami-event="github_star_selected"
+        data-umami-event-location="docs-header"
+        class="hidden rounded-full border border-accent-500/40 px-3 py-1 font-mono text-xs text-accent-300 hover:border-accent-400 hover:text-accent-200 sm:block"
+        aria-label={copy.starAria}
+      >★ Star</a>
+      <button data-theme-toggle type="button" aria-label={ui[lang].common.theme} class="hidden h-7 w-7 items-center justify-center rounded-full border border-ink-600 text-fog-300 transition hover:border-fog-500 hover:text-fog-100 sm:flex">
+        <svg class="icon-when-dark h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+        <svg class="icon-when-light h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+      </button>
+      {alternateLang && otherHref && <a href={otherHref} hreflang={localeRegistry[alternateLang].hrefLang} lang={localeRegistry[alternateLang].htmlLang} class="rounded-full border border-ink-600 px-2 py-1 font-mono text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100 sm:px-3">
+        <span class="sm:hidden">{localeRegistry[alternateLang].shortName}</span>
+        <span class="hidden sm:inline">{localeRegistry[alternateLang].nativeName}</span>
+      </a>}
+    </div>
+  </nav>
+</header>
+
+<dialog
+  data-docs-search
+  data-index-url={searchIndex}
+  data-lang={lang}
+  data-search-empty={copy.searchEmpty}
+  data-result-one={copy.resultOne}
+  data-result-many={copy.resultMany}
+  data-no-results={copy.noResults}
+  data-loading={copy.loading}
+  data-failed={copy.failed}
+  class="m-auto w-[min(44rem,calc(100%-2rem))] rounded-2xl border border-ink-700 bg-ink-900 p-0 text-fog-100 shadow-2xl"
+  aria-labelledby="docs-search-title"
+>
+  <div class="border-b border-ink-700 p-4 sm:p-5">
+    <div class="flex items-center justify-between gap-4">
+      <h2 id="docs-search-title" class="text-lg font-semibold">{copy.searchTitle}</h2>
+      <form method="dialog">
+        <button type="submit" class="rounded-lg px-2 py-1 text-sm text-fog-500 hover:bg-ink-800 hover:text-fog-100" aria-label={copy.closeSearch}>Esc</button>
+      </form>
+    </div>
+    <label class="mt-4 block">
+      <span class="sr-only">{copy.searchPrompt}</span>
+      <input
+        data-docs-search-input
+        type="search"
+        autocomplete="off"
+        placeholder={copy.searchPlaceholder}
+        class="w-full rounded-xl border border-ink-600 bg-ink-950 px-4 py-3 text-base text-fog-100 outline-none placeholder:text-fog-600 focus:border-accent-500"
+      />
+    </label>
+    <p data-docs-search-status class="mt-2 min-h-5 text-sm text-fog-500" aria-live="polite"></p>
+  </div>
+  <div data-docs-search-results class="max-h-[min(60vh,34rem)] overflow-y-auto p-2 sm:p-3"></div>
+</dialog>
+
+<div class="mx-auto grid max-w-[90rem] grid-cols-1 lg:grid-cols-[17rem_minmax(0,1fr)] xl:grid-cols-[17rem_minmax(0,1fr)_14rem]">
+  <aside class="hidden border-r border-ink-800 bg-ink-950/40 px-4 py-8 lg:block">
+    <div class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2">
+      <a href={docsHome} class="mb-5 block rounded-xl border border-ink-700 bg-ink-850 px-4 py-3 text-sm text-fog-300 hover:border-fog-500 hover:text-fog-100">
+        <span class="font-mono text-xs text-fog-600">AwakenWorks</span>
+        <span class="mt-1 block font-semibold text-fog-100">Documentation</span>
+      </a>
+      <DocsNavigation lang={lang} current={current} nav={nav} label={copy.sidebar} />
+    </div>
+  </aside>
+
+  <main class="min-w-0">
+    <div class="border-b border-ink-800 bg-ink-900/40 px-4 py-3 sm:px-6 lg:hidden">
+      <nav class="grid grid-cols-3 gap-2 font-mono text-xs sm:grid-cols-4" aria-label={copy.productDocs}>
+        {products.map((p) => <a href={localePath(lang, p.href)} class={`rounded-full border px-2 py-1 text-center ${product === p.key ? `${p.tone} border-current` : 'border-ink-600 text-fog-300'}`}>{p.key === 'agents' ? 'Agents' : p.key === 'objects' ? 'Objects' : 'Workforce'}</a>)}
+        <a
+          href={AWAKEN_GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-umami-event="github_star_selected"
+          data-umami-event-location="docs-mobile-nav"
+          class="col-span-3 rounded-full border border-accent-500/40 px-3 py-1 text-center text-accent-300 sm:col-span-1"
+        >★ {copy.mobileStar}</a>
+      </nav>
+      <details data-docs-mobile-sections class="mt-3 rounded-xl border border-ink-700 bg-ink-950/70">
+        <summary class="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium text-fog-200">
+          <span>{copy.browse(productLabel)}</span>
+          <span class="text-fog-500">›</span>
+        </summary>
+        <div class="max-h-[65vh] overflow-y-auto border-t border-ink-700 px-2 py-4">
+          <DocsNavigation lang={lang} current={current} nav={nav} compact label={copy.mobileNav} />
+          {toc.length > 0 && (
+            <div class="mt-5 border-t border-ink-700 pt-4">
+              <p class="px-3 font-mono text-[0.68rem] uppercase tracking-wider text-fog-600">{copy.onPage}</p>
+              <nav class="mt-2 space-y-1" aria-label={copy.mobileToc}>
+                {toc.map((item) => <a href={item.href} class="block rounded-lg px-3 py-2 text-sm text-fog-500 hover:bg-ink-850 hover:text-fog-100">{item.label}</a>)}
+              </nav>
+            </div>
+          )}
+        </div>
+      </details>
+    </div>
+    {title && <div class="border-b border-ink-800 bg-ink-950/60 px-6 py-3 text-sm text-fog-500"><a href={docsHome} class="hover:text-fog-100">Docs</a><span class="px-2">/</span><span>{productLabel}</span>{curVer && <span class="ml-2 rounded-full border border-ink-700 px-2 py-0.5 font-mono text-[0.6rem] text-fog-500">{curVer.label}</span>}{audience && <><span class="px-2">/</span><span>{docAudienceLabel(audience, lang)}</span></>}{section && <><span class="px-2">/</span><span>{groupLabel(section)}</span></>}<span class="sr-only">{title}</span></div>}
+    {banner && <div class="border-b border-accent-600/30 bg-accent-500/10 px-6 py-2.5 text-sm text-fog-300"><span class="font-mono text-xs text-accent-400">{copy.note}</span><span class="px-2">·</span>{banner}</div>}
+    <slot />
+  </main>
+
+  <aside class="hidden border-l border-ink-800 px-4 py-8 xl:block">
+    <div class="sticky top-24">
+      <p class="font-mono text-[0.68rem] uppercase tracking-wider text-fog-600">{copy.onPage}</p>
+      {toc.length > 0 ? (
+        <nav class="mt-3 space-y-2" aria-label={copy.toc}>
+          {toc.map((item) => <a href={item.href} class="block text-sm leading-5 text-fog-500 hover:text-fog-100">{item.label}</a>)}
+        </nav>
+      ) : (
+        <p class="mt-3 text-sm leading-6 text-fog-600">{copy.landing}</p>
+      )}
+    </div>
+  </aside>
+</div>
+
+<style>
+  dialog[data-docs-search]::backdrop {
+    background: rgb(5 7 12 / 0.76);
+    backdrop-filter: blur(3px);
+  }
+</style>
+
+<script>
+  interface SearchRecord {
+    title: string;
+    description: string;
+    href: string;
+    product: string;
+    text: string;
+  }
+
+  const dialog = document.querySelector<HTMLDialogElement>('[data-docs-search]');
+  const openButton = document.querySelector<HTMLButtonElement>('[data-docs-search-open]');
+  const input = dialog?.querySelector<HTMLInputElement>('[data-docs-search-input]');
+  const status = dialog?.querySelector<HTMLElement>('[data-docs-search-status]');
+  const results = dialog?.querySelector<HTMLElement>('[data-docs-search-results]');
+  const messages = dialog?.dataset;
+  let records: SearchRecord[] | null = null;
+
+  function setStatus(message: string) {
+    if (status) status.textContent = message;
+  }
+
+  function score(record: SearchRecord, terms: string[]): number {
+    const title = record.title.toLocaleLowerCase();
+    const description = record.description.toLocaleLowerCase();
+    const product = record.product.toLocaleLowerCase();
+    const text = record.text.toLocaleLowerCase();
+    let total = 0;
+    for (const term of terms) {
+      if (!title.includes(term) && !description.includes(term) && !product.includes(term) && !text.includes(term)) return -1;
+      if (title.includes(term)) total += 100;
+      if (description.includes(term)) total += 35;
+      if (product.includes(term)) total += 20;
+      if (text.includes(term)) total += 5;
+    }
+    return total;
+  }
+
+  function renderResults() {
+    if (!input || !results || !records) return;
+    results.replaceChildren();
+    const terms = input.value.trim().toLocaleLowerCase().split(/\s+/u).filter(Boolean);
+    if (terms.length === 0) {
+      setStatus(messages?.searchEmpty ?? 'Type a keyword to search.');
+      return;
+    }
+    const matches = records
+      .map((record) => ({ record, score: score(record, terms) }))
+      .filter((match) => match.score >= 0)
+      .sort((a, b) => b.score - a.score || a.record.title.localeCompare(b.record.title))
+      .slice(0, 12);
+    const resultTemplate = matches.length === 1 ? messages?.resultOne : messages?.resultMany;
+    setStatus(matches.length
+      ? (resultTemplate ?? '{count} results').replace('{count}', String(matches.length))
+      : (messages?.noResults ?? 'No matches. Try a task name, error message, or API.'));
+    for (const { record } of matches) {
+      const link = document.createElement('a');
+      link.href = record.href;
+      link.className = 'block rounded-xl px-4 py-3 hover:bg-ink-800 focus:bg-ink-800 focus:outline-none';
+      const meta = document.createElement('span');
+      meta.className = 'font-mono text-[0.68rem] uppercase tracking-wider text-accent-400';
+      meta.textContent = record.product;
+      const title = document.createElement('strong');
+      title.className = 'mt-1 block text-sm text-fog-100';
+      title.textContent = record.title;
+      const description = document.createElement('span');
+      description.className = 'mt-1 block text-sm leading-5 text-fog-500';
+      description.textContent = record.description;
+      link.append(meta, title, description);
+      results.append(link);
+    }
+  }
+
+  async function loadIndex() {
+    if (!dialog || records) return;
+    setStatus(messages?.loading ?? 'Loading index…');
+    try {
+      const response = await fetch(dialog.dataset.indexUrl ?? '');
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      records = await response.json() as SearchRecord[];
+      renderResults();
+    } catch {
+      setStatus(messages?.failed ?? 'Search index failed to load. Please try again.');
+    }
+  }
+
+  function openSearch() {
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    void loadIndex();
+    requestAnimationFrame(() => input?.focus());
+  }
+
+  openButton?.addEventListener('click', openSearch);
+  input?.addEventListener('input', renderResults);
+  document.addEventListener('keydown', (event) => {
+    const target = event.target as HTMLElement | null;
+    const isEditing = target?.matches('input, textarea, select, [contenteditable="true"]');
+    if (event.key === '/' && !isEditing && !dialog?.open) {
+      event.preventDefault();
+      openSearch();
+    }
+  });
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+</script>

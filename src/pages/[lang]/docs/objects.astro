@@ -1,0 +1,7 @@
+---
+import ObjectsDocsIndex from '../../../components/ObjectsDocsIndex.astro';
+import { localizedStaticPaths, type Lang } from '../../../i18n/locales';
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+---
+<ObjectsDocsIndex lang={lang} />

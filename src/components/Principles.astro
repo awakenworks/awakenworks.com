@@ -1,0 +1,158 @@
+---
+import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import { principlesCopy } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+// Real, verified surfaces. GitHub links are absolute; the implementation-evidence
+// page is an internal locale-aware document.
+const gh = {
+  discussions: 'https://github.com/AwakenWorks/awaken/discussions',
+  goodFirstIssues:
+    'https://github.com/AwakenWorks/awaken/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22',
+  contributing: 'https://github.com/AwakenWorks/awaken/blob/main/CONTRIBUTING.md',
+  openDecisions:
+    'https://github.com/AwakenWorks/awaken/issues?q=is%3Aissue+is%3Aopen+label%3A%22open+question%22',
+};
+const implementationEvidence = localePath(lang, '/docs/agents/runtime/explanation/architecture-invariants');
+
+const c = principlesCopy[lang];
+const links = c.open.links.map((link) => ({ ...link, href: gh[link.target] }));
+const isExternal = (href: string) => /^https?:\/\//.test(href);
+---
+
+<SiteHeader lang={lang} path="/principles" />
+
+<main>
+  <!-- Hero -->
+  <section id="principles-hero" class="relative overflow-hidden">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-4xl px-6 py-24 sm:py-32">
+      <p class="eyebrow text-accent-500">{c.eyebrow}</p>
+      <h1 class="hero-title mt-6 max-w-3xl font-semibold text-fog-100">
+        {c.heroTitle}
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-fog-300 sm:text-xl">
+        {c.heroSubtitle}
+      </p>
+    </div>
+  </section>
+
+  <!-- What we believe -->
+  <section id="principles-owner" class="border-t border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-4xl px-6 py-16 sm:py-20">
+      <h2 class="text-2xl font-semibold text-fog-100 sm:text-3xl">
+        {c.believe.heading}
+      </h2>
+      <p
+        class="mt-5 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg [&_code]:rounded [&_code]:border [&_code]:border-ink-700 [&_code]:bg-ink-850 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_em]:text-fog-100 [&_strong]:text-fog-100"
+        set:html={c.believe.body}
+      />
+    </div>
+  </section>
+
+  <!-- Built by developers, for developers -->
+  <section id="principles-commitments" class="border-t border-ink-800">
+    <div class="mx-auto max-w-4xl px-6 py-16 sm:py-20">
+      <h2 class="text-2xl font-semibold text-fog-100 sm:text-3xl">
+        {c.developers.heading}
+      </h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg">
+        {c.developers.body}
+      </p>
+      <div class="mt-8 grid gap-5 md:grid-cols-3">
+        {
+          c.developers.values.map((v) => (
+            <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+              <h3 class="font-semibold text-fog-100">{v.title}</h3>
+              <p class="mt-2 text-sm leading-6 text-fog-500">{v.desc}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- How we talk about maturity: the honesty contract -->
+  <section id="principles-status" class="border-t border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-4xl px-6 py-16 sm:py-20">
+      <div class="flex flex-wrap items-center gap-3">
+        <h2 class="text-2xl font-semibold text-fog-100 sm:text-3xl">
+          {c.honesty.heading}
+        </h2>
+        <span
+          class="rounded-full border border-accent-600/50 bg-accent-500/10 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-accent-500 uppercase"
+        >
+          {c.honesty.badge}
+        </span>
+      </div>
+      <p
+        class="mt-5 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg [&_code]:rounded [&_code]:border [&_code]:border-ink-700 [&_code]:bg-ink-850 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_strong]:text-fog-100"
+        set:html={c.honesty.body}
+      />
+      <a
+        href={implementationEvidence}
+        class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent-400 hover:text-accent-500"
+      >
+        {c.honesty.linkLabel}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Built in the open: help decide -->
+  <section id="principles-participate" class="border-t border-ink-800">
+    <div class="mx-auto max-w-4xl px-6 py-16 sm:py-20">
+      <h2 class="text-2xl font-semibold text-fog-100 sm:text-3xl">
+        {c.open.heading}
+      </h2>
+      <p
+        class="mt-5 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg [&_strong]:text-fog-100"
+        set:html={c.open.body}
+      />
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="group rounded-2xl border border-ink-700 bg-ink-850 p-5 transition hover:border-accent-600/60"
+              {...(isExternal(link.href)
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : {})}
+            >
+              <div class="flex items-center justify-between gap-3">
+                <h3 class="font-semibold text-fog-100">{link.label}</h3>
+                <span
+                  class="text-fog-500 transition group-hover:text-accent-400"
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              </div>
+              <p class="mt-2 text-sm leading-6 text-fog-500">{link.desc}</p>
+            </a>
+          ))
+        }
+      </div>
+      <a
+        href={AWAKEN_GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-umami-event="github_star_selected"
+        data-umami-event-location="principles"
+        class="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-accent-400 hover:text-accent-500"
+      >
+        {c.open.orgLabel}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

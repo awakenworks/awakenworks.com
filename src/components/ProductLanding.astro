@@ -1,0 +1,185 @@
+---
+import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import ProductMark from './ProductMark.astro';
+import ProductShowcase from './ProductShowcase.astro';
+import AdvantageSection from './AdvantageSection.astro';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = content[lang];
+const p = t.landing.managed;
+const path = '/agents';
+
+// Literal classes keep the product tone visible to Tailwind's scanner.
+const c = {
+  eyebrow: 'text-iris-400',
+  badge: 'border-iris-600/50 bg-iris-500/10 text-iris-400',
+};
+const compatibilityHref = localePath(lang, '/docs/agents/compatibility');
+const copy = ui[lang].agentsLanding;
+const ctaPrimaryHref = p.ctaPrimary.href.startsWith('/')
+  ? localePath(lang, p.ctaPrimary.href)
+  : p.ctaPrimary.href;
+const closerHref = p.closer.cta.href.startsWith('/')
+  ? localePath(lang, p.closer.cta.href)
+  : p.closer.cta.href;
+---
+
+<SiteHeader lang={lang} path={path} />
+
+<main>
+  <!-- ── Hero ──────────────────────────────────────────────────── -->
+  <section id="agents-hero" class="relative overflow-hidden">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-6 pt-16 pb-14 sm:pt-32 sm:pb-20">
+      <div>
+        <ProductMark
+          product="platform"
+          class={`mb-5 h-10 w-10 ${c.eyebrow}`}
+        />
+        <div class="flex flex-wrap items-center gap-3">
+          <p class={`eyebrow ${c.eyebrow}`}>{p.eyebrow}</p>
+          <span
+            class={`rounded-full border px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider uppercase ${c.badge}`}
+            >{p.status.label}</span
+          >
+          <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-fog-500 uppercase">
+            {t.products.managed.license}
+          </span>
+        </div>
+        <h1 class="hero-title mt-6 max-w-5xl font-semibold text-fog-100">
+          {p.title}
+        </h1>
+        <p class="mt-6 max-w-3xl text-lg text-fog-300 sm:text-xl">{p.subtitle}</p>
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <a
+            href={ctaPrimaryHref}
+            data-umami-event="developer_evaluation_selected"
+            class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400"
+          >
+            {p.ctaPrimary.label}
+          </a>
+          <a
+            href={AWAKEN_GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-umami-event="github_star_selected"
+            data-umami-event-location="platform-hero"
+            class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-iris-400"
+          >★ {copy.star}</a>
+        </div>
+        <p class="mt-5 max-w-3xl text-sm leading-6 text-fog-500">{p.audience}</p>
+        <a href={compatibilityHref} data-umami-event="awaken-view-compatibility" class={`mt-5 inline-flex text-sm font-medium ${c.eyebrow}`}>
+          {copy.compatibility} →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="agents-quickstart" class="border-y border-ink-800 bg-ink-850">
+    <div class="mx-auto max-w-6xl px-6 py-14 sm:py-18">
+      <p class={`eyebrow ${c.eyebrow}`}>{copy.quickstartEyebrow}</p>
+      <h2 class="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-fog-100">{copy.quickstartTitle}</h2>
+      <ol class="mt-8 grid gap-px overflow-hidden rounded-2xl border border-ink-700 bg-ink-700 md:grid-cols-3">
+        {copy.quickstartSteps.map(([number, title, body]) => (
+          <li class="bg-ink-900 p-6">
+            <span class="font-mono text-xs text-iris-400">{number}</span>
+            <h3 class="mt-3 font-semibold text-fog-100">{title}</h3>
+            <p class="mt-2 text-sm leading-6 text-fog-400">{body}</p>
+          </li>
+        ))}
+      </ol>
+      <a href={ctaPrimaryHref} class="mt-7 inline-flex font-medium text-iris-400 hover:text-iris-300">{copy.quickstartCta} →</a>
+    </div>
+  </section>
+
+  <section id="agents-outcomes" class="border-y border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class={`eyebrow ${c.eyebrow}`}>{p.outcomes.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">
+        {p.outcomes.title}
+      </h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300">{p.outcomes.body}</p>
+      <div class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-ink-700 bg-ink-700 md:grid-cols-2">
+        {p.outcomes.items.map((item) => (
+          <article data-agent-outcome class="bg-ink-850 p-6 sm:p-7">
+            <h3 class="text-xl font-semibold text-fog-100">{item.title}</h3>
+            <p class="mt-4 text-sm leading-7 text-fog-400">{item.body}</p>
+            <p class="mt-5 border-t border-ink-700 pt-4 font-mono text-xs leading-5 text-iris-400">{item.proof}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <AdvantageSection
+    id="managed-relation"
+    eyebrow={p.advantage.eyebrow}
+    title={p.advantage.title}
+    body={p.advantage.body}
+    commonLabel={p.advantage.commonLabel}
+    awakenLabel={p.advantage.awakenLabel}
+    proofLabel={p.advantage.proofLabel}
+    items={p.advantage.items}
+    tone={p.tone}
+  />
+
+  <ProductShowcase
+    lang={lang}
+    product="platform"
+    caption={copy.showcase}
+  />
+
+  <section id="agents-decisions" class="scroll-mt-16 border-t border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class={`eyebrow ${c.eyebrow}`}>{p.decisions.eyebrow}</p>
+      <h2 class="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{p.decisions.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300">{p.decisions.body}</p>
+      <div class="mt-9 grid gap-4 md:grid-cols-2">
+        {p.decisions.items.map((item) => (
+          <a
+            data-agent-doc-decision={item.key}
+            href={localePath(lang, item.href)}
+            class="group rounded-2xl border border-ink-700 bg-ink-900 p-6 transition hover:border-iris-600/70 hover:bg-ink-850"
+          >
+            <h3 class="text-lg font-semibold text-fog-100 group-hover:text-iris-300">{item.title}</h3>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{item.body}</p>
+            <span class="mt-5 inline-flex text-sm font-medium text-iris-400">{item.action} →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden border-t border-ink-800">
+      <div class="grid-backdrop absolute inset-0"></div>
+      <div class="relative mx-auto max-w-3xl px-6 py-24 text-center">
+        <h2 class="text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">
+          {p.closer.title}
+        </h2>
+        <p class="mx-auto mt-4 max-w-xl text-lg text-fog-300">{p.closer.body}</p>
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href={ctaPrimaryHref}
+            data-umami-event="developer_evaluation_selected"
+            class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400"
+            >{p.ctaPrimary.label}</a
+          >
+          <a
+            href={closerHref}
+            data-umami-event="enterprise_intent_selected"
+            class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500"
+            >{p.closer.cta.label}</a
+          >
+        </div>
+      </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

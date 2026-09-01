@@ -1,0 +1,58 @@
+---
+import { content, localePath, type Lang } from '../i18n/content';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import { ui } from '../i18n/ui';
+
+interface Props { lang: Lang }
+
+const { lang } = Astro.props;
+const t = content[lang];
+const copy = ui[lang].cases;
+---
+
+<SiteHeader lang={lang} path="/cases" />
+
+<main>
+  <section id="reference-hero" class="relative overflow-hidden border-b border-ink-800">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-6 py-24 sm:py-32">
+      <p class="eyebrow text-iris-400">{t.cases.eyebrow}</p>
+      <h1 class="mt-5 max-w-5xl text-5xl font-semibold tracking-tight text-fog-100 sm:text-7xl">{t.cases.title}</h1>
+      <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300">{t.cases.body}</p>
+      <p data-reference-disclaimer class="mt-7 max-w-3xl border-l-2 border-iris-500/60 pl-4 text-sm leading-6 text-fog-500">
+        {copy.disclaimer}
+      </p>
+    </div>
+  </section>
+
+  <section id="reference-builds" class="bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
+      <div class="grid gap-7">
+        {t.cases.items.map((item, index) => (
+          <article data-case-index={item.slug} class="grid gap-8 rounded-[1.5rem] border border-ink-700 bg-ink-850 p-7 sm:p-10 lg:grid-cols-[0.72fr_1.28fr]">
+            <div>
+              <p class="font-mono text-xs text-iris-400">0{index + 1} · {item.kind}</p>
+              <h2 class="mt-4 text-3xl font-semibold text-fog-100">{item.name}</h2>
+              <p class="mt-3 text-sm font-medium text-fog-300">{item.adoption}</p>
+              <p class="mt-6 rounded-full border border-ink-600 px-3 py-1.5 font-mono text-[0.68rem] leading-5 text-fog-500">{item.status}</p>
+            </div>
+            <div>
+              <h3 class="text-2xl font-semibold text-fog-100">{item.title}</h3>
+              <p class="mt-5 leading-8 text-fog-300"><strong class="text-fog-100">{copy.situationPrefix}</strong>{item.problem}</p>
+              <p class="mt-4 leading-8 text-fog-400"><strong class="text-iris-300">{copy.startPrefix}</strong>{item.firstWin}</p>
+              <p class="mt-5 text-sm leading-7 text-fog-500"><strong class="text-fog-300">{copy.bestPrefix}</strong>{item.audience}</p>
+              <a
+                href={localePath(lang, `/cases/${item.slug}`)}
+                data-umami-event={`cases-open-${item.slug}`}
+                class="mt-7 inline-flex rounded-xl bg-iris-500 px-5 py-3 font-medium text-white transition hover:bg-iris-400"
+              >{item.cta} →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import BlogIndex from '../../components/BlogIndex.astro';
+import { DEFAULT_LANG } from '../../i18n/locales';
+import { ui } from '../../i18n/ui';
+
+const meta = ui[DEFAULT_LANG].routes.blog;
+---
+
+<Base title={meta.title} description={meta.description}>
+  <BlogIndex lang={DEFAULT_LANG} />
+</Base>

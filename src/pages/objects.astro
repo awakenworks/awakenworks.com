@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import ObjectsLanding from '../components/ObjectsLanding.astro';
+import { content } from '../i18n/content';
+import { DEFAULT_LANG, localePath } from '../i18n/locales';
+import { softwareAppLd } from '../lib/jsonld';
+
+const p = content[DEFAULT_LANG].landing.objects;
+---
+
+<Base title={`Awaken Objects — ${p.title}`} description={p.subtitle} jsonLd={softwareAppLd({ name: 'Awaken Objects', description: p.subtitle, url: new URL(localePath(DEFAULT_LANG, '/objects'), Astro.site).href })}>
+  <ObjectsLanding lang={DEFAULT_LANG} />
+</Base>

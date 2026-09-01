@@ -1,0 +1,1299 @@
+import { publicProductLabel, publicVersionLabel } from './docsVersions';
+export { LANGS, localePath } from './locales';
+export type { Lang } from './locales';
+import { localePath, type Lang } from './locales';
+
+// Single source of truth for site copy in both locales.
+// Text is drawn from the awaken / managed-agents / awaken-flow product repos so
+// the site stays consistent with the products it describes.
+
+export const AWAKEN_GITHUB_URL = 'https://github.com/AwakenWorks/awaken';
+
+export const content = {
+  en: {
+    meta: {
+      title: 'AwakenWorks | Ship and operate self-hosted Agent applications',
+      description:
+        'Awaken Agents provides a reusable, self-hosted platform for building, running, and operating Agent applications beyond the first demo.',
+    },
+    nav: {
+      awaken: 'Awaken internals',
+      managed: 'Agents',
+      objects: 'Objects',
+      workforce: 'Workforce',
+      enterprise: 'Enterprise deployment',
+      cases: 'Reference builds',
+      blog: 'Blog',
+      docs: 'Docs',
+      github: 'Star',
+      run: 'Start',
+      menu: 'Menu',
+      theme: 'Toggle light / dark theme',
+    },
+    waitlist: {
+      placeholder: 'you@company.com',
+      fields: {
+        company: 'Company',
+        role: 'Your role',
+        scenario: 'Which Agent application are you building, migrating, or deploying?',
+        loss: 'What platform work or operating risk blocks the next release?',
+        systems: 'SDK, models, tools, data, identity, infrastructure, and isolation involved',
+        frequency: 'Expected run frequency or volume',
+        timing: 'When would you like to start? (optional)',
+      },
+      privacyPrefix: 'I agree that AwakenWorks may use this information to evaluate and follow up on this request. See the',
+      privacyLabel: 'privacy notice',
+      error: 'We could not submit this application. Try again, or email hello@awakenworks.com.',
+      variants: {
+        cooperation: {
+          button: 'Discuss implementation',
+          submitting: 'Submitting…',
+          subject: 'Awaken Agents implementation request',
+          success: 'Application received',
+          successBody: 'We aim to review the application and reply within one business day.',
+          successSteps: [
+            'We check the application, current platform gap, deployment boundary, and acceptance condition.',
+            'We reply with a self-service path, focused questions, or a scope conversation.',
+            'If the scope fits, both teams freeze technical checks, responsibilities, and exclusions before work begins.',
+          ],
+        },
+      },
+    },
+    home: {
+      hero: {
+        eyebrow: 'Awaken Agents · reusable Agent application platform',
+        title: 'Turn an Agent prototype into a shippable, operable, reusable product.',
+        subtitle:
+          'Awaken Agents packages the platform work repeated as Agent applications move from prototype to release: publication, Sessions, files and memory, permissions, isolated execution, recovery, and operations. Keep the customer experience and business logic; reuse the same foundation across products, deployments, and customer projects.',
+        ctaPrimary: 'Evaluate Awaken Agents',
+        ctaSecondary: 'Plan an enterprise deployment',
+      },
+      advantages: {
+        eyebrow: 'Why adopt Awaken',
+        title: 'Build the differentiated Agent product once. Stop rebuilding its platform for every release.',
+        body: 'A demo proves that a model can respond. A product still needs durable state, permissions, resources, isolated execution, recovery, and an operating owner. Awaken turns that repeated engineering into one reusable platform while your team keeps the experience, business logic, and customer relationship.',
+        items: [
+          { key: 'launch', value: 'Shorten the path from prototype to release', label: 'Start with working publication, Session, resource, permission, execution, and recovery paths instead of discovering each one after the demo.', proof: 'See the product path', href: '/agents' },
+          { key: 'private', value: 'Pass enterprise architecture and security review', label: 'Place control, Session data, credentials, model routes, Workers, and Sandboxes inside the approved infrastructure and responsibility boundary.', proof: 'Compare deployment choices', href: '/agents#deployment' },
+          { key: 'reuse', value: 'Reuse one foundation across applications', label: 'Keep each product\'s UX and domain model independent while sharing Agent publication, Sessions, resources, policies, and operations underneath.', proof: 'See first-party application shapes', href: '/cases' },
+          { key: 'delivery', value: 'Turn custom delivery into repeatable engineering', label: 'Change the vertical experience, tools, and rules for each customer while retaining one platform model for execution, security, upgrades, and support.', proof: 'Discuss an implementation', href: '/enterprise' },
+        ],
+      },
+      scenarios: {
+        eyebrow: 'Three concrete adoption paths',
+        title: 'Choose the platform work you want Awaken to own.',
+        body: 'Awaken Agents is the available product. The high-value entry points are an Agent product that must ship, an internal Agent that must run inside enterprise boundaries, or repeatable custom delivery across customers. Objects and Workforce remain early product directions, not prerequisites.',
+        featuredLabel: 'Best first path',
+        cta: 'Open this path',
+        labels: { trigger: 'You bring', systems: 'Awaken provides', human: 'You keep', finish: 'First useful result', measures: 'Verify' },
+        items: [
+          { key: 'agent-product', href: '/docs/agents/get-started', featured: true, label: 'AI-native product team', title: 'Ship an Agent workbench, copilot, or vertical application', body: 'Keep the product experience, domain model, workflow, and result acceptance in the application. Reuse Awaken for the Agent platform lifecycle underneath.', trigger: 'A working Agent demo and a product experience customers should use', systems: 'Agent publication · Session and events · files, memory, skills, tools, permissions · Worker and Sandbox execution', human: 'Product UX, domain state, business rules, pricing, and result acceptance', finish: 'One real application creates, runs, reconnects, and reopens the same Session', measures: 'Platform code avoided · integration gaps · recovery behavior · operating work before release' },
+          { key: 'enterprise-private-agent', href: '/enterprise', featured: false, label: 'Enterprise internal Agent', title: 'Run coding, knowledge, or operations Agents inside an approved boundary', body: 'Use Awaken where source code, internal documents, credentials, model routes, or tool execution cannot depend on an external control plane.', trigger: 'One internal Agent job plus data, identity, model, and isolation requirements', systems: 'Self-hosted control and Session data · credential references · governed tools · selected Workers and Sandboxes', human: 'Identity authority, infrastructure policy, business approval, and ongoing service ownership', finish: 'An authenticated user runs one Agent path without moving control or execution outside the approved boundary', measures: 'Data location · secret custody · access decisions · audit and recovery evidence · operating owner' },
+          { key: 'solution-delivery', href: '/enterprise', featured: false, label: 'Solution provider or delivery team', title: 'Reuse one Agent foundation across custom customer solutions', body: 'Change the vertical workflow, interface, integrations, and rules for each customer while keeping one platform model for Agents, Sessions, resources, permissions, and execution.', trigger: 'A repeatable delivery motion across customers or vertical applications', systems: 'A common Agent and deployment foundation with explicit extension and infrastructure boundaries', human: 'Customer discovery, vertical IP, integrations, acceptance, support, and commercial relationship', finish: 'Deliver a second application without copying the first project\'s platform code or creating another Session authority', measures: 'Reusable platform share · customer-specific work · deployment lead time · support and upgrade burden' },
+        ],
+      },
+      cta: {
+        eyebrow: 'One next step',
+        title: 'Evaluate the product yourself, or scope one enterprise implementation.',
+        body: 'Use the current Agents path when your team can evaluate independently. Talk with us when an application needs self-hosted or dedicated infrastructure, migration work, customer-specific integration, or an explicit operating handoff.',
+        primary: 'Evaluate Awaken Agents',
+        secondary: 'Discuss enterprise implementation',
+      },
+    },
+    enterprise: {
+      meta: {
+        title: 'Awaken enterprise implementation and product previews | AwakenWorks',
+        description: 'Choose a scoped Agents implementation or request an early preview of Objects and Workforce.',
+      },
+      hero: {
+        eyebrow: 'Choose the next product decision',
+        title: 'Implement Agents now, or shape an Objects and Workforce early preview.',
+        body: 'Agents is the current implementation path. Objects and Workforce are request-only early previews. Start with one product, one real job, and one decision boundary; every path uses the same application form below.',
+        primary: 'Choose a product path',
+        secondary: 'Run Agents independently',
+      },
+      paths: {
+        eyebrow: 'Three products · two engagement modes',
+        title: 'Do not evaluate three maturity levels as if they were the same offer.',
+        bringLabel: 'Bring',
+        decisionLabel: 'First decision',
+        boundaryLabel: 'Current boundary',
+        items: [
+          { product: 'Awaken Agents', status: 'Current implementation', body: 'Run the product independently or scope one Agent application inside an approved infrastructure boundary.', bring: 'One working Agent application, its client path, model and resource inputs, environment, and technical owner.', decision: 'A scoped 4–6 week implementation uses 2–4 release checks, including a permission decision and interruption-and-recovery path, to reach a go, change, or stop decision.', boundary: 'Further hardening, integrations, rollout, and support require a new bounded service scope on the same Agents foundation.', href: '/agents', docsHref: '/docs/agents/concepts/architecture', view: 'View Agents', docs: 'Review implementation detail', apply: 'Discuss an Agents implementation', query: 'agents' },
+          { product: 'Awaken Objects', status: 'Early preview', body: 'Shape a preview around one business fact and the system that already owns it.', bring: 'One business object, its source authority and provenance, one governed change, and the application or Agent that consumes it.', decision: 'Decide whether a shared typed-object boundary fits the job and which source connection or governed action a preview should validate next.', boundary: 'This is product discovery for an unreleased preview, not an Agents implementation, production commitment, or availability promise.', href: '/objects', docsHref: '/docs/objects', view: 'View Objects', docs: 'Review the object model', apply: 'Request an Objects preview', query: 'objects' },
+          { product: 'Awaken Workforce', status: 'Early preview', body: 'Shape a preview around one recurring outcome that must survive hand-offs and exceptions.', bring: 'One real job, responsible owner, execution systems, human decisions, exception path, evidence, and external acceptance fact.', decision: 'Decide whether the Issue, responsibility, and acceptance model fits the job and which end-to-end loop a preview should validate next.', boundary: 'This is product discovery for an unreleased preview, not a packaged workflow, Agents implementation, or production commitment.', href: '/workforce', docsHref: '/docs/workforce', view: 'View Workforce', docs: 'Review work and acceptance', apply: 'Request a Workforce preview', query: 'workforce' },
+        ],
+      },
+      process: {
+        eyebrow: 'One intake · product-specific next step',
+        title: 'The form is shared. The promise is not.',
+        body: 'Every request starts with one product and one real job. We then route it according to current maturity instead of forcing preview requests through the Agents implementation story.',
+        steps: [
+          { n: '01', title: 'Name the job and decision', body: 'Describe the current baseline or loss, the responsible owner, the systems involved, and the first result another person or system can accept.' },
+          { n: '02', title: 'Match the current product path', body: 'Agents may lead to self-service evaluation or a scoped implementation. Objects and Workforce lead to product-specific preview discovery.' },
+          { n: '03', title: 'Freeze one next step', body: 'We reply with a supported self-service path, focused questions, or a bounded scope. No form submission automatically commits either team to production delivery.' },
+        ],
+        boundary: 'Agents implementation scope does not transfer to Objects or Workforce. Preview interest does not imply product access, release timing, production readiness, support, or SLA.',
+      },
+      form: {
+        eyebrow: 'Discuss implementation',
+        title: 'Bring one product, one real job, and one next decision.',
+        body: 'Choose Agents, Objects, or Workforce above. Describe the current work, authority and systems, the first accepted result, and what blocks the next decision. We aim to reply within one business day.',
+        prepareTitle: 'Prepare these four facts',
+        prepare: ['The selected product and one concrete job', 'The current baseline, loss, or decision blocker', 'The systems, data, identity, and execution boundary', 'The buyer, operator, and acceptance owner'],
+      },
+      boundary: 'Agents is open source, with its first stable release coming soon. Objects and Workforce are available through focused early-access collaboration.',
+    },
+    privacy: {
+      meta: { title: 'Privacy notice | AwakenWorks', description: 'How the AwakenWorks website handles contact, opportunity, attribution, and analytics data.' },
+      eyebrow: 'Website privacy',
+      title: 'Privacy notice',
+      updated: 'Last updated: August 24, 2026',
+      intro: 'This notice applies to the AwakenWorks public website and its enterprise-deployment and implementation form. It does not describe data handled inside a customer-operated Awaken deployment.',
+      sections: [
+        { title: 'Information you provide', paragraphs: ['When you submit a form, we receive the contact details, company and role, work you want to discuss, systems involved, timing, consent, and referral or campaign details you choose to provide.', 'Do not send passwords, credentials, production data, personal records, or other secrets through a website form.'] },
+        { title: 'Website analytics', paragraphs: ['The site uses Umami to record page and interaction analytics, including page, locale, campaign, and named conversion events. We use this information to improve navigation and understand which content leads people to documentation, GitHub, or a conversation. The site does not use advertising cookies.'] },
+        { title: 'How we use submitted information', paragraphs: ['We use form submissions to reply, understand whether self-service evaluation or a scoped implementation is the more useful next step, and prepare for that conversation. We also use referral and campaign details to understand how the request reached us.'] },
+        { title: 'Service providers and transfers', paragraphs: ['By default, forms are sent to Formspree and website analytics are processed by Umami Cloud. A deployment may configure a different form endpoint or a self-hosted Umami endpoint. These providers may process information in other jurisdictions under their own terms.', 'Formspree and Umami are not the record for a customer engagement. If a request becomes a qualified opportunity, the working record moves to the company CRM; signed agreements and transaction records remain the formal business record.'] },
+        { title: 'Retention and your requests', paragraphs: ['We keep inquiry information only while it is needed to understand and follow up on the request, document a business relationship, or meet an operational or legal requirement. You may ask to access, correct, or delete your information. Records needed for an agreement, dispute, security matter, or legal obligation may need to be kept longer.'] },
+        { title: 'Changes and contact', paragraphs: ['Email hello@awakenworks.com with a question or data request. We will update this notice when the website data path, service provider, or purpose changes.'] },
+      ],
+      contactLabel: 'Email a privacy question or request',
+      contactHref: 'mailto:hello@awakenworks.com',
+    },
+    cases: {
+      meta: {
+        title: 'Built on Awaken: reference applications and implementations',
+        description: 'Choose a reference build by product shape, try its smallest useful path, and see what the application keeps versus what Awaken provides.',
+      },
+      eyebrow: 'Built on Awaken',
+      title: 'See how we build products on Awaken.',
+      body: 'Pilot, our DeepSeek workbench reimplementation, and Awaken Design begin with three different product needs. Each keeps the experience and domain model in the application, reuses Awaken Agents execution, and states what is available today.',
+      items: [
+        {
+          slug: 'pilot',
+          kind: 'First-party Reference App',
+          name: 'Awaken Pilot',
+          adoption: 'Create a thin Agent application',
+          title: 'Give Pilot a Mission. Keep the work in one Session.',
+          problem: 'You have the product idea, but the first prototype still needs task state, progress, approval, schedules, files, and recovery.',
+          firstWin: 'Run one bounded Mission in Plan or Execute mode, then review its progress and result in the same Session.',
+          summary: 'Pilot keeps the product surface thin: a Mission becomes an Awaken Session and a Project chooses the Deployment. Users see the plan, progress, files, approvals, and result without a second task engine underneath.',
+          audience: 'Agent product teams that want the shortest path from product UX to durable execution.',
+          owned: 'Product copy, Mission interaction flow, acceptance criteria, and UI projections.',
+          reused: 'Agent, Deployment, Session, Run, events, files, tools, policy, Worker, Sandbox, and recovery.',
+          status: 'Local reference build · public source pending',
+          sourceStatus: 'The build is currently local. An external team cannot reproduce it independently until a pinned public revision is available.',
+          proof: [
+            { level: 'Tested', claim: 'Execute and Plan paths share one Session log.', owner: 'Pilot web and API test suites' },
+            { level: 'Tested', claim: 'Approvals, budgets, Skills, MCP, subagents, artifacts, and schedules use Awaken-owned contracts.', owner: 'pnpm check' },
+            { level: 'Live gate pending', claim: 'The real-stack acceptance protocol includes interruption and recovery; its live result is not published yet.', owner: 'docs/real-stack-acceptance.md' },
+          ],
+          try: ['Start with one Mission and one visible acceptance criterion', 'Interrupt or approve it once, then confirm the same Session continues', 'Keep only the product projections your users need'],
+          primary: { label: 'Run the Awaken quickstart', href: '/docs/agents/get-started' },
+          secondary: { label: 'Learn Session management', href: '/docs/agents/how-to/manage-a-session' },
+          engineeringBlog: { label: 'Read the implementation decisions and failure modes', href: '/blog/2026-08-build-manus-style-agent-product' },
+          cta: 'See the Pilot reference build',
+        },
+        {
+          slug: 'deepseek-harness',
+          kind: 'Independent Reference Reimplementation',
+          name: 'DeepSeek workbench on Awaken Agents',
+          adoption: 'Build an advanced Agent workbench',
+          title: 'Keep the workbench experience. Reuse the Agent execution underneath.',
+          problem: 'An interaction-rich workbench needs Presets, Plans, approvals, Trajectory, Threads, and Files. Rebuilding the Agent loop first delays the parts users can actually see and judge.',
+          firstWin: 'Start one Preset-driven Session, review its Plan, approve a tool, and reopen the same Trajectory after an interruption.',
+          summary: 'This independent build keeps Presets, Trajectory, approvals, Skills, subagents, and deliverables in the workbench. The browser and product API remain projections over Awaken Sessions and committed Events.',
+          audience: 'Teams building Agent IDEs, coding workbenches, or other interaction-rich Agent products.',
+          owned: 'Preset UX, browser preferences, product projections, and a stateless workbench Session API and Interaction MCP.',
+          reused: 'Managed Sessions, events, model routing, credentials, tools, permissions, compaction, resources, subagents, Worker, and Sandbox.',
+          status: 'Local deterministic demo · live run not published',
+          sourceStatus: 'The deterministic path is local. A public revision and a fresh credentialed run are still required for independent reproduction.',
+          proof: [
+            { level: 'Fixture-tested', claim: 'The deterministic Managed API demo exercises the browser, workbench Session API, official SDK, and committed-event projection.', owner: 'e2e/harness.spec.ts' },
+            { level: 'Audited contract', claim: 'Native, Equivalent, Presentation, and Unavailable capabilities have explicit boundaries.', owner: 'docs/ui-parity.md' },
+            { level: 'Live gate pending', claim: 'A real DeepSeek path exists but needs a fresh credentialed result before publication.', owner: 'e2e/live/harness-live.spec.ts' },
+          ],
+          try: ['Run the deterministic demo before adding provider credentials', 'Trace one Preset-driven Session from the browser through the product API to committed Events', 'Replace the fixture with your published Agent without adding browser-owned execution state'],
+          primary: { label: 'Connect a published Agent', href: '/docs/agents/how-to/connect-a-published-agent' },
+          secondary: { label: 'Review the AI SDK boundary', href: '/docs/agents/protocols/ai-sdk' },
+          engineeringBlog: null,
+          cta: 'See the reference reimplementation',
+        },
+        {
+          slug: 'design',
+          kind: 'First-party Reference App',
+          name: 'Awaken Design',
+          adoption: 'Build a domain-rich AI product',
+          title: 'Turn one AI-generated design into a reviewable, revisable, explicitly accepted result.',
+          problem: 'Chat history is not a product model when a team must compare versions, attach feedback to the exact result, reject unsafe output, and deliver one selected design.',
+          firstWin: 'Start from one brief, review a ready immutable Revision, request one change, and accept the exact Artifact to deliver.',
+          summary: 'Awaken Design keeps the DesignProject, immutable Revisions, precise review, isolated Preview, and accepted Artifact in the product. Awaken runs the Agent Session, execution files, and recovery underneath.',
+          audience: 'AI-native product teams that need a durable domain model, human review, safe publication, and business facts beyond chat.',
+          owned: 'DesignProject, immutable DesignRevision, review targets, Preview safety, explicit acceptance, and the published Artifact.',
+          reused: 'Agent, Environment, Session, Run, execution-stage Files, tools, events, Worker, Sandbox, and recovery.',
+          status: 'Local source and test evidence · live and field gates pending',
+          sourceStatus: 'This first-party reference implementation is currently local; a pinned public revision, a fresh live demonstration, and observed external user outcomes are missing.',
+          proof: [
+            { level: 'Source-checked', claim: 'The current implementation preserves one immutable Revision and Artifact publication owner.', owner: 'Awaken Design architecture and ADRs' },
+            { level: 'Test-covered', claim: 'Publication, review, acceptance, and Artifact watcher paths have automated coverage; this page does not claim a fresh full-suite run.', owner: 'Awaken Design test suites' },
+            { level: 'Live and field pending', claim: 'Current runtime availability and external user or customer outcomes have not been published.', owner: 'Awaken Design release gates' },
+          ],
+          try: ['Model the durable result as a domain object, not as chat history', 'Publish execution Files through one immutable Revision and Artifact path', 'Keep review, safe publication, and explicit acceptance in the product experience'],
+          primary: { label: 'Build an Agent-backed product', href: '/docs/agents/how-to/build-an-agent-with-the-assistant' },
+          secondary: { label: 'Read the architecture guide', href: '/docs/agents/concepts/architecture' },
+          engineeringBlog: { label: 'Read the publication and acceptance decisions', href: '/blog/2026-08-build-claude-design-style-workflow' },
+          cta: 'See the Awaken Design reference build',
+        },
+      ],
+    },
+    products: {
+      eyebrow: 'Available now and product direction',
+      title: 'Start with Agents. Add business context and work coordination only when those products are ready.',
+      managed: {
+        tone: 'iris',
+        layer: 'Managed Agents-compatible platform',
+        status: publicVersionLabel('platform', 'en'),
+        license: 'Apache-2.0',
+        audience: 'For Agent product, AI platform, infrastructure, and delivery teams',
+        name: 'Awaken Agents',
+        role: 'Execution and recovery',
+        tagline: 'Ship and operate Agent applications on infrastructure you control.',
+        points: [
+          'Bring Managed Agents, AI SDK, AG-UI, and A2A clients into the same Session history.',
+          'Choose models, Agent runtimes, and tool locations without changing the application-facing contract.',
+          'Start in one process, then add Workers and isolated Sandboxes when the operating need is real.',
+        ],
+        cta: 'Explore Agents',
+        href: '/agents',
+      },
+      objects: {
+        tone: 'amber',
+        layer: 'Business object layer',
+        status: publicProductLabel('objects', 'en'),
+        license: 'Early access by request',
+        audience: 'For data, business systems, and internal application teams',
+        name: 'Awaken Objects',
+        role: 'Business context',
+        tagline: 'Give people, applications, and Agents the same business facts and actions.',
+        points: [
+          'Model ResourceType, Resource identity, Relation, Action, and provenance as domain facts.',
+          'Connect external systems without turning Agent context into a second business record.',
+          'Admit every proposed change through deterministic validation, authorization, and revision checks.',
+        ],
+        cta: 'Explore Objects',
+        href: '/objects',
+      },
+      workforce: {
+        tone: 'rust',
+        layer: 'Work and acceptance',
+        status: publicVersionLabel('flow', 'en'),
+        license: 'Early access by request',
+        audience: 'For Loop Engineers and teams accountable for outcomes',
+        name: 'Awaken Workforce',
+        role: 'Ownership and acceptance',
+        tagline: 'Keep ownership, exceptions, and acceptance connected until the work is done.',
+        points: [
+          'Durable Issues preserve intent and responsibility across attempts and hand-offs.',
+          'Dependencies and reactions keep ready work moving instead of waiting for manual polling.',
+          'People retain authority over intent, exceptions, approval, and consequential action.',
+        ],
+        cta: 'Explore Workforce',
+        href: '/workforce',
+      },
+    },
+    footer: {
+      tagline: 'Reliable, self-hosted execution for AI agents.',
+      rights: '© 2026 AwakenWorks. Product licenses vary.',
+      cols: [
+        {
+          title: 'Products',
+          links: [
+            { label: 'Awaken Agents', href: '/agents' },
+            { label: 'Awaken Objects', href: '/objects' },
+            { label: 'Awaken Workforce', href: '/workforce' },
+          ],
+        },
+        {
+          title: 'Resources',
+          links: [
+            { label: 'Enterprise deployment and implementation', href: '/enterprise' },
+            { label: 'Reference builds', href: '/cases' },
+            { label: 'Docs', href: '/docs' },
+            { label: 'Blog', href: '/blog' },
+          ],
+        },
+        {
+          title: 'Community',
+          links: [
+            { label: 'Star Awaken', href: AWAKEN_GITHUB_URL },
+            {
+              label: 'Discussions',
+              href: 'https://github.com/AwakenWorks/awaken/discussions',
+            },
+            { label: 'YouTube', href: 'https://www.youtube.com/@awakenworks-ai' },
+          ],
+        },
+        {
+          title: 'Contact',
+          links: [
+            { label: 'hello@awakenworks.com', href: 'mailto:hello@awakenworks.com' },
+            { label: 'Privacy', href: '/privacy' },
+          ],
+        },
+      ],
+    },
+
+    // ── Per-product pages ──────────────────────────────────────────
+    pages: {
+      awaken: {
+        meta: {
+          title: 'Awaken Agents internals: extend the Rust execution core',
+          description:
+            'Awaken Agents includes a programmable Rust execution core for typed Agent loops, tools, state, policies, and atomic step commits.',
+        },
+        tone: 'bone',
+        audience: 'For Rust agent developers',
+        title: 'Build production AI agents in Rust.',
+        subtitle:
+          'A programmable model/tool loop with typed state, bounded plugins, explicit permission gates, and one authoritative step-commit boundary.',
+        ctaPrimary: 'Read the docs',
+        ctaSecondary: 'View on GitHub',
+        problem: {
+          eyebrow: 'The problem',
+          title: "Agent behavior shouldn't live in fragile scripts.",
+          body: 'Hard-coded prompts, models, and permissions turn every tweak into a deployment. Runs become hard to audit and each Agent grows into a one-off script. Awaken Agents separates stable execution behavior from the parts a product team tunes.',
+          points: [
+            {
+              k: 'Code stays stable',
+              v: 'Tools, typed state, and providers live in compiled Rust.',
+            },
+            {
+              k: 'Policy is executable',
+              v: 'Hooks, gates, and guards are typed runtime seams, not prompt conventions.',
+            },
+            {
+              k: 'Steps commit together',
+              v: 'Messages, events, run state, and staged state cross one boundary.',
+            },
+          ],
+        },
+        compare: {
+          eyebrow: 'How it compares',
+          title: 'Not more checkboxes. Stronger execution invariants.',
+          intro:
+            'Modern agent frameworks already provide tools, persistence, guardrails, and human approval. Awaken Agents does not claim those checkboxes as unique; its execution core makes their authority, state effects, and recovery semantics explicit and enforceable.',
+          them: 'Common SDK / graph-runtime baseline',
+          us: 'Awaken Agents execution core',
+          rows: [
+            {
+              axis: 'Extension authority',
+              them: 'Callbacks and plugins follow framework or application conventions',
+              us: 'Fail-closed bounds over declared tools, state keys, hooks, actions, guards, and gates',
+            },
+            {
+              axis: 'Parallel state',
+              them: 'Reducer, shared object, or application-defined conflict handling',
+              us: 'Staged Commands with explicit Disjoint, Commutative, or Exclusive merge policy',
+            },
+            {
+              axis: 'Human decisions',
+              them: 'Interrupt or middleware state coordinated by the application',
+              us: 'A typed permission verdict and durable waiting outcome on the same execution path',
+            },
+            {
+              axis: 'Recovery truth',
+              them: 'Checkpoints, messages, side effects, and logs may have different boundaries',
+              us: 'Messages, state commands, audit, run state, and disposition cross one step commit boundary',
+            },
+          ],
+          footnote:
+            'Choose a lightweight SDK for fastest prototyping, LangGraph for graph-centric orchestration, or Rig for broader Rust integrations. Choose Awaken Agents when a tool call has consequences and execution invariants matter more than minimum setup.',
+        },
+        highlights: {
+          eyebrow: 'Highlights',
+          title: 'What the Awaken Agents execution core is actually strong at.',
+          items: [
+            {
+              no: '01',
+              title: 'A programmable loop',
+              body: 'Explicit hooks, gates, and guards extend runtime behavior without replacing the engine.',
+              tags: ['PhaseHook', 'ToolGateHook', 'RunEndGuard'],
+            },
+            {
+              no: '02',
+              title: 'Capabilities with bounds',
+              body: 'Plugins declare which tools, state, and lifecycle seams they may touch before installation.',
+              tags: ['CapabilityBound', 'Typed tools', 'Typed state'],
+            },
+            {
+              no: '03',
+              title: 'One authoritative step',
+              body: 'Messages, events, run state, resume state, and commands commit together or not at all.',
+              tags: ['CommitCoordinator', 'AgentEvent', 'RunState'],
+            },
+          ],
+          footnote:
+            'Inside Awaken Agents, the execution core owns loop semantics; public protocols, managed configuration, durable dispatch, Sandboxes, and operations remain parts of the same product.',
+        },
+      },
+    },
+
+    landing: {
+      managed: {
+        tone: 'iris',
+        eyebrow: 'Awaken Agents · tested with the official Anthropic SDK',
+        status: { label: publicVersionLabel('platform', 'en'), tone: 'iris' },
+        title: 'Make Agents shippable, operable, and reusable.',
+        subtitle:
+          'Your first Agent proves the behavior. Awaken adds durable Sessions, permissions, isolated execution, recovery, and operating boundaries so you can release it and reuse the same foundation for the next application.',
+        ctaPrimary: { label: 'Run the verified quickstart', href: '/docs/agents/get-started' },
+        audience:
+          'Create an Agent, adopt a supported one, or connect existing behavior. If the second application still requires another Session backend, file path, permission layer, Worker, Sandbox, and recovery system, the team needs one reusable application platform.',
+        outcomes: {
+          eyebrow: 'What changes for your team',
+          title: 'Build the Agent product your customers see. Reuse the platform work behind it.',
+          body: 'Your application keeps its experience, domain state, workflow, acceptance, and commercial relationship. Awaken supplies the reusable Agent lifecycle underneath.',
+          items: [
+            { title: 'Move beyond the first demo', body: 'Publish an Agent, create and reopen the same Session, connect resources and permissions, and operate execution without assembling another backend.', proof: 'Agent publication · Session and events · resources · Worker and Sandbox' },
+            { title: 'Keep existing application investment', body: 'Retain the tested official SDK model and connect web, copilot, or Agent-to-Agent surfaces to the same published Agent instead of copying it.', proof: 'Managed Agents · AI SDK · AG-UI · A2A' },
+            { title: 'Keep differentiated Agent behavior', body: 'Choose Awaken Native execution, a supported ACP runtime, or a remote A2A Agent without creating another Session authority.', proof: 'Native · ACP · outbound A2A' },
+            { title: 'Pass enterprise deployment review', body: 'Place control, Session data, credentials, model routes, Workers, and Sandboxes inside the approved infrastructure and responsibility boundary.', proof: 'Self-hosted · enterprise delivery · hosted preview' },
+          ],
+        },
+        advantage: {
+          eyebrow: 'Managed-compatible. Awaken-enhanced.',
+          title: 'Keep the application contract. Choose how the platform connects, executes, and runs.',
+          body:
+            'Anthropic Managed Agents defines a useful application contract. Awaken implements a tested baseline, then adds explicit client, execution, model, and deployment choices around one Agent and Session authority.',
+          commonLabel: 'Managed Agents baseline',
+          awakenLabel: 'Awaken extension',
+          proofLabel: 'What this changes',
+          items: [
+            {
+              title: 'Adopt with the official SDK model',
+              common: 'Use the official Managed Agents API and SDK resource model.',
+              awaken: 'Point a reviewed SDK version to Awaken, configure Awaken authentication, and keep the named compatible request and response shapes.',
+              proof: 'Reduce migration work while keeping exact differences reviewable',
+            },
+            {
+              title: 'Connect more than one application surface',
+              common: 'Managed Agents clients enter through the Managed API.',
+              awaken: 'Managed Agents, AI SDK, AG-UI, and A2A project the same published Agent and committed Session history.',
+              proof: 'Reuse one Agent across backend, web, copilot, and Agent-to-Agent products',
+            },
+            {
+              title: 'Choose the execution behavior',
+              common: 'Use a managed sandbox or self-hosted environment worker inside the Anthropic service model.',
+              awaken: 'Select Native execution, a supported ACP Agent runtime, or a remote A2A endpoint without changing the client contract.',
+              proof: 'Preserve existing Agent behavior and select the right execution path per product',
+            },
+            {
+              title: 'Choose who owns the platform boundary',
+              common: 'The service control plane and persistent service are operated by Anthropic.',
+              awaken: 'Deploy and operate the API, Session data, credentials, model routes, Workers, and Sandboxes yourself or through an AwakenWorks delivery mode.',
+              proof: 'Meet enterprise deployment and operating-responsibility requirements',
+            },
+          ],
+        },
+        decisions: {
+          eyebrow: 'Choose the next technical decision',
+          title: 'Keep the product decision short. Open the exact guide when you need depth.',
+          body: 'Start with the verified run above. The documentation owns compatibility versions, architecture and recovery, deployment procedure, and Runtime internals so this page can stay focused on whether Agents fits your product.',
+          items: [
+            { key: 'compatibility', title: 'Migrate an existing client', body: 'Check reviewed SDK versions, supported resources, required selectors, and known differences before changing an application.', action: 'Review compatibility', href: '/docs/agents/compatibility' },
+            { key: 'architecture', title: 'Review authority and recovery', body: 'Follow publication, Session, dispatch, Worker execution, committed facts, failures, and recovery through their owning boundaries.', action: 'Read the architecture', href: '/docs/agents/concepts/architecture' },
+            { key: 'self-host', title: 'Choose a deployment boundary', body: 'Plan AllInOne or split services, data and credential custody, Workers, Sandboxes, observation, backup, and operating ownership.', action: 'Open the self-hosting guide', href: '/docs/agents/how-to/self-host' },
+            { key: 'runtime', title: 'Extend the execution engine', body: 'Enter Runtime documentation only when you need to change Agent-loop, tool, plugin, state, or execution-backend behavior.', action: 'Open Runtime internals', href: '/docs/agents/runtime' },
+          ],
+        },
+        closer: {
+          title: 'Start with one Session. Expand only when the operating model fits.',
+          body: 'Run the open-source code today. The first stable release is coming soon; talk with us about architecture, integration, and operating responsibility when you need help.',
+          cta: { label: 'Enterprise deployment services', href: '/enterprise?product=agents#enterprise-agents' },
+        },
+      },
+      objects: {
+        eyebrow: 'Awaken Objects · governed business objects',
+        title: 'Let people and Agents act from the same business facts.',
+        subtitle: 'Turn identities, relationships, and allowed changes from existing systems into typed, versioned object records with explicit provenance.',
+        audience: 'For data, business-system, operations, and internal-application teams. Choose one important business object and identify the system that already owns it.',
+        docs: 'Read the Objects docs',
+        star: 'Star the Awaken open foundation',
+        example: {
+          eyebrow: 'Start with one object',
+          title: 'Make one business concept understandable before connecting every system.',
+          body: 'Take an Order as an example. Define its identity and fields, connect it to a Customer, record which system supplied each observation, and expose only the actions that system allows. The example is configurable product behavior, not a built-in Order package.',
+          items: [
+            { title: 'Name the object', body: 'ResourceType fixes the schema, relations, actions, and exact definition revision.' },
+            { title: 'Observe the source', body: 'A Connector normalizes external identity, properties, relations, source, and observation time.' },
+            { title: 'Offer allowed change', body: 'An Action names what may change and requires authorization, an expected revision, and an idempotency boundary.' },
+          ],
+        },
+        model: {
+          eyebrow: 'What Objects owns',
+          title: 'An object record is governed context, not a copy of Agent memory.',
+          body: 'Objects keeps the typed record that applications and Agents may use. It distinguishes platform-owned state from externally controlled state and never turns a Connector observation into exclusive authority.',
+          items: [
+            ['Type and identity', 'ResourceType defines the contract. Resource preserves identity, exact type revision, and lifecycle.'],
+            ['Snapshot and relation', 'A consumable ResourceSnapshot freezes one revision; Relation connects exact objects without guessing the latest value.'],
+            ['Observation and provenance', 'Connector observations retain provider or fallback identity, mechanism, time, and optional provider ordering evidence.'],
+            ['Action and receipt', 'Read-only, idempotent, and mutating Actions follow one authorization and revision-fenced execution path.'],
+          ],
+        },
+        change: {
+          eyebrow: 'One governed change',
+          title: 'A proposal becomes usable only after the owning boundary returns a result.',
+          steps: [
+            ['01', 'Observe', 'A Connector brings back normalized identity, properties, relations, and provenance.'],
+            ['02', 'Project', 'Objects exposes an exact typed snapshot rather than an unversioned latest value.'],
+            ['03', 'Propose', 'A person, application, or Agent submits one named Action with expected revision and idempotency key.'],
+            ['04', 'Authorize and call', 'Objects checks authority and revision before the configured provider boundary is invoked.'],
+            ['05', 'Record the result', 'The receipt and next observation make the accepted external result available to every authorized consumer.'],
+          ],
+        },
+        boundary: {
+          eyebrow: 'Boundary',
+          title: 'Connect business truth. Do not manufacture a second system of record.',
+          items: [
+            { title: 'Not a data warehouse', body: 'Objects does not replace analytical storage or ingest every source before one useful object can exist.' },
+            { title: 'Not Agent memory', body: 'Context assembled for a run is a consumer of the object record, never its lifecycle authority.' },
+            { title: 'Not universal write access', body: 'An Agent may propose only declared Actions; current authorization and revision are checked on every call.' },
+          ],
+        },
+        closer: {
+          title: 'Start with one object, one source, and one governed action.',
+          body: 'Read the current model, then request early access if you have one object and source-system boundary to explore.',
+          cooperation: 'Request early preview',
+        },
+      },
+      workforce: {
+        eyebrow: 'Awaken Workforce · work, responsibility, and acceptance',
+        status: { label: publicVersionLabel('flow', 'en'), tone: 'rust' },
+        title: 'Commission a result. Keep work moving until it is accepted.',
+        subtitle:
+          'Use one workspace to commission an outcome, see where people must intervene, follow Agent and human work, and close only when the declared deliverables are ready for review.',
+        audience: 'For process owners, operations teams, automation architects, and anyone accountable for a result that cannot end with an Agent response alone.',
+        ctaPrimary: {
+          label: 'See the product workspace',
+          href: '/workforce#workforce-preview',
+        },
+        ctaDocs: { label: 'Read the Workforce docs', href: '/docs/workforce' },
+        ctaSecondary: { label: 'Evaluate one real job', href: '/enterprise?product=workforce#enterprise-workforce' },
+        loop: {
+          eyebrow: 'One visible delivery path',
+          title: 'From commissioned outcome to a decision backed by deliverables.',
+          body: 'The product follows the same four stages shown in Workspace Home. Issues and WorkUnits preserve accountability underneath; Needs you collects decisions and exceptions; Outcome Review keeps delivery evidence separate from technical run output.',
+          stages: [
+            ['Commission', 'Define the result, owner, acceptance boundary, and exact Workflow binding.'],
+            ['Decompose', 'Turn the result into an accountable Issue graph with visible dependencies.'],
+            ['Execute', 'Agents, people, and automations complete WorkUnits and return typed evidence.'],
+            ['Accept', 'Review the declared deliverables and record the business decision on the root Outcome.'],
+          ],
+          rule: 'A completed Agent Run settles one execution attempt. It does not close an Issue whose declared completion conditions or external acceptance facts are still missing.',
+        },
+        products: {
+          eyebrow: 'Three products, one accountable path',
+          title: 'Workforce: coordinate the work. Objects: ground it in business facts. Agents: execute it.',
+          body: 'The console brings the three products into one delivery experience without merging their records or responsibilities.',
+          items: [
+            { name: 'Awaken Workforce', role: 'Commission and accept', body: 'Owns Outcome, Issue, Workflow, responsibility, Attention, formal deliverables, and the final business decision.', proof: 'Outcome · Issue · Workflow · Attention · Acceptance' },
+            { name: 'Awaken Objects', role: 'Ground and verify', body: 'Owns the typed objects, relationships, allowed actions, external observations, provenance, and exact business revisions used by the work.', proof: 'ResourceType · Resource · Relation · Action · Observation' },
+            { name: 'Awaken Agents', role: 'Execute and recover', body: 'Owns Agent publication, Session, Run, tools, Worker, Sandbox, committed execution history, and technical recovery.', proof: 'Agent · Session · Run · Worker · Sandbox' },
+          ],
+          path: 'Workforce commissions → Objects grounds context and actions → Agents executes → evidence returns → Workforce accepts',
+          rule: 'Runs and Agent Center are Agents capabilities projected into the composed console. Resources are Objects capabilities. Their presence does not transfer ownership to Workforce.',
+        },
+        scenarios: {
+          eyebrow: 'Jobs that fit',
+          title: 'Start where work crosses a boundary and somebody still has to follow up.',
+          body: 'These are example shapes, not prebuilt industry solutions. Each one requires the Pack, Connector, or verifier that owns its business facts.',
+          items: [
+            { label: 'Customer operations', title: 'Resolve a case across support, billing, and approval', body: 'The Issue stays open while Agents gather context and prepare actions; the customer or business system supplies the accepted resolution.' },
+            { label: 'Software delivery', title: 'Implement, review, and confirm one bounded change', body: 'A repository and CI can return the exact revision and check result required before the work is accepted.' },
+            { label: 'Operational exception', title: 'Recover a recurring process that stopped between systems', body: 'Routine retries continue under policy; missing authority or an unresolved decision reaches a named person as Attention.' },
+          ],
+        },
+        advantage: {
+          eyebrow: 'What Workforce owns beyond Agent execution',
+          title: 'Keep the work understandable between runs.',
+          body:
+            'An Agent can plan and act. Workforce keeps the surrounding job intact: who owns it, which revision applies, what the next step needs, why progress stopped, and which result the owning system accepted.',
+          commonLabel: 'Without a work layer',
+          awakenLabel: 'With Workforce',
+          proofLabel: 'Recorded as',
+          items: [
+            {
+              title: 'Know what is still open',
+              common: 'A run or chat ends, and the team reconstructs the remaining work from messages and logs.',
+              awaken: 'One Issue keeps the owner, process state, attempts, outputs, approvals, Attention, and completion facts together.',
+              proof: 'Issue · WorkflowRevision · WorkUnit · Assignment',
+            },
+            {
+              title: 'State what done means',
+              common: 'Prompts and node code reinterpret readiness, outputs, policy, and completion on every path.',
+              awaken: 'Named hand-offs, guards, approvals, and typed Resources make declared checks executable. A Connector or verifier supplies external truth.',
+              proof: 'ResourceType · Ruling · Requirement · Transition',
+            },
+            {
+              title: 'Send exceptions to the right person',
+              common: 'People watch routine progress and search transcripts to learn why work stopped.',
+              awaken: 'Routine cases advance automatically. Approval and Attention return ambiguity, policy exceptions, and consequential actions with a recorded reason.',
+              proof: 'Ruling · Approval · AttentionSignal · scheduling projection',
+            },
+          ],
+        },
+        solution: {
+          eyebrow: 'The pieces that carry the work',
+          title: 'One record for the job, its route, and the systems it touches.',
+          caps: [
+            { title: 'Issue and WorkUnits', desc: 'Keep the owner, intent, current state, attempts, events, and next action together.' },
+            { title: 'Pinned Workflow', desc: 'Use one immutable process revision for states, hand-offs, transitions, joins, and limits.' },
+            { title: 'Resources and decisions', desc: 'Connect actions to named objects, scoped authority, readiness checks, approvals, and custody.' },
+            { title: 'Domain Packs', desc: 'Signed immutable releases of exact ResourceType, Workflow, Automation, and Agent definitions.' },
+          ],
+        },
+      },
+    },
+  },
+
+  zh: {
+    meta: {
+      title: 'AwakenWorks｜交付并运营自托管 Agent 应用',
+      description:
+        'Awaken Agents 提供一套可复用、自托管的平台，让 Agent 应用越过 Demo，进入可交付和可运营阶段。',
+    },
+    nav: {
+      awaken: 'Awaken 内部机制',
+      managed: 'Agents',
+      objects: 'Objects',
+      workforce: 'Workforce',
+      enterprise: '企业部署',
+      cases: '参考实现',
+      blog: '博客',
+      docs: '文档',
+      github: 'Star',
+      run: '开始使用',
+      menu: '菜单',
+      theme: '切换明暗主题',
+    },
+    waitlist: {
+      placeholder: 'you@company.com',
+      fields: {
+        company: '公司',
+        role: '你的角色',
+        scenario: '贵司正在构建、迁移或部署哪一个 Agent 应用？',
+        loss: '哪些平台工程或运营风险正在阻碍下一次发布？',
+        systems: '涉及的 SDK、模型、工具、数据、身份、基础设施与隔离要求',
+        frequency: '预计运行频率或调用规模',
+        timing: '希望何时开始（选填）',
+      },
+      privacyPrefix: '我同意 AwakenWorks 使用这些信息评估并跟进本次申请。详见',
+      privacyLabel: '隐私说明',
+      error: '申请未能提交。请重试，或发送邮件至 hello@awakenworks.com。',
+      variants: {
+        cooperation: {
+          button: '沟通实施',
+          submitting: '提交中…',
+          subject: 'Awaken Agents 实施申请',
+          success: '申请已收到',
+          successBody: '我们会评估这个应用，并在一个工作日内回复。',
+          successSteps: [
+            '检查应用、当前平台缺口、部署边界和验收条件。',
+            '回复自助路径、聚焦问题，或邀请一次范围沟通。',
+            '如果范围合适，双方会在开始前固定技术检查、责任和排除项。',
+          ],
+        },
+      },
+    },
+    home: {
+      hero: {
+        eyebrow: 'Awaken Agents · 可复用的 Agent 应用平台',
+        title: '让 Agent 原型，变成可交付、可运营、可复用的产品。',
+        subtitle:
+          'Awaken Agents 把 Agent 应用从原型走向发布时反复需要的平台工程打包成产品：发布、Session、文件与记忆、权限、隔离执行、恢复和运营。产品体验与业务逻辑仍由您掌握，同一底座可复用于不同产品、部署和客户项目。',
+        ctaPrimary: '评估 Awaken Agents',
+        ctaSecondary: '规划企业部署',
+      },
+      advantages: {
+        eyebrow: '为什么选择 Awaken',
+        title: '把有差异的 Agent 产品做好一次，不要每次发布都重造底层平台。',
+        body: 'Demo 只能证明模型会回答。真正发布还需要持久状态、权限、资源、隔离执行、失败恢复和明确的运营责任。Awaken 把这些重复工程收敛为一套可复用平台，您的团队继续掌握产品体验、业务逻辑和客户关系。',
+        items: [
+          { key: 'launch', value: '缩短从原型到发布的路径', label: '直接使用发布、Session、资源、权限、执行与恢复路径，不必等 Demo 完成后再逐项补后台。', proof: '查看产品路径', href: '/agents' },
+          { key: 'private', value: '通过企业架构与安全评审', label: '把控制、Session 数据、凭据、模型路由、Worker 与 Sandbox 放进获准的基础设施和责任边界。', proof: '对比部署方式', href: '/agents#deployment' },
+          { key: 'reuse', value: '多个应用复用同一底座', label: '每个产品保持独立体验与领域模型，底层共享 Agent 发布、Session、资源、策略与运维能力。', proof: '查看第一方应用形态', href: '/cases' },
+          { key: 'delivery', value: '把定制交付变成可重复工程', label: '针对客户改变垂直体验、工具和规则，同时保留同一套执行、安全、升级与支持模型。', proof: '沟通实施服务', href: '/enterprise' },
+        ],
+      },
+      scenarios: {
+        eyebrow: '三条具体采用路径',
+        title: '选择希望由 Awaken 承担的平台工作。',
+        body: 'Awaken Agents 是当前可用产品。高价值入口是一个必须交付的 Agent 产品、一个必须运行在企业边界内的内部 Agent，或跨客户复用的定制化交付。Objects 与 Workforce 仍是早期产品方向，不是采用 Agents 的前置条件。',
+        featuredLabel: '建议从这里开始',
+        cta: '进入这条路径',
+        labels: { trigger: '您带来', systems: 'Awaken 提供', human: '您继续掌握', finish: '第一个可用结果', measures: '验证重点' },
+        items: [
+          { key: 'agent-product', href: '/docs/agents/get-started', featured: true, label: 'AI 原生产品团队', title: '交付 Agent Workbench、Copilot 或垂直应用', body: '产品体验、领域模型、工作流与结果验收仍由应用掌握；底层 Agent 平台生命周期复用 Awaken。', trigger: '一个已能运行的 Agent Demo，以及客户真正使用的产品体验', systems: 'Agent 发布 · Session 与事件 · 文件、记忆、Skill、工具与权限 · Worker 与 Sandbox 执行', human: '产品体验、领域状态、业务规则、定价与结果验收', finish: '一个真实应用创建、运行、重连并重新打开同一个 Session', measures: '少写了哪些平台代码 · 集成缺口 · 恢复行为 · 发布前的运维工作' },
+          { key: 'enterprise-private-agent', href: '/enterprise', featured: false, label: '企业内部 Agent', title: '让研发、知识或运营 Agent 运行在获准边界内', body: '当源代码、内部文档、凭据、模型路由或工具执行不能依赖外部控制面时，用 Awaken 承载下层平台。', trigger: '一个内部 Agent 任务，以及数据、身份、模型与隔离要求', systems: '自托管控制与 Session 数据 · 凭据引用 · 受控工具 · 指定 Worker 与 Sandbox', human: '身份权威、基础设施政策、业务审批与持续服务责任', finish: '通过认证的用户运行一条 Agent 路径，控制与执行不离开获准边界', measures: '数据位置 · 密钥保管 · 访问决定 · 审计与恢复证据 · 运维负责人' },
+          { key: 'solution-delivery', href: '/enterprise', featured: false, label: '解决方案商或交付团队', title: '多个客户定制方案，复用一套 Agent 底座', body: '针对每位客户改变垂直工作流、界面、集成与规则，同时保留同一套 Agent、Session、资源、权限与执行平台模型。', trigger: '一套需要跨客户或垂直应用重复交付的业务模式', systems: '一套公共 Agent 与部署底座，以及明确的扩展和基础设施边界', human: '客户发现、垂直知识产权、集成、验收、支持与商业关系', finish: '交付第二个应用时，不复制首个项目的平台代码，也不新建第二套 Session 权威', measures: '平台复用比例 · 客户特定工作 · 部署周期 · 支持与升级负担' },
+        ],
+      },
+      cta: {
+        eyebrow: '只选一个下一步',
+        title: '自行评估产品，或界定一期企业实施。',
+        body: '如果团队可以独立评估，请直接进入当前 Agents 路径；如果应用涉及自托管或专属基础设施、迁移、客户特定集成或明确的运维交接，再与我们沟通。',
+        primary: '评估 Awaken Agents',
+        secondary: '沟通企业实施',
+      },
+    },
+    enterprise: {
+      meta: {
+        title: 'Awaken 企业实施与产品预览｜AwakenWorks',
+        description: '选择范围受控的 Agents 实施，或申请 Objects 与 Workforce 提前预览。',
+      },
+      hero: {
+        eyebrow: '选择下一项产品决策',
+        title: '现在实施 Agents，或共同定义 Objects 与 Workforce 提前预览。',
+        body: 'Agents 是当前实施路径；Objects 与 Workforce 仅按申请提前预览。请选择一款产品、一项真实工作和一个决策边界，三条路径进入下方同一张申请表。',
+        primary: '选择产品路径',
+        secondary: '独立运行 Agents',
+      },
+      paths: {
+        eyebrow: '三款产品 · 两种合作模式',
+        title: '不要把三种成熟度当成同一种承诺。',
+        bringLabel: '请带来',
+        decisionLabel: '第一个决策',
+        boundaryLabel: '当前边界',
+        items: [
+          { product: 'Awaken Agents', status: '当前实施', body: '自行运行产品，或在获准的基础设施边界内界定一个 Agent 应用。', bring: '一个可运行的 Agent 应用、客户端路径、模型与资源输入、运行环境和技术负责人。', decision: '一次范围受控的 4–6 周实施以 2–4 项发布检查为边界，其中包含权限决定与中断恢复路径，最终形成继续、调整或停止决定。', boundary: '进一步加固、集成、推广与支持，需要基于同一 Agents 底座重新界定服务范围。', href: '/agents', docsHref: '/docs/agents/concepts/architecture', view: '查看 Agents', docs: '审阅实施细节', apply: '沟通 Agents 实施', query: 'agents' },
+          { product: 'Awaken Objects', status: '提前预览', body: '围绕一项业务事实和已经拥有它的系统，共同定义预览。', bring: '一个业务对象、来源权威与 provenance、一项受控变化，以及使用它的应用或 Agent。', decision: '判断共享、类型化对象边界是否适合这项工作，以及预览下一步应验证哪条来源连接或受控 Action。', boundary: '这是未发布产品的发现过程，不是 Agents 实施、生产交付承诺或可用性承诺。', href: '/objects', docsHref: '/docs/objects', view: '查看 Objects', docs: '审阅对象模型', apply: '申请 Objects 预览', query: 'objects' },
+          { product: 'Awaken Workforce', status: '提前预览', body: '围绕一项必须跨越交接与例外的重复结果，共同定义预览。', bring: '一项真实工作、责任人、执行系统、人工决定、例外路径、证据与外部验收事实。', decision: '判断 Issue、责任与验收模型是否适合这项工作，以及预览下一步应验证哪条端到端闭环。', boundary: '这是未发布产品的发现过程，不是打包 Workflow、Agents 实施或生产交付承诺。', href: '/workforce', docsHref: '/docs/workforce', view: '查看 Workforce', docs: '审阅工作与验收', apply: '申请 Workforce 预览', query: 'workforce' },
+        ],
+      },
+      process: {
+        eyebrow: '一张表单 · 按产品进入下一步',
+        title: '入口可以共用，承诺不能混用。',
+        body: '每次申请都从一款产品和一项真实工作开始，再依据当前成熟度进入对应路径，不再让预览申请穿过 Agents 实施叙事。',
+        steps: [
+          { n: '01', title: '说清工作与决策', body: '描述当前基线或损失、责任人、涉及系统，以及另一个人或系统可以验收的第一个结果。' },
+          { n: '02', title: '匹配当前产品路径', body: 'Agents 可以进入自行评估或范围受控实施；Objects 与 Workforce 进入各自的产品预览发现。' },
+          { n: '03', title: '固定一个下一步', body: '我们会回复可支持的自助路径、聚焦问题或范围边界。提交表单不会自动让任何一方承诺生产交付。' },
+        ],
+        boundary: 'Agents 实施范围不会自动转移到 Objects 或 Workforce；预览意向也不代表产品访问权、发布时间、生产就绪、支持或 SLA。',
+      },
+      form: {
+        eyebrow: '沟通实施',
+        title: '请带来一款产品、一项真实工作和一个下一步决策。',
+        body: '请先选择 Agents、Objects 或 Workforce，再说明当前工作、权威与系统、第一个可验收结果，以及阻碍下一步决策的因素。我们争取在一个工作日内回复。',
+        prepareTitle: '请准备四个事实',
+        prepare: ['所选产品与一项具体工作', '当前基线、损失或决策阻碍', '系统、数据、身份与执行边界', '购买、运营与验收负责人'],
+      },
+      boundary: 'Agents 已开源，首个稳定版即将发布。Objects 与 Workforce 通过聚焦的提前体验合作提供。',
+    },
+    privacy: {
+      meta: { title: '隐私说明｜AwakenWorks', description: 'AwakenWorks 官网如何处理联系、机会、归因和分析数据。' },
+      eyebrow: '网站隐私',
+      title: '隐私说明',
+      updated: '最近更新：2026 年 8 月 24 日',
+      intro: '本说明适用于 AwakenWorks 公开网站及企业部署与实施表单，不涉及客户自行运营的 Awaken 部署中所处理的数据。',
+      sections: [
+        { title: '你主动提供的信息', paragraphs: ['提交表单时，我们会收到你选择填写的联系方式、公司与角色、希望讨论的工作、涉及系统、时间、同意状态，以及推荐来源或活动信息。', '请勿通过网站表单发送密码、凭据、生产数据、个人档案或其他秘密。'] },
+        { title: '网站分析', paragraphs: ['网站使用 Umami 记录页面与交互分析，包括页面、语言、活动和具名转化事件。我们用这些信息改善导航，并了解哪些内容把读者带到文档、GitHub 或合作沟通。网站不使用广告 Cookie。'] },
+        { title: '如何使用表单信息', paragraphs: ['我们使用表单内容回复沟通，理解自行评估还是一次范围受控的实施更适合作为下一步，并为后续交流做准备。推荐来源与活动信息用于了解请求是如何到达我们的。'] },
+        { title: '服务商与跨境处理', paragraphs: ['网站默认把表单发送到 Formspree，并由 Umami Cloud 处理分析数据。部署可以改用其他表单端点或自托管 Umami。这些服务商可能依据各自条款，在其他司法辖区处理信息。', 'Formspree 和 Umami 不是正式合作记录。如果申请成为合格机会，工作记录会进入公司 CRM；已签署协议和交易记录仍是正式业务记录。'] },
+        { title: '保留期限与你的请求', paragraphs: ['我们只在理解和跟进请求、记录业务关系，或满足运营与法律要求所需的期限内保留询问信息。你可以请求访问、更正或删除；协议、争议、安全事项或法律义务所需的记录可能需要保留更久。'] },
+        { title: '变更与联系', paragraphs: ['如有问题或数据请求，请发送邮件至 hello@awakenworks.com。网站的数据路径、服务商或使用目的发生变化时，我们会更新本说明。'] },
+      ],
+      contactLabel: '发送隐私问题或数据请求',
+      contactHref: 'mailto:hello@awakenworks.com',
+    },
+    cases: {
+      meta: {
+        title: 'Built on Awaken：参考应用与参考实现',
+        description: '按产品形态选择参考实现，尝试最小可用路径，并看清应用保留什么、Awaken 提供什么。',
+      },
+      eyebrow: 'Built on Awaken',
+      title: '看看我们如何用 Awaken 构建产品。',
+      body: 'Pilot、DeepSeek Workbench 参考复现与 Awaken Design 从三类不同产品需求出发：体验与领域模型留在应用里，底层复用 Awaken Agents 执行，并清楚说明今天实际可用的部分。',
+      items: [
+        {
+          slug: 'pilot',
+          kind: '第一方 Reference App',
+          name: 'Awaken Pilot',
+          adoption: '创建轻量 Agent 应用',
+          title: '给 Pilot 一个 Mission，让工作留在同一个 Session。',
+          problem: '产品想法已经清楚，但第一个原型仍要处理任务状态、进展、审批、计划任务、文件与恢复。',
+          firstWin: '用 Plan 或 Execute 运行一个边界明确的 Mission，再从同一个 Session 查看进展和结果。',
+          summary: 'Pilot 保持很薄：Mission 对应 Awaken Session，Project 选择 Deployment。用户可以看到计划、进展、文件、审批与结果，底层不再增加第二套任务引擎。',
+          audience: '希望用最短路径把产品体验连接到持久执行的 Agent 产品团队。',
+          owned: '产品文案、Mission 交互、验收标准与 UI 投影。',
+          reused: 'Agent、Deployment、Session、Run、事件、文件、工具、策略、Worker、Sandbox 与恢复。',
+          status: '本地参考实现 · 公开源码待发布',
+          sourceStatus: '当前构建仍在本地。固定公开版本发布之前，外部团队还不能独立复现。',
+          proof: [
+            { level: '测试通过', claim: 'Execute 与 Plan 共用一份 Session 日志。', owner: 'Pilot Web 与 API 测试套件' },
+            { level: '测试通过', claim: '审批、预算、Skills、MCP、子 Agent、Artifact 与计划任务复用 Awaken 契约。', owner: 'pnpm check' },
+            { level: '真实栈待发布', claim: '真实栈验收协议包含中断与恢复，但 live 结果还没有发布。', owner: 'docs/real-stack-acceptance.md' },
+          ],
+          try: ['从一个 Mission 和一条可见验收标准开始', '中断或审批一次，再确认同一个 Session 可以继续', '只在应用里保留用户真正需要的产品投影'],
+          primary: { label: '运行 Awaken 快速开始', href: '/docs/agents/get-started' },
+          secondary: { label: '了解 Session 管理', href: '/docs/agents/how-to/manage-a-session' },
+          engineeringBlog: { label: '阅读实现决策与失败边界', href: '/blog/2026-08-build-manus-style-agent-product' },
+          cta: '查看 Pilot 参考实现',
+        },
+        {
+          slug: 'deepseek-harness',
+          kind: '独立 Reference Reimplementation',
+          name: 'DeepSeek Workbench on Awaken Agents',
+          adoption: '开发高级 Agent Workbench',
+          title: '保留 Workbench 体验，复用下层的 Agent 执行。',
+          problem: '强交互 Workbench 需要 Preset、Plan、审批、Trajectory、Thread 与 Files。先重做 Agent loop，会推迟用户真正看得见、能够判断的部分。',
+          firstWin: '启动一个由 Preset 驱动的 Session，审阅 Plan、批准工具，并在中断后重新打开同一条 Trajectory。',
+          summary: '这个独立参考实现拥有 Preset、Trajectory、审批、Skill、子 Agent 与 deliverable 等 Workbench 体验；浏览器和产品 API 只是 Awaken Session 与 committed Events 的投影。',
+          audience: '正在开发 Agent IDE、编码工作台或其他强交互 Agent 产品的团队。',
+          owned: 'Preset UX、浏览器偏好、产品投影，以及无状态 Workbench Session API 与 Interaction MCP。',
+          reused: 'Managed Session、事件、模型路由、凭据、工具、权限、压缩、资源、子 Agent、Worker 与 Sandbox。',
+          status: '本地确定性 Demo · 真实运行尚未发布',
+          sourceStatus: '确定性路径目前仍在本地。独立复现还需要公开版本，以及一次新的带凭据运行结果。',
+          proof: [
+            { level: 'Fixture 测试通过', claim: '确定性 Managed API Demo 贯穿浏览器、Workbench Session API、官方 SDK 与已提交事件投影。', owner: 'e2e/harness.spec.ts' },
+            { level: '契约已审计', claim: 'Native、Equivalent、Presentation 与 Unavailable 能力都有明确边界。', owner: 'docs/ui-parity.md' },
+            { level: '真实模型待发布', claim: '真实 DeepSeek 路径已经存在，但发布前仍需一次带凭据的新结果。', owner: 'e2e/live/harness-live.spec.ts' },
+          ],
+          try: ['先运行确定性 Demo，再添加模型供应商凭据', '沿浏览器、产品 API 与已提交事件追踪一条 Preset Session', '用自己的已发布 Agent 替换 fixture，不在浏览器增加执行状态'],
+          primary: { label: '接入已发布 Agent', href: '/docs/agents/how-to/connect-a-published-agent' },
+          secondary: { label: '了解 AI SDK 边界', href: '/docs/agents/protocols/ai-sdk' },
+          engineeringBlog: null,
+          cta: '查看独立参考实现',
+        },
+        {
+          slug: 'design',
+          kind: '第一方 Reference App',
+          name: 'Awaken Design',
+          adoption: '构建领域型 AI 产品',
+          title: '把一次 AI 设计生成，变成可评审、可修改、可明确验收的结果。',
+          problem: '当团队需要比较版本、把反馈绑定到精确结果、拒绝不安全输出并交付唯一选定设计时，聊天记录不是合适的产品模型。',
+          firstWin: '从一份 Brief 开始，评审一个 Ready 的不可变 Revision，提出一次修改，再验收要交付的精确 Artifact。',
+          summary: 'Awaken Design 在产品内保留 DesignProject、不可变 Revision、精确评审、隔离 Preview 与已验收 Artifact；Awaken 在下层运行 Agent Session、执行期文件与恢复。',
+          audience: '需要持久领域模型、人工评审、安全发布和聊天之外业务事实的 AI 原生产品团队。',
+          owned: 'DesignProject、不可变 DesignRevision、评审目标、Preview 安全、明确验收和已发布 Artifact。',
+          reused: 'Agent、Environment、Session、Run、执行期 File、工具、事件、Worker、Sandbox 与恢复。',
+          status: '本地源码与测试证据 · 真实运行和现场结果待验证',
+          sourceStatus: '这个第一方参考实现仍在本地，尚缺固定公开版本、一次新的真实运行演示，以及外部用户或客户结果。',
+          proof: [
+            { level: '源码已核对', claim: '当前实现保留唯一的不可变 Revision 与 Artifact 发布 owner。', owner: 'Awaken Design architecture 与 ADR' },
+            { level: '已有测试覆盖', claim: '发布、评审、验收与 Artifact watcher 路径已有自动化覆盖；本页不宣称本次重新跑完全套。', owner: 'Awaken Design 测试套件' },
+            { level: '真实运行与现场待验证', claim: '当前运行可用性，以及外部用户或客户结果尚未发布。', owner: 'Awaken Design 发布门' },
+          ],
+          try: ['把持久结果建模成领域对象，不把聊天记录当产品模型', '让执行期 File 只经过一条不可变 Revision 与 Artifact 发布路径', '把评审、安全发布和明确选定放进产品体验'],
+          primary: { label: '构建 Agent 驱动的产品', href: '/docs/agents/how-to/build-an-agent-with-the-assistant' },
+          secondary: { label: '阅读架构指南', href: '/docs/agents/concepts/architecture' },
+          engineeringBlog: { label: '阅读发布与验收的工程决策', href: '/blog/2026-08-build-claude-design-style-workflow' },
+          cta: '查看 Awaken Design 参考实现',
+        },
+      ],
+    },
+    products: {
+      eyebrow: '当前可用产品与后续方向',
+      title: '先采用 Agents；Objects 与 Workforce 成熟后，再按需要增加业务上下文与工作协调。',
+      managed: {
+        tone: 'iris',
+        layer: 'Managed Agents 兼容平台',
+        status: publicVersionLabel('platform', 'zh'),
+        license: 'Apache-2.0',
+        audience: '面向 Agent 产品、AI 平台、基础设施与交付团队',
+        name: 'Awaken Agents',
+        role: '执行与恢复',
+        tagline: '在自己掌控的基础设施上交付并运营 Agent 应用。',
+        points: [
+          '让 Managed Agents、AI SDK、AG-UI 与 A2A 客户端进入同一份 Session 历史。',
+          '选择模型、Agent Runtime 与工具位置，不改变应用面对的契约。',
+          '先从单进程开始，确有运营需要时再加入 Worker 与隔离 Sandbox。',
+        ],
+        cta: '了解 Agents',
+        href: '/agents',
+      },
+      objects: {
+        tone: 'amber',
+        layer: '业务对象层',
+        status: publicProductLabel('objects', 'zh'),
+        license: '可申请提前体验',
+        audience: '面向数据、业务系统与内部应用团队',
+        name: 'Awaken Objects',
+        role: '业务上下文',
+        tagline: '让人、应用与 Agent 使用同一份业务事实与动作。',
+        points: [
+          '把 ResourceType、Resource 身份、Relation、Action 与 provenance 建模成领域事实。',
+          '连接外部系统，不把 Agent context 变成第二份业务记录。',
+          '每项候选变更都经过确定性校验、授权与 revision 检查。',
+        ],
+        cta: '了解 Objects',
+        href: '/objects',
+      },
+      workforce: {
+        tone: 'rust',
+        layer: '工作与验收',
+        status: publicVersionLabel('flow', 'zh'),
+        license: '可申请提前体验',
+        audience: '面向 Loop Engineer 与对结果负责的团队',
+        name: 'Awaken Workforce',
+        role: '责任与验收',
+        tagline: '让责任、例外与验收始终相连，直到工作完成。',
+        points: [
+          '持久化 Issue 跨越多次尝试与交接，持续保存意图和责任。',
+          '依赖关系与 Reaction 自动唤醒已经具备条件的工作。',
+          '人继续掌握意图、例外、审批和重大行动。',
+        ],
+        cta: '了解 Workforce',
+        href: '/workforce',
+      },
+    },
+    footer: {
+      tagline: '可靠、自托管的 AI Agent 执行基础设施。',
+      rights: '© 2026 AwakenWorks. 产品许可因产品而异。',
+      cols: [
+        {
+          title: '产品',
+          links: [
+            { label: 'Awaken Agents', href: '/agents' },
+            { label: 'Awaken Objects', href: '/objects' },
+            { label: 'Awaken Workforce', href: '/workforce' },
+          ],
+        },
+        {
+          title: '资源',
+          links: [
+            { label: '企业部署与实施', href: '/enterprise' },
+            { label: '参考实现', href: '/cases' },
+            { label: '文档', href: '/docs' },
+            { label: '博客', href: '/blog' },
+          ],
+        },
+        {
+          title: '社区',
+          links: [
+            { label: 'Star Awaken', href: AWAKEN_GITHUB_URL },
+            {
+              label: '讨论区',
+              href: 'https://github.com/AwakenWorks/awaken/discussions',
+            },
+            { label: 'YouTube', href: 'https://www.youtube.com/@awakenworks-ai' },
+          ],
+        },
+        {
+          title: '联系',
+          links: [
+            { label: 'hello@awakenworks.com', href: 'mailto:hello@awakenworks.com' },
+            { label: '隐私说明', href: '/privacy' },
+          ],
+        },
+      ],
+    },
+
+    // ── Per-product pages ──────────────────────────────────────────
+    pages: {
+      awaken: {
+        meta: {
+          title: 'Awaken Agents 内部机制：扩展 Rust 执行内核',
+          description:
+            'Awaken Agents 包含可嵌入的 Rust 执行内核：可编程 loop、类型化工具与状态、有边界 plugins、显式 gates 和原子 step commit。',
+        },
+        tone: 'bone',
+        audience: '面向 Rust agent 开发者',
+        title: '用 Rust 构建生产级 AI agent。',
+        subtitle:
+          '把 agent loop 做成可编程的系统组件：类型化 state、有边界 plugins、显式 gates 与原子 step commit；I/O、持久化和部署仍由你的应用拥有。',
+        ctaPrimary: '阅读文档',
+        ctaSecondary: '在 GitHub 查看',
+        problem: {
+          eyebrow: '我们要解决的问题',
+          title: 'Agent 的行为，不该藏在脆弱的脚本里。',
+          body: '多数 Agent loop 把执行、策略和副作用揉成一团，直到并发、等待或失败恢复才暴露问题。Awaken Agents 把生命周期、能力与提交边界变成显式契约。',
+          points: [
+            { k: '代码保持稳定', v: '工具、类型化状态与 provider 编译进 Rust。' },
+            { k: '策略在 loop 内', v: '每次工具调用都经过 gate，等待和恢复是类型化结果。' },
+            { k: '状态原子提交', v: '并行工具先暂存 Command，再在 step 边界统一调和。' },
+          ],
+        },
+        compare: {
+          eyebrow: '与同类对比',
+          title: '不是增加更多勾选项，而是强化执行不变量。',
+          intro:
+            '现代 Agent 框架已经普遍提供 tools、持久化、guardrail 与人工审批。Awaken Agents 不把这些勾选项包装成独有功能；其执行内核让背后的权力、状态影响与恢复语义显式且可强制执行。',
+          them: '常见 SDK / graph runtime 基线',
+          us: 'Awaken Agents 执行内核',
+          rows: [
+            {
+              axis: '扩展的权力',
+              them: 'Callbacks 与 plugins 遵循框架或应用约定',
+              us: '对已声明 tools、state keys、hooks、actions、guards 与 gates 执行 fail-closed 边界',
+            },
+            {
+              axis: '并行状态',
+              them: 'Reducer、共享对象，或由应用自定义冲突处理',
+              us: '暂存 Command，并显式选择 Disjoint、Commutative 或 Exclusive merge policy',
+            },
+            {
+              axis: '人的决定',
+              them: '由应用协调 interrupt 或 middleware state',
+              us: '同一执行路径上的类型化 permission verdict 与 durable waiting outcome',
+            },
+            {
+              axis: '恢复真相',
+              them: 'Checkpoint、message、副作用与日志可能采用不同边界',
+              us: 'Messages、state commands、audit 与 RunDisposition 共用一个 step commit 边界',
+            },
+          ],
+          footnote:
+            '最快原型请选择轻量 SDK；以图为中心的编排请选择 LangGraph；更广的 Rust 集成请选择 Rig。当工具调用会产生真实后果、执行不变量比最少配置更重要时，选择 Awaken Agents。',
+        },
+        highlights: {
+          eyebrow: '亮点',
+          title: 'Awaken Agents 执行内核真正强在哪。',
+          items: [
+            {
+              no: '01',
+              title: '可编程的 Agent loop',
+              body: '显式生命周期 hooks、tool gates 与 run-end guards，让扩展行为无需 fork engine。',
+              tags: ['PhaseHook', 'ToolGateHook', 'RunEndGuard'],
+            },
+            {
+              no: '02',
+              title: '能力边界可验证',
+              body: '类型化 tools 与 state 配合有边界 plugins；扩展不能越过预先声明的 keys、tools 与生命周期接缝。',
+              tags: ['类型化工具', 'StateKey', 'Plugin'],
+            },
+            {
+              no: '03',
+              title: '提交与等待是契约',
+              body: '工具先暂存 Command，再原子提交 step；权限 Ask 产出可恢复的 ResumeTicket，而不是 UI 特例。',
+              tags: ['Command', 'MergePolicy', 'ResumeTicket'],
+            },
+          ],
+          footnote:
+            '需要托管协议、配置与凭证、持久调度、恢复和 fleet 运维时，进入 Awaken 的服务与运营文档。',
+        },
+      },
+    },
+
+    landing: {
+      managed: {
+        tone: 'iris',
+        eyebrow: 'Awaken Agents · 已通过官方 Anthropic SDK 测试',
+        status: { label: publicVersionLabel('platform', 'zh'), tone: 'iris' },
+        title: '让 Agent 可交付、可运营、可复用。',
+        subtitle:
+          '第一个 Agent 已经证明行为可行。Awaken 补齐发布所需的持久 Session、资源、权限、隔离执行、恢复与运营边界，并让同一套底座继续服务下一个应用。',
+        ctaPrimary: { label: '按实测路径快速开始', href: '/docs/agents/get-started' },
+        audience:
+          '创建 Agent、采用受支持的 Agent，或接入已有行为。如果第二个应用仍要重新开发 Session 后台、文件路径、权限层、Worker、Sandbox 和恢复系统，团队需要的是一套可复用的应用平台。',
+        outcomes: {
+          eyebrow: '您的团队会发生什么变化',
+          title: '把工程投入用在客户看得见的 Agent 产品上，复用背后的平台工作。',
+          body: '应用继续掌握产品体验、领域状态、工作流、结果验收与商业关系；Awaken 提供可复用的 Agent 生命周期底座。',
+          items: [
+            { title: '让 Agent 越过第一个 Demo', body: '发布 Agent，创建并重新打开同一个 Session，接入资源与权限并运营执行路径，不必再拼装一套后台。', proof: 'Agent 发布 · Session 与事件 · 资源 · Worker 与 Sandbox' },
+            { title: '保留现有应用投入', body: '保留经过测试的官方 SDK 模型，让 Web、Copilot 或 Agent-to-Agent 界面接入同一个已发布 Agent，而不是复制一份。', proof: 'Managed Agents · AI SDK · AG-UI · A2A' },
+            { title: '保留有差异的 Agent 行为', body: '选择 Awaken Native、受支持的 ACP Runtime 或远端 A2A Agent，不建立第二套 Session 权威。', proof: 'Native · ACP · outbound A2A' },
+            { title: '通过企业部署评审', body: '把控制、Session 数据、凭据、模型路由、Worker 与 Sandbox 放进获准的基础设施和责任边界。', proof: '自托管 · 企业交付 · 托管预览' },
+          ],
+        },
+        advantage: {
+          eyebrow: '兼容 Managed Agents，并在此基础上增强',
+          title: '保留应用契约，同时选择平台如何接入、执行与运营。',
+          body:
+            'Anthropic Managed Agents 定义了一套实用的应用契约。Awaken 实现经过测试的兼容基线，并围绕同一个 Agent 与 Session 权威增加明确的客户端、执行、模型和部署选择。',
+          commonLabel: 'Managed Agents 基线',
+          awakenLabel: 'Awaken 增强',
+          proofLabel: '这意味着',
+          items: [
+            {
+              title: '沿用官方 SDK 应用模型',
+              common: '使用官方 Managed Agents API 与 SDK 资源模型。',
+              awaken: '把已审阅的 SDK 版本指向 Awaken，配置 Awaken 认证，并保留具名兼容范围内的请求与响应结构。',
+              proof: '减少迁移工作，同时让精确差异可检查',
+            },
+            {
+              title: '接入不止一种产品界面',
+              common: 'Managed Agents 客户端通过 Managed API 接入。',
+              awaken: 'Managed Agents、AI SDK、AG-UI 与 A2A 投影同一个已发布 Agent 和已提交 Session 历史。',
+              proof: '一个 Agent 复用于后端、Web、Copilot 与 Agent 协作产品',
+            },
+            {
+              title: '选择 Agent 的执行行为',
+              common: '在 Anthropic 服务模型中使用托管 Sandbox 或 self-hosted environment worker。',
+              awaken: '选择 Native 执行、受支持的 ACP Agent Runtime 或远端 A2A endpoint，不改变客户端契约。',
+              proof: '保留已有 Agent 行为，并为不同产品选择合适执行路径',
+            },
+            {
+              title: '选择由谁掌握平台边界',
+              common: '平台控制面与持久服务由 Anthropic 运营。',
+              awaken: 'API、Session 数据、凭据、模型路由、Worker 与 Sandbox 可以由您的团队部署运营，也可以采用 AwakenWorks 交付方式。',
+              proof: '满足企业部署和运营责任要求',
+            },
+          ],
+        },
+        decisions: {
+          eyebrow: '选择下一项技术决策',
+          title: '产品判断保持简短；需要深度时，再进入对应指南。',
+          body: '先完成上方实测运行。兼容版本、架构与恢复、部署步骤和 Runtime 内部机制由文档负责，让本页只回答 Agents 是否适合你的产品。',
+          items: [
+            { key: 'compatibility', title: '迁移已有客户端', body: '改变应用前，检查已审阅 SDK 版本、支持资源、必需 selector 与已知差异。', action: '查看兼容范围', href: '/docs/agents/compatibility' },
+            { key: 'architecture', title: '审阅权威与恢复', body: '沿着各自权威边界，理解 publication、Session、dispatch、Worker 执行、已提交事实、失败与恢复。', action: '阅读架构', href: '/docs/agents/concepts/architecture' },
+            { key: 'self-host', title: '选择部署边界', body: '规划 AllInOne 或拆分服务，以及数据和凭据保管、Worker、Sandbox、观测、备份与运营责任。', action: '打开自托管指南', href: '/docs/agents/how-to/self-host' },
+            { key: 'runtime', title: '扩展执行内核', body: '只有需要改变 Agent loop、工具、Plugin、状态或执行后端行为时，才进入 Runtime 文档。', action: '进入 Runtime 内部机制', href: '/docs/agents/runtime' },
+          ],
+        },
+        closer: {
+          title: '先运行一个 Session，确认运营方式适合以后再扩展。',
+          body: '现在即可运行开源代码，首个稳定版也将很快发布。需要帮助时，可以与我们沟通架构、集成与运营责任。',
+          cta: { label: '企业部署服务', href: '/enterprise?product=agents#enterprise-agents' },
+        },
+      },
+      objects: {
+        eyebrow: 'Awaken Objects · 受治理的业务对象',
+        title: '让人和 Agent 基于同一份业务事实行动。',
+        subtitle: '把现有系统中的身份、关系与允许的变化，整理成有类型、有版本、有明确来源的对象记录。',
+        audience: '面向数据、业务系统、运营和内部应用团队。选择一类关键业务对象，并找到已经拥有它的系统。',
+        docs: '阅读 Objects 文档',
+        star: 'Star Awaken 开源基础',
+        example: {
+          eyebrow: '从一个对象开始',
+          title: '先让一个业务概念清楚，再连接所有系统。',
+          body: '以订单为例：定义它的身份和字段，把它连接到客户，记录每次观察来自哪个系统，并且只开放该系统允许的动作。这个例子说明可配置的产品能力，并不代表内置了订单方案。',
+          items: [
+            { title: '说明对象', body: 'ResourceType 固定 schema、relation、action 与精确的定义 revision。' },
+            { title: '观察来源', body: 'Connector 规范化外部身份、属性、关系、来源与观察时间。' },
+            { title: '开放动作', body: 'Action 说明允许怎样改变，并要求授权、预期 revision 与幂等边界。' },
+          ],
+        },
+        model: {
+          eyebrow: 'Objects 拥有什么',
+          title: '对象记录是受治理的上下文，不是 Agent memory 的副本。',
+          body: 'Objects 保存应用和 Agent 可以使用的类型化记录，区分平台拥有的状态与外部系统控制的状态，也不会把一次 Connector observation 当成独占权威。',
+          items: [
+            ['类型与身份', 'ResourceType 定义契约；Resource 保存身份、精确类型 revision 与生命周期。'],
+            ['快照与关系', '可使用的 ResourceSnapshot 固定一个 revision；Relation 连接精确对象，不猜测最新值。'],
+            ['观察与来源', 'Connector observation 保留 provider 或 fallback 身份、机制、时间与可选的 provider 顺序证据。'],
+            ['动作与回执', '只读、幂等和变更 Action 复用同一条授权与 revision-fenced 执行路径。'],
+          ],
+        },
+        change: {
+          eyebrow: '一次受治理的变化',
+          title: '只有拥有事实的边界返回结果，候选变化才可继续使用。',
+          steps: [
+            ['01', '观察', 'Connector 带回规范化的身份、属性、关系与 provenance。'],
+            ['02', '形成视图', 'Objects 提供精确的类型化 snapshot，而不是没有版本的“最新值”。'],
+            ['03', '提出动作', '人、应用或 Agent 提交具名 Action，并带上预期 revision 与幂等 key。'],
+            ['04', '授权并调用', 'Objects 检查权限与 revision，再进入已配置的 provider 边界。'],
+            ['05', '记录结果', '回执与下一次 observation 让获准的使用者看到外部系统接受的结果。'],
+          ],
+        },
+        boundary: {
+          eyebrow: '边界',
+          title: '连接业务事实，不制造第二个权威系统。',
+          items: [
+            { title: '不是数据仓库', body: 'Objects 不替代分析存储，也不要求先接入所有来源才能建立一个有用对象。' },
+            { title: '不是 Agent memory', body: '一次 Run 组装的 context 只是对象记录的使用者，不能拥有它的生命周期。' },
+            { title: '不是通用写权限', body: 'Agent 只能提出已声明的 Action；每次调用都重新检查当前授权与 revision。' },
+          ],
+        },
+        closer: {
+          title: '从一个对象、一个来源和一个受治理动作开始。',
+          body: '你可以先了解当前模型；如果已有明确的对象和源系统边界，可以申请提前体验。',
+          cooperation: '申请提前预览',
+        },
+      },
+      workforce: {
+        eyebrow: 'Awaken Workforce · 工作、责任与验收',
+        status: { label: publicVersionLabel('flow', 'zh'), tone: 'rust' },
+        title: '委托一个结果，让工作持续推进，直到可以验收。',
+        subtitle:
+          '在一个工作空间中委托 Outcome、查看哪里需要人介入、跟踪 Agent 与人的协作，并且只在声明的交付物进入评审后结束工作。',
+        audience: '面向流程负责人、运营团队、自动化架构师，以及所有不能把一次 Agent 回复直接当成最终结果的人。',
+        ctaPrimary: {
+          label: '查看产品工作空间',
+          href: '/workforce#workforce-preview',
+        },
+        ctaDocs: { label: '阅读 Workforce 文档', href: '/docs/workforce' },
+        ctaSecondary: { label: '验证一项真实工作', href: '/enterprise?product=workforce#enterprise-workforce' },
+        loop: {
+          eyebrow: '一条看得见的交付路径',
+          title: '从委托 Outcome，到基于交付物作出验收决定。',
+          body: '产品遵循 Workspace Home 展示的四个阶段。Issue 与 WorkUnit 在底层保存责任；Needs you 汇总人工决定和例外；Outcome Review 把正式交付证据与技术 Run 输出分开。',
+          stages: [
+            ['委托', '定义结果、负责人、验收边界与精确 Workflow binding。'],
+            ['分解', '形成可问责的 Issue 图，并让依赖关系保持可见。'],
+            ['执行', 'Agent、人和自动化完成 WorkUnit，并返回类型化证据。'],
+            ['验收', '检查声明的交付物，并在根 Outcome 上记录业务决定。'],
+          ],
+          rule: 'Agent Run 完成只代表一次执行已经结算；只要声明的完成条件或外部验收事实仍然缺失，Issue 就不会结束。',
+        },
+        products: {
+          eyebrow: '三个产品，一条可问责路径',
+          title: 'Workforce 协调工作，Objects 提供业务事实，Agents 负责执行。',
+          body: 'Console 将三个产品组合为一套交付体验，但不会合并它们的记录、权威和责任。',
+          items: [
+            { name: 'Awaken Workforce', role: '委托与验收', body: '拥有 Outcome、Issue、Workflow、责任、Attention、正式交付物与最终业务决定。', proof: 'Outcome · Issue · Workflow · Attention · Acceptance' },
+            { name: 'Awaken Objects', role: '提供事实并核验', body: '拥有工作所用的类型化对象、关系、允许动作、外部 observation、provenance 与精确业务 revision。', proof: 'ResourceType · Resource · Relation · Action · Observation' },
+            { name: 'Awaken Agents', role: '执行与恢复', body: '拥有 Agent publication、Session、Run、工具、Worker、Sandbox、已提交执行历史与技术恢复。', proof: 'Agent · Session · Run · Worker · Sandbox' },
+          ],
+          path: 'Workforce 委托 → Objects 提供上下文和动作 → Agents 执行 → 证据返回 → Workforce 验收',
+          rule: 'Runs 与 Agent Center 是投影到组合 Console 中的 Agents 能力；Resources 属于 Objects。它们出现在 Workforce 界面中，不代表权威转移给 Workforce。',
+        },
+        scenarios: {
+          eyebrow: '适合的工作',
+          title: '从那些跨越边界、仍然需要有人追问的工作开始。',
+          body: '以下是工作形态示例，不是内置行业方案。每种工作仍需要拥有业务事实的 Pack、Connector 或 verifier。',
+          items: [
+            { label: '客户运营', title: '跨客服、账务与审批解决一个问题', body: 'Agent 可以收集上下文并准备动作；在客户或业务系统返回可接受结果前，Issue 继续保持开放。' },
+            { label: '软件交付', title: '实现、复核并确认一项有边界的变更', body: '代码仓和 CI 可以返回精确 revision 与检查结果，作为这项工作被接受的条件。' },
+            { label: '运营例外', title: '恢复一项停在系统之间的重复流程', body: '常规重试按照 policy 继续；缺少权限或尚未解决的决定以 Attention 交给具名负责人。' },
+          ],
+        },
+        advantage: {
+          eyebrow: 'Agent 执行之外，Workforce 拥有什么',
+          title: '让两次运行之间的工作仍然清楚。',
+          body:
+            'Agent 可以规划和行动。Workforce 保存外围那项工作：谁负责、使用哪个 revision、下一步需要什么、为何停止，以及权威系统最终接受了什么。',
+          commonLabel: '没有工作层',
+          awakenLabel: '使用 Workforce',
+          proofLabel: '记录为',
+          items: [
+            {
+              title: '知道还有什么没有完成',
+              common: 'Run 或对话结束后，团队从消息与日志中重新拼装剩余工作。',
+              awaken: '一项 Issue 把负责人、process state、attempt、output、approval、Attention 与完成事实放在一起。',
+              proof: 'Issue · WorkflowRevision · WorkUnit · Assignment',
+            },
+            {
+              title: '把完成条件说清楚',
+              common: 'Prompt 与 node code 在每条路径上重新解释 readiness、output、policy 和完成。',
+              awaken: '具名交接、guard、approval 与 typed Resource 执行已经声明的检查；外部真实性由 Connector 或 verifier 提供。',
+              proof: 'ResourceType · Ruling · Requirement · Transition',
+            },
+            {
+              title: '把例外交给合适的人',
+              common: '人持续查看常规进展，还要翻 transcript 才知道工作为何停止。',
+              awaken: '常规情况自动推进；approval 与 Attention 把歧义、policy exception 和重大行动连同原因交给人。',
+              proof: 'Ruling · Approval · AttentionSignal · scheduling projection',
+            },
+          ],
+        },
+        solution: {
+          eyebrow: '承载工作的几个部分',
+          title: '用一份记录连接工作、路径和它触及的系统。',
+          caps: [
+            { title: 'Issue 与 WorkUnit', desc: '把负责人、意图、当前状态、attempt、event 与下一步放在一起。' },
+            { title: '固定的 Workflow', desc: '使用一份不可变 process revision 表达 state、交接、transition、join 与限制。' },
+            { title: 'Resource 与决定', desc: '把动作连接到具名对象、scoped authority、readiness check、approval 与 custody。' },
+            { title: 'Domain Pack', desc: 'ResourceType、Workflow、Automation 与 Agent 精确定义的签名不可变 release。' },
+          ],
+        },
+      },
+    },
+  },
+} as const;
+
+export type Content = (typeof content)[Lang];

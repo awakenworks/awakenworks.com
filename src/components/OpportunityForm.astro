@@ -1,0 +1,245 @@
+---
+import { content, localePath, type Lang } from '../i18n/content';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  product: string;
+  align?: 'left' | 'center';
+}
+
+const { lang, product, align = 'left' } = Astro.props;
+const intent = 'cooperation' as const;
+const w = content[lang].waitlist;
+const variant = w.variants.cooperation;
+const endpoint =
+  import.meta.env.PUBLIC_OPPORTUNITY_ENDPOINT
+  ?? 'https://formspree.io/f/mrewzorl';
+const rowAlign = align === 'center' ? 'sm:justify-center' : 'sm:justify-start';
+const source = Astro.url.pathname;
+const privacyHref = localePath(lang, '/privacy');
+const frequencyOptions = ui[lang].landing.frequencies;
+const selectedScenarioPrefix = ui[lang].landing.selectedScenario;
+const selectedProductPrefix = ui[lang].landing.selectedProduct;
+const productLabels = ui[lang].landing.productLabels;
+const productOptions = Object.entries(productLabels);
+const scenarioLabels = Object.fromEntries(
+  content[lang].home.scenarios.items.map((item) => [item.key, item.label]),
+);
+---
+
+<form
+  class="opportunity-form"
+  action={endpoint}
+  method="POST"
+  data-opportunity-form
+  data-intent={intent}
+  data-source={source}
+  data-success={variant.success}
+  data-error={w.error}
+  data-submitting={variant.submitting}
+  data-scenario-labels={JSON.stringify(scenarioLabels)}
+>
+  <input type="hidden" name="intent" value={intent} />
+  <input type="hidden" name="lang" value={lang} />
+  <input type="hidden" name="source_page" value={source} />
+  <input type="hidden" name="landing_page" value="" />
+  <input type="hidden" name="referrer" value="" />
+  <input type="hidden" name="utm_source" value="" />
+  <input type="hidden" name="utm_medium" value="" />
+  <input type="hidden" name="utm_campaign" value="" />
+  <input type="hidden" name="utm_content" value="" />
+  <input type="hidden" name="scenario_context" value="" />
+  <input type="hidden" name="submission_id" value="" />
+  <input type="hidden" name="submitted_at" value="" />
+  <input type="hidden" name="page_url" value="" />
+  <input type="hidden" name="_subject" value={variant.subject} />
+  <label class="sr-only">
+    Leave this field empty
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+  </label>
+  <div data-opportunity-fields class={`grid gap-4 ${rowAlign}`}>
+    <p data-scenario-context class="rounded-lg border border-accent-700/50 bg-accent-500/5 px-4 py-3 text-sm text-accent-300" hidden>
+      {selectedScenarioPrefix} <strong data-scenario-context-label></strong>
+    </p>
+    <label class="grid gap-2 text-sm text-fog-400">
+      {selectedProductPrefix}
+      <select name="product" class="w-full rounded-lg border border-accent-700/50 bg-accent-500/5 px-4 py-3 font-medium text-accent-300 focus:border-accent-500 focus:outline-none">
+        {productOptions.map(([value, label]) => <option value={value} selected={value === product}>{label}</option>)}
+      </select>
+    </label>
+    <div class="grid gap-4 sm:grid-cols-2">
+      <label class="grid gap-2 text-sm text-fog-400">
+        Email
+        <input type="email" name="email" required autocomplete="email" placeholder={w.placeholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-600 focus:border-accent-500 focus:outline-none" />
+      </label>
+      <label class="grid gap-2 text-sm text-fog-400">
+        {w.fields.company}
+        <input type="text" name="company" required autocomplete="organization" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none" />
+      </label>
+      <label class="grid gap-2 text-sm text-fog-400">
+        {w.fields.role}
+        <input type="text" name="role" required autocomplete="organization-title" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none" />
+      </label>
+      <label class="grid gap-2 text-sm text-fog-400">
+        {w.fields.frequency}
+        <select name="frequency" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none">
+          <option value="" selected disabled>—</option>
+          {frequencyOptions.map((option) => <option value={option}>{option}</option>)}
+        </select>
+      </label>
+    </div>
+    <label class="grid gap-2 text-sm text-fog-400">
+      {w.fields.scenario}
+      <textarea name="job" required rows="4" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none"></textarea>
+    </label>
+    <label class="grid gap-2 text-sm text-fog-400">
+      {w.fields.loss}
+      <textarea name="current_loss" required rows="3" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none"></textarea>
+    </label>
+    <details class="rounded-xl border border-ink-700 bg-ink-900/60 p-4">
+      <summary class="cursor-pointer text-sm font-medium text-fog-300">{ui[lang].landing.optionalDetails}</summary>
+      <div class="mt-4 grid gap-4">
+        <label class="grid gap-2 text-sm text-fog-400">
+          {w.fields.systems}
+          <textarea name="systems_and_risks" rows="3" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none"></textarea>
+        </label>
+        <label class="grid gap-2 text-sm text-fog-400">
+          {w.fields.timing}
+          <input type="text" name="target_timing" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none" />
+        </label>
+      </div>
+    </details>
+    <label class="flex items-start gap-3 text-xs leading-5 text-fog-500">
+      <input type="checkbox" name="contact_consent" value="yes" required class="mt-1 h-4 w-4 shrink-0 accent-[var(--color-accent-500)]" />
+      <span>{w.privacyPrefix} <a href={privacyHref} class="text-accent-400 underline underline-offset-2">{w.privacyLabel}</a>.</span>
+    </label>
+    <button
+      type="submit"
+      class="justify-self-start rounded-lg bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400 disabled:opacity-60"
+      >{variant.button}</button
+    >
+  </div>
+  <section data-opportunity-success role="status" aria-live="polite" tabindex="-1" class="rounded-2xl border border-accent-700/60 bg-accent-500/5 p-6 outline-none" hidden>
+    <p class="eyebrow text-accent-400">{variant.success}</p>
+    <p class="mt-4 leading-7 text-fog-300">{variant.successBody}</p>
+    <ol class="mt-6 space-y-4">
+      {variant.successSteps.map((step, index) => (
+        <li data-opportunity-success-step class="grid grid-cols-[2rem_1fr] gap-3 text-sm leading-6 text-fog-400">
+          <span class="font-mono text-xs text-accent-400">{String(index + 1).padStart(2, '0')}</span>
+          <span>{step}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+  <p class={`opportunity-message mt-3 text-sm ${align === 'center' ? 'text-center' : ''}`} role="status" aria-live="polite" hidden></p>
+</form>
+
+<script is:inline>
+  if (!window.__opportunityFormInit) {
+    window.__opportunityFormInit = true;
+    var attributionKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
+
+    function trackOpportunity(name, form) {
+      if (window.umami && typeof window.umami.track === 'function') {
+        window.umami.track(name, {
+          intent: form.dataset.intent,
+          source: form.dataset.source,
+          scenario: form.elements.namedItem('scenario_context')?.value || undefined,
+        });
+      }
+    }
+
+    function hydrateAttribution(form) {
+      var params = new URLSearchParams(window.location.search);
+      var stored = {};
+      try {
+        stored = JSON.parse(sessionStorage.getItem('awakenworks_attribution') || '{}');
+      } catch (_error) {}
+      var landing = form.elements.namedItem('landing_page');
+      var referrer = form.elements.namedItem('referrer');
+      var product = form.elements.namedItem('product');
+      var requestedProduct = params.get('product');
+      var scenario = form.elements.namedItem('scenario_context');
+      var requestedScenario = params.get('scenario');
+      var submissionId = form.elements.namedItem('submission_id');
+      var submittedAt = form.elements.namedItem('submitted_at');
+      var pageUrl = form.elements.namedItem('page_url');
+      var scenarioLabels = {};
+      try {
+        scenarioLabels = JSON.parse(form.dataset.scenarioLabels || '{}');
+      } catch (_error) {}
+      if (landing) landing.value = stored.landing_page || window.location.href;
+      if (referrer) referrer.value = stored.referrer || document.referrer;
+      if (submissionId && !submissionId.value) {
+        submissionId.value = globalThis.crypto?.randomUUID?.()
+          ?? 'web-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+      }
+      if (submittedAt) submittedAt.value = new Date().toISOString();
+      if (pageUrl) pageUrl.value = window.location.href;
+      if (product && requestedProduct && ['agents', 'objects', 'workforce'].includes(requestedProduct)) {
+        product.value = requestedProduct;
+      }
+      if (scenario && requestedScenario && Object.prototype.hasOwnProperty.call(scenarioLabels, requestedScenario)) {
+        scenario.value = requestedScenario;
+        var context = form.querySelector('[data-scenario-context]');
+        var label = form.querySelector('[data-scenario-context-label]');
+        if (context && label) {
+          label.textContent = scenarioLabels[requestedScenario];
+          context.hidden = false;
+        }
+      }
+      attributionKeys.forEach(function (key) {
+        var field = form.elements.namedItem(key);
+        if (field) field.value = params.get(key) || stored[key] || '';
+      });
+    }
+
+    document.querySelectorAll('[data-opportunity-form]').forEach(hydrateAttribution);
+
+    document.addEventListener('focusin', function (event) {
+      var form = event.target.closest('[data-opportunity-form]');
+      if (!form || form.dataset.started === 'true') return;
+      form.dataset.started = 'true';
+      trackOpportunity('opportunity_form_started', form);
+    });
+
+    document.addEventListener('submit', async function (event) {
+      var form = event.target.closest('[data-opportunity-form]');
+      if (!form) return;
+      event.preventDefault();
+      if (form.getAttribute('aria-busy') === 'true') return;
+      var message = form.querySelector('.opportunity-message');
+      var button = form.querySelector('button[type="submit"]');
+      var buttonLabel = button.textContent;
+      button.disabled = true;
+      form.setAttribute('aria-busy', 'true');
+      button.textContent = form.dataset.submitting;
+      try {
+        var response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) throw new Error();
+        trackOpportunity('opportunity_form_submitted', form);
+        var fields = form.querySelector('[data-opportunity-fields]');
+        var success = form.querySelector('[data-opportunity-success]');
+        if (fields) fields.hidden = true;
+        if (success) {
+          success.hidden = false;
+          success.focus();
+        }
+        message.hidden = true;
+      } catch (_error) {
+        message.textContent = form.dataset.error;
+        message.style.color = 'var(--color-rust-500)';
+        message.hidden = false;
+      } finally {
+        button.disabled = false;
+        button.textContent = buttonLabel;
+        form.removeAttribute('aria-busy');
+      }
+    });
+  }
+</script>

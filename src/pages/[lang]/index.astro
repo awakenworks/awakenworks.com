@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import Home from '../../components/Home.astro';
+import { content } from '../../i18n/content';
+import { localizedStaticPaths, type Lang } from '../../i18n/locales';
+import { homeLd } from '../../lib/jsonld';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const t = content[lang];
+---
+
+<Base
+  title={t.meta.title}
+  description={t.meta.description}
+  jsonLd={homeLd()}
+>
+  <Home lang={lang} />
+</Base>

@@ -1,0 +1,62 @@
+---
+import { localePath, type Lang } from '../i18n/content';
+import type { NavGroup } from '../lib/docsRoutes';
+import { docAudienceLabel, docSectionLabel, docSubsectionLabel } from '../lib/docsTaxonomy';
+
+interface Props {
+  lang: Lang;
+  current: string;
+  nav: NavGroup[];
+  label: string;
+  compact?: boolean;
+}
+
+const { lang, current, nav, label, compact = false } = Astro.props;
+
+function isActive(href?: string) {
+  if (!href) return false;
+  const localized = localePath(lang, href).replace(/\/$/, '') || '/';
+  return current === localized;
+}
+
+const groupLabel = (group: NavGroup) => {
+  const section = docSectionLabel(group.group, lang);
+  return group.audience ? `${docAudienceLabel(group.audience, lang)} · ${section}` : section;
+};
+
+const groupContainsActive = (group: NavGroup) => group.nodes.some((node) =>
+  node.kind === 'sub'
+    ? node.items?.some((item) => isActive(item.href))
+    : isActive(node.href),
+);
+---
+
+<nav class={compact ? 'space-y-5' : 'space-y-6'} aria-label={label}>
+  {nav.map((group) => (
+    <details open={groupContainsActive(group)} class="group/nav">
+      <summary class="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 font-mono text-[0.68rem] tracking-wider text-fog-500 uppercase hover:bg-ink-850 hover:text-fog-200">
+        <span>{groupLabel(group)}</span>
+        <span class="nav-chevron text-fog-600" aria-hidden="true">›</span>
+      </summary>
+      <div class="mt-1 space-y-1">
+        {group.nodes.map((node) =>
+          node.kind === 'sub' ? (
+            <details open={node.items?.some((item) => isActive(item.href))} class="group/sub">
+              <summary class="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 text-sm text-fog-400 hover:bg-ink-850 hover:text-fog-100">
+                <span>{docSubsectionLabel(node.label, lang)}</span>
+                <span class="sub-chevron text-fog-600">›</span>
+              </summary>
+              <div class="mt-1 ml-3 space-y-1 border-l border-ink-700 pl-2">
+                {node.items?.map((item) => (
+                  <a href={localePath(lang, item.href)} class={`block rounded-lg px-3 py-1.5 text-sm ${isActive(item.href) ? 'bg-accent-500/10 text-accent-400' : 'text-fog-500 hover:bg-ink-850 hover:text-fog-100'}`}>{item.label}</a>
+                ))}
+              </div>
+            </details>
+          ) : (
+            <a href={localePath(lang, node.href ?? '/docs')} class={`block rounded-lg px-3 py-2 text-sm ${isActive(node.href) ? 'bg-accent-500/10 text-accent-400' : 'text-fog-300 hover:bg-ink-850 hover:text-fog-100'}`}>{node.label}</a>
+          ),
+        )}
+      </div>
+    </details>
+  ))}
+</nav>

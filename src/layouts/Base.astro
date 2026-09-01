@@ -1,0 +1,184 @@
+---
+import '../styles/global.css';
+import { withSiteBase } from '../config/siteDeployment.mjs';
+import {
+  DEFAULT_LANG,
+  LANGS,
+  localeFromPath,
+  localePath,
+  localeRegistry,
+  unlocalizedPath,
+} from '../i18n/locales';
+
+interface Props {
+  title: string;
+  description: string;
+  // OpenGraph overrides — default to a site-wide website card.
+  ogType?: string;
+  ogImage?: string;
+  // Article metadata (only emitted when ogType === 'article').
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  // Structured data (JSON-LD) for this page, serialised into <head>.
+  jsonLd?: object;
+}
+
+const {
+  title,
+  description,
+  ogType = 'website',
+  ogImage = '/og.png',
+  publishedTime,
+  modifiedTime,
+  author,
+  jsonLd,
+} = Astro.props;
+const isArticle = ogType === 'article';
+const path = Astro.url.pathname;
+const rawPath = path.replace(/\/+$/, '') || '/';
+const lang = localeFromPath(rawPath);
+const locale = localeRegistry[lang];
+const basePath = unlocalizedPath(rawPath);
+
+// Brand identity is chosen by route. Product pages use their product UI
+// direction; the company/home/docs pages stay on the neutral Works identity.
+const brand = /^\/workforce(\/|$)/.test(basePath)
+  ? 'workforce'
+  : /^\/objects(\/|$)/.test(basePath)
+    ? 'objects'
+  : /^\/agents(\/|$)/.test(basePath)
+    ? 'managed'
+    : 'works';
+
+// Canonical URL + hreflang alternates derive from the same registry as routing.
+const site = Astro.site ?? new URL('https://awakenworks.com');
+const canonicalPath = localePath(lang, basePath);
+const abs = (p: string) => new URL(p, site).href;
+const socialImage = withSiteBase(ogImage);
+
+// Umami analytics — privacy-first, no cookies, GDPR-friendly (no consent
+// banner needed). The website ID is public (it ships in the page source), so
+// we default it here; override via env when self-hosting:
+//   PUBLIC_UMAMI_WEBSITE_ID  the website UUID from your Umami dashboard
+//   PUBLIC_UMAMI_SRC         script URL (defaults to Umami Cloud)
+// Only loads in production builds.
+const umamiWebsiteId =
+  import.meta.env.PUBLIC_UMAMI_WEBSITE_ID ??
+  '59dd9ed4-a538-4fd3-98f4-c9ab7ded1d57';
+const umamiSrc =
+  import.meta.env.PUBLIC_UMAMI_SRC ?? 'https://cloud.umami.is/script.js';
+const enableAnalytics = import.meta.env.PROD && Boolean(umamiWebsiteId);
+---
+
+<!doctype html>
+<html lang={locale.htmlLang} data-brand={brand} class="bg-ink-950">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script is:inline>
+      // Resolve one site-wide theme before paint. Routes may change product
+      // colour identity, but navigation must never change light/dark mode.
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var system =
+            window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+          var theme = stored || system;
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+    <script is:inline>
+      // Keep first-touch campaign context across the company -> enterprise path.
+      // Opportunity forms read this session-scoped snapshot; CRM remains the
+      // authority for qualification and downstream sales state.
+      (function () {
+        try {
+          var key = 'awakenworks_attribution';
+          var names = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
+          var params = new URLSearchParams(window.location.search);
+          var current = JSON.parse(sessionStorage.getItem(key) || '{}');
+          var hasCampaign = names.some(function (name) { return params.has(name); });
+          if (!current.landing_page || hasCampaign) {
+            current.landing_page = window.location.href;
+            current.referrer = document.referrer;
+          }
+          names.forEach(function (name) {
+            if (params.has(name)) current[name] = params.get(name);
+          });
+          sessionStorage.setItem(key, JSON.stringify(current));
+        } catch (_error) {}
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href={withSiteBase('/favicon.svg')} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={abs(canonicalPath)} />
+    {LANGS.map((alternateLang) => (
+      <link rel="alternate" hreflang={localeRegistry[alternateLang].hrefLang} href={abs(localePath(alternateLang, basePath))} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={abs(localePath(DEFAULT_LANG, basePath))} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={abs(canonicalPath)} />
+    <meta property="og:site_name" content="AwakenWorks" />
+    <meta property="og:locale" content={locale.ogLocale} />
+    <meta property="og:image" content={abs(socialImage)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    {
+      isArticle && (
+        <>
+          {publishedTime && (
+            <meta property="article:published_time" content={publishedTime} />
+          )}
+          {modifiedTime && (
+            <meta property="article:modified_time" content={modifiedTime} />
+          )}
+          {author && <meta property="article:author" content={author} />}
+        </>
+      )
+    }
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={abs(socialImage)} />
+    {
+      jsonLd && (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(jsonLd)}
+        />
+      )
+    }
+    {
+      enableAnalytics && (
+        <script is:inline defer src={umamiSrc} data-website-id={umamiWebsiteId} />
+      )
+    }
+  </head>
+  <body class="bg-ink-950 text-fog-300 antialiased">
+    <slot />
+    <script is:inline>
+      // Delegated theme toggle — works on every page without bundling.
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-theme-toggle]');
+        if (!btn) return;
+        var next =
+          document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch (err) {}
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import Principles from '../components/Principles.astro';
+import { DEFAULT_LANG } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+
+const { title, description } = ui[DEFAULT_LANG].routes.principles;
+---
+
+<Base title={title} description={description}>
+  <Principles lang={DEFAULT_LANG} />
+</Base>

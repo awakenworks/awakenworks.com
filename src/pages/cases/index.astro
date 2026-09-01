@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import CasesIndex from '../../components/CasesIndex.astro';
+import { content } from '../../i18n/content';
+import { DEFAULT_LANG } from '../../i18n/locales';
+
+const t = content[DEFAULT_LANG];
+---
+
+<Base title={t.cases.meta.title} description={t.cases.meta.description}>
+  <CasesIndex lang={DEFAULT_LANG} />
+</Base>

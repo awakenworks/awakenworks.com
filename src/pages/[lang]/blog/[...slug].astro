@@ -1,0 +1,41 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BlogPost from '../../../components/BlogPost.astro';
+import { getCollection } from 'astro:content';
+import { blogPostLd } from '../../../lib/jsonld';
+import { NON_DEFAULT_LANGS, localePath, type Lang } from '../../../i18n/locales';
+import { ui } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts
+    .filter((p) => NON_DEFAULT_LANGS.includes(p.data.lang as (typeof NON_DEFAULT_LANGS)[number]) && !p.data.draft)
+    .map((p) => ({
+      params: { lang: p.data.lang, slug: p.id.replace(new RegExp(`^${p.data.lang}/`), '') },
+      props: { lang: p.data.lang as Lang, post: p },
+    }));
+}
+
+const { lang, post } = Astro.props as { lang: Lang; post: typeof Astro.props.post };
+const slug = post.id.replace(new RegExp(`^${lang}/`), '');
+const url = new URL(localePath(lang, `/blog/${slug}`), Astro.site).href;
+const published = post.data.date.toISOString();
+---
+
+<Base
+  title={ui[lang].routes.blogTitle(post.data.title)}
+  description={post.data.description}
+  ogType="article"
+  publishedTime={published}
+  author={post.data.author}
+  jsonLd={blogPostLd({
+    title: post.data.title,
+    description: post.data.description,
+    url,
+    datePublished: published,
+    author: post.data.author,
+    blogIndexUrl: new URL(localePath(lang, '/blog'), Astro.site).href,
+  })}
+>
+  <BlogPost lang={lang} post={post} />
+</Base>

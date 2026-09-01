@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import DocsIndex from '../../components/DocsIndex.astro';
+import { DEFAULT_LANG } from '../../i18n/locales';
+import { ui } from '../../i18n/ui';
+
+const meta = ui[DEFAULT_LANG].routes.docs;
+---
+<Base title={meta.title} description={meta.description}><DocsIndex lang={DEFAULT_LANG} /></Base>

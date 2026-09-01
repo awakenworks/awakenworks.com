@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import EnterpriseLanding from '../components/EnterpriseLanding.astro';
+import { content } from '../i18n/content';
+import { DEFAULT_LANG } from '../i18n/locales';
+
+const t = content[DEFAULT_LANG];
+---
+
+<Base title={t.enterprise.meta.title} description={t.enterprise.meta.description}>
+  <EnterpriseLanding lang={DEFAULT_LANG} />
+</Base>

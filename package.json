@@ -1,0 +1,32 @@
+{
+  "name": "awakenworks.com",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm brand:generate && astro dev",
+    "brand:generate": "node scripts/generate-brand-marks.mjs",
+    "build": "pnpm brand:generate && astro build",
+    "check:home": "pnpm brand:generate && astro sync --force && astro build && node scripts/check-home.mjs",
+    "check:live": "node scripts/check-live.mjs",
+    "check:pages": "pnpm build && node scripts/check-pages-base.mjs",
+    "check:docs": "pnpm check:standalone && pnpm brand:generate && astro sync --force && astro build && node scripts/check-docs.mjs",
+    "check:standalone": "node scripts/check-standalone.mjs",
+    "hooks:install": "lefthook install",
+    "provenance:refresh": "node scripts/refresh-source-provenance.mjs",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.6.1",
+    "astro-mermaid": "^2.0.4",
+    "mermaid": "^11.15.0"
+  },
+  "devDependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@tailwindcss/vite": "^4.1.3",
+    "lefthook": "^1.10.0",
+    "pptxgenjs": "^4.0.1",
+    "tailwindcss": "^4.1.3"
+  }
+}

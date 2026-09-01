@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import PrivacyPage from '../components/PrivacyPage.astro';
+import { content } from '../i18n/content';
+import { DEFAULT_LANG } from '../i18n/locales';
+
+const t = content[DEFAULT_LANG];
+---
+
+<Base title={t.privacy.meta.title} description={t.privacy.meta.description}>
+  <PrivacyPage lang={DEFAULT_LANG} />
+</Base>

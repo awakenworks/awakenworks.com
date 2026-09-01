@@ -1,0 +1,125 @@
+---
+import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import ProductMark from './ProductMark.astro';
+import ProductShowcase from './ProductShowcase.astro';
+import { ui } from '../i18n/ui';
+
+interface Props { lang: Lang }
+
+const { lang } = Astro.props;
+const t = content[lang];
+const o = t.landing.objects;
+const copy = ui[lang].landing;
+---
+
+<SiteHeader lang={lang} path="/objects" />
+
+<main>
+  <section id="objects-hero" class="relative overflow-hidden border-b border-ink-800">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-4xl px-6 py-16 sm:py-32">
+      <ProductMark product="objects" class="mb-5 h-10 w-10 text-amber-400" />
+      <div class="flex flex-wrap items-center gap-3">
+        <p class="eyebrow text-amber-400">{o.eyebrow}</p>
+        <span class="rounded-full border border-amber-600/50 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-amber-300 uppercase">{t.products.objects.status}</span>
+        <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-fog-500 uppercase">{t.products.objects.license}</span>
+      </div>
+      <h1 class="hero-title mt-6 max-w-3xl font-semibold text-fog-100">{o.title}</h1>
+      <p class="mt-6 max-w-2xl text-lg text-fog-300 sm:text-xl">{o.subtitle}</p>
+      <div class="mt-9 flex flex-wrap gap-4">
+        <a href="#objects-start" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent hover:bg-accent-400">{copy.exploreObjects}</a>
+        <a href={`${localePath(lang, '/enterprise')}?product=objects#enterprise-objects`} data-umami-event="enterprise_intent_selected" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-medium text-fog-100 hover:border-fog-500">{o.closer.cooperation}</a>
+      </div>
+      <p class="mt-5 max-w-2xl text-sm leading-7 text-fog-500">{o.audience}</p>
+    </div>
+  </section>
+
+  <ProductShowcase
+    lang={lang}
+    product="objects"
+    caption={copy.objectsCaption}
+  />
+
+  <section id="objects-start" class="border-t border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class="eyebrow text-amber-400">{o.example.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.example.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-8 text-fog-300">{o.example.body}</p>
+      <div class="mt-10 grid gap-4 md:grid-cols-3">
+        {o.example.items.map((item, index) => (
+          <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+            <p class="font-mono text-xs text-amber-400">{String(index + 1).padStart(2, '0')}</p>
+            <h3 class="mt-3 text-lg font-semibold text-fog-100">{item.title}</h3>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="objects-model" class="border-t border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class="eyebrow text-amber-400">{o.model.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.model.title}</h2>
+      <p class="mt-6 max-w-3xl text-lg leading-8 text-fog-300">{o.model.body}</p>
+      <div class="mt-10 grid gap-4 md:grid-cols-2">
+        {o.model.items.map(([title, body]) => (
+          <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+            <h3 class="font-mono text-sm font-semibold text-amber-400">{title}</h3>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="objects-change" class="border-y border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class="eyebrow text-amber-400">{o.change.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.change.title}</h2>
+      <div class="mt-10 grid gap-3 md:grid-cols-5">
+        {o.change.steps.map(([n, title, body]) => (
+          <details class="rounded-2xl border border-ink-700 bg-ink-850 p-5 first:border-amber-600/50" open={n === '01'}>
+            <summary class="cursor-pointer list-none">
+              <span class="font-mono text-xs text-amber-400">{n}</span>
+              <h3 class="mt-3 font-semibold text-fog-100">{title}</h3>
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-fog-500">{body}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="objects-boundary" class="border-t border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class="eyebrow text-amber-400">{o.boundary.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.boundary.title}</h2>
+      <div class="mt-10 grid gap-4 md:grid-cols-3">
+        {o.boundary.items.map((item) => (
+          <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+            <h3 class="text-lg font-semibold text-fog-100">{item.title}</h3>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative overflow-hidden border-t border-ink-800">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-3xl px-6 py-24 text-center">
+      <h2 class="text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.closer.title}</h2>
+      <p class="mx-auto mt-4 max-w-xl text-lg text-fog-300">{o.closer.body}</p>
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a href={localePath(lang, '/docs/objects')} class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{o.docs}</a>
+        <a href={`${localePath(lang, '/enterprise')}?product=objects#enterprise-objects`} data-umami-event="enterprise_intent_selected" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.closer.cooperation}</a>
+        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="objects-close" class="px-2 py-3 text-sm font-medium text-fog-300 hover:text-amber-400">★ {o.star}</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

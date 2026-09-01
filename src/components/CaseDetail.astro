@@ -1,0 +1,108 @@
+---
+import { content, localePath, type Lang } from '../i18n/content';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import { ui } from '../i18n/ui';
+
+interface Props { lang: Lang; slug: string }
+
+const { lang, slug } = Astro.props;
+const t = content[lang];
+const copy = ui[lang].cases;
+const item = t.cases.items.find((candidate) => candidate.slug === slug);
+if (!item) throw new Error(`Unknown case: ${slug}`);
+const isDeepSeek = item.slug === 'deepseek-harness';
+---
+
+<SiteHeader lang={lang} path={`/cases/${slug}`} />
+
+<main>
+  <section id="case-hero" class="relative overflow-hidden border-b border-ink-800">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-28">
+      <a href={localePath(lang, '/cases')} class="font-mono text-xs text-iris-400">← {copy.all}</a>
+      <p class="mt-10 font-mono text-xs uppercase tracking-wider text-iris-400">{item.kind}</p>
+      <h1 class="mt-4 max-w-5xl text-5xl font-semibold tracking-tight text-fog-100 sm:text-7xl">{item.name}</h1>
+      <p class="mt-5 max-w-3xl text-xl leading-9 text-fog-300">{item.title}</p>
+      <p class="mt-7 max-w-3xl leading-8 text-fog-400">{item.summary}</p>
+      <p class="mt-6 max-w-3xl text-sm leading-7 text-fog-500"><strong class="text-fog-300">{copy.bestFor}</strong>{item.audience}</p>
+      <p class="mt-8 inline-flex rounded-full border border-ink-600 bg-ink-850 px-4 py-2 font-mono text-xs text-fog-400">{item.status}</p>
+      {isDeepSeek && <p class="mt-5 max-w-3xl text-sm leading-7 text-fog-500">{copy.deepSeek}</p>}
+    </div>
+  </section>
+
+  <section id="case-result" class="border-b border-ink-800 bg-ink-950">
+    <div class="mx-auto grid max-w-6xl gap-6 px-6 py-16 md:grid-cols-2">
+      <article class="rounded-2xl border border-ink-700 bg-ink-850 p-7">
+        <p class="eyebrow text-accent-400">{copy.situation}</p>
+        <p class="mt-4 text-lg leading-8 text-fog-300">{item.problem}</p>
+      </article>
+      <article class="rounded-2xl border border-iris-700/60 bg-iris-500/5 p-7">
+        <p class="eyebrow text-iris-400">{copy.firstResult}</p>
+        <p class="mt-4 text-lg leading-8 text-fog-200">{item.firstWin}</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="case-boundary" class="border-b border-ink-800 bg-ink-900">
+    <div class="mx-auto grid max-w-6xl gap-6 px-6 py-20 md:grid-cols-3">
+      <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+        <p class="eyebrow text-iris-400">{copy.productShape}</p>
+        <p class="mt-4 leading-7 text-fog-300">{item.adoption}</p>
+      </article>
+      <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+        <p class="eyebrow text-iris-400">{copy.applicationKeeps}</p>
+        <p class="mt-4 leading-7 text-fog-300">{item.owned}</p>
+      </article>
+      <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+        <p class="eyebrow text-iris-400">{copy.awakenProvides}</p>
+        <p class="mt-4 leading-7 text-fog-300">{item.reused}</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="case-try" class="bg-ink-950">
+    <div class="mx-auto grid max-w-6xl gap-14 px-6 py-20 lg:grid-cols-2">
+      <div>
+        <p class="eyebrow text-iris-400">{copy.tryPath}</p>
+        <h2 class="mt-4 text-3xl font-semibold text-fog-100">{copy.smallest}</h2>
+        <ol class="mt-8 space-y-4">
+          {item.try.map((action, index) => <li class="grid grid-cols-[2rem_1fr] gap-3 leading-7 text-fog-400"><span class="font-mono text-xs text-iris-400">0{index + 1}</span>{action}</li>)}
+        </ol>
+      </div>
+      <div id="case-availability">
+        <p class="eyebrow text-accent-400">{copy.availability}</p>
+        <h2 class="mt-4 text-3xl font-semibold text-fog-100">{copy.invest}</h2>
+        <p class="mt-5 rounded-xl border border-ink-700 bg-ink-900 px-4 py-3 text-sm leading-6 text-fog-500">{item.sourceStatus}</p>
+        {item.engineeringBlog && (
+          <a
+            href={localePath(lang, item.engineeringBlog.href)}
+            data-umami-event={`case-${slug}-engineering-blog`}
+            class="mt-5 inline-flex text-sm font-medium text-iris-400 hover:text-iris-300"
+          >{item.engineeringBlog.label} →</a>
+        )}
+        <ul class="mt-8 space-y-4">
+          {item.proof.map((proof) => (
+            <li data-evidence-level={proof.level} class="rounded-xl border border-ink-800 bg-ink-900/60 p-4">
+              <span class="inline-flex rounded-full border border-accent-700/60 px-2.5 py-1 font-mono text-[0.65rem] text-accent-300">{proof.level}</span>
+              <p class="mt-3 leading-7 text-fog-300">{proof.claim}</p>
+              <p class="mt-2 font-mono text-[0.68rem] leading-5 text-fog-600">{copy.checkAt}{proof.owner}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="case-cta" class="border-t border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-5xl px-6 py-20 text-center">
+      <h2 class="text-4xl font-semibold tracking-tight text-fog-100">{item.firstWin}</h2>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href={localePath(lang, item.primary.href)} data-umami-event={`case-${slug}-primary`} class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent hover:bg-accent-400">{item.primary.label}</a>
+        <a href={localePath(lang, item.secondary.href)} data-umami-event={`case-${slug}-secondary`} class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 hover:border-fog-500">{item.secondary.label}</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

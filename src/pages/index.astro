@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Home from '../components/Home.astro';
+import { content } from '../i18n/content';
+import { DEFAULT_LANG } from '../i18n/locales';
+import { homeLd } from '../lib/jsonld';
+
+const t = content[DEFAULT_LANG];
+---
+
+<Base
+  title={t.meta.title}
+  description={t.meta.description}
+  jsonLd={homeLd()}
+>
+  <Home lang={DEFAULT_LANG} />
+</Base>

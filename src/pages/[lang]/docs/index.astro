@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import DocsIndex from '../../../components/DocsIndex.astro';
+import { localizedStaticPaths, type Lang } from '../../../i18n/locales';
+import { ui } from '../../../i18n/ui';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const meta = ui[lang].routes.docs;
+---
+<Base title={meta.title} description={meta.description}><DocsIndex lang={lang} /></Base>

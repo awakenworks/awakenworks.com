@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import CaseDetail from '../../components/CaseDetail.astro';
+import { content } from '../../i18n/content';
+import { DEFAULT_LANG } from '../../i18n/locales';
+import { ui } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return content[DEFAULT_LANG].cases.items.map((item) => ({ params: { slug: item.slug } }));
+}
+
+const { slug } = Astro.params;
+const item = content[DEFAULT_LANG].cases.items.find((candidate) => candidate.slug === slug)!;
+---
+
+<Base title={ui[DEFAULT_LANG].routes.caseTitle(item.name)} description={item.summary}>
+  <CaseDetail lang={DEFAULT_LANG} slug={item.slug} />
+</Base>

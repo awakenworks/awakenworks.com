@@ -1,0 +1,191 @@
+# Lefthook configuration — adapted from ../awaken for this Astro/TS/JS site.
+# https://github.com/evilmartians/lefthook
+#
+# Override a single check for one commit, e.g.:
+#   LEFTHOOK_EXCLUDE=check-debug-code git commit ...
+
+pre-commit:
+  parallel: false
+  commands:
+    # 阻断:生产代码中遗留调试日志/调试语句。
+    check-debug-code:
+      run: |
+        code_files=$(git diff --cached --name-only --diff-filter=ACMR \
+          | grep -E '\.(astro|ts|tsx|js|jsx|mjs|cjs)$' \
+          | grep -vE '(^|/)(node_modules|dist|build|coverage|\.astro)/' \
+          | grep -vE '(^|/)[^/]*(\.test|\.spec)\.(ts|tsx|js|jsx|mjs|cjs)$' \
+          || true)
+
+        if [ -z "$code_files" ]; then
+          exit 0
+        fi
+
+        violations=""
+        for file in $code_files; do
+          debug_matches=$(git diff --cached "$file" \
+            | grep "^+" | grep -v "^+++" \
+            | grep -E '(console\.(log|debug|info|warn)|debugger;)' \
+            || true)
+          if [ -n "$debug_matches" ]; then
+            violations="${violations}\n${file}:\n${debug_matches}\n"
+          fi
+        done
+
+        if [ -n "$violations" ]; then
+          echo "ERROR: 检测到遗留的调试代码:"
+          printf '%b' "$violations"
+          echo ""
+          echo "❌ 生产代码中不应包含: console.log/debug/info/warn, debugger;"
+          echo ""
+          echo "<system-reminder>"
+          echo "→ Next: Remove debug code → git add → re-commit"
+          echo "   (For dev tooling only: LEFTHOOK_EXCLUDE=check-debug-code git commit)"
+          echo "</system-reminder>"
+          exit 1
+        fi
+      stage_fixed: false
+
+    # 警告:占位符 / 未完成标记。
+    check-placeholders:
+      run: |
+        code_files=$(git diff --cached --name-only --diff-filter=ACMR \
+          | grep -E '\.(astro|ts|tsx|js|jsx|mjs|cjs)$' \
+          | grep -vE '(^|/)(node_modules|dist|build|coverage)/' \
+          || true)
+
+        if [ -z "$code_files" ]; then
+          exit 0
+        fi
+
+        violations=""
+        for file in $code_files; do
+          # 排除 HTML/JSX 的 placeholder 属性(输入提示是合法用法)。
+          placeholder_matches=$(git diff --cached "$file" \
+            | grep "^+" | grep -v "^+++" \
+            | grep -ivE '(\bplaceholder=|\.placeholder\b|"placeholder":|placeholder: ")' \
+            | grep -iE '\b(TODO|FIXME|XXX|HACK)\b|\bplaceholder\b' \
+            || true)
+          if [ -n "$placeholder_matches" ]; then
+            violations="${violations}\n${file}:\n${placeholder_matches}\n"
+          fi
+        done
+
+        if [ -n "$violations" ]; then
+          echo "⚠️  WARNING: 检测到占位符/未完成标记:"
+          printf '%b' "$violations"
+          echo "  (TODO, FIXME, XXX, HACK, placeholder)"
+          echo ""
+        fi
+      stage_fixed: false
+
+    # 警告:可能的硬编码密钥。
+    check-secrets:
+      run: |
+        sensitive=$(git diff --cached --diff-filter=ACMR | grep "^+" | grep -v "^+++" \
+          | grep -iE "(api[_-]?key|password|secret[_-]?key|access[_-]?token).*(=|:).*(sk-|pk-|['\"][A-Za-z0-9]{32,}['\"])" \
+          || true)
+
+        if [ -n "$sensitive" ]; then
+          echo "⚠️  WARNING: 可能检测到硬编码的敏感信息:"
+          echo "$sensitive"
+          echo ""
+          echo "请确认以上不含真实 API keys/passwords/tokens;应改用环境变量。"
+          echo "  (For docs only: LEFTHOOK_EXCLUDE=check-secrets git commit)"
+          echo ""
+        fi
+      stage_fixed: false
+
+    # 阻断:隐藏的 bidi / zero-width Unicode 控制字符。
+    check-hidden-unicode:
+      run: |
+        scanned_files=$(git diff --cached --name-only --diff-filter=ACMR \
+          | grep -E '\.(astro|ts|tsx|js|jsx|mjs|cjs|css|json|md|yml|yaml|svg)$' \
+          | grep -vE '(^|/)(node_modules|dist|build|coverage)/' \
+          || true)
+
+        if [ -z "$scanned_files" ]; then
+          exit 0
+        fi
+
+        violations=""
+        for file in $scanned_files; do
+          git cat-file -e ":$file" 2>/dev/null || continue
+          matches=$(git show ":$file" \
+            | perl -CS -ne 'if (/[\x{200B}-\x{200F}\x{202A}-\x{202E}\x{2066}-\x{2069}\x{FEFF}]/) { print "  line $.: $_" }' \
+            || true)
+          if [ -n "$matches" ]; then
+            violations="${violations}${file}:\n${matches}\n"
+          fi
+        done
+
+        if [ -n "$violations" ]; then
+          echo "ERROR: 检测到隐藏 Unicode 控制字符:"
+          printf '%b' "$violations"
+          echo ""
+          echo "❌ 源码中不应包含 bidi/zero-width 控制字符,易造成审查误导或显示歧义。"
+          echo ""
+          echo "<system-reminder>"
+          echo "→ Next: Remove hidden Unicode control chars → git add"
+          echo "</system-reminder>"
+          exit 1
+        fi
+      stage_fixed: false
+
+commit-msg:
+  commands:
+    # 阻断:强制 Conventional Commits + emoji,禁止署名/AI/外部工具来源标记。
+    validate-message:
+      run: |
+        MSG_FILE="{1}"
+        if [ ! -f "$MSG_FILE" ]; then
+          echo "ERROR: commit message file not found: $MSG_FILE"
+          exit 1
+        fi
+
+        first_line="$(sed -n '1p' "$MSG_FILE" | tr -d '\r')"
+        line_count="$(wc -l < "$MSG_FILE" | tr -d ' ')"
+        second_line="$(sed -n '2p' "$MSG_FILE" | tr -d '\r')"
+
+        if [ "$line_count" -gt 4 ]; then
+          echo "ERROR: commit message has too many lines (max 4)."
+          echo "默认用单行;仅在必要时加正文以补充关键背景/影响。"
+          exit 1
+        fi
+
+        if [ "$line_count" -gt 1 ] && [ -n "$second_line" ]; then
+          echo "ERROR: commit body must be separated by a blank line."
+          exit 1
+        fi
+
+        if [ "${#first_line}" -gt 100 ]; then
+          echo "ERROR: commit subject exceeds 100 characters."
+          exit 1
+        fi
+
+        if ! printf '%s\n' "$first_line" | grep -Eq '^[^[:space:]]+ [a-z]+\([a-z0-9-]+\): .+'; then
+          echo "ERROR: commit subject must match '<emoji> <type>(<scope>): <subject>'."
+          echo "Example: ✨ feat(auth): add OAuth2 login"
+          exit 1
+        fi
+
+        if grep -iq "Co-Authored-By:" "$MSG_FILE"; then
+          echo "ERROR: commit message contains 'Co-Authored-By:' which is not allowed."
+          exit 1
+        fi
+
+        if grep -iE "(Generated (with|by))|(🤖.*Generated)" "$MSG_FILE" >/dev/null 2>&1; then
+          echo "ERROR: commit message contains AI generation markers which are not allowed."
+          exit 1
+        fi
+
+        EXTERNAL_TOOL_PATTERNS="(^via \[[^]]+\]\(https?://[^)]+\)$)|(^via https?://)|(^Tool: [A-Za-z0-9._-]+$)|(^Platform: [A-Za-z0-9._-]+$)"
+        if grep -Ei "$EXTERNAL_TOOL_PATTERNS" "$MSG_FILE" >/dev/null 2>&1; then
+          echo "ERROR: commit message contains external tool provenance markers (e.g. 'via [...]')."
+          exit 1
+        fi
+
+        PROHIBITED_PATTERNS="(Phases? [0-9])|(Stages? [0-9])|(Steps? [0-9])|(Week [0-9])|(Day [0-9])|([Ii]n [Pp]rogress)|([0-9]+% done)|(Sprint [0-9])|(Milestone)|(est\.)|(estimated)|(预计)|(计划)|(负责人)|(工作量)|(Owner)|(Assignee)"
+        if grep -E "$PROHIBITED_PATTERNS" "$MSG_FILE" >/dev/null 2>&1; then
+          echo "ERROR: commit message contains prohibited project-management terms."
+          exit 1
+        fi

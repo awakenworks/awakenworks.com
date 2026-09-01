@@ -1,0 +1,168 @@
+---
+import type { Lang } from '../i18n/content';
+import { withSiteBase } from '../config/siteDeployment.mjs';
+import ProductPreview from './ProductPreview.astro';
+import { agentsConsoleTour } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  product?: 'platform' | 'objects' | 'workforce';
+  caption?: string;
+  compact?: boolean;
+}
+
+const { lang, product = 'platform', caption, compact = false } = Astro.props;
+const consoleTour = agentsConsoleTour[lang];
+const overviewSrc = withSiteBase('/awaken/assets/console-current/overview.png');
+const consoleDetails = consoleTour.details.map((item) => ({
+  ...item,
+  src: withSiteBase(item.src),
+}));
+---
+
+<!--
+  Full-width product showcase. Lifts ProductPreview out of the hero's side
+  column into a hero moment of its own — show, don't tell. The glow and sheen
+  read against --color-accent-500, which flips per data-brand, so the accent
+  matches the Agents page.
+  All motion is CSS-only and disabled under prefers-reduced-motion.
+-->
+<section id={`${product}-preview`} class="showcase relative overflow-hidden border-t border-ink-800 bg-ink-950">
+  <div class="showcase-glow absolute inset-0" aria-hidden="true"></div>
+  <div class:list={['relative mx-auto max-w-5xl px-6', compact ? 'py-10 sm:py-14' : 'py-20 sm:py-24']}>
+    {
+      caption && (
+        <p class="mb-6 text-center font-mono text-xs tracking-wider text-fog-600 uppercase">
+          {caption}
+        </p>
+      )
+    }
+    {product === 'platform' ? (
+      <div class="space-y-6">
+        <figure class="showcase-frame overflow-hidden rounded-2xl border border-ink-700 bg-ink-900 p-2 sm:p-3">
+          <button type="button" data-console-image={overviewSrc} data-console-alt={consoleTour.overviewAlt} class="group relative block w-full cursor-zoom-in rounded-xl text-left">
+            <img
+              src={overviewSrc}
+              alt={consoleTour.overviewAlt}
+              width="1440"
+              height="900"
+              loading="eager"
+              decoding="async"
+              class="h-auto w-full rounded-xl border border-ink-700"
+            />
+            <span class="absolute right-3 bottom-3 rounded-full bg-ink-950/90 px-3 py-1.5 text-xs text-fog-200 opacity-0 backdrop-blur transition group-hover:opacity-100 group-focus-visible:opacity-100">{consoleTour.zoom}</span>
+          </button>
+          <figcaption class="px-2 pt-3 pb-1 text-sm leading-6 text-fog-400 sm:px-3">
+            {consoleTour.overviewCaption}
+          </figcaption>
+        </figure>
+
+        {!compact && <div class="grid gap-4 md:grid-cols-2">
+          {consoleDetails.map((item) => (
+            <figure class="overflow-hidden rounded-2xl border border-ink-700 bg-ink-900 p-2 sm:p-3">
+              <button type="button" data-console-image={item.src} data-console-alt={item.alt} class="group relative block w-full cursor-zoom-in rounded-xl text-left">
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  width="1440"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-auto w-full rounded-xl border border-ink-700"
+                />
+                <span class="absolute right-3 bottom-3 rounded-full bg-ink-950/90 px-3 py-1.5 text-xs text-fog-200 opacity-0 backdrop-blur transition group-hover:opacity-100 group-focus-visible:opacity-100">{consoleTour.zoom}</span>
+              </button>
+              <figcaption class="px-2 pt-3 pb-1 text-sm leading-6 text-fog-400 sm:px-3">
+                <strong class="font-medium text-fog-100">{item.title}</strong>
+                <span class="mt-1 block">{item.caption}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>}
+        <p class="text-center text-xs leading-5 text-fog-600">{consoleTour.provenance}</p>
+      </div>
+    ) : (
+      <div class="showcase-frame relative rounded-2xl">
+        <span class="showcase-sheen" aria-hidden="true"></span>
+        <ProductPreview lang={lang} product={product} />
+      </div>
+    )}
+  </div>
+</section>
+
+{product === 'platform' && (
+  <dialog data-console-dialog class="m-auto max-h-[92vh] w-[min(94vw,90rem)] rounded-2xl border border-ink-700 bg-ink-950 p-3 text-fog-100 shadow-2xl backdrop:bg-ink-950/85">
+    <form method="dialog" class="mb-3 flex justify-end">
+      <button value="close" class="rounded-full border border-ink-600 px-3 py-1.5 text-sm text-fog-200 hover:border-fog-400">{consoleTour.close}</button>
+    </form>
+    <img data-console-dialog-image alt="" width="1440" height="900" class="h-auto max-h-[80vh] w-full rounded-xl border border-ink-700 object-contain" />
+  </dialog>
+)}
+
+{product === 'platform' && <script is:inline>
+  if (!window.__awakenConsoleZoom) {
+    window.__awakenConsoleZoom = true;
+    document.addEventListener('click', function (event) {
+      var trigger = event.target.closest('[data-console-image]');
+      if (trigger) {
+        var dialog = document.querySelector('[data-console-dialog]');
+        var image = dialog && dialog.querySelector('[data-console-dialog-image]');
+        if (dialog && image) {
+          image.src = trigger.dataset.consoleImage;
+          image.alt = trigger.dataset.consoleAlt || '';
+          dialog.showModal();
+        }
+        return;
+      }
+      var openDialog = event.target.closest('[data-console-dialog]');
+      if (openDialog && event.target === openDialog) openDialog.close();
+    });
+  }
+</script>}
+
+<style>
+  .showcase-glow {
+    background: radial-gradient(
+      60% 55% at 50% 0%,
+      color-mix(in oklch, var(--color-accent-500) 16%, transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+  .showcase-frame {
+    box-shadow: 0 40px 90px -45px color-mix(in oklch, var(--color-accent-500) 45%, #000);
+  }
+  /* Diagonal light sweep across the frame — subtle, slow, non-distracting. */
+  .showcase-sheen {
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(
+      120deg,
+      transparent 42%,
+      color-mix(in oklch, var(--color-accent-500) 24%, transparent) 50%,
+      transparent 58%
+    );
+    background-size: 240% 100%;
+    background-repeat: no-repeat;
+    mix-blend-mode: screen;
+    opacity: 0.55;
+    animation: showcase-sweep 7s ease-in-out infinite;
+  }
+  @keyframes showcase-sweep {
+    0% {
+      background-position: 160% 0;
+    }
+    100% {
+      background-position: -60% 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-sheen {
+      animation: none;
+      opacity: 0;
+    }
+  }
+</style>

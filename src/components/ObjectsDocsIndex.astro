@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { localePath, type Lang } from '../i18n/locales';
+import { publicProductLabel } from '../i18n/docsVersions';
+import { ui } from '../i18n/ui';
+import DocsShell from './DocsShell.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = ui[lang].objectsDocs;
+const meta = ui[lang].routes.objectsDocs;
+---
+
+<Base title={meta.title} description={meta.description}>
+  <DocsShell lang={lang} product="objects" title="Awaken Objects" otherPath="/docs/objects" toc={[{href:'#objects-docs', label:copy.toc}]}>
+    <section id="objects-docs" class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-amber-400">Awaken Objects · {publicProductLabel('objects', lang)}</p>
+      <h1 class="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-fog-100 sm:text-5xl">{copy.title}</h1>
+      <p class="mt-6 max-w-3xl text-lg leading-8 text-fog-300">{copy.body}</p>
+      <div class="mt-10 grid gap-5 md:grid-cols-2">
+        {copy.items.map(([title, body, href]) => (
+          <a href={localePath(lang, href)} class="rounded-2xl border border-ink-700 bg-ink-850 p-6 transition hover:border-amber-500">
+            <h2 class="text-lg font-semibold text-fog-100">{title}</h2>
+            <p class="mt-3 text-sm leading-6 text-fog-500">{body}</p>
+            <p class="mt-5 font-mono text-xs text-amber-400">{copy.open}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </DocsShell>
+</Base>

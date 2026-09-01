@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const posts = (await getCollection('blog'))
+  .filter((p) => p.data.lang === lang && !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const slugOf = (id: string) => id.replace(/^[^/]+\//, '');
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+const copy = ui[lang].blog;
+---
+
+<SiteHeader lang={lang} path="/blog" />
+
+<main id="blog-hero" class="mx-auto max-w-3xl px-6 py-20 sm:py-28">
+  <p class="eyebrow text-accent-400">{copy.eyebrow}</p>
+  <h1 class="hero-title mt-4 font-semibold text-fog-100">{copy.title}</h1>
+  <p class="mt-6 text-lg leading-8 text-fog-300">{copy.intro}</p>
+  <div class="mt-7 flex flex-wrap gap-2">
+    {copy.topics.map((topic) => <span class="rounded-full border border-ink-600 px-3 py-1 font-mono text-xs text-fog-500">{topic}</span>)}
+  </div>
+  <div class="mt-8 flex flex-wrap gap-4 border-b border-ink-700 pb-10">
+    <a href={localePath(lang, '/docs')} class="text-sm font-medium text-accent-400">{copy.docs} →</a>
+    <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="blog-index" class="text-sm font-medium text-fog-300 hover:text-accent-400">★ {ui[lang].common.githubStar} →</a>
+  </div>
+  <section id="blog-archive" class="mt-14 space-y-12" aria-label={copy.archive}>
+    {
+      posts.map((p) => (
+        <article>
+          <p class="font-mono text-xs text-fog-600">
+            {p.data.author} · {fmt(p.data.date)}
+            {p.data.tags.length > 0 && <> · {p.data.tags.join(' · ')}</>}
+          </p>
+          <h2 class="mt-2 text-2xl font-semibold tracking-tight text-fog-100">
+            <a
+              href={localePath(lang, `/blog/${slugOf(p.id)}`)}
+              class="hover:text-accent-400"
+            >
+              {p.data.title}
+            </a>
+          </h2>
+          <p class="mt-2 text-fog-300">{p.data.description}</p>
+          <a
+            href={localePath(lang, `/blog/${slugOf(p.id)}`)}
+            class="mt-3 inline-block text-sm font-medium text-accent-400 hover:text-accent-500"
+          >
+            {copy.read} →
+          </a>
+        </article>
+      ))
+    }
+    {posts.length === 0 && (
+      <p class="text-fog-500">{copy.empty}</p>
+    )}
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

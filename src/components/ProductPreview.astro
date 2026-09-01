@@ -1,0 +1,183 @@
+---
+import type { Lang } from '../i18n/content';
+import ProductMark from './ProductMark.astro';
+import { productPreviewCopy } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  product?: 'platform' | 'objects' | 'workforce';
+}
+
+const { lang, product = 'platform' } = Astro.props;
+const presentation = {
+  platform: { mark: 'platform' as const, accent: 'text-iris-400', border: 'border-iris-600/45', wash: 'bg-iris-500/5' },
+  objects: { mark: 'objects' as const, accent: 'text-amber-400', border: 'border-amber-600/45', wash: 'bg-amber-500/5' },
+  workforce: { mark: 'flow' as const, accent: 'text-rust-400', border: 'border-rust-600/45', wash: 'bg-rust-500/5' },
+};
+const copy = productPreviewCopy[lang];
+const conventionalProduct = product === 'objects' ? 'objects' : 'platform';
+const view = { ...copy.views[conventionalProduct], ...presentation[conventionalProduct] };
+const workforce = copy.workforce;
+---
+
+<div class="rounded-2xl border border-ink-700 bg-ink-900 p-3 shadow-sm">
+  {product === 'workforce' ? (
+    <div data-workforce-console-preview class="overflow-hidden rounded-xl border border-ink-700 bg-ink-850">
+      <header class="flex items-center justify-between gap-4 border-b border-ink-700 bg-ink-900 px-4 py-3 sm:px-5">
+        <div class="flex min-w-0 items-center gap-2.5">
+          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-accent-500 text-onaccent">
+            <ProductMark product="flow" class="h-4 w-4" />
+          </span>
+          <strong class="truncate text-sm text-fog-100">{workforce.brand}</strong>
+          <span class="hidden text-xs text-fog-600 sm:inline">/</span>
+          <span class="hidden truncate text-xs text-fog-400 sm:inline">{workforce.workspace}</span>
+        </div>
+        <span class="rounded-full border border-emerald-700/50 bg-emerald-500/5 px-2.5 py-1 font-mono text-[0.62rem] text-emerald-400">{workforce.status}</span>
+      </header>
+
+      <div class="grid min-h-[520px] sm:grid-cols-[175px_1fr]">
+        <aside class="hidden border-r border-ink-700 bg-ink-900 p-3 sm:block">
+          {workforce.navigation.map(([group, items]) => (
+            <div class="mb-5 last:mb-0">
+              <p class="px-2 font-mono text-[0.58rem] tracking-wider text-fog-600 uppercase">{group}</p>
+              <div class="mt-1.5 space-y-0.5">
+                {items.map((item, index) => (
+                  <div class={`rounded-md px-2 py-1.5 text-[0.7rem] ${group === 'Workspace' && index === 0 ? 'bg-ink-850 font-semibold text-fog-100' : item.includes('2') ? 'text-rust-400' : 'text-fog-500'}`}>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </aside>
+
+        <div class="min-w-0 p-4 sm:p-5">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p class="font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">Workspace</p>
+              <h2 class="mt-2 text-xl font-semibold text-fog-100">{workforce.workspace}</h2>
+              <p class="mt-1 max-w-xl text-xs leading-5 text-fog-500">{workforce.commandBody}</p>
+            </div>
+            <span class="rounded-lg bg-accent-500 px-3 py-2 text-xs font-semibold text-onaccent">+ {workforce.action}</span>
+          </div>
+
+          <ol data-workforce-outcome-path class="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-4" aria-label={workforce.pathAria}>
+            {workforce.path.map(([number, label]) => (
+              <li class="rounded-lg border border-ink-700 bg-ink-900 px-3 py-2.5">
+                <span class="font-mono text-[0.58rem] text-rust-400">{number}</span>
+                <strong class="ml-2 text-xs text-fog-200">{label}</strong>
+              </li>
+            ))}
+          </ol>
+
+          <section class="mt-5">
+            <div>
+              <p class="font-mono text-[0.6rem] tracking-wider text-rust-400 uppercase">{workforce.commandEyebrow}</p>
+              <h3 class="mt-1 text-base font-semibold text-fog-100">{workforce.commandTitle}</h3>
+            </div>
+            <div class="mt-3 grid gap-2 lg:grid-cols-3">
+              {workforce.buckets.map((bucket) => (
+                <article data-workforce-bucket data-tone={bucket.tone} class="rounded-lg border border-ink-700 bg-ink-900 p-3">
+                  <header class="flex items-center justify-between gap-2">
+                    <h4 class="text-xs font-semibold text-fog-200">{bucket.label}</h4>
+                    <span class="rounded-full border border-ink-600 px-1.5 py-0.5 font-mono text-[0.58rem] text-fog-500">{bucket.count}</span>
+                  </header>
+                  <div class="mt-3 border-l-2 border-rust-600/60 pl-3">
+                    <strong class="block text-xs leading-5 text-fog-100">{bucket.title}</strong>
+                    <span class="mt-1 block text-[0.65rem] leading-4 text-fog-500">{bucket.detail}</span>
+                    <em class="mt-2 block text-[0.62rem] not-italic text-rust-400">{bucket.delivery}</em>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section data-workforce-acceptance-preview class="mt-4 rounded-xl border border-rust-600/45 bg-rust-500/5 p-4">
+            <div class="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p class="font-mono text-[0.58rem] tracking-wider text-rust-400 uppercase">{workforce.reviewEyebrow}</p>
+                <h3 class="mt-1 text-sm font-semibold text-fog-100">{workforce.reviewTitle}</h3>
+              </div>
+              <strong class="text-sm text-rust-400">{workforce.reviewSummary}</strong>
+            </div>
+            <div class="mt-3 grid gap-2 sm:grid-cols-3">
+              {workforce.deliverables.map(([name, state], index) => (
+                <div class="flex items-center justify-between gap-2 rounded-md border border-ink-700 bg-ink-900 px-3 py-2 text-[0.66rem]">
+                  <span class="text-fog-300">{name}</span>
+                  <span class={index === workforce.deliverables.length - 1 ? 'text-amber-400' : 'text-emerald-400'}>{state}</span>
+                </div>
+              ))}
+            </div>
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-ink-700 pt-3">
+              <div>
+                <strong class="block text-xs text-fog-100">{workforce.decision}</strong>
+                <span class="mt-1 block text-[0.64rem] leading-4 text-fog-500">{workforce.decisionBody}</span>
+              </div>
+              <span aria-disabled="true" class="rounded-md border border-ink-600 px-3 py-1.5 text-[0.64rem] text-fog-600">{workforce.acceptanceUnavailable}</span>
+            </div>
+          </section>
+        </div>
+      </div>
+      <p class="border-t border-ink-700 bg-ink-900 px-4 py-3 text-[0.65rem] leading-5 text-fog-600 sm:px-5">{workforce.boundary}</p>
+    </div>
+  ) : (
+  <div class="grid min-h-[390px] overflow-hidden rounded-xl border border-ink-700 bg-ink-850 sm:grid-cols-[165px_1fr]">
+    <aside class="hidden border-r border-ink-700 bg-ink-900 p-3 sm:block">
+      <div class="mb-5 flex items-center gap-2">
+        <span class="grid h-7 w-7 place-items-center rounded-md bg-accent-500 text-onaccent">
+          <ProductMark product={view.mark} class="h-4 w-4" />
+        </span>
+        <span class="text-sm font-semibold text-fog-100">awaken</span>
+      </div>
+      <div class="space-y-1">
+        {view.nav.map((item, i) => (
+          <div class={`rounded-md px-2 py-1.5 text-xs ${i === 0 ? 'bg-ink-850 font-semibold text-fog-100 shadow-sm' : 'text-fog-500'}`}>
+            {item}
+          </div>
+        ))}
+      </div>
+    </aside>
+
+    <div class="min-w-0 p-4 sm:p-5">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">
+            {copy.label}
+          </p>
+          <h2 class="mt-3 text-xl font-semibold text-fog-100">{view.title}</h2>
+          <p class="mt-1 max-w-xl text-xs leading-5 text-fog-500">{view.subtitle}</p>
+        </div>
+        <span class={`rounded-full border px-3 py-1 font-mono text-[0.65rem] ${view.border} ${view.wash} ${view.accent}`}>
+          {view.badge}
+        </span>
+      </div>
+
+      <div class="mt-5 grid gap-3 md:grid-cols-3">
+        {view.facts.map(([label, value]) => (
+          <div class="rounded-lg border border-ink-700 bg-ink-900 p-3">
+            <p class="text-[0.68rem] text-fog-600">{label}</p>
+            <p class="mt-2 text-sm font-semibold text-fog-100">{value}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-3 overflow-hidden rounded-lg border border-ink-700 bg-ink-900">
+        <div class="grid grid-cols-[1fr_1fr_auto] gap-3 border-b border-ink-700 px-3 py-2 font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">
+          {copy.columns.map((column) => <span>{column}</span>)}
+        </div>
+        {view.rows.map(([name, detail, state], index) => (
+          <div class="grid grid-cols-[1fr_1fr_auto] items-center gap-3 border-b border-ink-700 px-3 py-2.5 text-xs last:border-0">
+            <span class="min-w-0 font-semibold leading-4 text-fog-100">{name}</span>
+            <span class="min-w-0 leading-4 text-fog-500">{detail}</span>
+            <span class={`rounded-full border px-2 py-0.5 font-mono text-[0.62rem] ${view.border} ${view.wash} ${view.accent}`}>
+              {state}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <p class="mt-4 border-l border-ink-600 pl-4 text-xs leading-5 text-fog-500">{view.boundary}</p>
+    </div>
+  </div>
+  )}
+</div>

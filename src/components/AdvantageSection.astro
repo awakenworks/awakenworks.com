@@ -1,0 +1,102 @@
+---
+interface Item {
+  title: string;
+  common: string;
+  awaken: string;
+  proof: string;
+}
+
+interface Props {
+  id?: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  commonLabel: string;
+  awakenLabel: string;
+  proofLabel: string;
+  items: readonly Item[];
+  tone?: 'bone' | 'iris' | 'rust';
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  body,
+  commonLabel,
+  awakenLabel,
+  proofLabel,
+  items,
+  tone = 'bone',
+} = Astro.props;
+
+const tones = {
+  bone: {
+    text: 'text-bone-300',
+    border: 'border-bone-400/35',
+    wash: 'bg-bone-400/5',
+    dot: 'bg-bone-400',
+  },
+  iris: {
+    text: 'text-iris-400',
+    border: 'border-iris-600/45',
+    wash: 'bg-iris-500/5',
+    dot: 'bg-iris-500',
+  },
+  rust: {
+    text: 'text-rust-400',
+    border: 'border-rust-600/45',
+    wash: 'bg-rust-500/5',
+    dot: 'bg-rust-500',
+  },
+};
+
+const c = tones[tone];
+---
+
+<section id={id} class="border-t border-ink-800 bg-ink-900">
+  <div class="mx-auto max-w-6xl px-6 py-24">
+    <p class={`eyebrow ${c.text}`}>{eyebrow}</p>
+    <h2 class="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">
+      {title}
+    </h2>
+    <p class="mt-6 max-w-3xl text-lg leading-8 text-fog-300">{body}</p>
+
+    <div role="table" class={`mt-12 overflow-hidden rounded-2xl border ${c.border} bg-ink-850`}>
+      <div role="row" class="hidden grid-cols-[24%_34%_42%] border-b border-ink-700 bg-ink-950 md:grid">
+        <div role="columnheader" class="px-6 py-4">
+          <span class="sr-only">{eyebrow}</span>
+        </div>
+        <div role="columnheader" class="border-l border-ink-700 px-6 py-4 font-mono text-xs font-medium tracking-wider text-fog-600 uppercase">
+          {commonLabel}
+        </div>
+        <div role="columnheader" class={`border-l border-ink-700 px-6 py-4 font-mono text-xs font-medium tracking-wider uppercase ${c.text} ${c.wash}`}>
+          {awakenLabel}
+        </div>
+      </div>
+      <div role="rowgroup" class="divide-y divide-ink-700">
+        {items.map((item) => (
+          <article role="row" class="grid grid-cols-1 md:grid-cols-[24%_34%_42%]">
+            <div role="rowheader" class="bg-ink-950 px-6 py-5 text-left md:py-6">
+              <h3 class="text-lg font-semibold leading-6 text-fog-100">{item.title}</h3>
+            </div>
+            <div role="cell" class="min-w-0 border-t border-ink-700 px-6 py-5 md:border-t-0 md:border-l md:py-6">
+              <p class="font-mono text-xs tracking-wider text-fog-600 uppercase md:hidden">{commonLabel}</p>
+              <p class="mt-3 text-sm leading-6 text-fog-400 md:mt-0">{item.common}</p>
+            </div>
+            <div role="cell" class={`min-w-0 border-t border-ink-700 px-6 py-5 md:border-t-0 md:border-l md:py-6 ${c.wash}`}>
+              <p class={`font-mono text-xs tracking-wider uppercase md:hidden ${c.text}`}>{awakenLabel}</p>
+              <p class="mt-3 text-sm leading-6 text-fog-100 md:mt-0">{item.awaken}</p>
+              <div class="mt-5 flex items-start gap-2.5 border-t border-ink-700/80 pt-4">
+                <span class={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${c.dot}`} />
+                <p class="min-w-0 break-words font-mono text-xs leading-5 text-fog-500">
+                  <span class="text-fog-400">{proofLabel}:</span> {item.proof}
+                </p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

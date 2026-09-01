@@ -1,0 +1,463 @@
+@import 'tailwindcss';
+
+/* ── Route-aware brand system ─────────────────────────────────────
+   The site has four visual identities, switched by `data-brand` on
+   <html> (set by Base.astro from the route path):
+
+     • default / data-brand="works"  → cold "infrastructure" identity
+       (achromatic slate neutrals, indigo accent). Company, Awaken.
+     • data-brand="managed"          → cool infra-console identity
+       (watermetal neutrals, teal accent). Managed Agents.
+     • data-brand="objects"          → graphite + amber identity.
+       Objects uses the neutral foundation with governed-change accents.
+     • data-brand="workforce"        → warm "workshop" identity
+       (cream / chocolate neutrals, amber accent). The Workforce
+       product page and all Workforce docs.
+
+   Both identities are dark by default; `data-theme="light"` re-themes
+   the same Tailwind utilities (bg-ink-*, text-fog-*, …) per brand.
+
+   Cascade (source order matters — later, more-specific blocks win):
+     1. @theme :root                                   cold · dark   (default)
+     2. html[data-theme='light']                       cold · light
+     3. html[data-brand='managed']                     managed · dark
+     4. html[data-brand='managed'][data-theme='light'] managed · light
+     5. html[data-brand='workforce']                   Workforce · dark
+     6. html[data-brand='workforce'][data-theme='light'] Workforce · light
+     7. html[data-brand='objects']                     Objects · dark
+     8. html[data-brand='objects'][data-theme='light'] Objects · light
+   ----------------------------------------------------------------- */
+
+@theme {
+  /* Neutral ramp — cold achromatic slate (dark). */
+  --color-ink-950: oklch(14.5% 0 0); /* page background */
+  --color-ink-900: oklch(12% 0 0); /* canvas / alt band */
+  --color-ink-850: oklch(18.5% 0 0); /* card surface */
+  --color-ink-800: oklch(22.5% 0 0); /* muted */
+  --color-ink-700: oklch(28% 0 0); /* border */
+  --color-ink-600: oklch(40% 0 0); /* border-strong */
+
+  --color-fog-100: oklch(100% 0 0); /* strong / headings */
+  --color-fog-300: oklch(94% 0 0); /* body */
+  --color-fog-500: oklch(68% 0 0); /* soft */
+  --color-fog-600: oklch(46% 0 0); /* faint */
+
+  /* Primary accent — semantic. Cold = indigo; flips to amber for
+     the Workforce brand. CTAs and links use accent-*, not a product hue. */
+  --color-accent-400: oklch(76% 0.14 240);
+  --color-accent-500: oklch(70% 0.15 240);
+  --color-accent-600: oklch(62% 0.15 245);
+  --color-onaccent: oklch(100% 0 0); /* text on the accent fill */
+
+  /* Product-identity hues — FIXED across brands (altitude markers).
+     Workforce = rust, Managed Agents = teal, Awaken = bone. */
+  --color-rust-400: #e9a850;
+  --color-rust-500: #e0954a;
+  --color-rust-600: #c97c2e;
+
+  --color-iris-400: #5cc6d3;
+  --color-iris-500: #3fb3c2;
+  --color-iris-600: #2e8f9d;
+
+  --color-bone-300: #ece6da;
+  --color-bone-400: #c9bfaa;
+  --color-bone-500: #9a9085;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'Noto Sans CJK SC', 'PingFang SC', 'Microsoft YaHei',
+    'Hiragino Sans GB', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo,
+    Consolas, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-ink-950);
+  color-scheme: dark;
+  --grid-dot: rgba(220, 230, 255, 0.05);
+}
+
+/* ── 2. Cold · light ─────────────────────────────────────────────── */
+html[data-theme='light'] {
+  color-scheme: light;
+  --grid-dot: rgba(20, 24, 40, 0.05);
+
+  --color-ink-950: oklch(99.2% 0.003 80);
+  --color-ink-900: oklch(98% 0.004 75);
+  --color-ink-850: oklch(100% 0 0);
+  --color-ink-800: oklch(96.5% 0.005 80);
+  --color-ink-700: oklch(91.5% 0.006 80);
+  --color-ink-600: oklch(86% 0.008 80);
+
+  --color-fog-100: oklch(12% 0.02 260);
+  --color-fog-300: oklch(18% 0.02 260);
+  --color-fog-500: oklch(48% 0.01 260);
+  --color-fog-600: oklch(62% 0.008 260);
+
+  --color-accent-400: oklch(58% 0.135 250);
+  --color-accent-500: oklch(54% 0.14 252);
+  --color-accent-600: oklch(48% 0.14 255);
+  --color-onaccent: oklch(100% 0 0);
+
+  /* Product hues that are too light for a light canvas go darker. */
+  --color-rust-400: #c97c2e;
+  --color-rust-500: #c97c2e;
+  --color-rust-600: #b06a20;
+
+  --color-iris-400: #0f7d8c;
+  --color-iris-500: #0f7d8c;
+  --color-iris-600: #0b626f;
+
+  --color-bone-300: #1a1612;
+  --color-bone-400: #4c4334;
+  --color-bone-500: #6b6358;
+}
+
+/* ── 3. Managed Agents · dark (ink console) ──────────────────────── */
+html[data-brand='managed'] {
+  --color-ink-950: #0b1216;
+  --color-ink-900: #0e171c;
+  --color-ink-850: #131e23;
+  --color-ink-800: #1d2b32;
+  --color-ink-700: #28373e;
+  --color-ink-600: #3c4d55;
+
+  --color-fog-100: #f1f6f8;
+  --color-fog-300: #d6dde1;
+  --color-fog-500: #93a0a7;
+  --color-fog-600: #66747d;
+
+  --color-accent-400: #57c3d1;
+  --color-accent-500: #3fb3c2;
+  --color-accent-600: #2e8f9d;
+  --color-onaccent: #03161a;
+
+  --grid-dot: rgba(120, 220, 235, 0.06);
+}
+
+/* ── 4. Managed Agents · light (watermetal console) ─────────────── */
+html[data-brand='managed'][data-theme='light'] {
+  --color-ink-950: #f4f6f7;
+  --color-ink-900: #eef1f3;
+  --color-ink-850: #ffffff;
+  --color-ink-800: #f0f2f4;
+  --color-ink-700: #e0e4e8;
+  --color-ink-600: #c4ccd3;
+
+  --color-fog-100: #080d12;
+  --color-fog-300: #161d24;
+  --color-fog-500: #565f68;
+  --color-fog-600: #8a939c;
+
+  --color-accent-400: #0f7d8c;
+  --color-accent-500: #0f7d8c;
+  --color-accent-600: #0b626f;
+  --color-onaccent: #ffffff;
+
+  --grid-dot: rgba(15, 125, 140, 0.06);
+}
+
+/* ── 5. Workforce · dark (warm chocolate) ────────────────────────── */
+html[data-brand='workforce'] {
+  --color-ink-950: #1a1612;
+  --color-ink-900: #231e18;
+  --color-ink-850: #2b251d;
+  --color-ink-800: #332c22;
+  --color-ink-700: #3a3328;
+  --color-ink-600: #4c4334;
+
+  --color-fog-100: #ffffff;
+  --color-fog-300: #f4eedf;
+  --color-fog-500: #bcb3a1;
+  --color-fog-600: #7c7363;
+
+  --color-accent-400: #e9a850;
+  --color-accent-500: #e0954a;
+  --color-accent-600: #c97c2e;
+  --color-onaccent: #1a1612;
+
+  --grid-dot: rgba(255, 245, 225, 0.05);
+}
+
+/* ── 6. Workforce · light (warm cream) ───────────────────────────── */
+html[data-brand='workforce'][data-theme='light'] {
+  --color-ink-950: #f8f5ef;
+  --color-ink-900: #f4f0e7;
+  --color-ink-850: #ffffff;
+  --color-ink-800: #ebe5d8;
+  --color-ink-700: #e3ddce;
+  --color-ink-600: #c9bfaa;
+
+  --color-fog-100: #1a1612;
+  --color-fog-300: #2a251f;
+  --color-fog-500: #6b6358;
+  --color-fog-600: #8e8676;
+
+  --color-accent-400: #c97c2e;
+  --color-accent-500: #c97c2e;
+  --color-accent-600: #b06a20;
+  --color-onaccent: #ffffff;
+
+  --grid-dot: rgba(40, 30, 20, 0.05);
+}
+
+/* Objects keeps the same graphite foundation while using an amber semantic
+   accent for governed business entities and change approval. */
+html[data-brand='objects'] {
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-onaccent: #1c1202;
+}
+
+html[data-brand='objects'][data-theme='light'] {
+  --color-accent-300: #f59e0b;
+  --color-accent-400: #d97706;
+  --color-accent-500: #b45309;
+  --color-accent-600: #92400e;
+  --color-onaccent: #fffaf0;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Eyebrow / technical labels — mono by default (a nod to Awaken's
+   identity); the Workforce brand uses sans, matching its design system. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+html[data-brand='workforce'] .eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+/* Hero display type — fluid, tight tracking. */
+.hero-title {
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+:where(a, button, summary, input, textarea, select):focus-visible {
+  outline: 2px solid var(--color-accent-400);
+  outline-offset: 3px;
+}
+
+@media (max-width: 639px) {
+  .hero-title {
+    font-size: clamp(2.25rem, 11vw, 3rem);
+    line-height: 1.02;
+  }
+}
+
+/* Long-form reading (blog posts) — themed to the brand tokens. */
+.prose {
+  color: var(--color-fog-300);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose h2 {
+  margin: 2em 0 0.6em;
+  color: var(--color-fog-100);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.prose h3 {
+  margin: 1.6em 0 0.5em;
+  color: var(--color-fog-100);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.prose p {
+  margin: 1.1em 0;
+}
+.prose a {
+  color: var(--color-accent-400);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose a:hover {
+  color: var(--color-accent-500);
+}
+.prose strong {
+  color: var(--color-fog-100);
+  font-weight: 600;
+}
+.prose ul,
+.prose ol {
+  margin: 1.1em 0;
+  padding-left: 1.4em;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin: 0.4em 0;
+}
+.prose blockquote {
+  margin: 1.4em 0;
+  border-left: 3px solid var(--color-accent-600);
+  padding-left: 1em;
+  color: var(--color-fog-500);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-ink-850);
+  border: 1px solid var(--color-ink-700);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+.prose :not(pre) > code {
+  overflow-wrap: anywhere;
+}
+.prose pre {
+  margin: 1.4em 0;
+  background: var(--color-ink-900);
+  border: 1px solid var(--color-ink-700);
+  border-radius: 12px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+.prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+.prose table {
+  display: block;
+  width: 100%;
+  margin: 1.5em 0;
+  overflow-x: auto;
+  border: 1px solid var(--color-ink-700);
+  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  scrollbar-color: var(--color-ink-600) transparent;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.prose .table-scroll-hint {
+  display: none;
+  margin: 1.25rem 0 -1rem;
+  color: var(--color-fog-500);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+@media (max-width: 639px) {
+  .prose .table-scroll-hint {
+    display: block;
+  }
+  .prose table[data-scrollable='true'] {
+    margin-top: 1.3rem;
+  }
+}
+.prose table:focus-visible {
+  outline: 2px solid var(--color-accent-400);
+  outline-offset: 3px;
+}
+.prose thead {
+  background: var(--color-ink-900);
+}
+.prose th,
+.prose td {
+  min-width: 10rem;
+  padding: 0.8rem 1rem;
+  border-right: 1px solid var(--color-ink-700);
+  border-bottom: 1px solid var(--color-ink-700);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  color: var(--color-fog-100);
+  font-weight: 600;
+}
+.prose td {
+  color: var(--color-fog-300);
+}
+.prose th:first-child,
+.prose td:first-child {
+  min-width: 8rem;
+}
+.prose th:last-child,
+.prose td:last-child {
+  border-right: 0;
+}
+.prose tbody tr:last-child td {
+  border-bottom: 0;
+}
+.prose tbody tr:nth-child(even) {
+  background: color-mix(in oklab, var(--color-ink-850) 55%, transparent);
+}
+.prose td code {
+  white-space: nowrap;
+}
+.prose hr {
+  margin: 2em 0;
+  border: 0;
+  border-top: 1px solid var(--color-ink-700);
+}
+.blog-prose img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.5em 0;
+  border: 1px solid var(--color-ink-700);
+  border-radius: 16px;
+  background: var(--color-ink-900);
+}
+.blog-prose .mermaid {
+  margin: 1.5em 0;
+  overflow-x: auto;
+  border: 1px solid var(--color-ink-700);
+  border-radius: 16px;
+  background: var(--color-ink-900);
+  padding: 1rem;
+}
+
+/* Docs sidebar sub-group chevron — rotates when the <details> is open. */
+.nav-chevron,
+.sub-chevron {
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+details[open] > summary .nav-chevron,
+details[open] > summary .sub-chevron {
+  transform: rotate(90deg);
+}
+
+/* Subtle dotted grid backdrop for hero / stack */
+.grid-backdrop {
+  background-image: radial-gradient(
+    circle at center,
+    var(--grid-dot) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+/* Theme-toggle icon visibility */
+html[data-theme='dark'] .icon-when-light {
+  display: none;
+}
+html[data-theme='light'] .icon-when-dark {
+  display: none;
+}

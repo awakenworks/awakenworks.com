@@ -1,0 +1,20 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CaseDetail from '../../../components/CaseDetail.astro';
+import { content } from '../../../i18n/content';
+import { NON_DEFAULT_LANGS, type Lang } from '../../../i18n/locales';
+import { ui } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.flatMap((lang) => content[lang].cases.items.map((item) => ({
+    params: { lang, slug: item.slug },
+    props: { lang, item },
+  })));
+}
+
+const { lang, item } = Astro.props as { lang: Lang; item: (typeof content)[Lang]['cases']['items'][number] };
+---
+
+<Base title={ui[lang].routes.caseTitle(item.name)} description={item.summary}>
+  <CaseDetail lang={lang} slug={item.slug} />
+</Base>

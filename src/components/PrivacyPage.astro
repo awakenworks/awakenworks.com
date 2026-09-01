@@ -1,0 +1,45 @@
+---
+import { content, type Lang } from '../i18n/content';
+import SiteFooter from './SiteFooter.astro';
+import SiteHeader from './SiteHeader.astro';
+
+interface Props { lang: Lang }
+
+const { lang } = Astro.props;
+const page = content[lang].privacy;
+const sectionIds = [
+  'privacy-provided',
+  'privacy-analytics',
+  'privacy-purpose',
+  'privacy-processors',
+  'privacy-retention',
+  'privacy-contact',
+] as const;
+---
+
+<SiteHeader lang={lang} path="/privacy" />
+<main>
+  <article id="privacy-notice" class="mx-auto max-w-4xl px-6 py-20 sm:py-28">
+    <p class="eyebrow text-accent-400">{page.eyebrow}</p>
+    <h1 class="mt-5 text-5xl font-semibold tracking-tight text-fog-100 sm:text-7xl">{page.title}</h1>
+    <p class="mt-5 font-mono text-xs text-fog-600">{page.updated}</p>
+    <p class="mt-8 max-w-3xl text-lg leading-8 text-fog-300">{page.intro}</p>
+    <div class="mt-14 divide-y divide-ink-700 border-y border-ink-700">
+      {page.sections.map((section, index) => (
+        <section id={sectionIds[index]} class="scroll-mt-20 py-8">
+          <h2 class="text-2xl font-semibold text-fog-100">{section.title}</h2>
+          <div class="mt-4 space-y-4 text-sm leading-7 text-fog-400">
+            {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+        </section>
+      ))}
+    </div>
+    <a
+      href={page.contactHref}
+      class="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-accent-400 hover:text-accent-500"
+    >
+      {page.contactLabel}<span aria-hidden="true">→</span>
+    </a>
+  </article>
+</main>
+<SiteFooter lang={lang} />

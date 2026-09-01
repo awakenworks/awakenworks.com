@@ -1,0 +1,93 @@
+---
+import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
+import { publicProductLabel, publicVersionLabel } from '../i18n/docsVersions';
+import DocsShell from './DocsShell.astro';
+import { docAudienceLabel, type DocsAudience } from '../lib/docsTaxonomy';
+import { docsIndexCopy, ui } from '../i18n/ui';
+
+interface Props { lang: Lang }
+
+const { lang } = Astro.props;
+const copy = docsIndexCopy[lang];
+const startPaths = copy.startPaths;
+const products = copy.products.map((product) => ({
+  ...product,
+  status: product.key === 'agents'
+    ? publicVersionLabel('platform', lang)
+    : product.key === 'objects'
+      ? publicProductLabel('objects', lang)
+      : publicVersionLabel('flow', lang),
+}));
+const agentsPaths = copy.agentsPaths as readonly (readonly [DocsAudience, string, string])[];
+
+const toneClass: Record<string, string> = {
+  amber: 'border-amber-600/50 bg-amber-500/10 text-amber-400',
+  rust: 'border-rust-600/50 bg-rust-500/10 text-rust-400',
+  iris: 'border-iris-600/50 bg-iris-500/10 text-iris-400',
+};
+---
+
+<DocsShell lang={lang} product="docs" title={copy.shellTitle} otherPath="/docs" toc={[{href:'#start', label:copy.toc[0]}, {href:'#products', label:copy.toc[1]}, {href:'#agents-paths', label:copy.toc[2]}]}>
+  <section id="docs-hero" class="relative overflow-hidden border-b border-ink-800">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-accent-400">AwakenWorks Docs</p>
+      <h1 class="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-fog-100 sm:text-6xl">{copy.heroTitle}</h1>
+      <p class="mt-6 max-w-3xl text-lg leading-8 text-fog-300">{copy.heroBody}</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="#start" data-umami-event="docs-task-path-selected" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent transition hover:bg-accent-400">{copy.startCta}</a>
+        <a href={localePath(lang, '/docs/agents')} data-umami-event="docs-agents-overview-selected" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-medium text-fog-100 transition hover:border-fog-500">{copy.agentsCta}</a>
+        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="docs-index" class="px-3 py-3 text-sm font-medium text-fog-300 transition hover:text-accent-400">★ {ui[lang].common.githubStar} →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="start" class="mx-auto max-w-6xl scroll-mt-16 px-6 py-14">
+    <p class="eyebrow text-accent-400">{copy.taskEyebrow}</p>
+    <h2 class="mt-3 max-w-3xl text-3xl font-semibold text-fog-100">{copy.taskTitle}</h2>
+    <div class="mt-8 grid gap-5 md:grid-cols-2">
+      {startPaths.map(([title, body, href, owner]) => (
+        <a href={localePath(lang, href)} class="rounded-2xl border border-ink-700 bg-ink-850 p-6 transition hover:border-accent-500">
+          <p class="font-mono text-xs uppercase tracking-wider text-accent-400">{owner}</p>
+          <h3 class="mt-3 text-lg font-semibold text-fog-100">{title}</h3>
+          <p class="mt-3 text-sm leading-6 text-fog-500">{body}</p>
+          <p class="mt-5 font-mono text-xs text-accent-400">{ui[lang].common.openPath}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section id="products" class="mx-auto max-w-6xl px-6 py-14">
+    <div class="grid gap-6 md:grid-cols-2">
+      {products.map((product) => (
+        <article class="flex flex-col rounded-2xl border border-ink-700 bg-ink-850 p-7 transition hover:border-fog-500">
+          <div class="flex items-center justify-between gap-3">
+            <p class="eyebrow text-fog-500">{product.label}</p>
+            <span class={`rounded-full border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-wider ${toneClass[product.tone]}`}>{product.status}</span>
+          </div>
+          <h2 class="mt-4 text-2xl font-semibold text-fog-100">{product.title}</h2>
+          <p class="mt-3 flex-1 text-sm leading-6 text-fog-300">{product.body}</p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            {product.links.map(([label, href]) => <a href={localePath(lang, href)} class="rounded-full border border-ink-600 px-3 py-1 font-mono text-xs text-fog-400 hover:border-fog-500 hover:text-fog-100">{label}</a>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="agents-paths" class="border-y border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-14">
+      <p class="eyebrow text-iris-400">Awaken Agents</p>
+      <h2 class="mt-3 text-3xl font-semibold text-fog-100">{copy.agentsTitle}</h2>
+      <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {agentsPaths.map(([audience, body, href]) => (
+          <a href={localePath(lang, href)} class="rounded-2xl border border-ink-700 bg-ink-850 p-6 transition hover:border-iris-500">
+            <h3 class="text-lg font-semibold text-fog-100">{docAudienceLabel(audience, lang)}</h3>
+            <p class="mt-3 text-sm leading-6 text-fog-500">{body}</p>
+            <p class="mt-5 font-mono text-xs text-iris-400">{ui[lang].common.openPath}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</DocsShell>

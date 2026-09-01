@@ -1,0 +1,37 @@
+---
+import {
+  brandMarkBody,
+  brandMarkStyle,
+  canonicalBrandMark,
+} from '../lib/brandMarks.mjs';
+
+interface Props {
+  product: 'harness' | 'platform' | 'flow' | 'works' | 'agents' | 'objects' | 'workforce';
+  class?: string;
+  scheme?: 'auto' | 'on-dark' | 'on-light' | 'current';
+}
+const { product, class: klass = 'h-5 w-5', scheme = 'auto' } = Astro.props;
+const canonical = canonicalBrandMark(product);
+const body = brandMarkBody(canonical);
+const variants = scheme === 'auto'
+  ? [
+      { scheme: 'on-dark' as const, visibility: 'icon-when-dark' },
+      { scheme: 'on-light' as const, visibility: 'icon-when-light' },
+    ]
+  : [{ scheme, visibility: '' }];
+---
+{
+  variants.map((variant) => (
+    <svg
+      class={`${variant.visibility} ${klass}`.trim()}
+      data-brand-mark={canonical}
+      data-mark-scheme={variant.scheme}
+      style={brandMarkStyle(canonical, variant.scheme)}
+      viewBox="0 0 32 32"
+      fill="none"
+      aria-hidden="true"
+    >
+      <Fragment set:html={body} />
+    </svg>
+  ))
+}

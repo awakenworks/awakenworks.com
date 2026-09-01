@@ -1,0 +1,113 @@
+---
+import { content, localePath, type Lang } from '../i18n/content';
+import OpportunityForm from './OpportunityForm.astro';
+import SiteFooter from './SiteFooter.astro';
+import SiteHeader from './SiteHeader.astro';
+
+interface Props { lang: Lang }
+
+const { lang } = Astro.props;
+const page = content[lang].enterprise;
+const productHref = localePath(lang, '/agents');
+const pathTone = {
+  agents: 'target:border-iris-500 target:bg-iris-500/5',
+  objects: 'target:border-amber-500 target:bg-amber-500/5',
+  workforce: 'target:border-rust-500 target:bg-rust-500/5',
+} as const;
+---
+
+<SiteHeader lang={lang} path="/enterprise" />
+
+<main>
+  <section id="enterprise-hero" class="relative overflow-hidden border-b border-ink-800">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-6 py-16 sm:py-32">
+      <p class="eyebrow text-accent-400">{page.hero.eyebrow}</p>
+      <h1 class="hero-title mt-6 max-w-5xl font-semibold text-fog-100">{page.hero.title}</h1>
+      <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300 sm:text-xl">{page.hero.body}</p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a href="#enterprise-paths" data-umami-event="private_deployment_cooperation_selected" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{page.hero.primary}</a>
+        <a href={productHref} data-umami-event="developer_evaluation_selected" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{page.hero.secondary}</a>
+      </div>
+      <p data-enterprise-now class="mt-8 max-w-3xl border-l-2 border-accent-500/60 pl-4 text-sm leading-6 text-fog-500">{page.boundary}</p>
+    </div>
+  </section>
+
+  <section id="enterprise-paths" class="scroll-mt-16 border-b border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-accent-400">{page.paths.eyebrow}</p>
+      <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{page.paths.title}</h2>
+      <div class="mt-10 grid gap-5 lg:grid-cols-3">
+        {page.paths.items.map((item) => (
+          <article
+            id={`enterprise-${item.query}`}
+            data-enterprise-product-path={item.query}
+            class={`scroll-mt-24 rounded-2xl border border-ink-700 bg-ink-850 p-7 ${pathTone[item.query]}`}
+          >
+            <p class="font-mono text-xs text-accent-400">{item.status}</p>
+            <h3 class="mt-3 text-xl font-semibold text-fog-100">{item.product}</h3>
+            <p class="mt-4 text-sm leading-7 text-fog-400">{item.body}</p>
+            <dl class="mt-6 space-y-5 border-t border-ink-700 pt-5">
+              <div data-enterprise-path-fact="bring">
+                <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{page.paths.bringLabel}</dt>
+                <dd class="mt-1.5 text-sm leading-6 text-fog-300">{item.bring}</dd>
+              </div>
+              <div data-enterprise-path-fact="decision">
+                <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{page.paths.decisionLabel}</dt>
+                <dd class="mt-1.5 text-sm leading-6 text-fog-300">{item.decision}</dd>
+              </div>
+              <div data-enterprise-path-fact="boundary">
+                <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{page.paths.boundaryLabel}</dt>
+                <dd class="mt-1.5 text-sm leading-6 text-fog-400">{item.boundary}</dd>
+              </div>
+            </dl>
+            <div class="mt-6 flex flex-wrap gap-x-4 gap-y-3 border-t border-ink-700 pt-5 text-sm">
+              <a href={localePath(lang, item.href)} class="text-fog-300 hover:text-fog-100">{item.view} →</a>
+              <a href={localePath(lang, item.docsHref)} class="text-fog-300 hover:text-fog-100">{item.docs} →</a>
+              <a href={`${localePath(lang, '/enterprise')}?product=${item.query}#apply`} class="font-medium text-accent-400 hover:text-accent-300">{item.apply} →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="enterprise-process" class="border-b border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-accent-400">{page.process.eyebrow}</p>
+      <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{page.process.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300">{page.process.body}</p>
+      <ol class="mt-9 grid gap-4 md:grid-cols-3">
+        {page.process.steps.map((step) => (
+          <li data-enterprise-process-step class="rounded-2xl border border-ink-700 bg-ink-900 p-6">
+            <p class="font-mono text-xs text-accent-400">{step.n}</p>
+            <h3 class="mt-3 text-lg font-semibold text-fog-100">{step.title}</h3>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+      <p data-enterprise-promise-boundary class="mt-7 max-w-4xl border-l-2 border-accent-500/60 pl-4 text-sm leading-7 text-fog-500">{page.process.boundary}</p>
+    </div>
+  </section>
+
+  <section id="apply" class="scroll-mt-16 bg-ink-900">
+    <div class="mx-auto grid max-w-6xl gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16">
+      <div>
+        <p class="eyebrow text-accent-400">{page.form.eyebrow}</p>
+        <h2 class="mt-5 text-3xl font-semibold tracking-tight text-fog-100 sm:text-5xl">{page.form.title}</h2>
+        <p class="mt-6 text-lg leading-8 text-fog-300">{page.form.body}</p>
+        <div class="mt-8 rounded-2xl border border-ink-700 bg-ink-950/70 p-6">
+          <h3 class="font-semibold text-fog-100">{page.form.prepareTitle}</h3>
+          <ul class="mt-4 space-y-3 text-sm leading-6 text-fog-400">
+            {page.form.prepare.map((item) => <li class="flex gap-3"><span class="text-accent-400">✓</span><span>{item}</span></li>)}
+          </ul>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-ink-700 bg-ink-950 p-6 sm:p-8">
+        <OpportunityForm lang={lang} product="agents" />
+      </div>
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

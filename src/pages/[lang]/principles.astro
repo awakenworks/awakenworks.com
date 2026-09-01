@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import Principles from '../../components/Principles.astro';
+import { localizedStaticPaths, type Lang } from '../../i18n/locales';
+import { ui } from '../../i18n/ui';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const { title, description } = ui[lang].routes.principles;
+---
+
+<Base title={title} description={description}>
+  <Principles lang={lang} />
+</Base>

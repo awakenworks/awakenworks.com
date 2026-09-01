@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import PrivacyPage from '../../components/PrivacyPage.astro';
+import { content } from '../../i18n/content';
+import { localizedStaticPaths, type Lang } from '../../i18n/locales';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const t = content[lang];
+---
+
+<Base title={t.privacy.meta.title} description={t.privacy.meta.description}>
+  <PrivacyPage lang={lang} />
+</Base>

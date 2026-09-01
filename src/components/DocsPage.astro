@@ -1,0 +1,173 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { localePath, type Lang } from '../i18n/content';
+import { docAudience, docAudienceLabel, docSectionLabel, docsProductName } from '../lib/docsTaxonomy';
+import {
+  buildNav,
+  canonicalDocsEntry,
+  docsNeighbors,
+  parseId,
+  publicDocsId,
+  urlSlug,
+} from '../lib/docsRoutes';
+import DocsShell from './DocsShell.astro';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  entry: CollectionEntry<'docs'>;
+}
+
+const { lang, entry } = Astro.props;
+const copy = ui[lang].docsPage;
+const all = await getCollection('docs');
+const parsed = parseId(entry.id);
+const publicId = publicDocsId(parsed);
+const canonical = canonicalDocsEntry(all, entry);
+const { Content, headings } = await render(entry);
+const navGroups = buildNav(all, publicId.product, parsed.version, lang);
+const toc = headings
+  .filter((heading) => heading.depth === 2)
+  .map((heading) => ({ href: `#${heading.slug}`, label: heading.text }));
+const basePath = '/docs/' + urlSlug(parsed);
+const neighbors = docsNeighbors(navGroups, basePath);
+const displaySection = canonical.data.section
+  ? docSectionLabel(canonical.data.section, lang)
+  : undefined;
+const audience = docAudience(parsed.product, canonical.data.section, canonical.data.audience);
+const neighborSection = (section: string) => docSectionLabel(section, lang);
+const pageTitle = copy.title(entry.data.title, docsProductName(publicId.product));
+---
+
+<Base
+  title={pageTitle}
+  description={entry.data.description}
+>
+  <div data-doc-copy data-copy={copy.copy} data-copy-aria={copy.copyAria} data-copied={copy.copied} data-copy-failed={copy.copyFailed} data-scroll-table={copy.scrollTable} hidden></div>
+  <DocsShell
+    lang={lang}
+    product={publicId.product}
+    versionProduct={parsed.product as 'flow' | 'harness' | 'platform'}
+    section={canonical.data.section}
+    audience={audience}
+    title={entry.data.title}
+    navGroups={navGroups}
+    versionBaseSlug={publicId.parts.join('/')}
+    otherPath={basePath}
+    toc={toc}
+  >
+    <div class="border-b border-ink-800 px-6 py-12">
+      <div class="mx-auto max-w-3xl">
+        <p class="eyebrow text-accent-400">{docAudienceLabel(audience, lang)}{displaySection ? ` · ${displaySection}` : ''}</p>
+        <h1 class="mt-3 text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">
+          {entry.data.title}
+        </h1>
+        <div class="mt-5 border-l-2 border-accent-500/50 pl-4" data-doc-purpose>
+          <p class="font-mono text-[0.68rem] uppercase tracking-wider text-fog-600">
+            {copy.purpose}
+          </p>
+          <p class="mt-1 text-lg leading-8 text-fog-300">{entry.data.description}</p>
+        </div>
+      </div>
+    </div>
+    <article class="prose mx-auto max-w-3xl px-6 py-12">
+      <Content />
+    </article>
+    <nav
+      class="mx-auto grid max-w-3xl grid-cols-1 gap-4 border-t border-ink-800 px-6 py-10 sm:grid-cols-2"
+      aria-label={copy.adjacent}
+      data-doc-journey
+    >
+      {neighbors.previous ? (
+        <a
+          href={localePath(lang, neighbors.previous.href)}
+          class="rounded-xl border border-ink-700 p-4 text-left hover:border-fog-500"
+          data-doc-neighbor="previous"
+        >
+          <span class="block font-mono text-[0.68rem] uppercase tracking-wider text-fog-600">
+            {copy.previous} · {neighborSection(neighbors.previous.group)}
+          </span>
+          <span class="mt-2 block text-sm font-semibold text-fog-200">{neighbors.previous.label}</span>
+        </a>
+      ) : null}
+      {neighbors.next ? (
+        <a
+          href={localePath(lang, neighbors.next.href)}
+          class="rounded-xl border border-ink-700 p-4 text-right hover:border-fog-500 sm:col-start-2"
+          data-doc-neighbor="next"
+        >
+          <span class="block font-mono text-[0.68rem] uppercase tracking-wider text-fog-600">
+            {neighborSection(neighbors.next.group)} · {copy.next}
+          </span>
+          <span class="mt-2 block text-sm font-semibold text-fog-200">{neighbors.next.label}</span>
+        </a>
+      ) : null}
+    </nav>
+  </DocsShell>
+</Base>
+
+<script>
+  const copyHost = document.querySelector<HTMLElement>('[data-doc-copy]');
+  const copyText = copyHost?.dataset.copy ?? 'Copy';
+  const copyAria = copyHost?.dataset.copyAria ?? 'Copy code';
+  const copiedText = copyHost?.dataset.copied ?? 'Copied';
+  const copyFailedText = copyHost?.dataset.copyFailed ?? 'Copy failed';
+  const scrollTableText = copyHost?.dataset.scrollTable ?? 'Scrollable data table';
+  const prepareScrollableTables = () => {
+    for (const table of document.querySelectorAll<HTMLElement>('.prose table')) {
+      const scrollable = table.scrollWidth > table.clientWidth;
+      if (scrollable) {
+        table.tabIndex = 0;
+        table.setAttribute('aria-label', scrollTableText);
+        table.dataset.scrollable = 'true';
+        if (!table.previousElementSibling?.matches('[data-table-scroll-hint]')) {
+          const hint = document.createElement('p');
+          hint.dataset.tableScrollHint = 'true';
+          hint.className = 'table-scroll-hint';
+          hint.textContent = `↔ ${scrollTableText}`;
+          hint.setAttribute('aria-hidden', 'true');
+          table.before(hint);
+        }
+      } else {
+        table.removeAttribute('tabindex');
+        table.removeAttribute('aria-label');
+        delete table.dataset.scrollable;
+        if (table.previousElementSibling?.matches('[data-table-scroll-hint]')) {
+          table.previousElementSibling.remove();
+        }
+      }
+    }
+  };
+  prepareScrollableTables();
+  window.addEventListener('resize', prepareScrollableTables, { passive: true });
+  for (const block of document.querySelectorAll<HTMLElement>('.prose pre')) {
+    // astro-mermaid reads the complete <pre>.textContent after this script runs.
+    // Appending a visible control would therefore turn a valid final line such
+    // as `T --> D["Done"]` into `T --> D["Done"]Copy`. Mermaid diagrams keep
+    // their own rendered surface; only literal code blocks receive this control.
+    if (block.matches('.mermaid')) continue;
+    if (block.dataset.copyReady === 'true') continue;
+    block.dataset.copyReady = 'true';
+    block.classList.add('relative');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'absolute right-2 top-2 rounded-md border border-ink-600 bg-ink-900/90 px-2 py-1 font-mono text-[0.68rem] text-fog-400 hover:border-fog-500 hover:text-fog-100';
+    button.textContent = copyText;
+    button.setAttribute('aria-label', copyAria);
+    button.addEventListener('click', async () => {
+      const code = block.querySelector('code')?.textContent ?? block.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+        button.textContent = copiedText;
+      } catch {
+        button.textContent = copyFailedText;
+      }
+      window.setTimeout(() => {
+        button.textContent = copyText;
+      }, 1600);
+    });
+    block.append(button);
+  }
+</script>

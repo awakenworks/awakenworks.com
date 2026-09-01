@@ -1,0 +1,14 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BlogIndex from '../../../components/BlogIndex.astro';
+import { localizedStaticPaths, type Lang } from '../../../i18n/locales';
+import { ui } from '../../../i18n/ui';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const meta = ui[lang].routes.blog;
+---
+
+<Base title={meta.title} description={meta.description}>
+  <BlogIndex lang={lang} />
+</Base>

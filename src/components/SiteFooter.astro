@@ -1,0 +1,62 @@
+---
+import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
+import ProductMark from './ProductMark.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = content[lang];
+
+function externalEvent(href: string): string | undefined {
+  if (href.includes('youtube.com')) return 'footer-youtube';
+  if (href === AWAKEN_GITHUB_URL) return 'github_star_selected';
+  if (href.includes('github.com')) return 'footer-github';
+  return undefined;
+}
+---
+
+<footer class="border-t border-ink-800 bg-ink-950">
+  <div class="mx-auto max-w-6xl px-6 py-16">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+      <div>
+        <div class="flex items-center gap-2 font-semibold text-fog-100">
+          <ProductMark product="works" class="h-5 w-5" />
+          AwakenWorks
+        </div>
+        <p class="mt-4 max-w-xs text-sm text-fog-500">{t.footer.tagline}</p>
+      </div>
+      {
+        t.footer.cols.map((col) => (
+          <div>
+            <h3 class="font-mono text-xs tracking-wider text-fog-600 uppercase">
+              {col.title}
+            </h3>
+            <ul class="mt-4 space-y-2.5 text-sm">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={
+                      link.href.startsWith('/')
+                        ? localePath(lang, link.href)
+                        : link.href
+                    }
+                    data-umami-event={externalEvent(link.href)}
+                    data-umami-event-location={link.href === AWAKEN_GITHUB_URL ? 'footer' : undefined}
+                    class="text-fog-300 hover:text-fog-100"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    <p class="mt-12 border-t border-ink-800 pt-8 text-sm text-fog-600">
+      {t.footer.rights}
+    </p>
+  </div>
+</footer>

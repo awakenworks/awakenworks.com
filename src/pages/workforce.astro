@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import AwakenFlowLanding from '../components/AwakenFlowLanding.astro';
+import { content } from '../i18n/content';
+import { DEFAULT_LANG, localePath } from '../i18n/locales';
+import { softwareAppLd } from '../lib/jsonld';
+
+const o = content[DEFAULT_LANG].landing.workforce;
+---
+
+<Base title={`Awaken Workforce — ${o.title}`} description={o.subtitle} jsonLd={softwareAppLd({ name: 'Awaken Workforce', description: o.subtitle, url: new URL(localePath(DEFAULT_LANG, '/workforce'), Astro.site).href })}>
+  <AwakenFlowLanding lang={DEFAULT_LANG} />
+</Base>

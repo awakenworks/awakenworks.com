@@ -1,0 +1,254 @@
+---
+import { content, localePath, type Lang } from '../i18n/content';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import ProductMark from './ProductMark.astro';
+import ProductShowcase from './ProductShowcase.astro';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = content[lang];
+const home = t.home;
+const enterpriseHref = localePath(lang, '/enterprise');
+const agentsDocsHref = localePath(lang, '/docs/agents/get-started');
+const casesHref = localePath(lang, '/cases');
+const productCards = [
+  { key: 'agents', product: t.products.managed, tone: 'text-iris-400', border: 'hover:border-iris-500' },
+  { key: 'objects', product: t.products.objects, tone: 'text-amber-400', border: 'hover:border-amber-500' },
+  { key: 'workforce', product: t.products.workforce, tone: 'text-rust-400', border: 'hover:border-rust-500' },
+] as const;
+const copy = ui[lang].home;
+---
+
+<SiteHeader lang={lang} path="/" />
+
+<main>
+  <section id="home-hero" class="home-hero relative overflow-hidden">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-28 lg:py-32">
+      <div class="max-w-4xl">
+        <p class="eyebrow text-accent-400">{home.hero.eyebrow}</p>
+        <h1 class={`home-display-title mt-6 font-semibold text-fog-100 ${copy.titleClass}`}>
+          {home.hero.title}
+        </h1>
+        <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300 sm:text-xl">
+          {home.hero.subtitle}
+        </p>
+        <div class="mt-9 flex flex-wrap items-center gap-3">
+          <a
+            href={agentsDocsHref}
+            data-umami-event="developer_evaluation_selected"
+            class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400"
+          >{home.hero.ctaPrimary}</a>
+          <a
+            href={enterpriseHref}
+            data-umami-event="private_deployment_cooperation_selected"
+            class="rounded-xl border border-ink-600 bg-ink-950/20 px-6 py-3 font-medium text-fog-100 backdrop-blur-sm transition hover:border-fog-500"
+          >{home.hero.ctaSecondary}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ProductShowcase lang={lang} product="platform" compact caption={ui[lang].agentsLanding.showcase} />
+
+  <section id="home-advantages" class="scroll-mt-16 border-y border-ink-800 bg-ink-850">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <div class="max-w-4xl">
+        <p class="eyebrow text-accent-400">{home.advantages.eyebrow}</p>
+        <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{home.advantages.title}</h2>
+        <p class="mt-6 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg sm:leading-8">{home.advantages.body}</p>
+      </div>
+
+      <div class="mt-10 grid gap-px overflow-hidden rounded-[1.4rem] border border-ink-700 bg-ink-700 sm:grid-cols-2 xl:grid-cols-4">
+        {home.advantages.items.map((advantage) => (
+          <article data-home-advantage={advantage.key} class="bg-ink-900 p-6 sm:p-7">
+            <p class="font-mono text-sm font-semibold text-fog-100">{advantage.value}</p>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{advantage.label}</p>
+            <a
+              href={localePath(lang, advantage.href)}
+              data-umami-event={`home-advantage-${advantage.key}`}
+              class="mt-3 inline-flex text-xs font-medium text-accent-400 hover:text-accent-300"
+            >{advantage.proof} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="home-products" class="scroll-mt-16 border-b border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class="eyebrow text-fog-500">{t.products.eyebrow}</p>
+      <h2 class="home-section-title mt-5 max-w-4xl text-fog-100">{t.products.title}</h2>
+      <div class="mt-12 grid gap-5 lg:grid-cols-2">
+        {productCards.map(({ key, product, tone, border }) => (
+          <a
+            href={localePath(lang, product.href)}
+            data-umami-event={`home-${key}-details`}
+            class={`group grid min-w-0 grid-cols-[auto_1fr_auto] items-center gap-4 rounded-[1.4rem] border border-ink-700 bg-ink-850 p-6 transition sm:p-7 ${key === 'agents' ? 'lg:col-span-2' : ''} ${border}`}
+          >
+            <ProductMark product={key} class={`h-8 w-8 ${tone}`} />
+            <span class="min-w-0">
+              <span class="flex flex-wrap items-baseline gap-x-3">
+                <span class="text-lg font-semibold text-fog-100">{product.name}</span>
+                <span class="font-mono text-[0.65rem] text-fog-600">{product.status}</span>
+              </span>
+              <span data-product-role class="mt-1 block text-xs text-fog-500">{product.role}</span>
+              <span class="mt-2 block text-sm leading-6 text-fog-400">{product.tagline}</span>
+            </span>
+            <span class={`text-lg transition group-hover:translate-x-1 ${tone}`}>→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="home-scenarios" class="scroll-mt-16 border-b border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
+      <div class="max-w-4xl">
+        <p class="eyebrow text-accent-400">{home.scenarios.eyebrow}</p>
+        <h2 class="home-section-title mt-5 text-fog-100">{home.scenarios.title}</h2>
+        <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300">{home.scenarios.body}</p>
+      </div>
+      <div class="mt-12 grid gap-5 lg:grid-cols-3">
+        {home.scenarios.items.map((item, index) => (
+          <article
+            data-scenario-card
+            data-scenario-priority={item.featured ? 'primary' : 'secondary'}
+            class={`rounded-[1.4rem] border p-7 ${item.featured ? 'border-accent-600/70 bg-accent-500/5 lg:col-span-2' : 'border-ink-700 bg-ink-850'}`}
+          >
+            <p class="font-mono text-xs text-accent-400">{String(index + 1).padStart(2, '0')}</p>
+            {item.featured && <p class="mt-4 inline-flex rounded-full border border-accent-700/60 px-2.5 py-1 font-mono text-[0.65rem] tracking-wider text-accent-300 uppercase">{home.scenarios.featuredLabel}</p>}
+            <p class="mt-4 font-mono text-[0.68rem] tracking-wider text-fog-600 uppercase">{item.label}</p>
+            <h3 class="mt-4 text-xl font-semibold text-fog-100">{item.title}</h3>
+            <p class="mt-4 text-sm leading-7 text-fog-400">{item.body}</p>
+            <dl class="mt-6 grid gap-4 border-t border-ink-700 pt-6 sm:grid-cols-2">
+              {[
+                [home.scenarios.labels.trigger, item.trigger],
+                [home.scenarios.labels.systems, item.systems],
+                [home.scenarios.labels.finish, item.finish],
+              ].map(([label, value]) => (
+                <div data-scenario-fact class="last:sm:col-span-2">
+                  <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{label}</dt>
+                  <dd class="mt-1.5 text-xs leading-6 text-fog-300">{value}</dd>
+                </div>
+              ))}
+            </dl>
+            <details class="mt-5 border-t border-ink-700 pt-4">
+              <summary class="cursor-pointer text-xs font-medium text-fog-300 hover:text-fog-100">{home.scenarios.labels.human} · {home.scenarios.labels.measures}</summary>
+              <dl class="mt-4 grid gap-4 sm:grid-cols-2">
+                {[
+                  [home.scenarios.labels.human, item.human],
+                  [home.scenarios.labels.measures, item.measures],
+                ].map(([label, value]) => (
+                  <div data-scenario-detail>
+                    <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{label}</dt>
+                    <dd class="mt-1.5 text-xs leading-6 text-fog-300">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </details>
+            <a
+              href={item.href === '/enterprise' ? `${enterpriseHref}?product=agents&scenario=${item.key}#apply` : localePath(lang, item.href)}
+              data-umami-event={`scenario-${item.key}-selected`}
+              class="mt-6 inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
+            >{home.scenarios.cta} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="home-cases" class="scroll-mt-16 border-b border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
+      <div class="max-w-4xl">
+        <p class="eyebrow text-iris-400">{t.cases.eyebrow}</p>
+        <h2 class="home-section-title mt-5 text-fog-100">{t.cases.title}</h2>
+        <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300">{t.cases.body}</p>
+      </div>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-3">
+        {t.cases.items.map((item) => (
+          <article data-case-card={item.slug} class="flex flex-col rounded-[1.4rem] border border-ink-700 bg-ink-850 p-7 transition hover:border-iris-600/70">
+            <p class="font-mono text-[0.68rem] uppercase tracking-wider text-iris-400">{item.kind}</p>
+            <h3 class="mt-4 text-2xl font-semibold text-fog-100">{item.name}</h3>
+            <p class="mt-3 text-sm font-medium text-fog-300">{item.adoption}</p>
+            <p class="mt-5 flex-1 text-sm leading-7 text-fog-400">{item.title}</p>
+            <div class="mt-7 border-t border-ink-700 pt-5">
+              <p class="font-mono text-[0.68rem] uppercase tracking-wider text-fog-600">{item.status}</p>
+              <a
+                href={localePath(lang, `/cases/${item.slug}`)}
+                data-umami-event={`home-case-${item.slug}`}
+                class="mt-4 inline-flex font-medium text-iris-400"
+              >{item.cta} →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <a href={casesHref} data-umami-event="home-all-cases" class="mt-10 inline-flex rounded-xl border border-ink-600 px-5 py-3 font-medium text-fog-200 transition hover:border-iris-500">
+        {copy.allCases} →
+      </a>
+    </div>
+  </section>
+
+  <section id="home-cta" class="home-cta border-t border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-5xl px-6 py-20 text-center sm:py-24">
+      <p class="eyebrow text-accent-400">{home.cta.eyebrow}</p>
+      <h2 class="home-section-title mx-auto mt-5 max-w-4xl text-fog-100">{home.cta.title}</h2>
+      <p class="mx-auto mt-7 max-w-2xl text-lg leading-8 text-fog-300">{home.cta.body}</p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href={agentsDocsHref} data-umami-event="developer_evaluation_selected" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{home.cta.primary}</a>
+        <a href={enterpriseHref} data-umami-event="private_deployment_cooperation_selected" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{home.cta.secondary}</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />
+
+<style>
+  .home-hero {
+    background:
+      radial-gradient(circle at 12% 38%, color-mix(in oklch, var(--color-accent-400) 14%, transparent), transparent 24%),
+      radial-gradient(circle at 88% 42%, color-mix(in oklch, var(--color-iris-400) 20%, transparent), transparent 26%),
+      linear-gradient(180deg, var(--color-ink-900), var(--color-ink-950));
+  }
+
+  .home-display-title {
+    font-size: clamp(3.25rem, 6.2vw, 6rem);
+    line-height: 0.98;
+    letter-spacing: -0.06em;
+    text-wrap: balance;
+  }
+
+  .home-display-title-zh {
+    font-size: clamp(2.8rem, 4.4vw, 4.5rem);
+  }
+
+  .home-section-title {
+    max-width: 56rem;
+    font-size: clamp(2.5rem, 5.2vw, 5rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+  }
+
+  .home-cta {
+    background:
+      radial-gradient(circle at 50% 0%, color-mix(in oklch, var(--color-accent-500) 16%, transparent), transparent 48%),
+      var(--color-ink-900);
+  }
+
+  @media (max-width: 639px) {
+    .home-display-title {
+      font-size: 2.3rem;
+      letter-spacing: -0.05em;
+    }
+  }
+</style>

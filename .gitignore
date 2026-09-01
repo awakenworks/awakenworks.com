@@ -1,0 +1,36 @@
+# build output
+dist/
+# generated types
+.astro/
+# dependencies
+node_modules/
+# logs
+npm-debug.log*
+pnpm-debug.log*
+# environment variables
+.env
+.env.production
+.env.*
+!.env.example
+# macOS
+.DS_Store
+
+# local browser/MCP artifacts
+.playwright-mcp/
+
+# External presentation materials live under ~/docs/04-presentations.
+# Keep decks, talk scripts, transcripts, and their generated assets out of the
+# website code repository so product documentation remains the only public
+# content authority here.
+assets/presentation/
+content/*-cfp-submission.md
+content/*-script.md
+scripts/build-awakenworks-company-product-intro.mjs
+scripts/build-awaken-audience-decks.mjs
+scripts/build-awaken-flow-talk.mjs
+scripts/update-audience-transcripts.mjs
+
+# Local review and transfer artifacts must never enter the public repository.
+/docs/reviews/
+/awaken-agent-studio-*.png
+/awakenworks-docs-code-*.tar.gz

@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductLanding from '../../components/ProductLanding.astro';
+import { content } from '../../i18n/content';
+import { localizedStaticPaths, localePath, type Lang } from '../../i18n/locales';
+import { softwareAppLd } from '../../lib/jsonld';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const t = content[lang];
+const p = t.landing.managed;
+---
+
+<Base
+  title={`Awaken Agents — ${p.title}`}
+  description={p.subtitle}
+  jsonLd={softwareAppLd({
+    name: 'Awaken Agents',
+    description: p.subtitle,
+    url: new URL(localePath(lang, '/agents'), Astro.site).href,
+  })}
+>
+  <ProductLanding lang={lang} />
+</Base>

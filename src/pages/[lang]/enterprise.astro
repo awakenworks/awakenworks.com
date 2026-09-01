@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import EnterpriseLanding from '../../components/EnterpriseLanding.astro';
+import { content } from '../../i18n/content';
+import { localizedStaticPaths, type Lang } from '../../i18n/locales';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const t = content[lang];
+---
+
+<Base title={t.enterprise.meta.title} description={t.enterprise.meta.description}>
+  <EnterpriseLanding lang={lang} />
+</Base>

@@ -1,0 +1,20 @@
+---
+import DocsPage from '../../../components/DocsPage.astro';
+import { getCollection } from 'astro:content';
+import { parseId, urlSlug } from '../../../lib/docsRoutes';
+import { NON_DEFAULT_LANGS, type Lang } from '../../../i18n/locales';
+
+export async function getStaticPaths() {
+  const all = await getCollection('docs');
+  return all
+    .filter((e) => NON_DEFAULT_LANGS.includes(parseId(e.id).lang as (typeof NON_DEFAULT_LANGS)[number]))
+    .map((entry) => {
+      const parsed = parseId(entry.id);
+      return { params: { lang: parsed.lang, slug: urlSlug(parsed) }, props: { lang: parsed.lang, entry } };
+    });
+}
+
+const { lang, entry } = Astro.props as { lang: Lang; entry: typeof Astro.props.entry };
+---
+
+<DocsPage lang={lang} entry={entry} />
