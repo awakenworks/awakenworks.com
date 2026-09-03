@@ -571,8 +571,9 @@ const rules = [
 ];
 
 // Cause/effect design for the compressed company-home decision:
-// C1: an AI product team arrives with working Agent behavior but no reusable
-//     application lifecycle; C2: an enterprise visitor needs a private boundary;
+// C1: an AI product team may start from a real job, a compatible Agent, or an
+//     Agent it already owns, but lacks a reusable application lifecycle;
+// C2: an enterprise visitor needs a private boundary;
 // C3: a proof-seeker needs current product UI and reference-build status;
 // C4: a visitor asks about the broader portfolio; C5: execution reconnects,
 //     stops, requests permission, needs inspection, or must remain private;
@@ -588,7 +589,7 @@ const rules = [
 //     identity without adding another conversion CTA.
 // Decision table:
 // | Rule | visitor cause | required effect | terminal route |
-// | H1 | working Agent | product promise + first result | quickstart |
+// | H1 | any of three technical starts | product promise + first result | quickstart |
 // | H2 | private boundary | concise control benefit | enterprise |
 // | H3 | implementation proof | workflow + current Console | evidence link |
 // | H4 | failure/control question | one bounded consequence | owning docs |
@@ -673,46 +674,54 @@ rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"/, 'source must not
 rejectPattern(homeSourcePath, /id="home-scenarios"|data-scenario-card/, 'source must keep secondary ICP detail in the existing Agents and enterprise owners');
 rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-event-location="home-closing"/, 'home source must keep explanatory and GitHub links out of the two-choice hero and closing action');
 // Cause/effect design for the Agents-led promise and its responsive rendering:
-// C1: future portfolio outcomes can become the headline and leave a buyer unable
-//     to identify the current Agents product or its immediate buying reason.
-// C2: an array renderer forces an editorial line break in both locales.
-// C3: a string lets the browser wrap only when the viewport requires it.
-// C4: editor prompts, replacement instructions, or distribution reminders can
+// C1: requiring a working Agent in the headline excludes teams that start from
+//     a real job or adopt a compatible third-party Agent.
+// C2: saying an Agent is shipped "as an application" collapses the Agent
+//     execution boundary into the application's UX, domain, and acceptance owner.
+// C3: "customers can keep using" can imply unverified adoption or retention
+//     instead of the bounded Session continuity that current evidence supports.
+// C4: an array renderer forces an editorial line break in both locales; a string
+//     lets the browser wrap only when the viewport requires it.
+// C5: editor prompts, replacement instructions, or distribution reminders can
 //     leak from the working layer into public website copy.
-// C5: a reliability mechanism can become the value headline even though buyers
+// C6: a reliability mechanism can become the value headline even though buyers
 //     fund product launch, enterprise deployment, platform reuse, or delivery leverage.
-// C6: an internal sales label can address the reader as "the customer" instead
+// C7: an internal sales label can address the reader as "the customer" instead
 //     of explaining the practical consequence in the page's existing voice.
-// C7: lifecycle adjectives can occupy the headline without showing the first
+// C8: lifecycle adjectives can occupy the headline without showing the first
 //     observable result a buyer can run and inspect.
-// E1: both locales lead with shipping an Agent product without rebuilding its
-//     platform while supporting copy stays inside verified Agents responsibilities.
-// E2: the promise reads as one sentence on wide screens and remains responsive.
-// E3: public copy is a finished reader-facing point of view; internal editing
+// E1: both locales lead with building and shipping Agent applications without
+//     turning the adopter into an Agent infrastructure team.
+// E2: supporting copy admits all three technical starts and preserves the
+//     application's UX, domain-model, and acceptance ownership.
+// E3: the promise reads as one sentence on wide screens and remains responsive.
+// E4: public copy is a finished reader-facing point of view; internal editing
 //     language remains outside the rendered content source.
-// E4: both locales distinguish customer value from supporting mechanisms without
+// E5: both locales distinguish customer value from supporting mechanisms without
 //     claiming measured customer ROI or available Workforce outcomes.
-// E5: comparison rows connect capability to consequence with natural reader-facing
+// E6: comparison rows connect capability to consequence with natural reader-facing
 //     labels and contain no third-person "customer gets" drafting language.
-// E6: the hero reuses the recommended scenario's finish condition as supporting
+// E7: the hero reuses the recommended scenario's finish condition as supporting
 //     evidence without delaying its two actions or creating a second result authority.
 // Decision table:
-// | Rule | customer result | evidence | renderer | result owner | Outcome |
-// | H1   | observable      | present  | string   | scenario     | accept  |
-// | H2   | adjectives only | any      | any      | any          | reject  |
-// | H3   | observable      | missing  | any      | any          | reject  |
-// | H4   | observable      | present  | array    | any          | reject  |
-// | H5   | observable      | present  | string   | duplicate    | reject  |
-// | H6   | observable      | present  | string   | draft marker | reject  |
+// | Rule | existing Agent required | boundary intact | evidence | renderer | finished copy | Outcome |
+// | H1   | no                      | yes             | present  | string   | yes           | accept  |
+// | H2   | yes                     | any             | any      | any      | any           | reject  |
+// | H3   | no                      | no              | any      | any      | any           | reject  |
+// | H4   | no                      | yes             | missing  | any      | any           | reject  |
+// | H5   | no                      | yes             | present  | array    | any           | reject  |
+// | H6   | no                      | yes             | present  | string   | no            | reject  |
 requirePattern(homeSourcePath, /\{home\.hero\.title\}/, 'home must render the vision as one responsive sentence');
 rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the vision');
 requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as supporting first-result evidence');
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
-requirePattern(contentSourcePath, /title: 'Ship your working Agent as an application customers can keep using\.'[\s\S]*title: '把能运行的 Agent，交付成客户可以持续使用的应用。'/, 'both locales must lead with the application result a buyer can recognize');
+requirePattern(contentSourcePath, /title: 'Build and ship Agent applications without becoming an Agent infrastructure team\.'[\s\S]*title: '构建并交付 Agent 应用，不必把团队变成 Agent 基础设施团队。'/, 'both locales must lead with the Agent application job without requiring an existing Agent');
+requirePattern(contentSourcePath, /the path can start from a real job, a compatible Agent, or an Agent you already own\.[\s\S]*可以从一项真实工作、一个兼容 Agent，或自有 Agent 开始。/, 'both locales must expose the three technical starting paths in one supporting-copy owner');
+requirePattern(contentSourcePath, /application keeps its UX, domain model, and acceptance rules[\s\S]*应用继续掌握用户体验、领域模型和验收规则/, 'both locales must preserve the application ownership boundary');
+rejectPattern(contentSourcePath, /Ship your working Agent as an application customers can keep using|把能运行的 Agent，交付成客户可以持续使用的应用|Your Agent already works\. Now ship the application|Agent 已经能运行，现在把应用交付出去/, 'homepage copy must not require an existing working Agent or imply unverified continued customer use');
 requirePattern(contentSourcePath, /export const canonicalEntities[\s\S]*AwakenWorks builds open infrastructure designed for production AI Agent applications\.[\s\S]*Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\.[\s\S]*Awaken Runtime is the Rust execution core inside Awaken Agents\./, 'one catalog must own the company, product, and runtime entity definitions');
 rejectPattern(contentSourcePath, /pages:\s*\{[\s\S]*awaken:/, 'the retired hidden Awaken page copy must not compete with canonical entity definitions');
 rejectPattern(contentSourcePath, /Turn an Agent prototype into a shippable, operable, reusable product|让 Agent 原型，变成可交付、可运营、可复用的产品|Make Agents shippable, operable, and reusable|让 Agent 可交付、可运营、可复用/, 'result headlines must not regress to lifecycle adjectives');
-requirePattern(contentSourcePath, /experience, business logic, and customer relationship[\s\S]*产品体验、业务逻辑和客户关系/, 'both locales must state what the adopting product team keeps');
 requirePattern(contentSourcePath, /Objects and Workforce remain early product directions, not prerequisites[\s\S]*Objects 与 Workforce 仍是早期产品方向，不是采用 Agents 的前置条件/, 'both locales must keep future products out of the current adoption prerequisite');
 requirePattern(contentSourcePath, /proofLabel: 'What this changes'[\s\S]*proofLabel: '这意味着'/, 'Agents comparison must connect each capability to its consequence in both locales');
 rejectPattern(contentSourcePath, /REFERENCE ACCOUNT|REPLACE WITH|本页故意|客户需要纠正|外发前确认|受控外发|【\s*】/, 'public content must not expose editor prompts, distribution reminders, or visible placeholders');

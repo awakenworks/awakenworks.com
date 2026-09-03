@@ -81,8 +81,8 @@ export const content = {
     home: {
       hero: {
         eyebrow: 'Open-source infrastructure for production AI Agents',
-        title: 'Ship your working Agent as an application customers can keep using.',
-        definition: `${canonicalEntities.en.agents} For AI product teams, it supplies durable Sessions, permissions, isolated execution, and recovery while your team keeps the product experience, business logic, and customer relationship.`,
+        title: 'Build and ship Agent applications without becoming an Agent infrastructure team.',
+        definition: `${canonicalEntities.en.agents} For AI product teams, the path can start from a real job, a compatible Agent, or an Agent you already own. Awaken provides durable Sessions, permissions, isolated execution, and recovery while your application keeps its UX, domain model, and acceptance rules.`,
         ctaPrimary: 'Run the quickstart',
         ctaSecondary: 'Discuss private deployment',
         deploymentLabel: 'Self-hostable',
@@ -122,7 +122,7 @@ export const content = {
       },
       cta: {
         eyebrow: 'One next step',
-        title: 'Your Agent already works. Now ship the application.',
+        title: 'Build the Agent application. Reuse the infrastructure behind it.',
         body: 'Run the quickstart independently, or discuss the boundary when control, data, credentials, Workers, or Sandboxes must stay inside dedicated infrastructure.',
         primary: 'Run the quickstart',
         secondary: 'Discuss private deployment',
@@ -642,8 +642,8 @@ export const content = {
     home: {
       hero: {
         eyebrow: '面向生产级 AI Agent 的开源基础设施',
-        title: '把能运行的 Agent，交付成客户可以持续使用的应用。',
-        definition: `${canonicalEntities.zh.agents}面向 AI 产品团队，它提供持久 Session、权限、隔离执行与恢复，团队继续掌握产品体验、业务逻辑和客户关系。`,
+        title: '构建并交付 Agent 应用，不必把团队变成 Agent 基础设施团队。',
+        definition: `${canonicalEntities.zh.agents}面向 AI 产品团队，可以从一项真实工作、一个兼容 Agent，或自有 Agent 开始。Awaken 提供持久 Session、权限、隔离执行与恢复，应用继续掌握用户体验、领域模型和验收规则。`,
         ctaPrimary: '运行快速开始',
         ctaSecondary: '沟通私有部署',
         deploymentLabel: '可自托管',
@@ -683,7 +683,7 @@ export const content = {
       },
       cta: {
         eyebrow: '只选一个下一步',
-        title: 'Agent 已经能运行，现在把应用交付出去。',
+        title: '构建 Agent 应用，复用它背后的基础设施。',
         body: '自行运行快速开始；当控制、数据、凭据、Worker 或 Sandbox 必须留在专属基础设施内时，再与我们沟通边界。',
         primary: '运行快速开始',
         secondary: '沟通私有部署',
