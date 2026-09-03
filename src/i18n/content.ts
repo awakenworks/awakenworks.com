@@ -30,8 +30,8 @@ export const canonicalEntities = {
 export const content = {
   en: {
     meta: {
-      title: 'Awaken Agents | Open-source infrastructure for production AI Agent applications',
-      description: 'Awaken Agents is open-source, self-hostable infrastructure for production AI Agent applications, with durable Sessions, permissions, Sandboxes, and recovery.',
+      title: 'AwakenWorks | Open infrastructure for production AI Agent applications',
+      description: 'AwakenWorks builds open infrastructure for production AI Agent applications. Start with Awaken Agents for durable Sessions, controlled execution, and recovery.',
     },
     nav: {
       awaken: 'Awaken internals',
@@ -80,9 +80,10 @@ export const content = {
     },
     home: {
       hero: {
-        eyebrow: 'Open-source infrastructure for production AI Agents',
+        eyebrow: 'AwakenWorks · Open infrastructure for production AI Agent applications',
         title: 'Build and ship Agent applications without becoming an Agent infrastructure team.',
-        definition: `${canonicalEntities.en.agents} For AI product teams, the path can start from a real job, a compatible Agent, or an Agent you already own. Awaken provides durable Sessions, permissions, isolated execution, and recovery while your application keeps its UX, domain model, and acceptance rules.`,
+        companyDefinition: canonicalEntities.en.company,
+        definition: `${canonicalEntities.en.agents} For AI product teams, the path can start from a real job, a compatible Agent, or an Agent you already own. Your application keeps its UX, domain model, and acceptance rules.`,
         ctaPrimary: 'Run the quickstart',
         ctaSecondary: 'Discuss private deployment',
         deploymentLabel: 'Self-hostable',
@@ -96,15 +97,13 @@ export const content = {
         concept: { label: 'What is an AI Agent Runtime?', href: '/docs/agents/concepts/agent-runtime' },
       },
       advantages: {
-        eyebrow: 'When Agent work must keep going',
-        title: 'Reliable means the work remains inspectable and can continue safely.',
-        body: 'Awaken makes specific failure and control boundaries visible. Recovery follows committed facts and an explicit policy; it does not assume every external side effect is safe to replay.',
+        eyebrow: 'Why teams adopt Awaken',
+        title: 'Reuse the platform work that turns Agent capability into an operable application.',
+        body: 'Models and tools are only part of an Agent product. Awaken supplies the continuity, control, and reusable operating foundation underneath the experience your team owns.',
         items: [
-          { key: 'reconnect', value: 'A user reconnects', label: 'Reopen the same Session from committed events instead of depending on one browser or process.', proof: 'Durable Session', href: '/docs/agents/concepts/sessions-and-events' },
-          { key: 'interrupt', value: 'A Worker or process stops', label: 'Recover from committed facts and continue under the configured recovery policy.', proof: 'Recovery boundary', href: '/docs/agents/concepts/production-reliability' },
-          { key: 'permission', value: 'A tool requests sensitive action', label: 'Allow, deny, or suspend for a human decision before the tool executes.', proof: 'Permission and HITL', href: '/docs/agents/runtime/how-to/enable-tool-permission-hitl' },
-          { key: 'inspect', value: 'An operator needs an explanation', label: 'Inspect events, traces, and audit history across the execution path.', proof: 'Observability', href: '/docs/agents/runtime/how-to/enable-observability' },
-          { key: 'boundary', value: 'Data and tools must stay inside', label: 'Place control, Session data, credentials, Workers, and Sandboxes in the approved infrastructure boundary.', proof: 'Self-hosting', href: '/docs/agents/how-to/self-host' },
+          { key: 'durable', value: 'Keep work continuous', label: 'Preserve committed Session events across reconnects and interruptions, then recover under an explicit policy.', proof: 'Durable execution', href: '/docs/agents/concepts/production-reliability' },
+          { key: 'controlled', value: 'Keep the operating boundary', label: 'Choose where control, Session data, credentials, Workers, tools, and Sandboxes run.', proof: 'Deployment control', href: '/docs/agents/how-to/self-host' },
+          { key: 'reusable', value: 'Keep one foundation', label: 'Connect multiple application surfaces and execution paths to the same published Agent and Session authority.', proof: 'Application reuse', href: '/docs/agents/concepts/architecture' },
         ],
       },
       scenarios: {
@@ -375,13 +374,51 @@ export const content = {
     landing: {
       managed: {
         tone: 'iris',
-        eyebrow: 'Awaken Agents · tested with the official Anthropic SDK',
+        eyebrow: 'Awaken Agents · Agent application infrastructure',
         status: { label: publicVersionLabel('platform', 'en'), tone: 'iris' },
-        title: 'Build and operate Agent applications on infrastructure you control.',
+        title: 'Run production Agent applications on infrastructure you control.',
         subtitle: canonicalEntities.en.agents,
         ctaPrimary: { label: 'Run the Agents quickstart', href: '/docs/agents/get-started' },
         audience:
           `${canonicalEntities.en.composition} Create an Agent, adopt a supported one, or connect existing behavior, then make one application create, run, reconnect, and reopen the same Session.`,
+        fit: {
+          eyebrow: 'When to choose Awaken',
+          title: 'Use Awaken when Agent behavior must become part of a product your team operates.',
+          body: 'The application remains the owner of customer experience, domain state, workflow, and result acceptance. Awaken takes the shared execution lifecycle underneath.',
+          items: [
+            { title: 'Embed an Agent in your product', body: 'Connect a backend, web interface, copilot, or Agent-to-Agent client to one published Agent.' },
+            { title: 'Keep work beyond one connection', body: 'Create and reopen a durable Session from committed events instead of tying work to one request or browser.' },
+            { title: 'Choose execution without forking the product', body: 'Use Native execution, a supported ACP runtime, or a remote A2A Agent behind the same Session authority.' },
+            { title: 'Control and grow the operating boundary', body: 'Start all-in-one, then split Control, Coordinator, and Workers when isolation, capacity, or ownership requires it.' },
+          ],
+          boundary: 'A short-lived prompt, a trusted one-off local script, or a fully delegated managed service may not need Awaken. Choose it when Session continuity, controlled execution, or reusable application infrastructure is part of the product requirement.',
+        },
+        boundary: {
+          eyebrow: 'One authority path',
+          title: 'Your application owns the product. Awaken owns the execution lifecycle underneath.',
+          body: 'This is the compact product boundary verified against the current Awaken source. Exact APIs, schemas, deployment procedure, and compatibility versions remain in the documentation.',
+          owners: [
+            { key: 'control', title: 'Control', body: 'Owns Agent and Environment definitions, immutable revisions and publications, IAM, and credential references.' },
+            { key: 'coordinator', title: 'Coordinator', body: 'Owns executable projections, durable Sessions and Runs, dispatch, committed events, and public replay.' },
+            { key: 'worker', title: 'Worker + Runtime', body: 'The Worker claims fenced work and owns Sandbox and process lifetime. Its embedded Rust Runtime executes Agent loops, tools, permissions, typed state, and atomic steps; it is not a second service authority.' },
+          ],
+          lifecycleTitle: 'From publication to a recoverable result',
+          lifecycle: [
+            'Publish immutable Agent and Environment revisions.',
+            'Create a Session that freezes the exact executable references.',
+            'Record work and project an idempotent dispatch in the Coordinator.',
+            'Let an eligible Worker claim the dispatch and execute inside its Sandbox boundary.',
+            'Commit events and state through the Session authority before they become public replay.',
+            'Reconnect or recover from committed Session facts under the configured policy.',
+          ],
+          failureTitle: 'Failure remains explicit',
+          failures: [
+            { title: 'Permission required', body: 'Commit an awaiting state and durable resume ticket; continue only after the decision.' },
+            { title: 'Worker interrupted', body: 'Use committed facts and claim fences to recover eligible work without creating another Session owner.' },
+            { title: 'External outcome ambiguous', body: 'Record an indeterminate terminal cause. Never project uncertain execution as success.' },
+          ],
+          link: { label: 'Read the full architecture and recovery model', href: '/docs/agents/concepts/architecture' },
+        },
         outcomes: {
           eyebrow: 'What changes for your team',
           title: 'Build the Agent product your customers see. Reuse the platform work behind it.',
@@ -391,6 +428,18 @@ export const content = {
             { title: 'Keep existing application investment', body: 'Retain the tested official SDK model and connect web, copilot, or Agent-to-Agent surfaces to the same published Agent instead of copying it.', proof: 'Managed Agents · AI SDK · AG-UI · A2A' },
             { title: 'Keep differentiated Agent behavior', body: 'Choose Awaken Native execution, a supported ACP runtime, or a remote A2A Agent without creating another Session authority.', proof: 'Native · ACP · outbound A2A' },
             { title: 'Run inside enterprise boundaries', body: 'Place control, Session data, credentials, model routes, Workers, and Sandboxes inside the approved infrastructure and responsibility boundary.', proof: 'Self-hosted · enterprise delivery · hosted preview' },
+          ],
+        },
+        reliability: {
+          eyebrow: 'Failure and control evidence',
+          title: 'Reliable means each interruption has an explicit outcome.',
+          body: 'Awaken follows committed facts and an explicit recovery policy. It does not assume every external side effect is safe to replay.',
+          items: [
+            { key: 'reconnect', value: 'A user reconnects', label: 'Reopen the same Session from committed events instead of depending on one browser or process.', proof: 'Durable Session', href: '/docs/agents/concepts/sessions-and-events' },
+            { key: 'interrupt', value: 'A Worker or process stops', label: 'Recover eligible work from committed facts and continue under the configured recovery policy.', proof: 'Recovery boundary', href: '/docs/agents/concepts/production-reliability' },
+            { key: 'permission', value: 'A tool requests sensitive action', label: 'Allow, deny, or suspend for a human decision before the tool executes.', proof: 'Permission and HITL', href: '/docs/agents/runtime/how-to/enable-tool-permission-hitl' },
+            { key: 'inspect', value: 'An operator needs an explanation', label: 'Inspect events, traces, and audit history across the execution path.', proof: 'Observability', href: '/docs/agents/runtime/how-to/enable-observability' },
+            { key: 'boundary', value: 'Data and tools must stay inside', label: 'Place control, Session data, credentials, Workers, and Sandboxes in the approved infrastructure boundary.', proof: 'Self-hosting', href: '/docs/agents/how-to/self-host' },
           ],
         },
         advantage: {
@@ -591,8 +640,8 @@ export const content = {
 
   zh: {
     meta: {
-      title: 'Awaken Agents｜面向生产级 AI Agent 应用的开源基础设施',
-      description: 'Awaken Agents 是面向生产级 AI Agent 应用的开源、可自托管基础设施，提供持久 Session、权限、Sandbox 与恢复能力。',
+      title: 'AwakenWorks｜面向生产级 AI Agent 应用的开放基础设施',
+      description: 'AwakenWorks 构建面向生产级 AI Agent 应用的开放基础设施。当前可从 Awaken Agents 的持久 Session、受控执行与恢复能力开始。',
     },
     nav: {
       awaken: 'Awaken 内部机制',
@@ -641,9 +690,10 @@ export const content = {
     },
     home: {
       hero: {
-        eyebrow: '面向生产级 AI Agent 的开源基础设施',
+        eyebrow: 'AwakenWorks · 面向生产级 AI Agent 应用的开放基础设施',
         title: '构建并交付 Agent 应用，不必把团队变成 Agent 基础设施团队。',
-        definition: `${canonicalEntities.zh.agents}面向 AI 产品团队，可以从一项真实工作、一个兼容 Agent，或自有 Agent 开始。Awaken 提供持久 Session、权限、隔离执行与恢复，应用继续掌握用户体验、领域模型和验收规则。`,
+        companyDefinition: canonicalEntities.zh.company,
+        definition: `${canonicalEntities.zh.agents}面向 AI 产品团队，可以从一项真实工作、一个兼容 Agent，或自有 Agent 开始。应用继续掌握用户体验、领域模型和验收规则。`,
         ctaPrimary: '运行快速开始',
         ctaSecondary: '沟通私有部署',
         deploymentLabel: '可自托管',
@@ -657,15 +707,13 @@ export const content = {
         concept: { label: '什么是 AI Agent Runtime？', href: '/docs/agents/concepts/agent-runtime' },
       },
       advantages: {
-        eyebrow: '当 Agent 工作必须持续推进',
-        title: '可靠意味着工作可以被检查，也可以安全地继续。',
-        body: 'Awaken 让具体的失败与控制边界可见。恢复依据已提交事实和明确策略，不假定所有外部副作用都可以安全重放。',
+        eyebrow: '团队为何采用 Awaken',
+        title: '复用把 Agent 能力变成可运营应用所需的平台工程。',
+        body: '模型和工具只是 Agent 产品的一部分。Awaken 在团队自有产品体验之下，提供连续性、控制权与可复用的运营底座。',
         items: [
-          { key: 'reconnect', value: '用户重新连接', label: '从已提交事件重新打开同一个 Session，不依赖某个浏览器或进程。', proof: '持久 Session', href: '/docs/agents/concepts/sessions-and-events' },
-          { key: 'interrupt', value: 'Worker 或进程中断', label: '依据已提交事实恢复，并按照配置的恢复策略继续。', proof: '恢复边界', href: '/docs/agents/concepts/production-reliability' },
-          { key: 'permission', value: '工具请求敏感操作', label: '在工具执行前允许、拒绝，或暂停并等待人工决定。', proof: '权限与 HITL', href: '/docs/agents/runtime/how-to/enable-tool-permission-hitl' },
-          { key: 'inspect', value: '操作者需要解释过程', label: '沿执行路径检查事件、trace 与审计历史。', proof: '可观测性', href: '/docs/agents/runtime/how-to/enable-observability' },
-          { key: 'boundary', value: '数据与工具必须留在内部', label: '把控制、Session 数据、凭据、Worker 与 Sandbox 放在获准的基础设施边界内。', proof: '自托管', href: '/docs/agents/how-to/self-host' },
+          { key: 'durable', value: '让工作保持连续', label: '在重连与中断之间保留已提交的 Session 事件，再依据明确策略恢复。', proof: '持久执行', href: '/docs/agents/concepts/production-reliability' },
+          { key: 'controlled', value: '保留运营边界', label: '选择控制、Session 数据、凭据、Worker、工具与 Sandbox 在哪里运行。', proof: '部署控制权', href: '/docs/agents/how-to/self-host' },
+          { key: 'reusable', value: '复用同一底座', label: '让多个应用界面与执行路径连接同一个已发布 Agent 和 Session 权威。', proof: '应用复用', href: '/docs/agents/concepts/architecture' },
         ],
       },
       scenarios: {
@@ -936,13 +984,51 @@ export const content = {
     landing: {
       managed: {
         tone: 'iris',
-        eyebrow: 'Awaken Agents · 已通过官方 Anthropic SDK 测试',
+        eyebrow: 'Awaken Agents · Agent 应用基础设施',
         status: { label: publicVersionLabel('platform', 'zh'), tone: 'iris' },
-        title: '在自己掌控的基础设施上构建并运营 Agent 应用。',
+        title: '在自己掌控的基础设施上运行生产级 Agent 应用。',
         subtitle: canonicalEntities.zh.agents,
         ctaPrimary: { label: '运行 Agents 快速开始', href: '/docs/agents/get-started' },
         audience:
           `${canonicalEntities.zh.composition}创建 Agent、采用受支持的 Agent，或接入已有行为，再让一个应用能够创建、运行、重连并重新打开同一个 Session。`,
+        fit: {
+          eyebrow: '何时选择 Awaken',
+          title: '当 Agent 行为必须成为团队所运营产品的一部分时，使用 Awaken。',
+          body: '应用继续拥有客户体验、领域状态、工作流和结果验收；Awaken 承担下层公共执行生命周期。',
+          items: [
+            { title: '把 Agent 接入自己的产品', body: '让后端、Web 界面、Copilot 或 Agent-to-Agent 客户端连接同一个已发布 Agent。' },
+            { title: '让工作跨越单次连接', body: '从已提交事件创建并重新打开持久 Session，不把工作绑定到一次请求或一个浏览器。' },
+            { title: '改变执行方式而不分叉产品', body: '在同一个 Session 权威背后使用 Native 执行、受支持的 ACP Runtime 或远端 A2A Agent。' },
+            { title: '掌控并扩展运营边界', body: '先用 AllInOne，再在隔离、容量或责任需要时拆分 Control、Coordinator 与 Worker。' },
+          ],
+          boundary: '短时 prompt、受信任的一次性本地脚本，或完全委托的托管服务未必需要 Awaken。只有当 Session 连续性、受控执行或可复用应用基础设施成为产品要求时，才应选择它。',
+        },
+        boundary: {
+          eyebrow: '唯一权威路径',
+          title: '应用拥有产品，Awaken 拥有下层执行生命周期。',
+          body: '这是依据当前 Awaken 源码核对后的简明产品边界；精确 API、schema、部署步骤与兼容版本仍由文档维护。',
+          owners: [
+            { key: 'control', title: 'Control', body: '拥有 Agent 与 Environment 定义、不可变 revision 与 publication、IAM 和凭据引用。' },
+            { key: 'coordinator', title: 'Coordinator', body: '拥有可执行 projection、持久 Session 与 Run、dispatch、已提交事件和公开 replay。' },
+            { key: 'worker', title: 'Worker + Runtime', body: 'Worker 以 claim fence 领取工作，并拥有 Sandbox 与进程生命周期；其内嵌 Rust Runtime 执行 Agent loop、工具、权限、类型化状态与原子 step，但不是第二个服务权威。' },
+          ],
+          lifecycleTitle: '从发布到可恢复结果',
+          lifecycle: [
+            '发布不可变的 Agent 与 Environment revision。',
+            '创建 Session，并固定精确的可执行引用。',
+            '在 Coordinator 中记录工作并幂等投影 dispatch。',
+            '由符合条件的 Worker 领取 dispatch，并在自身 Sandbox 边界内执行。',
+            '事件与状态先经过 Session 权威提交，再成为公开 replay。',
+            '依据已提交的 Session 事实与配置策略重新连接或恢复。',
+          ],
+          failureTitle: '失败必须保持明确',
+          failures: [
+            { title: '需要权限决定', body: '提交等待状态与持久 resume ticket；只有决定完成后才继续。' },
+            { title: 'Worker 中断', body: '依据已提交事实与 claim fence 恢复符合条件的工作，不建立另一个 Session owner。' },
+            { title: '外部结果不确定', body: '记录 indeterminate 终止原因，绝不把不确定执行投影为成功。' },
+          ],
+          link: { label: '阅读完整架构与恢复模型', href: '/docs/agents/concepts/architecture' },
+        },
         outcomes: {
           eyebrow: '您的团队会发生什么变化',
           title: '把工程投入用在客户看得见的 Agent 产品上，复用背后的平台工作。',
@@ -952,6 +1038,18 @@ export const content = {
             { title: '保留现有应用投入', body: '保留经过测试的官方 SDK 模型，让 Web、Copilot 或 Agent-to-Agent 界面接入同一个已发布 Agent，而不是复制一份。', proof: 'Managed Agents · AI SDK · AG-UI · A2A' },
             { title: '保留有差异的 Agent 行为', body: '选择 Awaken Native、受支持的 ACP Runtime 或远端 A2A Agent，不建立第二套 Session 权威。', proof: 'Native · ACP · outbound A2A' },
             { title: '在企业边界内运行', body: '把控制、Session 数据、凭据、模型路由、Worker 与 Sandbox 放进获准的基础设施和责任边界。', proof: '自托管 · 企业交付 · 托管预览' },
+          ],
+        },
+        reliability: {
+          eyebrow: '失败与控制证据',
+          title: '可靠意味着每次中断都有明确结果。',
+          body: 'Awaken 依据已提交事实和明确恢复策略推进，不假定所有外部副作用都可以安全重放。',
+          items: [
+            { key: 'reconnect', value: '用户重新连接', label: '从已提交事件重新打开同一个 Session，不依赖某个浏览器或进程。', proof: '持久 Session', href: '/docs/agents/concepts/sessions-and-events' },
+            { key: 'interrupt', value: 'Worker 或进程中断', label: '依据已提交事实恢复符合条件的工作，并按照配置的恢复策略继续。', proof: '恢复边界', href: '/docs/agents/concepts/production-reliability' },
+            { key: 'permission', value: '工具请求敏感操作', label: '在工具执行前允许、拒绝，或暂停并等待人工决定。', proof: '权限与 HITL', href: '/docs/agents/runtime/how-to/enable-tool-permission-hitl' },
+            { key: 'inspect', value: '操作者需要解释过程', label: '沿执行路径检查事件、trace 与审计历史。', proof: '可观测性', href: '/docs/agents/runtime/how-to/enable-observability' },
+            { key: 'boundary', value: '数据与工具必须留在内部', label: '把控制、Session 数据、凭据、Worker 与 Sandbox 放在获准的基础设施边界内。', proof: '自托管', href: '/docs/agents/how-to/self-host' },
           ],
         },
         advantage: {

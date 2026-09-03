@@ -522,7 +522,7 @@ requireOccurrenceCount(siteHeaderPath, 'aria-current=', 4, 'grouped desktop and 
 // | R38 | company/workforce | en/zh | understand Workflow | current | Workforce-owned definition, never fourth product |
 // | R39 | benchmark owner | n/a | portfolio voice | current | ten official pages -> strengths/debts -> editorial decision |
 // | R40 | company hero | en/zh | choose intent | current | exactly two conversion choices |
-// | R41 | company reliability | en/zh | understand difference | current | five failure/control causes + inspectable effect + evidence owner |
+// | R41 | company value | en/zh | understand difference | current | continuity + control + reuse -> owning product evidence |
 // | R42 | company home | en/zh | recognize primary audience | current | product-team promise + workflow proof; secondary ICP detail remains off-home |
 // | R43 | enterprise | en/zh | understand purchase | current | concrete implementation -> scope -> outputs -> delivery -> form |
 // | R44 | cooperation form | en/zh | submitted | current | review sequence + one-business-day boundary |
@@ -531,6 +531,8 @@ requireOccurrenceCount(siteHeaderPath, 'aria-current=', 4, 'grouped desktop and 
 // | R47 | Agents | en/zh | SDK migration | current | compact baseline -> canonical compatibility page |
 // | R48 | Agents/enterprise | en/zh | choose operations | current | one shared structured delivery renderer |
 // | R49 | Agents | en/zh | exact API question | current | no local matrix -> documentation authority |
+// | R50 | company entity | en/zh | classify provider | current | AwakenWorks company -> Awaken Agents current product |
+// | R51 | Agents | en/zh | assess operating fit | current | fit -> first run -> owners -> lifecycle/failure -> evidence |
 const rules = [
   {
     path: resolve(root, 'dist/index.html'),
@@ -544,11 +546,12 @@ const rules = [
     deploymentStatus: 'Self-hostable',
     primaryAudience: 'For AI product teams',
     firstResult: 'One real application creates, runs, reconnects, and reopens the same Session',
+    companyDefinition: 'AwakenWorks builds open infrastructure designed for production AI Agent applications.',
     entityDefinition: 'Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications.',
     runtimeConcept: '/docs/agents/concepts/agent-runtime',
     workflow: ['Connect model', 'Publish Agent', 'Run Session', 'Inspect evidence', 'Connect application'],
-    reliability: ['A user reconnects', 'A Worker or process stops', 'A tool requests sensitive action', 'An operator needs an explanation', 'Data and tools must stay inside'],
-    proofHrefs: ['/docs/agents/concepts/sessions-and-events', '/docs/agents/concepts/production-reliability', '/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/docs/agents/runtime/how-to/enable-observability', '/docs/agents/how-to/self-host'],
+    values: ['Keep work continuous', 'Keep the operating boundary', 'Keep one foundation'],
+    proofHrefs: ['/docs/agents/concepts/production-reliability', '/docs/agents/how-to/self-host', '/docs/agents/concepts/architecture'],
   },
   {
     path: resolve(root, 'dist/zh/index.html'),
@@ -562,11 +565,12 @@ const rules = [
     deploymentStatus: '可自托管',
     primaryAudience: '面向 AI 产品团队',
     firstResult: '一个真实应用创建、运行、重连并重新打开同一个 Session',
+    companyDefinition: 'AwakenWorks 构建面向生产级 AI Agent 应用的开放基础设施。',
     entityDefinition: 'Awaken Agents 是开源、可自托管的 Agent 应用基础设施，用于构建和运营生产级 AI Agent 应用。',
     runtimeConcept: '/zh/docs/agents/concepts/agent-runtime',
     workflow: ['连接模型', '发布 Agent', '运行 Session', '检查证据', '接入应用'],
-    reliability: ['用户重新连接', 'Worker 或进程中断', '工具请求敏感操作', '操作者需要解释过程', '数据与工具必须留在内部'],
-    proofHrefs: ['/zh/docs/agents/concepts/sessions-and-events', '/zh/docs/agents/concepts/production-reliability', '/zh/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/zh/docs/agents/runtime/how-to/enable-observability', '/zh/docs/agents/how-to/self-host'],
+    values: ['让工作保持连续', '保留运营边界', '复用同一底座'],
+    proofHrefs: ['/zh/docs/agents/concepts/production-reliability', '/zh/docs/agents/how-to/self-host', '/zh/docs/agents/concepts/architecture'],
   },
 ];
 
@@ -575,14 +579,14 @@ const rules = [
 //     Agent it already owns, but lacks a reusable application lifecycle;
 // C2: an enterprise visitor needs a private boundary;
 // C3: a proof-seeker needs current product UI and reference-build status;
-// C4: a visitor asks about the broader portfolio; C5: execution reconnects,
-//     stops, requests permission, needs inspection, or must remain private;
-// C6: a crawler or answer engine must classify the visible product before it
-//     follows implementation detail.
-// E1: the hero names the product category, product-team job, and one observable result; E2: exactly
+// C4: a visitor asks about the broader portfolio; C5: a buyer needs to compare
+//     continuity, operating control, and platform reuse without reading a
+//     failure-mode specification; C6: a crawler or answer engine must classify
+//     the company separately from its current product before following detail.
+// E1: the hero names the company, product category, product-team job, and one observable result; E2: exactly
 //     two decision CTAs reach self-evaluation and the existing enterprise path;
-// E3: one five-step Console path appears before reliability claims; E4: five
-//     cause/effect rows link to their detailed evidence owners; E5: reference
+// E3: one five-step Console path appears before value claims; E4: three buyer
+//     outcomes link to their detailed product or Docs evidence owners; E5: reference
 //     builds remain explicitly non-customer evidence; E6: Agents maturity leads,
 //     while Objects and Workforce appear later with their registry-owned status;
 // E7: the visible definition and ordinary concept link expose the same product
@@ -592,7 +596,7 @@ const rules = [
 // | H1 | any of three technical starts | product promise + first result | quickstart |
 // | H2 | private boundary | concise control benefit | enterprise |
 // | H3 | implementation proof | workflow + current Console | evidence link |
-// | H4 | failure/control question | one bounded consequence | owning docs |
+// | H4 | value comparison | continuity + control + reuse | product evidence |
 // | H5 | reference interest | maturity + non-customer boundary | case detail |
 // | H6 | portfolio interest | Agents first + preview status | product page |
 // | H7 | category question | visible canonical definition | runtime concept |
@@ -600,7 +604,7 @@ for (const rule of rules) {
   requireOrderedText(rule.path, [
     'id="home-hero"',
     'id="platform-preview"',
-    'id="home-reliability"',
+    'id="home-value"',
     'id="home-cases"',
     'id="home-products"',
     'id="home-cta"',
@@ -618,6 +622,8 @@ for (const rule of rules) {
   requireOccurrenceCount(rule.path, '<h1', 1, 'home must have one primary heading');
   requireSectionOccurrenceCount(rule.path, 'id="home-hero"', '</section>', '<a ', 2, 'home hero must expose exactly the two intent actions');
   requireOccurrenceCount(rule.path, 'data-home-first-result', 1, 'home hero must expose one observable first result');
+  requireOccurrenceCount(rule.path, 'data-home-company-definition', 1, 'home hero must expose one canonical company definition');
+  requirePattern(rule.path, new RegExp(`data-home-company-definition[\\s\\S]*${rule.companyDefinition}`), 'home hero must make the company category directly quotable');
   requireOccurrenceCount(rule.path, 'data-home-entity-definition', 1, 'home hero must expose one canonical product definition');
   requirePattern(rule.path, new RegExp(`data-home-entity-definition[\\s\\S]*${rule.entityDefinition}`), 'home hero must make the Agents category directly quotable');
   requirePattern(rule.path, new RegExp(`data-home-runtime-concept href="${rule.runtimeConcept}"`), 'home workflow must link to the localized canonical Agent Runtime concept');
@@ -641,9 +647,9 @@ for (const rule of rules) {
   for (const step of rule.workflow) {
     requirePattern(rule.path, new RegExp(step), `home workflow must show ${step}`);
   }
-  requireOccurrenceCount(rule.path, 'data-home-reliability=', 5, 'home must render five bounded reliability causes exactly once');
-  for (const cause of rule.reliability) {
-    requirePattern(rule.path, new RegExp(cause), `home must connect ${cause} to an inspectable consequence`);
+  requireOccurrenceCount(rule.path, 'data-home-value=', 3, 'home must render continuity, control, and reuse exactly once');
+  for (const value of rule.values) {
+    requirePattern(rule.path, new RegExp(value), `home must make ${value} visible as a buyer outcome`);
   }
   for (const href of rule.proofHrefs) {
     requirePattern(rule.path, new RegExp(`href="${href}"`), `home advantage must link to ${href}`);
@@ -669,7 +675,7 @@ for (const rule of rules) {
 }
 
 const homeSourcePath = resolve(root, 'src/components/Home.astro');
-requireOrderedText(homeSourcePath, ['id="home-hero"', '<ProductShowcase', 'id="home-reliability"', 'id="home-cases"', 'id="home-products"'], 'source must move from the Agents promise through product proof, reliability, reference evidence, and late portfolio context');
+requireOrderedText(homeSourcePath, ['id="home-hero"', '<ProductShowcase', 'id="home-value"', 'id="home-cases"', 'id="home-products"'], 'source must move from the company promise through product proof, buyer value, reference evidence, and late portfolio context');
 rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"/, 'source must not restore duplicate entry cards or promote Workforce outcome mechanics on the Agents-led home');
 rejectPattern(homeSourcePath, /id="home-scenarios"|data-scenario-card/, 'source must keep secondary ICP detail in the existing Agents and enterprise owners');
 rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-event-location="home-closing"/, 'home source must keep explanatory and GitHub links out of the two-choice hero and closing action');
@@ -728,24 +734,39 @@ rejectPattern(contentSourcePath, /REFERENCE ACCOUNT|REPLACE WITH|本页故意|�
 rejectPattern(contentSourcePath, /Customer result|客户得到/, 'public comparison copy must not address the reader with an internal third-person sales label');
 rejectPattern(homeSourcePath, /home-display-title-zh[\s\S]{0,120}white-space: nowrap/, 'the longer Chinese result promise must wrap naturally instead of overflowing');
 
-// Cause/effect design for product proof inspection:
-// C1 full Agents pages need all verified captures; C2 home needs one compact
-// capture; C3 JavaScript may be absent; C4 reduced motion can be requested;
-// C5 keyboard users need a native close path.
-// C6 the same Quickstart href can carry one CTA label in product content and a
-//    second label in UI copy, allowing the two placements to drift.
-// E1 compact and full modes reuse one renderer; E2 every image remains visible
-// without JS; E3 enhancement opens one native dialog; E4 native Escape/form
-// close works; E5 decorative motion is disabled for reduced motion.
-// E6 the primary CTA object owns both the href and label in hero, Quickstart,
-// and closing placements. Decision table: compact -> overview only; full ->
-// overview + details; JS off -> static proof; JS on -> zoom dialog; reduced
-// motion -> no sheen animation; duplicate CTA label -> reject.
+// Cause/effect design for Agents fit, authority, recovery, and product proof:
+// C1: a visitor owns an application but may start from a job, compatible Agent,
+//     or existing behavior; C2: a one-off script may not need this platform;
+// C3: Control, Coordinator, Worker, and embedded Runtime can be mistaken for
+//     competing owners; C4: permission, Worker interruption, or ambiguous
+//     external execution changes the legal recovery outcome; C5: full Agents
+//     pages need verified captures while home needs one compact capture;
+// C6: JavaScript may be absent, reduced motion requested, or keyboard close
+//     required; C7: one Quickstart href can drift across placements.
+// E1: four fit conditions and one non-fit boundary precede evaluation; E2: one
+//     three-owner static view and six-step dynamic path preserve the source
+//     authority direction; E3: three failure rules keep awaiting, reclaim, and
+//     indeterminate outcomes distinct; E4: five reliability consequences link
+//     to their Docs owners; E5: compact/full proof reuses one renderer and stays
+//     visible without hydration; E6: native dialog and reduced-motion behavior
+//     remain intact; E7: one CTA object owns its label and href.
+// Decision table:
+// | Rule | durable/controlled need | authority path | terminal outcome | proof | Outcome |
+// | A1   | yes                     | single         | explicit         | linked| accept  |
+// | A2   | no, one-off             | n/a            | n/a              | n/a   | explain non-fit |
+// | A3   | yes                     | competing      | any              | any   | reject  |
+// | A4   | yes                     | single         | ambiguous success| any   | reject  |
+// | A5   | yes                     | single         | explicit         | absent| reject  |
 const productRules = [
   {
     path: resolve(root, 'dist/agents/index.html'),
-    title: 'Build and operate Agent applications on infrastructure you control.',
+    title: 'Run production Agent applications on infrastructure you control.',
     agentsHref: '/docs/agents/get-started',
+    fit: ['Embed an Agent in your product', 'Keep work beyond one connection', 'Choose execution without forking the product', 'Control and grow the operating boundary'],
+    owners: ['Control', 'Coordinator', 'Worker + Runtime'],
+    failures: ['Permission required', 'Worker interrupted', 'External outcome ambiguous'],
+    reliability: ['A user reconnects', 'A Worker or process stops', 'A tool requests sensitive action', 'An operator needs an explanation', 'Data and tools must stay inside'],
+    proofHrefs: ['/docs/agents/concepts/sessions-and-events', '/docs/agents/concepts/production-reliability', '/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/docs/agents/runtime/how-to/enable-observability', '/docs/agents/how-to/self-host'],
     outcomes: ['Ship one real Agent application', 'Keep existing application investment', 'Keep differentiated Agent behavior', 'Run inside enterprise boundaries'],
     decisions: [
       ['/docs/agents/compatibility', 'Migrate an existing client'],
@@ -756,8 +777,13 @@ const productRules = [
   },
   {
     path: resolve(root, 'dist/zh/agents/index.html'),
-    title: '在自己掌控的基础设施上构建并运营 Agent 应用。',
+    title: '在自己掌控的基础设施上运行生产级 Agent 应用。',
     agentsHref: '/zh/docs/agents/get-started',
+    fit: ['把 Agent 接入自己的产品', '让工作跨越单次连接', '改变执行方式而不分叉产品', '掌控并扩展运营边界'],
+    owners: ['Control', 'Coordinator', 'Worker + Runtime'],
+    failures: ['需要权限决定', 'Worker 中断', '外部结果不确定'],
+    reliability: ['用户重新连接', 'Worker 或进程中断', '工具请求敏感操作', '操作者需要解释过程', '数据与工具必须留在内部'],
+    proofHrefs: ['/zh/docs/agents/concepts/sessions-and-events', '/zh/docs/agents/concepts/production-reliability', '/zh/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/zh/docs/agents/runtime/how-to/enable-observability', '/zh/docs/agents/how-to/self-host'],
     outcomes: ['交付一个真实 Agent 应用', '保留现有应用投入', '保留有差异的 Agent 行为', '在企业边界内运行'],
     decisions: [
       ['/zh/docs/agents/compatibility', '迁移已有客户端'],
@@ -770,7 +796,16 @@ const productRules = [
 
 for (const rule of productRules) {
   requirePattern(rule.path, new RegExp(`<h1[^>]*>[\\s\\S]*${rule.title.replaceAll('.', '\\.')}[\\s\\S]*</h1>`), 'Awaken product page must own the production Agent application promise');
-  requireOrderedText(rule.path, ['id="agents-hero"', 'id="agents-quickstart"', 'id="agents-outcomes"', 'id="managed-relation"', 'id="platform-preview"', 'id="agents-decisions"'], 'Agents must move from value through a first success, differentiation, evidence, and four Docs-owned next decisions');
+  requireOrderedText(rule.path, ['id="agents-hero"', 'id="agents-fit"', 'id="agents-quickstart"', 'id="agents-boundary"', 'id="agents-outcomes"', 'id="agents-reliability"', 'id="managed-relation"', 'id="platform-preview"', 'id="agents-decisions"'], 'Agents must move from fit through first success, authority and recovery, outcomes, evidence, compatibility, and Docs-owned decisions');
+  requireOccurrenceCount(rule.path, 'data-agent-fit', 4, 'Agents must expose exactly four product-fit conditions');
+  requireOccurrenceCount(rule.path, 'data-agent-not-fit', 1, 'Agents must expose one explicit non-fit boundary');
+  for (const fit of rule.fit) requirePattern(rule.path, new RegExp(fit), `Agents must name the ${fit} fit condition`);
+  requireOccurrenceCount(rule.path, 'data-agent-owner=', 3, 'Agents must expose one compact three-owner static view');
+  for (const owner of rule.owners) requirePattern(rule.path, new RegExp(owner.replace('+', '\\+')), `Agents must name the ${owner} authority`);
+  requireOccurrenceCount(rule.path, 'data-agent-lifecycle-step', 6, 'Agents must expose the six-step publication-to-recovery path');
+  requireOccurrenceCount(rule.path, 'data-agent-failure', 3, 'Agents must keep three distinct failure outcomes');
+  for (const failure of rule.failures) requirePattern(rule.path, new RegExp(failure), `Agents must name the ${failure} outcome`);
+  requirePattern(rule.path, /indeterminate|不确定/, 'Agents must never collapse ambiguous external execution into success');
   requireOccurrenceCount(rule.path, '<dialog data-console-dialog', 1, 'Agents must expose one native dialog owner for screenshot inspection');
   requireOccurrenceCount(rule.path, '<img data-console-dialog-image', 1, 'Agents must expose one dialog image target');
   requirePattern(rule.path, /showModal\(\)/, 'Agents screenshot proof must support a larger native-dialog view');
@@ -778,6 +813,9 @@ for (const rule of productRules) {
   for (const outcome of rule.outcomes) {
     requirePattern(rule.path, new RegExp(outcome), `Agents must explain the ${outcome} customer outcome`);
   }
+  requireOccurrenceCount(rule.path, 'data-agent-reliability=', 5, 'Agents must render five bounded reliability causes exactly once');
+  for (const cause of rule.reliability) requirePattern(rule.path, new RegExp(cause), `Agents must connect ${cause} to an explicit consequence`);
+  for (const href of rule.proofHrefs) requirePattern(rule.path, new RegExp(`href="${href}"`), `Agents reliability evidence must link to ${href}`);
   requirePattern(rule.path, new RegExp(`href="${rule.agentsHref}"`), 'Agents primary action must reach the task-first product entry before the source quickstart');
   requireOccurrenceCount(rule.path, 'data-agent-doc-decision=', 4, 'Agents must expose exactly four compact technical decisions after product evidence');
   for (const [href, title] of rule.decisions) {
@@ -1432,7 +1470,7 @@ const runtimeIdentityRules = [
 ];
 
 for (const rule of runtimeIdentityRules) {
-  requireOrderedText(rule.landing, ['id="agents-hero"', 'id="agents-outcomes"', 'id="platform-preview"', 'id="agents-decisions"'], 'Agents must keep the Runtime Docs decision after value and product evidence');
+  requireOrderedText(rule.landing, ['id="agents-hero"', 'id="agents-boundary"', 'id="agents-outcomes"', 'id="platform-preview"', 'id="agents-decisions"'], 'Agents must keep the embedded Runtime boundary before value and the Runtime Docs decision after product evidence');
   requirePattern(rule.landing, rule.decision, 'Awaken must name the Runtime extension decision without recreating the guide');
   requirePattern(rule.landing, new RegExp(`href="${rule.docsHref}"`), 'Awaken must route Runtime maintainers to the stable technical documentation');
   requireOccurrenceCount(rule.landing, 'id="runtime"', 0, 'Agents landing must not recreate a Runtime explanation section');

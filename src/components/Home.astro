@@ -36,7 +36,10 @@ const copy = ui[lang].home;
         <h1 class={`home-display-title mt-6 font-semibold text-fog-100 ${copy.titleClass}`}>
           {home.hero.title}
         </h1>
-        <p data-home-entity-definition class="mt-7 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg sm:leading-8">
+        <p data-home-company-definition class="mt-7 max-w-3xl text-base font-medium leading-7 text-fog-200 sm:text-lg sm:leading-8">
+          {home.hero.companyDefinition}
+        </p>
+        <p data-home-entity-definition class="mt-3 max-w-3xl text-base leading-7 text-fog-400 sm:text-lg sm:leading-8">
           {home.hero.definition}
         </p>
         <div class="mt-8 flex flex-wrap items-center gap-3">
@@ -77,7 +80,7 @@ const copy = ui[lang].home;
     concept={{ ...home.workflow.concept, href: localePath(lang, home.workflow.concept.href) }}
   />
 
-  <section id="home-reliability" class="scroll-mt-16 border-y border-ink-800 bg-ink-850">
+  <section id="home-value" class="scroll-mt-16 border-y border-ink-800 bg-ink-850">
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
       <div class="max-w-4xl">
         <p class="eyebrow text-accent-400">{home.advantages.eyebrow}</p>
@@ -87,12 +90,12 @@ const copy = ui[lang].home;
 
       <div class="mt-10 overflow-hidden rounded-[1.4rem] border border-ink-700 bg-ink-900">
         {home.advantages.items.map((advantage) => (
-          <article data-home-reliability={advantage.key} class="grid gap-3 border-b border-ink-700 p-6 last:border-b-0 sm:grid-cols-[minmax(10rem,0.7fr)_minmax(16rem,1.4fr)_auto] sm:items-center sm:gap-7 sm:px-7">
+          <article data-home-value={advantage.key} class="grid gap-3 border-b border-ink-700 p-6 last:border-b-0 sm:grid-cols-[minmax(10rem,0.7fr)_minmax(16rem,1.4fr)_auto] sm:items-center sm:gap-7 sm:px-7">
             <p class="font-mono text-sm font-semibold text-fog-100">{advantage.value}</p>
             <p class="text-sm leading-7 text-fog-400">{advantage.label}</p>
             <a
               href={localePath(lang, advantage.href)}
-              data-umami-event={`home-reliability-${advantage.key}`}
+              data-umami-event={`home-value-${advantage.key}`}
               class="inline-flex whitespace-nowrap text-xs font-medium text-accent-400 hover:text-accent-300"
             >{advantage.proof} →</a>
           </article>

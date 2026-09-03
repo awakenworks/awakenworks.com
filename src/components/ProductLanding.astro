@@ -82,6 +82,23 @@ const closerHref = p.closer.cta.href.startsWith('/')
     </div>
   </section>
 
+  <section id="agents-fit" class="border-y border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class={`eyebrow ${c.eyebrow}`}>{p.fit.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{p.fit.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300">{p.fit.body}</p>
+      <div class="mt-9 grid gap-px overflow-hidden rounded-2xl border border-ink-700 bg-ink-700 md:grid-cols-2">
+        {p.fit.items.map((item) => (
+          <article data-agent-fit class="bg-ink-850 p-6">
+            <h3 class="text-lg font-semibold text-fog-100">{item.title}</h3>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{item.body}</p>
+          </article>
+        ))}
+      </div>
+      <p data-agent-not-fit class="mt-7 max-w-4xl border-l-2 border-fog-600 pl-4 text-sm leading-7 text-fog-400">{p.fit.boundary}</p>
+    </div>
+  </section>
+
   <section id="agents-quickstart" class="border-y border-ink-800 bg-ink-850">
     <div class="mx-auto max-w-6xl px-6 py-14 sm:py-18">
       <p class={`eyebrow ${c.eyebrow}`}>{copy.quickstartEyebrow}</p>
@@ -99,6 +116,47 @@ const closerHref = p.closer.cta.href.startsWith('/')
     </div>
   </section>
 
+  <section id="agents-boundary" class="border-y border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <p class={`eyebrow ${c.eyebrow}`}>{p.boundary.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{p.boundary.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300">{p.boundary.body}</p>
+
+      <div class="mt-10 grid gap-4 lg:grid-cols-3">
+        {p.boundary.owners.map((owner) => (
+          <article data-agent-owner={owner.key} class="rounded-2xl border border-ink-700 bg-ink-900 p-6">
+            <h3 class="font-mono text-sm font-semibold text-iris-400">{owner.title}</h3>
+            <p class="mt-4 text-sm leading-7 text-fog-400">{owner.body}</p>
+          </article>
+        ))}
+      </div>
+
+      <h3 class="mt-14 text-2xl font-semibold text-fog-100">{p.boundary.lifecycleTitle}</h3>
+      <ol class="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {p.boundary.lifecycle.map((step, index) => (
+          <li data-agent-lifecycle-step class="grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-ink-700 bg-ink-900 p-5">
+            <span class="font-mono text-xs text-iris-400">{String(index + 1).padStart(2, '0')}</span>
+            <p class="text-sm leading-7 text-fog-300">{step}</p>
+          </li>
+        ))}
+      </ol>
+
+      <h3 class="mt-14 text-2xl font-semibold text-fog-100">{p.boundary.failureTitle}</h3>
+      <div class="mt-7 grid gap-4 lg:grid-cols-3">
+        {p.boundary.failures.map((failure) => (
+          <article data-agent-failure class="rounded-2xl border border-ink-700 bg-ink-900 p-6">
+            <h4 class="font-semibold text-fog-100">{failure.title}</h4>
+            <p class="mt-3 text-sm leading-7 text-fog-400">{failure.body}</p>
+          </article>
+        ))}
+      </div>
+
+      <a href={localePath(lang, p.boundary.link.href)} class="mt-9 inline-flex font-medium text-iris-400 hover:text-iris-300">
+        {p.boundary.link.label} →
+      </a>
+    </div>
+  </section>
+
   <section id="agents-outcomes" class="border-y border-ink-800 bg-ink-900">
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
       <p class={`eyebrow ${c.eyebrow}`}>{p.outcomes.eyebrow}</p>
@@ -112,6 +170,23 @@ const closerHref = p.closer.cta.href.startsWith('/')
             <h3 class="text-xl font-semibold text-fog-100">{item.title}</h3>
             <p class="mt-4 text-sm leading-7 text-fog-400">{item.body}</p>
             <p class="mt-5 border-t border-ink-700 pt-4 font-mono text-xs leading-5 text-iris-400">{item.proof}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="agents-reliability" class="border-y border-ink-800 bg-ink-850">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class={`eyebrow ${c.eyebrow}`}>{p.reliability.eyebrow}</p>
+      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{p.reliability.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300">{p.reliability.body}</p>
+      <div class="mt-10 overflow-hidden rounded-[1.4rem] border border-ink-700 bg-ink-900">
+        {p.reliability.items.map((item) => (
+          <article data-agent-reliability={item.key} class="grid gap-3 border-b border-ink-700 p-6 last:border-b-0 sm:grid-cols-[minmax(10rem,0.7fr)_minmax(16rem,1.4fr)_auto] sm:items-center sm:gap-7 sm:px-7">
+            <p class="font-mono text-sm font-semibold text-fog-100">{item.value}</p>
+            <p class="text-sm leading-7 text-fog-400">{item.label}</p>
+            <a href={localePath(lang, item.href)} class="inline-flex whitespace-nowrap text-xs font-medium text-iris-400 hover:text-iris-300">{item.proof} →</a>
           </article>
         ))}
       </div>
