@@ -1104,18 +1104,27 @@ for (const rule of enterpriseRules) {
   // C1: JavaScript is unavailable; C2: JavaScript is available; C3: attribution
   // and a known scenario are present; C4: a product/scenario is unrecognized;
   // C5: a user submits twice or the network is slow; C6: transport accepts or
-  // rejects the request.
+  // rejects the request; C7: role, stage, blocker, timing, and environment
+  // usually fit a bounded vocabulary; C8: the real job cannot be inferred from
+  // that vocabulary; C9: several systems can apply; C10: optional context is
+  // unknown or unnecessary.
   // E1: normal POST and progressive fetch share one endpoint/schema; E2: every
   // attempt has an ID, timestamp, and exact page; E3: only allowlisted context
   // is copied; E4: the submit control exposes busy state and cannot double-fire;
   // E5: success focuses one announced next-step panel; E6: failure restores the
-  // control and keeps the entered fields.
+  // control and keeps the entered fields; E7: bounded facts use localized
+  // choices; E8: one short required field captures the real job; E9: system
+  // choices allow more than one answer; E10: optional facts never block submit.
   // Decision table:
   // | Rule | JS | context | transport | repeated click | Outcome |
   // | F1   | no | any     | accepted  | n/a            | normal POST |
   // | F2   | yes| known   | accepted  | blocked        | attributed success |
   // | F3   | yes| unknown | accepted  | blocked        | context omitted |
   // | F4   | yes| any     | rejected  | blocked        | error and restore |
+  // | F5   | any| bounded answers | any | n/a          | select choices |
+  // | F6   | any| concrete job    | any | n/a          | short required text |
+  // | F7   | any| multiple systems| any | n/a          | optional checkboxes |
+  // | F8   | any| no extra context| any | n/a          | submit without extras |
   for (const field of ['intent', 'product', 'source_page', 'landing_page', 'referrer', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'scenario_context', 'submission_id', 'submitted_at', 'page_url', 'contact_consent']) {
     requirePattern(rule.path, new RegExp(`name="${field}"`), `opportunity form must carry ${field}`);
   }
@@ -1127,6 +1136,15 @@ for (const rule of enterpriseRules) {
   requirePattern(rule.path, /<option value="agents" selected>/, 'no-context intake must default to the current Agents path');
   requirePattern(rule.path, /<select name="frequency" class=/, 'frequency must remain optional for previews where cadence is not yet known');
   rejectPattern(rule.path, /<select name="frequency" required/, 'optional preview frequency must not block the shared form');
+  requireOccurrenceCount(rule.path, 'data-form-step=', 3, 'the opportunity form must group contact, request, and scope into three short steps');
+  requirePattern(rule.path, /<select name="role" required/, 'role must use a required bounded choice instead of open-ended text');
+  requirePattern(rule.path, /<select name="current_stage" required/, 'current stage must use a required bounded choice without duplicating product selection');
+  requirePattern(rule.path, /<input type="text" name="job" required/, 'the concrete customer job must remain one short required text field');
+  requirePattern(rule.path, /<select name="current_loss" required/, 'the main blocker must use a required bounded choice');
+  requireOccurrenceCount(rule.path, 'type="checkbox" name="systems_and_risks"', 9, 'system and constraint context must allow multiple optional choices');
+  requirePattern(rule.path, /<select name="target_timing" class=/, 'target timing must use an optional bounded choice');
+  requirePattern(rule.path, /<textarea name="additional_context" rows="2"/, 'unmatched context must retain one short optional text escape hatch');
+  rejectPattern(rule.path, /<textarea name="current_loss"|<textarea name="systems_and_risks"|<input type="text" name="target_timing"|<input type="text" name="role"/, 'bounded form facts must not regress to long open-ended fields');
   requirePattern(rule.path, /Object\.prototype\.hasOwnProperty\.call\(scenarioLabels, requestedScenario\)/, 'shared form must accept only known scenario context from company links');
   requirePattern(rule.path, /data-submitting="(?:Submitting…|提交中…)"/, 'shared form must expose localized submitting state');
   requirePattern(rule.path, /aria-busy/, 'progressive submission must expose its busy state');

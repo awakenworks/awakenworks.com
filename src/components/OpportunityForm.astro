@@ -19,6 +19,13 @@ const rowAlign = align === 'center' ? 'sm:justify-center' : 'sm:justify-start';
 const source = Astro.url.pathname;
 const privacyHref = localePath(lang, '/privacy');
 const frequencyOptions = ui[lang].landing.frequencies;
+const roleOptions = ui[lang].landing.roles;
+const stageOptions = ui[lang].landing.stages;
+const blockerOptions = ui[lang].landing.blockers;
+const systemOptions = ui[lang].landing.systems;
+const timingOptions = ui[lang].landing.timings;
+const chooseOption = ui[lang].landing.chooseOption;
+const formSteps = ui[lang].landing.formSteps;
 const selectedScenarioPrefix = ui[lang].landing.selectedScenario;
 const selectedProductPrefix = ui[lang].landing.selectedProduct;
 const productLabels = ui[lang].landing.productLabels;
@@ -58,58 +65,93 @@ const scenarioLabels = Object.fromEntries(
     Leave this field empty
     <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
   </label>
-  <div data-opportunity-fields class={`grid gap-4 ${rowAlign}`}>
+  <div data-opportunity-fields class={`grid gap-6 ${rowAlign}`}>
     <p data-scenario-context class="rounded-lg border border-accent-700/50 bg-accent-500/5 px-4 py-3 text-sm text-accent-300" hidden>
       {selectedScenarioPrefix} <strong data-scenario-context-label></strong>
     </p>
-    <label class="grid gap-2 text-sm text-fog-400">
-      {selectedProductPrefix}
-      <select name="product" class="w-full rounded-lg border border-accent-700/50 bg-accent-500/5 px-4 py-3 font-medium text-accent-300 focus:border-accent-500 focus:outline-none">
-        {productOptions.map(([value, label]) => <option value={value} selected={value === product}>{label}</option>)}
-      </select>
-    </label>
-    <div class="grid gap-4 sm:grid-cols-2">
-      <label class="grid gap-2 text-sm text-fog-400">
-        Email
-        <input type="email" name="email" required autocomplete="email" placeholder={w.placeholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-600 focus:border-accent-500 focus:outline-none" />
-      </label>
-      <label class="grid gap-2 text-sm text-fog-400">
-        {w.fields.company}
-        <input type="text" name="company" required autocomplete="organization" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none" />
-      </label>
+    <fieldset data-form-step="contact" class="grid gap-4 rounded-xl border border-ink-700 bg-ink-900/60 p-4 sm:p-5">
+      <legend class="px-2 text-sm font-semibold text-fog-200">1. {formSteps[0]}</legend>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm text-fog-400">
+          Email
+          <input type="email" name="email" required autocomplete="email" placeholder={w.placeholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-600 focus:border-accent-500 focus:outline-none" />
+        </label>
+        <label class="grid gap-2 text-sm text-fog-400">
+          {w.fields.company}
+          <input type="text" name="company" required autocomplete="organization" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none" />
+        </label>
+      </div>
       <label class="grid gap-2 text-sm text-fog-400">
         {w.fields.role}
-        <input type="text" name="role" required autocomplete="organization-title" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none" />
-      </label>
-      <label class="grid gap-2 text-sm text-fog-400">
-        {w.fields.frequency}
-        <select name="frequency" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none">
-          <option value="" selected disabled>—</option>
-          {frequencyOptions.map((option) => <option value={option}>{option}</option>)}
+        <select name="role" required autocomplete="organization-title" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none">
+          <option value="" selected disabled>{chooseOption}</option>
+          {roleOptions.map(([value, label]) => <option value={value}>{label}</option>)}
         </select>
       </label>
-    </div>
-    <label class="grid gap-2 text-sm text-fog-400">
-      {w.fields.scenario}
-      <textarea name="job" required rows="4" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none"></textarea>
-    </label>
-    <label class="grid gap-2 text-sm text-fog-400">
-      {w.fields.loss}
-      <textarea name="current_loss" required rows="3" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none"></textarea>
-    </label>
-    <details class="rounded-xl border border-ink-700 bg-ink-900/60 p-4">
-      <summary class="cursor-pointer text-sm font-medium text-fog-300">{ui[lang].landing.optionalDetails}</summary>
-      <div class="mt-4 grid gap-4">
+    </fieldset>
+
+    <fieldset data-form-step="request" class="grid gap-4 rounded-xl border border-ink-700 bg-ink-900/60 p-4 sm:p-5">
+      <legend class="px-2 text-sm font-semibold text-fog-200">2. {formSteps[1]}</legend>
+      <label class="grid gap-2 text-sm text-fog-400">
+        {selectedProductPrefix}
+        <select name="product" class="w-full rounded-lg border border-accent-700/50 bg-accent-500/5 px-4 py-3 font-medium text-accent-300 focus:border-accent-500 focus:outline-none">
+          {productOptions.map(([value, label]) => <option value={value} selected={value === product}>{label}</option>)}
+        </select>
+      </label>
+      <label class="grid gap-2 text-sm text-fog-400">
+        {w.fields.stage}
+        <select name="current_stage" required class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none">
+          <option value="" selected disabled>{chooseOption}</option>
+          {stageOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+        </select>
+      </label>
+      <label class="grid gap-2 text-sm text-fog-400">
+        {w.fields.scenario}
+        <input type="text" name="job" required placeholder={w.jobPlaceholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-600 focus:border-accent-500 focus:outline-none" />
+      </label>
+    </fieldset>
+
+    <fieldset data-form-step="scope" class="grid gap-4 rounded-xl border border-ink-700 bg-ink-900/60 p-4 sm:p-5">
+      <legend class="px-2 text-sm font-semibold text-fog-200">3. {formSteps[2]}</legend>
+      <label class="grid gap-2 text-sm text-fog-400">
+        {w.fields.loss}
+        <select name="current_loss" required class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none">
+          <option value="" selected disabled>{chooseOption}</option>
+          {blockerOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+        </select>
+      </label>
+      <fieldset class="grid gap-3">
+        <legend class="text-sm text-fog-400">{w.fields.systems}</legend>
+        <div class="grid gap-2 sm:grid-cols-2">
+          {systemOptions.map(([value, label]) => (
+            <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-ink-700 bg-ink-850 px-3 py-2.5 text-sm leading-5 text-fog-300 transition hover:border-ink-600">
+              <input type="checkbox" name="systems_and_risks" value={value} class="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent-500)]" />
+              <span>{label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div class="grid gap-4 sm:grid-cols-2">
         <label class="grid gap-2 text-sm text-fog-400">
-          {w.fields.systems}
-          <textarea name="systems_and_risks" rows="3" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none"></textarea>
+          {w.fields.frequency}
+          <select name="frequency" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none">
+            <option value="" selected>{chooseOption}</option>
+            {frequencyOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+          </select>
         </label>
         <label class="grid gap-2 text-sm text-fog-400">
           {w.fields.timing}
-          <input type="text" name="target_timing" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none" />
+          <select name="target_timing" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500 focus:outline-none">
+            <option value="" selected>{chooseOption}</option>
+            {timingOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+          </select>
         </label>
       </div>
-    </details>
+      <label class="grid gap-2 text-sm text-fog-400">
+        {w.fields.additional}
+        <textarea name="additional_context" rows="2" placeholder={w.additionalPlaceholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-600 focus:border-accent-500 focus:outline-none"></textarea>
+      </label>
+    </fieldset>
     <label class="flex items-start gap-3 text-xs leading-5 text-fog-500">
       <input type="checkbox" name="contact_consent" value="yes" required class="mt-1 h-4 w-4 shrink-0 accent-[var(--color-accent-500)]" />
       <span>{w.privacyPrefix} <a href={privacyHref} class="text-accent-400 underline underline-offset-2">{w.privacyLabel}</a>.</span>
