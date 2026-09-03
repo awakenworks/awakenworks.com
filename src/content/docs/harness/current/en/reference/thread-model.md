@@ -138,19 +138,19 @@ place. Validation rejects empty or mismatched identities before a backend write.
 
 ```mermaid
 sequenceDiagram
-    participant Loop as Runtime or executor
+    participant Executor as Runtime or executor
     participant Commit as ThreadCommit::assemble
     participant Store as CommitCoordinator
     participant View as CommittedThreadView
 
-    Loop->>Commit: messages, state, next disposition, audit drafts
+    Executor->>Commit: messages, state, next disposition, audit drafts
     Commit->>Commit: bind Run scope and validate identities
     Commit->>Store: commit one transition
     Store-->>View: expose accepted fact prefix
     alt next Run continues the Thread
-        View-->>Loop: committed messages and state
+        View-->>Executor: committed messages and state
     else same Run resumes
-        View-->>Loop: exact ResumeTicket and committed prefix
+        View-->>Executor: exact ResumeTicket and committed prefix
     end
 ```
 

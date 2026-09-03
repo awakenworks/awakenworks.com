@@ -129,19 +129,19 @@ id，并在一个位置生成生命周期审计草稿。后端写入前，校验
 
 ```mermaid
 sequenceDiagram
-    participant Loop as 运行时或执行器
+    participant Executor as 运行时或执行器
     participant Commit as ThreadCommit::assemble
     participant Store as CommitCoordinator
     participant View as CommittedThreadView
 
-    Loop->>Commit: 消息、状态、下一处置与审计草稿
+    Executor->>Commit: 消息、状态、下一处置与审计草稿
     Commit->>Commit: 绑定 Run 作用域并校验标识
     Commit->>Store: 提交一个转换
     Store-->>View: 暴露已接受事实前缀
     alt 新 Run 继续 Thread
-        View-->>Loop: 已提交消息与状态
+        View-->>Executor: 已提交消息与状态
     else 同一 Run 恢复
-        View-->>Loop: 精确 ResumeTicket 与已提交前缀
+        View-->>Executor: 精确 ResumeTicket 与已提交前缀
     end
 ```
 

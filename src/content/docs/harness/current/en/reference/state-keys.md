@@ -144,7 +144,7 @@ sequenceDiagram
         C->>H: append whole transition
         H-->>S: replay commands for this Thread
     else invalid batch or storage failure
-        C-->>P: error; no partial state is visible
+        C-->>P: error and no partial state is visible
     end
 ```
 

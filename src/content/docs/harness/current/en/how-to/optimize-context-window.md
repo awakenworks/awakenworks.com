@@ -102,7 +102,7 @@ sequenceDiagram
         P->>S: write ContextMessages + ContextWindow + marker
         S-->>R: summary + optional bridge + recent tail
     end
-    R->>R: assemble model request; committed history remains unchanged
+    R->>R: assemble model request while committed history remains unchanged
 ```
 
 The hook evaluates at most once per Run. A completed background artifact is an

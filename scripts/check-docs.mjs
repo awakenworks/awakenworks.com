@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { extname, join, relative, resolve } from 'node:path';
+import { dirname, extname, join, relative, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = resolve(import.meta.dirname, '..');
 const docsRoot = join(root, 'src/content/docs');
@@ -3364,6 +3365,61 @@ else {
     for (const [value, paths] of values) {
       if (paths.length > 1) failures.push(`dist: duplicate rendered ${kind} ${JSON.stringify(value)} in ${paths.join(', ')}`);
     }
+  }
+}
+
+// Cause/effect test design for Mermaid sequence syntax:
+// C1: an ASCII semicolon terminates a sequence statement, so trailing prose is
+//     parsed as a new and invalid statement.
+// C2: a participant identifier can collide case-insensitively with a Mermaid
+//     control keyword such as `loop`.
+// C3: Astro can build the page before Mermaid parses it in the browser.
+// E1: every repository-owned sequenceDiagram is accepted by the exact Mermaid
+//     version installed for the site.
+// E2: a syntax regression fails this canonical docs check with source and line.
+// Decision table: R1 sequenceDiagram + valid grammar -> accept; R2
+// sequenceDiagram + invalid grammar -> reject with location; R3 other Mermaid
+// diagram type -> retain its existing renderer path and exclude it from this
+// sequence-parser-specific gate.
+const mermaidEntryDir = dirname(fileURLToPath(import.meta.resolve('mermaid')));
+const mermaidChunkDir = join(mermaidEntryDir, 'chunks', 'mermaid.core');
+const sequenceParserFiles = readdirSync(mermaidChunkDir).filter((name) =>
+  /^sequenceDiagram-[A-Z0-9]+\.mjs$/u.test(name),
+);
+if (sequenceParserFiles.length !== 1) {
+  failures.push(
+    `mermaid: expected one installed sequence parser, found ${sequenceParserFiles.length}`,
+  );
+} else {
+  try {
+    const { diagram } = await import(
+      pathToFileURL(join(mermaidChunkDir, sequenceParserFiles[0])).href
+    );
+    let sequenceDiagramCount = 0;
+    const contentMarkdown = filesBelow(join(root, 'src/content'), (path) => extname(path) === '.md');
+    for (const path of contentMarkdown) {
+      const text = readFileSync(path, 'utf8');
+      for (const match of text.matchAll(/```mermaid[^\S\r\n]*\r?\n([\s\S]*?)```/gu)) {
+        const source = match[1];
+        if (!source.trimStart().startsWith('sequenceDiagram')) continue;
+        sequenceDiagramCount += 1;
+        const fenceLine = text.slice(0, match.index).split('\n').length;
+        try {
+          diagram.db.clear();
+          diagram.parser.yy = diagram.db;
+          if (diagram.parser.parser) diagram.parser.parser.yy = diagram.db;
+          diagram.parser.parse(source);
+        } catch (error) {
+          const reason = String(error?.str ?? error?.message ?? error).split('\n')[0];
+          failures.push(
+            `${relative(root, path)}:${fenceLine}: Mermaid sequence syntax error: ${reason}`,
+          );
+        }
+      }
+    }
+    if (sequenceDiagramCount === 0) failures.push('mermaid: no sequenceDiagram blocks were checked');
+  } catch (error) {
+    failures.push(`mermaid: failed to load installed sequence parser: ${error?.message ?? error}`);
   }
 }
 

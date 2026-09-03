@@ -74,7 +74,7 @@ sequenceDiagram
   participant L as Session ledger
 
   C->>A: message with optional contextId and taskId
-  A->>A: negotiate version; resolve published Agent
+  A->>A: negotiate version and resolve published Agent
   alt no current awaiting task
     A->>R: start context-bound Run
   else task is input-required

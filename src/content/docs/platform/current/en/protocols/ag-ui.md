@@ -66,7 +66,7 @@ sequenceDiagram
 
   U->>A: RunAgentInput(threadId, runId, messages)
   A->>L: read committed ids
-  A->>A: validate extensions; discard replayed messages
+  A->>A: validate extensions and discard replayed messages
   alt new content
     A->>R: run_streaming()
     R-->>A: live AgentEvent deltas

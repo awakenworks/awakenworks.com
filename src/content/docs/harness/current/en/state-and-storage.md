@@ -67,7 +67,7 @@ sequenceDiagram
         Facts-->>Reader: replay or hydrate
         Reader-->>Runtime: committed messages, state, Run, and ticket
     else commit rejected
-        Commit-->>Runtime: error; no partial transition becomes visible
+        Commit-->>Runtime: error and no partial transition becomes visible
     end
 ```
 

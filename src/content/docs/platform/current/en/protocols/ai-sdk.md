@@ -81,7 +81,7 @@ sequenceDiagram
 
   U->>A: UIMessage[] + threadId
   A->>L: read committed message ids
-  A->>A: discard replayed ids; decode new input or one tool decision
+  A->>A: discard replayed ids and decode new input or one tool decision
   alt new user or system input
     A->>R: run_streaming(thread, Agent, new messages)
     R-->>A: best-effort live Deltas

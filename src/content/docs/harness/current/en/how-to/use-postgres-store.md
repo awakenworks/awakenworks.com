@@ -83,7 +83,7 @@ sequenceDiagram
         Store->>View: advance this process's projection
         Store-->>Runtime: CommitRecord
     else validation, version, or SQL failure
-        Store-->>Runtime: error; transaction is not visible
+        Store-->>Runtime: error and transaction is not visible
     end
 ```
 

@@ -127,7 +127,7 @@ sequenceDiagram
   Catalog-->>Config: Exact versions and secret-free access coordinates
   Config->>Config: Compile and calculate fingerprint
   Config-->>Runtime: ExecutableAgentSnapshot
-  Runtime->>Runtime: Verify fingerprint; create RunActivation
+  Runtime->>Runtime: Verify fingerprint and build RunActivation
   Runtime->>Commit: Commit messages, state, events, and result
 ```
 
