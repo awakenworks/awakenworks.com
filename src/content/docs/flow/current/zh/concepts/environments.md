@@ -38,6 +38,19 @@ flowchart LR
   `allow_package_managers`；
 - cloud package 可列出 `apt`、`cargo`、`gem`、`go`、`npm` 与 `pip` requirement。
 
+`cloud` 与 `self_hosted` 表达的是**运维责任边界**，不是工作负载是否恰好运行在容器里：
+
+| 契约值 | 产品展示名称 | 谁负责运行环境生命周期 | 常见部署位置 |
+| --- | --- | --- | --- |
+| `cloud` | 平台托管 | Awaken 负责创建、隔离、网络策略、维护与回收可执行环境 | Awaken 管理的基础设施 |
+| `self_hosted` | 自有基础设施 | 用户组织提供并运维执行基础设施；Awaken 使用受管理的 Environment 引用 | 开发者电脑、自有数据中心或自己的云账号/VPC |
+
+因此，Awaken 管理的容器属于 `cloud`；开发者电脑上的 Docker、客户 VPC 中的 Kubernetes，
+以及客户自行运维的 VM 容器都属于 `self_hosted`。Container、VM 或 process 是 Awaken
+执行层拥有的实现细节，Workforce 不应据此推导契约类型。如果未来 BYOC 产品在 provisioning、
+credential custody 或支持责任上形成实质不同的行为，再增加显式契约，而不是复用现有值表达
+两种含义。
+
 Workforce 不提供第二套 image、implementation、command 或 backend abstraction。Hostname 会被
 规范化；看起来像命令选项的 package value 会被拒绝。
 

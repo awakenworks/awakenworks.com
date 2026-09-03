@@ -31,6 +31,7 @@ scripts/build-awaken-flow-talk.mjs
 scripts/update-audience-transcripts.mjs
 
 # Local review and transfer artifacts must never enter the public repository.
+/artifacts/
 /docs/reviews/
 /awaken-agent-studio-*.png
 /awakenworks-docs-code-*.tar.gz

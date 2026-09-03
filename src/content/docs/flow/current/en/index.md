@@ -21,8 +21,10 @@ to make:
 | If you need to… | Open | What you can decide there |
 | --- | --- | --- |
 | commission and direct delivery across Projects | Workspace **Home** | define an Outcome, see the Commission → Decompose → Execute → Accept path, and identify delivery that needs intervention |
-| resolve a human decision or exception | **Needs you** | filter approvals, Issue Attention, and Agent/platform readiness signals without watching every Run |
+| continue accountable delivery or resolve a human decision | Workspace **Work** | filter approvals, Issue Attention, and Agent/platform readiness signals across Projects without watching every Run |
 | resume a temporary Agent conversation | Workspace **Chats** | continue one URL-addressed Awaken Session and issue an explicit command without turning Flow into a transcript owner |
+| inspect governed business data or run an allowed operation | Workspace **Objects** | choose a Pack-defined Object type, inspect all schema-declared data and relationships, and invoke a typed Action with an explicit result |
+| add a reusable capability | Workspace **Library** | inspect and install a verified Solution without hard-coding a provider or industry into the console |
 | check whether one Project can move | Project **Overview** | review execution readiness, dispatch health, open work, and the next blocking configuration |
 | inspect or accept a commissioned result | **Outcomes** → **Outcome Review** | compare formal deliverables with the acceptance boundary and take only the transitions currently permitted |
 | review one persistent interactive result | Project **Canvases** | open one exact admitted `canvas_artifact` Resource revision, review or edit it, and explicitly send a request back to an Agent |
@@ -30,7 +32,7 @@ to make:
 | use a solution-specific operating view | solution **Workbench** | follow the installed value path, metrics, and queues while the underlying Issue and Workflow remain authoritative |
 
 **Runs** and **Agent Center** project Agents execution health into the composed
-console. **Resources** projects Objects business facts and actions. Workforce
+console. Workspace **Objects** projects Objects business facts and actions. Workforce
 uses those products without taking ownership of their Session, Run, Resource, or
 Action truth.
 

@@ -1,12 +1,12 @@
 ---
-title: "Needs you, attention, and approvals"
-description: "Use the workspace Needs you view, decide the two approval surfaces that currently ship, and keep approvals separate from attention."
+title: "Work, attention, and approvals"
+description: "Use Workspace Work to decide the approval and attention states that currently ship while keeping their owners separate."
 section: "Use"
 subsection: "Decide and recover"
 order: 40
 ---
 
-Open Workspace **Needs you** when a person must decide what Agents cannot safely
+Open Workspace **Work** when a person must decide what Agents cannot safely
 complete on their own. Filter by Project and by approval, Issue Attention, or
 Agent/platform readiness. Selecting a delivery item returns to the owning Issue;
 selecting a platform blocker opens Agent Center. The page is a projection, not a
@@ -67,7 +67,7 @@ approving a tool does not resolve attention. See
 
 ## Verify in the UI
 
-- **Needs you** shows only open items matching the selected Project and type;
+- **Work** shows only open items matching the selected Project and type;
 - approval and Attention keep distinct labels and permitted actions;
 - an empty result says that no human decision matches the filters—it does not
   claim that every Outcome is accepted;

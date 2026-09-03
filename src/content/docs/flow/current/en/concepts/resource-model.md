@@ -11,6 +11,22 @@ ResourceType revision, owner root, lifecycle, properties, relations, behavior,
 and provenance. It may exist before, during, after, or without any Issue. Issue
 closure or deletion never retires it.
 
+## How this appears in the Objects UI
+
+Open Workspace **Objects**, choose an Object type, and select one row. The detail
+drawer renders every schema-declared property, including nested objects and
+arrays, before relationships and available Actions. The web application does
+not contain provider-specific cards for repositories, tickets, customers, or
+orders.
+
+The Pack supplies the data contract. Restrained presentation attributes may
+provide a human label, description, grouping, order, format, or sensitivity
+hint; an unknown attribute still has a safe generic representation. Each Action
+owns its argument schema, impact explanation, and confirmation requirement.
+Submitting it returns the Resource owner's structured result and technical
+receipt. Presentation metadata never grants authority or replaces Resource
+validation, revision fencing, authorization, or idempotency.
+
 ## Static ownership
 
 | Concern | Authority |

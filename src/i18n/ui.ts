@@ -307,18 +307,19 @@ export const productPreviewCopy = {
     label: 'Product model preview · example content', columns: ['Record', 'Fact', 'State'],
     views: {
       platform: { badge: 'Running', title: 'Session', subtitle: 'Configuration, ownership, and committed history for one long-running task.', nav: ['Agents', 'Sessions', 'Environments', 'Workers'], facts: [['Agent publication', 'Exact revision'], ['Environment', 'Frozen at Session create'], ['Work ownership', 'Lease + epoch']], rows: [['Complete Session', 'Persisted', 'Committed'], ['One Work item', 'Claimed by Worker', 'Claimed'], ['Runtime execution', 'Claim-fenced', 'Running'], ['Session history', 'Awaiting next commit', 'Open']], boundary: 'Control publishes immutable configuration; Coordinator owns Session and dispatch; Worker embeds Runtime and commits under lease and epoch fences.' },
-      objects: { badge: 'Current revision', title: 'Business object', subtitle: 'Example: an order controlled by an external system and observed through a Connector.', nav: ['Objects', 'Types', 'Relations', 'Actions'], facts: [['ResourceType', 'Exact revision'], ['Identity authority', 'External system'], ['Object view', 'Exact snapshot']], rows: [['Order · example', 'Connector observation', 'Observed'], ['Customer relation', 'Resolved by external identity', 'Resolved'], ['approve Action', 'Requires authority and revision', 'Available'], ['Latest change', 'Source and time retained', 'Recorded']], boundary: 'Objects keeps a typed, sourced object record. The external system still owns its business fact; an Action returns the governed result.' },
+      objects: { badge: 'Current revision', title: 'Business object', subtitle: 'Example: an order controlled by an external system and observed through a Connector.', nav: ['Objects', 'Object types', 'Relationships', 'Actions'], facts: [['ResourceType', 'Exact revision'], ['Identity authority', 'External system'], ['Object view', 'Schema-driven']], rows: [['Order · example', 'All declared business fields', 'Observed'], ['Customer relation', 'Resolved by external identity', 'Resolved'], ['approve Action', 'Pack-defined inputs and impact', 'Available'], ['Latest change', 'Result, source, and time retained', 'Recorded']], boundary: 'The Pack supplies typed data and presentation hints. One generic Objects UI renders every admitted field, relation, and Action; the external system still owns its business fact.' },
     },
     workforce: {
       brand: 'Awaken Workforce', workspace: 'Customer operations', status: 'Active', action: 'Commission outcome',
       pathAria: 'Outcome delivery path', acceptanceUnavailable: 'Acceptance unavailable',
       navigation: [
-        ['Workspace', ['Home', 'Needs you · 2', 'Chats', 'Solutions', 'Resources']],
-        ['Project', ['Overview', 'Outcomes', 'Canvases', 'Issues', 'Planning', 'Workflows', 'Automations']],
+        ['Workspace', ['Home', 'Chats', 'Work · 2', 'Objects', 'Library']],
+        ['Project delivery', ['Overview', 'Outcomes', 'Canvases', 'Issues']],
+        ['Advanced', ['Planning', 'Workflows', 'Automations', 'Build']],
         ['Operations', ['Runs', 'Agent Center']],
       ],
       path: [['01', 'Commission'], ['02', 'Decompose'], ['03', 'Execute'], ['04', 'Accept']],
-      commandEyebrow: 'AI workforce', commandTitle: 'Outcome command', commandBody: 'Intervene where acceptance, evidence, or execution needs you.',
+      commandEyebrow: 'Workspace work', commandTitle: 'The next decision that needs you', commandBody: 'Continue accountable work without searching across Projects or Agent logs.',
       buckets: [
         { label: 'Needs you', count: '1', title: 'Resolve billing dispute', detail: 'Approval required · 3/4 tasks', delivery: 'Formal delivery 2/3', tone: 'warning' },
         { label: 'In progress', count: '1', title: 'Onboard enterprise customer', detail: 'Agent WorkUnit running · 2/5 tasks', delivery: 'Formal delivery 1/3', tone: 'active' },
@@ -327,25 +328,26 @@ export const productPreviewCopy = {
       reviewEyebrow: 'Acceptance boundary', reviewTitle: 'Formal deliverables', reviewSummary: '2/3 fulfilled',
       deliverables: [['Account correction', 'Accepted'], ['Refund receipt', 'Accepted'], ['Ledger confirmation', 'Awaiting']],
       decision: 'Formal delivery is incomplete', decisionBody: 'Acceptance remains unavailable until every declared deliverable is present.',
-      boundary: 'Modeled on the committed Workspace, Project, Chats, Canvases, Outcomes, and Outcome Review surfaces at source revision b75e0ff9. Chats projects Awaken conversation state; Canvases projects Objects resources. Example records are illustrative and are not customer results.',
+      boundary: 'Aligned with the current Home, Chats, Work, Objects, Library, Project delivery, Advanced, and Operations information architecture. Chats projects Awaken conversation state; Objects owns business data and Actions. Example records are illustrative and are not customer results.',
     },
   },
   zh: {
     label: '产品模型预览 · 示例内容', columns: ['对象', '事实', '状态'],
     views: {
       platform: { badge: '执行中', title: 'Session', subtitle: '一项长期任务的配置、归属与已提交历史。', nav: ['Agents', 'Sessions', 'Environments', 'Workers'], facts: [['Agent publication', '固定版本'], ['Environment', 'Session 创建时冻结'], ['Work ownership', 'lease + epoch']], rows: [['完整 Session', '已持久化', 'Committed'], ['唯一 Work item', 'Worker 已领取', 'Claimed'], ['Runtime 执行', '受 claim 约束', 'Running'], ['Session history', '等待下一次提交', 'Open']], boundary: 'Control 发布不可变配置；Coordinator 拥有 Session 与分派；Worker 嵌入 Runtime 并在 lease/epoch 约束下提交。' },
-      objects: { badge: '当前 revision', title: '业务对象', subtitle: '示例：一个由外部系统控制、由 Connector 观察的订单。', nav: ['对象', '类型', '关系', '动作'], facts: [['ResourceType', '固定 revision'], ['身份权威', '外部系统'], ['对象视图', '精确 snapshot']], rows: [['Order · 示例', 'Connector observation', 'Observed'], ['Customer relation', '按外部身份解析', 'Resolved'], ['approve Action', '需要授权与 revision', 'Available'], ['最近变化', '保留来源与时间', 'Recorded']], boundary: 'Objects 保存有类型、有来源的对象记录；外部系统仍拥有自己的业务事实，Action 通过受控调用把结果带回来。' },
+      objects: { badge: '当前 revision', title: '业务对象', subtitle: '示例：一个由外部系统控制、由 Connector 观察的订单。', nav: ['Objects', '对象类型', '关系', '动作'], facts: [['ResourceType', '固定 revision'], ['身份权威', '外部系统'], ['对象视图', '按 schema 生成']], rows: [['Order · 示例', '完整展示声明的业务字段', 'Observed'], ['Customer relation', '按外部身份解析', 'Resolved'], ['approve Action', 'Pack 声明输入与影响', 'Available'], ['最近变化', '保留结果、来源与时间', 'Recorded']], boundary: 'Pack 提供类型化数据与呈现提示；同一套通用 Objects 界面展示全部已准入字段、关系与 Action，外部系统仍拥有业务事实。' },
     },
     workforce: {
       brand: 'Awaken Workforce', workspace: '客户运营', status: '运行中', action: '委托 Outcome',
       pathAria: 'Outcome 交付路径', acceptanceUnavailable: '验收不可用',
       navigation: [
-        ['Workspace', ['首页', '需要你处理 · 2', 'Chats', '解决方案', '资源']],
-        ['Project', ['概览', 'Outcomes', 'Canvases', 'Issues', '规划', 'Workflows', 'Automations']],
+        ['Workspace', ['首页', 'Chats', 'Work · 2', 'Objects', 'Library']],
+        ['Project 交付', ['概览', 'Outcomes', 'Canvases', 'Issues']],
+        ['高级', ['规划', 'Workflows', 'Automations', 'Build']],
         ['Operations', ['Runs', 'Agent Center']],
       ],
       path: [['01', '委托'], ['02', '分解'], ['03', '执行'], ['04', '验收']],
-      commandEyebrow: 'AI workforce', commandTitle: 'Outcome 指挥台', commandBody: '只在验收、证据或执行确实需要你时介入。',
+      commandEyebrow: 'Workspace 工作', commandTitle: '当前最需要你决定的事项', commandBody: '无需跨 Project 或 Agent 日志寻找，即可继续可问责工作。',
       buckets: [
         { label: '需要你处理', count: '1', title: '解决账务争议', detail: '需要审批 · 3/4 项工作', delivery: '正式交付 2/3', tone: 'warning' },
         { label: '进行中', count: '1', title: '开通企业客户', detail: 'Agent WorkUnit 执行中 · 2/5 项工作', delivery: '正式交付 1/3', tone: 'active' },
@@ -354,7 +356,7 @@ export const productPreviewCopy = {
       reviewEyebrow: '验收边界', reviewTitle: '正式交付物', reviewSummary: '已满足 2/3',
       deliverables: [['账户更正', '已接受'], ['退款回执', '已接受'], ['总账确认', '等待中']],
       decision: '正式交付尚未齐备', decisionBody: '在每项声明的交付物都存在前，系统不会开放验收。',
-      boundary: '依据 source revision b75e0ff9 已提交的 Workspace、Project、Chats、Canvases、Outcomes 与 Outcome Review 界面建模。Chats 投影 Awaken 会话状态，Canvases 投影 Objects 资源；示例记录仅用于说明，不代表客户业绩。',
+      boundary: '与当前 Home、Chats、Work、Objects、Library、Project 交付、高级配置及 Operations 信息架构对齐。Chats 投影 Awaken 会话状态，Objects 拥有业务数据与 Action；示例记录仅用于说明，不代表客户业绩。',
     },
   },
 } as const satisfies Record<Lang, object>;

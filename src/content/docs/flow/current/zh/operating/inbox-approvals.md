@@ -1,9 +1,9 @@
 ---
-title: "Needs you、Attention 与审批"
-description: "使用 workspace Needs you 视图，处理当前已交付的两种 approval surface，并与 Attention 保持分离。"
+title: "Work、Attention 与审批"
+description: "使用 Workspace Work 处理当前已交付的 approval 与 attention 状态，同时保持各自权威分离。"
 ---
 
-当人必须决定 Agent 无法安全完成的事项时，打开 Workspace **Needs you**。可以按 Project，
+当人必须决定 Agent 无法安全完成的事项时，打开 Workspace **Work**。可以按 Project，
 以及 approval、Issue Attention 或 Agent/平台 readiness 筛选。选择交付事项会返回拥有它的
 Issue；选择平台 blocker 会打开 Agent Center。这个页面是 projection，不是新的任务或通知生命周期。
 
@@ -55,7 +55,7 @@ attention 不会批准工具，approve tool 也不会 resolve attention。见
 
 ## 在 UI 中验证
 
-- **Needs you** 只显示符合所选 Project 与类型的开放事项；
+- **Work** 只显示符合所选 Project 与类型的开放事项；
 - approval 与 Attention 使用不同标签和允许动作；
 - 空结果只表示没有符合筛选条件的人工决定，不代表所有 Outcome 已经验收；
 - 最后一项阻塞 signal 被解决后，进展回到拥有它的 Issue，而不是创建另一份工作记录。

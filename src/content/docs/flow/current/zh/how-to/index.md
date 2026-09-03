@@ -3,8 +3,9 @@ title: "管理日常工作"
 description: "优先在 Workforce 工作空间完成日常工作，进阶集成再进入 API 参考。"
 ---
 
-默认从产品界面开始。仓库已经包含 Workspace Home、Library、Resources，项目级 Overview、
-Issues、Planning、Build，以及运营级 Runs、Fleet、Settings。生成的 API 是自动化与集成契约，
+默认从产品界面开始。Workspace 主导航是 Home、Chats、Work、Objects 与 Library；Project
+交付包含 Overview、Outcomes、Canvases 与 Issues；高级配置包含 Planning、Workflows、
+Automations 与 Build；Operations 包含 Runs 与 Agent Center。生成的 API 是自动化与集成契约，
 不是解释用户任务的默认入口。
 
 | 任务 | 从这里开始 |
@@ -12,7 +13,10 @@ Issues、Planning、Build，以及运营级 Runs、Fleet、Settings。生成的 
 | 委托并验收一个结果 | [委托并跟踪 Outcome](/zh/docs/workforce/how-to/manage-outcomes) |
 | 进入工作空间与项目 | [源码快速开始](/zh/docs/workforce/quickstart) |
 | 创建并跟进 Issue | [创建并跟踪 Issue](/zh/docs/workforce/how-to/create-and-follow-an-issue) |
-| 查看工作为何无法推进 | 打开 Issue 详情中的 diagnosis 与 scheduling 区域 |
+| 跨 Project 处理需要人介入的事项 | 打开 Workspace **Work**，按决定类型筛选，再进入拥有该决定的 Issue 或 Agent Center |
+| 查看一项 Issue 为何无法推进 | 打开 Issue 详情中的 diagnosis 与 scheduling 区域 |
+| 自由对话后创建可问责工作 | 打开 Workspace **Chats**，选择目标 Project，审阅拟议命令，再进入 owner receipt 指向的对象 |
+| 检查或操作业务数据 | 打开 Workspace **Objects**，选择对象类型，再查看数据、关系与 Pack 定义的 Action |
 | 检查证据或恢复工作 | 使用 Issue worklog、attention action 与 run control |
 | 创作并绑定 workflow | [设计工作流](/zh/docs/workforce/designing/design-a-workflow) |
 | 定义 Agent | [定义 Agent](/zh/docs/workforce/designing/define-an-agent) |

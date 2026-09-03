@@ -7,6 +7,17 @@ description: "独立的受治理企业身份、显式 Issue 关联，以及所�
 生命周期、属性、关系、行为和来源。它可以在 Issue 之前、期间、之后或完全没有 Issue 时存在；
 Issue 关闭或删除不会退役 Resource。
 
+## 在 Objects 界面中的呈现
+
+打开 Workspace **Objects**，选择对象类型，再选择一行。详情抽屉先完整展示 schema 声明的
+属性，包括嵌套对象和数组，然后展示关系与当前可用的 Action。Web 应用不会为代码仓、工单、
+客户或订单维护供应商专用卡片。
+
+Pack 提供数据契约。受限呈现属性可以提供人类可读标签、说明、分组、顺序、格式或敏感性提示；
+未知属性仍然具有安全的通用呈现。每个 Action 自己拥有参数 schema、影响说明与确认要求。
+提交后显示 Resource owner 返回的结构化结果和技术回执。呈现元数据不会授予权限，也不会替代
+Resource 校验、revision fence、authorization 或 idempotency。
+
 ## 静态所有权
 
 | 关注点 | 权威 |

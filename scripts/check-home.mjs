@@ -896,9 +896,9 @@ for (const rule of [
 //     intent, while the enterprise page is the sole owner of contact capture.
 // C3: a Run can complete while its parent Issue still lacks a declared completion
 //     condition or externally accepted fact.
-// C4: the source UI can move to Workspace Home, Needs you, Outcomes, and formal
+// C4: the source UI can move to Workspace Home, Work, Outcomes, and formal
 //     Outcome Review while the website keeps an obsolete generic Issue table.
-// C5: a composed console can make Runs, Agent Center, and Resources look owned by
+// C5: a composed console can make Runs, Agent Center, and Objects look owned by
 //     Workforce, collapsing Agents, Objects, and Workforce into one product.
 // E1: every preview labels controlled example records and makes no customer,
 //     adoption, or performance claim from illustrative per-record state counts.
@@ -1010,7 +1010,7 @@ for (const rule of [
   requireOccurrenceCount(rule.path, 'data-umami-event="workforce_workspace_selected"', 2, 'Workforce must measure both product-workspace actions');
   requireOccurrenceCount(rule.path, 'data-umami-event="paid_validation_selected"', 2, 'Workforce must measure both one-real-job validation actions');
   requireOccurrenceCount(rule.path, 'data-workforce-outcome-path', 1, 'Workforce preview must show the current four-stage Outcome path once');
-  requireOccurrenceCount(rule.path, 'data-workforce-bucket', 3, 'Workforce preview must show Needs you, In progress, and Blocked command buckets');
+  requireOccurrenceCount(rule.path, 'data-workforce-bucket', 3, 'Workforce preview must show Needs you, In progress, and Blocked Work buckets');
   requireOccurrenceCount(rule.path, 'data-workforce-acceptance-preview', 1, 'Workforce preview must show the formal-deliverable acceptance boundary');
   requireOccurrenceCount(rule.path, 'data-workforce-stage', 4, 'Workforce mechanism must match the four stages shown by Workspace Home');
   requireOccurrenceCount(rule.path, 'data-workforce-product-card', 3, 'Workforce must name exactly Agents, Objects, and Workforce as separate products');

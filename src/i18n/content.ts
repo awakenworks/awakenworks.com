@@ -308,9 +308,9 @@ export const content = {
         role: 'Business context',
         tagline: 'Give people, applications, and Agents the same business facts and actions.',
         points: [
-          'Model ResourceType, Resource identity, Relation, Action, and provenance as domain facts.',
-          'Connect external systems without turning Agent context into a second business record.',
-          'Admit every proposed change through deterministic validation, authorization, and revision checks.',
+          'Let each Pack declare ResourceType data, relationships, Actions, and restrained presentation hints.',
+          'Render every admitted field and nested value through one generic, schema-driven Objects experience.',
+          'Admit every proposed change through deterministic validation, authorization, revision checks, and a structured receipt.',
         ],
         cta: 'Explore Objects',
         href: '/objects',
@@ -510,9 +510,9 @@ export const content = {
           title: 'Define one business object before connecting more systems.',
           body: 'Take an Order as an example. Define its identity and fields, connect it to a Customer, record which system supplied each observation, and expose only the actions that system allows. The example is configurable product behavior, not a built-in Order package.',
           items: [
-            { title: 'Name the object', body: 'ResourceType fixes the schema, relations, actions, and exact definition revision.' },
-            { title: 'Observe the source', body: 'A Connector normalizes external identity, properties, relations, source, and observation time.' },
-            { title: 'Offer allowed change', body: 'An Action names what may change and requires authorization, an expected revision, and an idempotency boundary.' },
+            { title: 'Describe the object', body: 'A Pack fixes the ResourceType schema, relationships, Actions, restrained presentation hints, and exact definition revision.' },
+            { title: 'Render all business data', body: 'The generic Objects UI displays declared fields and nested values without provider-specific frontend branches.' },
+            { title: 'Offer allowed change', body: 'A Pack-defined Action describes its inputs and impact, then requires authorization, expected revision, and an idempotency boundary.' },
           ],
         },
         model: {
@@ -520,10 +520,10 @@ export const content = {
           title: 'Objects stores business records separately from Agent memory.',
           body: 'Objects keeps the typed record that applications and Agents may use. It distinguishes platform-owned state from externally controlled state and never turns a Connector observation into exclusive authority.',
           items: [
-            ['Type and identity', 'ResourceType defines the contract. Resource preserves identity, exact type revision, and lifecycle.'],
-            ['Snapshot and relation', 'A consumable ResourceSnapshot freezes one revision; Relation connects exact objects without guessing the latest value.'],
+            ['Type, data, and identity', 'ResourceType defines the data contract and optional presentation hints. Resource preserves identity, complete attributes, exact type revision, and lifecycle.'],
+            ['Snapshot and relationship', 'A consumable ResourceSnapshot freezes one revision; Relation connects exact objects while the generic UI resolves human labels without guessing the latest value.'],
             ['Observation and provenance', 'Connector observations retain provider or fallback identity, mechanism, time, and optional provider ordering evidence.'],
-            ['Action and receipt', 'Read-only, idempotent, and mutating Actions follow one authorization and revision-fenced execution path.'],
+            ['Action and receipt', 'The Action owns its field schema and impact copy. Read-only, idempotent, and mutating Actions follow one authorization and revision-fenced execution path.'],
           ],
         },
         change: {
@@ -566,9 +566,9 @@ export const content = {
         ctaDocs: { label: 'Read the Workforce docs', href: '/docs/workforce' },
         ctaSecondary: { label: 'Evaluate one real job', href: '/enterprise?product=workforce#enterprise-workforce' },
         loop: {
-          eyebrow: 'Work lifecycle',
-          title: 'Track an Outcome from assignment through acceptance.',
-          body: 'The product follows the same four stages shown in Workspace Home. Issues and WorkUnits preserve accountability underneath; Needs you collects decisions and exceptions; Outcome Review keeps delivery evidence separate from technical run output.',
+          eyebrow: 'One visible delivery path',
+          title: 'From commissioned outcome to a decision backed by deliverables.',
+          body: 'The product follows the same four stages shown in Workspace Home. Issues and WorkUnits preserve accountability underneath; Workspace Work collects decisions and exceptions; Outcome Review keeps delivery evidence separate from technical run output.',
           stages: [
             ['Commission', 'Define the result, owner, acceptance boundary, and exact Workflow binding.'],
             ['Decompose', 'Turn the result into an accountable Issue graph with visible dependencies.'],
@@ -587,7 +587,7 @@ export const content = {
             { name: 'Awaken Agents', role: 'Execute and recover', body: 'Owns Agent publication, Session, Run, tools, Worker, Sandbox, committed execution history, and technical recovery.', proof: 'Agent · Session · Run · Worker · Sandbox' },
           ],
           path: 'Workforce commissions → Objects grounds context and actions → Agents executes → evidence returns → Workforce accepts',
-          rule: 'Runs and Agent Center are Agents capabilities projected into the composed console. Resources are Objects capabilities. Their presence does not transfer ownership to Workforce.',
+          rule: 'Runs and Agent Center are Agents capabilities projected into the composed console. The Objects surface projects Objects capabilities. Their presence does not transfer ownership to Workforce.',
         },
         scenarios: {
           eyebrow: 'Jobs that fit',
@@ -922,9 +922,9 @@ export const content = {
         role: '业务上下文',
         tagline: '让人、应用与 Agent 使用同一份业务事实与动作。',
         points: [
-          '把 ResourceType、Resource 身份、Relation、Action 与 provenance 建模成领域事实。',
-          '连接外部系统，不把 Agent context 变成第二份业务记录。',
-          '每项候选变更都经过确定性校验、授权与 revision 检查。',
+          '让 Pack 声明 ResourceType 数据、关系、Action 与受限呈现提示。',
+          '通过一套通用、schema 驱动的 Objects 体验完整展示所有已准入字段与嵌套值。',
+          '每项候选变更都经过确定性校验、授权、revision 检查并返回结构化回执。',
         ],
         cta: '了解 Objects',
         href: '/objects',
@@ -1124,9 +1124,9 @@ export const content = {
           title: '先定义一个业务对象，再连接更多系统。',
           body: '以订单为例：定义它的身份和字段，把它连接到客户，记录每次观察来自哪个系统，并且只开放该系统允许的动作。这个例子说明可配置的产品能力，并不代表内置了订单方案。',
           items: [
-            { title: '说明对象', body: 'ResourceType 固定 schema、relation、action 与精确的定义 revision。' },
-            { title: '观察来源', body: 'Connector 规范化外部身份、属性、关系、来源与观察时间。' },
-            { title: '开放动作', body: 'Action 说明允许怎样改变，并要求授权、预期 revision 与幂等边界。' },
+            { title: '描述对象', body: 'Pack 固定 ResourceType schema、关系、Action、受限呈现提示与精确定义 revision。' },
+            { title: '完整展示业务数据', body: '通用 Objects 界面展示声明的字段与嵌套值，不为供应商增加前端分支。' },
+            { title: '开放允许的动作', body: 'Pack 定义的 Action 描述输入与影响，并要求授权、预期 revision 与幂等边界。' },
           ],
         },
         model: {
@@ -1134,10 +1134,10 @@ export const content = {
           title: 'Objects 与 Agent memory 分开保存业务记录。',
           body: 'Objects 保存应用和 Agent 可以使用的类型化记录，区分平台拥有的状态与外部系统控制的状态，也不会把一次 Connector observation 当成独占权威。',
           items: [
-            ['类型与身份', 'ResourceType 定义契约；Resource 保存身份、精确类型 revision 与生命周期。'],
-            ['快照与关系', '可使用的 ResourceSnapshot 固定一个 revision；Relation 连接精确对象，不猜测最新值。'],
+            ['类型、数据与身份', 'ResourceType 定义数据契约和可选呈现提示；Resource 保存身份、完整属性、精确类型 revision 与生命周期。'],
+            ['快照与关系', '可使用的 ResourceSnapshot 固定一个 revision；Relation 连接精确对象，通用界面解析人类可读标签而不猜测最新值。'],
             ['观察与来源', 'Connector observation 保留 provider 或 fallback 身份、机制、时间与可选的 provider 顺序证据。'],
-            ['动作与回执', '只读、幂等和变更 Action 复用同一条授权与 revision-fenced 执行路径。'],
+            ['动作与回执', 'Action 自己拥有字段 schema 与影响文案；只读、幂等和变更 Action 复用同一条授权与 revision-fenced 执行路径。'],
           ],
         },
         change: {
@@ -1180,9 +1180,9 @@ export const content = {
         ctaDocs: { label: '阅读 Workforce 文档', href: '/docs/workforce' },
         ctaSecondary: { label: '验证一项真实工作', href: '/enterprise?product=workforce#enterprise-workforce' },
         loop: {
-          eyebrow: '工作生命周期',
-          title: '跟踪 Outcome 从分配到验收的过程。',
-          body: '产品遵循 Workspace Home 展示的四个阶段。Issue 与 WorkUnit 在底层保存责任；Needs you 汇总人工决定和例外；Outcome Review 把正式交付证据与技术 Run 输出分开。',
+          eyebrow: '一条看得见的交付路径',
+          title: '从委托 Outcome，到基于交付物作出验收决定。',
+          body: '产品遵循 Workspace Home 展示的四个阶段。Issue 与 WorkUnit 在底层保存责任；Workspace Work 汇总人工决定和例外；Outcome Review 把正式交付证据与技术 Run 输出分开。',
           stages: [
             ['委托', '定义结果、负责人、验收边界与精确 Workflow binding。'],
             ['分解', '形成可问责的 Issue 图，并让依赖关系保持可见。'],
@@ -1201,7 +1201,7 @@ export const content = {
             { name: 'Awaken Agents', role: '执行与恢复', body: '拥有 Agent publication、Session、Run、工具、Worker、Sandbox、已提交执行历史与技术恢复。', proof: 'Agent · Session · Run · Worker · Sandbox' },
           ],
           path: 'Workforce 委托 → Objects 提供上下文和动作 → Agents 执行 → 证据返回 → Workforce 验收',
-          rule: 'Runs 与 Agent Center 是投影到组合 Console 中的 Agents 能力；Resources 属于 Objects。它们出现在 Workforce 界面中，不代表权威转移给 Workforce。',
+          rule: 'Runs 与 Agent Center 是投影到组合 Console 中的 Agents 能力；Objects 界面投影 Objects 能力。它们出现在组合 Console 中，不代表权威转移给 Workforce。',
         },
         scenarios: {
           eyebrow: '适合的工作',

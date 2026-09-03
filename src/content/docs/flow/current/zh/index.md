@@ -16,15 +16,17 @@ Workforce 通过聚焦的提前体验合作提供。第一个有用结果是一�
 | 你需要…… | 打开 | 可以在这里决定什么 |
 | --- | --- | --- |
 | 跨 Project 委托并指挥交付 | Workspace **Home** | 定义 Outcome，查看“委托 → 分解 → 执行 → 验收”路径，并找到需要介入的交付 |
-| 处理人工决定或例外 | **Needs you** | 筛选 approval、Issue Attention 与 Agent/平台就绪信号，不必持续盯住每次 Run |
+| 继续可问责交付或处理人工决定 | Workspace **Work** | 跨 Project 筛选 approval、Issue Attention 与 Agent/平台就绪信号，不必持续盯住每次 Run |
 | 继续一段临时 Agent 对话 | Workspace **Chats** | 继续一个有 URL 身份的 Awaken Session 并发出明确命令，不让 Flow 成为 transcript 权威 |
+| 检查受治理业务数据或执行允许的操作 | Workspace **Objects** | 选择 Pack 定义的对象类型，完整查看 schema 声明的数据与关系，并调用返回明确结果的类型化 Action |
+| 增加可复用能力 | Workspace **Library** | 检查并安装已验证 Solution，不在 Console 中硬编码供应商或行业流程 |
 | 检查一个 Project 能否继续 | Project **Overview** | 查看执行就绪、dispatch health、开放工作和下一项阻塞配置 |
 | 检查或验收一个已委托结果 | **Outcomes** → **Outcome Review** | 对照验收边界检查正式交付物，并且只执行当前允许的 transition |
 | 评审一份持久交互结果 | Project **Canvases** | 打开一个精确、已准入的 `canvas_artifact` Resource revision，评审或编辑，再明确发送给 Agent |
 | 理解一项可问责工作 | **Issues** → Issue 详情 | 查看 owner、下一动作、diagnosis、Workflow 位置、worklog、approval、关系与 Agent conversation |
 | 使用面向方案的运营界面 | 方案 **Workbench** | 查看已安装 value path、metric 与 queue，同时保持底层 Issue 和 Workflow 权威不变 |
 
-**Runs** 与 **Agent Center** 将 Agents 的执行健康投影到组合 Console；**Resources** 投影
+**Runs** 与 **Agent Center** 将 Agents 的执行健康投影到组合 Console；Workspace **Objects** 投影
 Objects 的业务事实与动作。Workforce 使用这些产品，但不拥有它们的 Session、Run、Resource
 或 Action 真相。
 

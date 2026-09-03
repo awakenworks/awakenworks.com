@@ -44,6 +44,22 @@ The author contract is deliberately the same closed vocabulary Awaken accepts:
 - cloud packages may list `apt`, `cargo`, `gem`, `go`, `npm`, and `pip`
   requirements.
 
+`cloud` and `self_hosted` describe the **operational responsibility boundary**,
+not whether the workload happens to run in a container:
+
+| Contract value | Product label | Who owns the runtime lifecycle? | Typical placement |
+| --- | --- | --- | --- |
+| `cloud` | Platform managed | Awaken provisions, isolates, applies network policy, maintains, and retires the executable environment | Awaken-managed infrastructure |
+| `self_hosted` | Your infrastructure | Your organization supplies and operates the execution infrastructure; Awaken uses the managed Environment reference | a developer machine, your data center, or your own cloud account/VPC |
+
+An Awaken-managed container is therefore `cloud`. Docker on a developer laptop,
+Kubernetes in a customer VPC, and a container on a customer-operated VM are all
+`self_hosted`. Container, VM, and process are implementation details owned by
+Awaken's execution layer; Workforce must not infer the contract type from them.
+If a future bring-your-own-cloud offering has materially different provisioning,
+credential-custody, or support behavior, it should gain an explicit contract at
+that time instead of overloading either value.
+
 There is no second image, implementation, command, or backend abstraction in
 Workforce. Hostnames are normalized and package values that look like command options
 are rejected.

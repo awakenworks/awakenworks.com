@@ -6,9 +6,10 @@ subsection: "Manage work"
 order: 20
 ---
 
-Start in the product UI. The repository includes workspace Home, Library and
-Resources; project Overview, Issues, Planning and Build; and operational Runs,
-Fleet and Settings surfaces. The generated API remains the contract for
+Start in the product UI. The primary workspace navigation is Home, Chats, Work,
+Objects, and Library. Project delivery contains Overview, Outcomes, Canvases,
+and Issues; Advanced contains Planning, Workflows, Automations, and Build;
+Operations contains Runs and Agent Center. The generated API remains the contract for
 automation and integration, not the default explanation of a user's task.
 
 | Task | Start here |
@@ -16,7 +17,10 @@ automation and integration, not the default explanation of a user's task.
 | Commission and accept one result | [Commission and follow an Outcome](/docs/workforce/how-to/manage-outcomes) |
 | Open a workspace and project | [Source quickstart](/docs/workforce/quickstart) |
 | Create and follow an Issue | [Create and follow an Issue](/docs/workforce/how-to/create-and-follow-an-issue) |
-| Check why work cannot advance | Open the Issue detail diagnosis and scheduling sections |
+| Decide what needs human attention across Projects | Open Workspace **Work**, filter the exact decision type, then continue in the owning Issue or Agent Center |
+| Check why one Issue cannot advance | Open the Issue detail diagnosis and scheduling sections |
+| Talk freely, then create accountable work | Open Workspace **Chats**, select the target Project, review the proposed command, and follow its owner receipt |
+| Inspect or operate business data | Open Workspace **Objects**, choose the Object type, then inspect data, relationships, and Pack-defined Actions |
 | Inspect evidence or recover work | Use the Issue worklog, attention actions, and run controls |
 | Author and bind a workflow | [Design a workflow](/docs/workforce/designing/design-a-workflow) |
 | Define an Agent | [Define an Agent](/docs/workforce/designing/define-an-agent) |

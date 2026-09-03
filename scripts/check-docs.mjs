@@ -874,14 +874,14 @@ for (const [docsRel, patterns] of [
 }
 
 // Cause-effect design for the source-aligned Workforce console documentation:
-// C1: the source UI exposes Home, Needs you, Chats, Overview, Outcomes,
-//     Canvases, Issue detail, and solution Workbench while docs still
+// C1: the source UI exposes Home, Chats, Work, Objects, Library, Overview,
+//     Outcomes, Canvases, Issue detail, and solution Workbench while docs still
 //     begin from domain nouns.
-// C2: Runs, Agent Center, and Resources appear in one composed console and can be
+// C2: Runs, Agent Center, and Objects appear in one composed console and can be
 //     mistaken for Workforce-owned execution or business-object authorities.
 // C3: an Outcome review can present supporting Run/Issue evidence beside formal
 //     deliverables, tempting readers to accept technical completion as business completion.
-// C4: the Needs you page can be described as a stored inbox or a merged approval
+// C4: the Work page can be described as a stored inbox or a merged approval
 //     lifecycle even though it is a projection over distinct owner states.
 // C5: Chats and Canvases can be misread as new Workforce-owned transcript and
 //     Design stores even though they project Agents and Objects authorities.
@@ -889,12 +889,12 @@ for (const [docsRel, patterns] of [
 // E2: Agents, Objects, and Workforce retain three explicit, non-overlapping owners.
 // E3: the Outcome guide names the formal-deliverable decision boundary and keeps
 //     supporting work as evidence only.
-// E4: the operations guide names Needs you as a projection and preserves distinct
+// E4: the operations guide names Work as a projection and preserves distinct
 //     Attention, business approval, tool-call control, and Resource responsibilities.
 // E5: the overview names Chats as an Awaken conversation projection and Canvases
 //     as exact Objects Resources, rejecting both parallel authorities.
 // Decision table:
-// | Rule | UI map | three owners | formal boundary | Needs you projection | Chats/Canvas owners | Outcome |
+// | Rule | UI map | three owners | formal boundary | Work projection | Chats/Canvas owners | Outcome |
 // | W1   | yes    | yes          | yes             | yes                  | yes                 | accept  |
 // | W2   | no     | any          | any             | any                  | any                 | reject  |
 // | W3   | yes    | no           | any             | any                  | any                 | reject  |
@@ -908,7 +908,7 @@ for (const locale of ['en', 'zh']) {
   const needsYou = join(flow, 'operating/inbox-approvals.md');
   requireText(overview, [
     [locale === 'zh' ? /^## 从眼前需要作出的决定进入/m : /^## Start from the decision in front of you/m, `${locale} Workforce overview must begin its UI map from user decisions`],
-    [/Workspace \*\*Home\*\*[\s\S]*\*\*Needs you\*\*[\s\S]*Workspace \*\*Chats\*\*[\s\S]*Project \*\*Overview\*\*[\s\S]*\*\*Outcomes\*\*[\s\S]*Project \*\*Canvases\*\*[\s\S]*\*\*Issues\*\*[\s\S]*\*\*Workbench\*\*/, `${locale} Workforce overview must map the current primary console surfaces`],
+    [/Workspace \*\*Home\*\*[\s\S]*Workspace \*\*Work\*\*[\s\S]*Workspace \*\*Chats\*\*[\s\S]*Workspace \*\*Objects\*\*[\s\S]*Workspace \*\*Library\*\*[\s\S]*Project \*\*Overview\*\*[\s\S]*\*\*Outcomes\*\*[\s\S]*Project \*\*Canvases\*\*[\s\S]*\*\*Issues\*\*[\s\S]*\*\*Workbench\*\*/, `${locale} Workforce overview must map the current primary console surfaces`],
     [/Awaken Workforce[\s\S]*Awaken Objects[\s\S]*Awaken Agents/, `${locale} Workforce overview must retain exactly named product owners`],
     [/Workforce.*Objects.*Agents.*Workforce/s, `${locale} Workforce overview must show one composed owner path`],
     [/\*\*Chats\*\*[\s\S]*(?:Awaken conversation|Awaken Session)[\s\S]*(?:not a Flow transcript|不是 Flow transcript)[\s\S]*\*\*Canvases\*\*[\s\S]*(?:Objects-owned|Objects 拥有)[\s\S]*(?:not a second Design backend|不是第二套 Design 后台)/, `${locale} Workforce overview must keep Chats and Canvases on their existing authorities`],
@@ -919,9 +919,9 @@ for (const locale of ['en', 'zh']) {
     [/Agents[\s\S]*Objects[\s\S]*Workforce|Workforce[\s\S]*Agents[\s\S]*Objects/s, `${locale} Outcome guide must preserve all three product owners`],
   ]);
   requireText(needsYou, [
-    [/Workspace \*\*Needs you\*\*/, `${locale} operations guide must name the shipping Needs you surface`],
-    [/(?:projection|投影|派生)/, `${locale} Needs you documentation must reject a second stored lifecycle`],
-    [/Workforce[\s\S]*Agents[\s\S]*Objects/s, `${locale} Needs you guide must preserve work, execution, and object ownership`],
+    [/Workspace \*\*Work\*\*/, `${locale} operations guide must name the shipping Work surface`],
+    [/(?:projection|投影|派生)/, `${locale} Work documentation must reject a second stored lifecycle`],
+    [/Workforce[\s\S]*Agents[\s\S]*Objects/s, `${locale} Work guide must preserve work, execution, and object ownership`],
   ]);
 }
 
@@ -2238,6 +2238,8 @@ for (const locale of ['en', 'zh']) {
   ]);
   requireText(join(flow, 'concepts/resource-model.md'), [
     [/without any Issue|完全没有 Issue/, `${locale} Resource concept must preserve independent lifetime`],
+    [/Workspace \*\*Objects\*\*[\s\S]*(?:schema-declared|schema 声明)[\s\S]*(?:nested|嵌套)[\s\S]*(?:provider-specific|供应商专用)/, `${locale} Resource concept must explain the generic schema-driven Objects UI`],
+    [/(?:Pack supplies the data contract|Pack 提供数据契约)[\s\S]*(?:Action[\s\S]*owns|Action 自己拥有)[\s\S]*(?:impact|影响)/, `${locale} Resource concept must keep data and presentation hints with the Pack and Action`],
     [/resource_access/, `${locale} Resource concept must preserve explicit Agent access`],
     [/resource-operations/, `${locale} Resource concept must preserve one application boundary`],
     [/ResourceContentStore[\s\S]*ContentDescriptor/, `${locale} Resource concept must preserve one content custody boundary`],
