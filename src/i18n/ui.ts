@@ -3,12 +3,12 @@ import { canonicalEntities, type Lang } from './content';
 export const ui = {
   en: {
     routes: {
-      blog: { title: 'Blog — AwakenWorks', description: 'Engineering notes, product progress, and reproducible build records from AwakenWorks.' },
-      principles: { title: 'Our principles — AwakenWorks', description: 'Four commitments that guide how AwakenWorks builds, operates, and describes Agent infrastructure.' },
-      docs: { title: 'Awaken Agents documentation — Runtime, Sessions, deployment, and APIs', description: 'Build and operate Agent applications with Awaken Agents, then inspect its Rust Runtime, durable Sessions, protocols, permissions, Sandboxes, and recovery.' },
+      blog: { title: 'Blog | AwakenWorks', description: 'Engineering notes, product progress, and reproducible build records from AwakenWorks.' },
+      principles: { title: 'Our principles | AwakenWorks', description: 'Four commitments that guide how AwakenWorks builds, operates, and describes Agent infrastructure.' },
+      docs: { title: 'Awaken Agents documentation | Runtime, Sessions, deployment, and APIs', description: 'Build and operate Agent applications with Awaken Agents, then inspect its Rust Runtime, durable Sessions, protocols, permissions, Sandboxes, and recovery.' },
       objectsDocs: { title: 'Awaken Objects documentation | AwakenWorks', description: 'Model business objects, Resources, Relations, Connectors, and governed actions with Awaken Objects.' },
       caseTitle: (name: string) => `${name} | Built on Awaken`,
-      blogTitle: (title: string) => `${title} — AwakenWorks`,
+      blogTitle: (title: string) => `${title} | AwakenWorks`,
     },
     common: {
       theme: 'Toggle light / dark theme',
@@ -34,7 +34,7 @@ export const ui = {
       exploreObjects: 'Explore the product model',
       workforceStar: 'Star the Awaken open foundation',
       workforceCaption: 'Current product workspace · controlled example content, not customer activity',
-      workforceCloseTitle: 'Bring one recurring job all the way to an accepted result.',
+      workforceCloseTitle: 'Evaluate Workforce with one recurring job and its acceptance result.',
       workforceCloseBody: 'See the complete outcome loop first. Apply for a focused validation when the job needs real system connections, exceptions, and acceptance facts.',
       objectsCaption: 'Product model preview · example content, with type, provenance, and revision semantics from the current implementation',
       frequencies: ['Daily', 'Weekly', 'Monthly', 'Event-driven'],
@@ -45,7 +45,7 @@ export const ui = {
     },
     agentsLanding: {
       quickstartEyebrow: 'First successful run',
-      quickstartTitle: 'Reach one inspectable Session before you evaluate architecture.',
+      quickstartTitle: 'Run and inspect one Session.',
       quickstartSteps: [
         ['1', 'Start', 'Run the local AllInOne service with a durable data directory.'],
         ['2', 'Publish', 'Connect a model, publish one Agent, and create a Session.'],
@@ -83,12 +83,12 @@ export const ui = {
   },
   zh: {
     routes: {
-      blog: { title: '博客 — AwakenWorks', description: '来自 AwakenWorks 的工程笔记、产品进展与可复现的构建记录。' },
-      principles: { title: '我们的原则 — AwakenWorks', description: '四项承诺，说明 AwakenWorks 如何构建、运营并描述 Agent 基础设施。' },
+      blog: { title: '博客 | AwakenWorks', description: '来自 AwakenWorks 的工程笔记、产品进展与可复现的构建记录。' },
+      principles: { title: '我们的原则 | AwakenWorks', description: '四项承诺，说明 AwakenWorks 如何构建、运营并描述 Agent 基础设施。' },
       docs: { title: 'Awaken Agents 文档｜Runtime、Session、部署与 API', description: '使用 Awaken Agents 构建和运营 Agent 应用，并了解其 Rust Runtime、持久 Session、协议、权限、Sandbox 与恢复机制。' },
       objectsDocs: { title: 'Awaken Objects 文档｜AwakenWorks', description: '使用 Awaken Objects 建模业务对象、Resource、Relation、Connector 与受控动作。' },
       caseTitle: (name: string) => `${name}｜基于 Awaken 构建`,
-      blogTitle: (title: string) => `${title} — AwakenWorks`,
+      blogTitle: (title: string) => `${title} | AwakenWorks`,
     },
     common: {
       theme: '切换明暗主题',
@@ -114,7 +114,7 @@ export const ui = {
       exploreObjects: '查看产品模型',
       workforceStar: 'Star Awaken 开源基础',
       workforceCaption: '当前产品工作空间 · 受控示例内容，不代表客户活动',
-      workforceCloseTitle: '让一项重复工作真正走到可验收结果。',
+      workforceCloseTitle: '用一项重复工作及其验收结果评估 Workforce。',
       workforceCloseBody: '先看完整结果闭环；当工作需要连接真实系统、处理例外并取得验收事实时，再申请一次聚焦验证。',
       objectsCaption: '产品模型预览 · 示例内容，类型、来源与 revision 语义来自当前实现',
       frequencies: ['每天', '每周', '每月', '按事件触发'],
@@ -125,7 +125,7 @@ export const ui = {
     },
     agentsLanding: {
       quickstartEyebrow: '第一次成功运行',
-      quickstartTitle: '先完成一个可检查的 Session，再评估整体架构。',
+      quickstartTitle: '运行并检查一个 Session。',
       quickstartSteps: [
         ['1', '启动', '使用持久化数据目录运行本地 AllInOne 服务。'],
         ['2', '发布', '连接模型，发布一个 Agent，并创建 Session。'],
@@ -298,15 +298,15 @@ export const docsIndexCopy = {
 
 export const principlesCopy = {
   en: {
-    eyebrow: 'Our principles', heroTitle: 'Make powerful systems understandable.', heroSubtitle: 'Agent systems can act for a long time and across many tools. The people responsible for the work should still be able to see what is happening, decide what is allowed, and change course.',
-    believe: { heading: 'Begin with the work and its owner', body: 'A useful system starts with a clear job, a person responsible for it, and a result they can accept. The Agent may plan and act, but it does not get to redefine who decides whether the work is done.' },
-    developers: { heading: 'Keep control close to the people doing the work', body: 'These choices shape both the software and the way we work with teams adopting it.', values: [
+    eyebrow: 'Our principles', heroTitle: 'How AwakenWorks builds and describes its products.', heroSubtitle: 'Operators must be able to inspect Agent activity, set permissions, and stop or redirect work. These requirements guide the product and our public claims.',
+    believe: { heading: 'Define the work, owner, and acceptance result', body: 'Each job needs a named owner and an observable result. An Agent may plan and act, but the owner decides whether the work is complete.' },
+    developers: { heading: 'Keep deployment and product decisions with the operating team', body: 'These rules guide product design and implementation support.', values: [
       { title: 'Show the source', desc: 'Awaken is Apache-2.0. You can read the code, follow a decision, and propose a better one.' },
       { title: 'Keep operations in your boundary', desc: 'Run the control plane on infrastructure you choose. Keep Session records and credentials inside that operating boundary.' },
       { title: 'Leave room to change course', desc: 'Choose providers and execution backends explicitly. Open protocols and readable formats make later changes easier, though never free.' },
     ] },
-    honesty: { heading: 'Name what is ready, and what is not', badge: 'Plain status', body: 'We distinguish what is available now, what is still a preview, and what remains a target. When a limit matters to your decision, we state it near the claim instead of hiding it in a footnote.', linkLabel: 'Read the current implementation boundaries' },
-    open: { heading: 'Make it easy to question and improve', body: 'You do not need to agree with us before taking part. Ask about a design, point out a confusing limit, or improve a small piece of the system. The links below are the direct paths into that work.', links: [
+    honesty: { heading: 'State product availability and limits', badge: 'Plain status', body: 'We distinguish what is available now, what is still a preview, and what remains a target. When a limit matters to your decision, we state it near the claim instead of hiding it in a footnote.', linkLabel: 'Read the current implementation boundaries' },
+    open: { heading: 'Ask questions and contribute', body: 'Ask about a design, report an unclear limit, or submit a change through the links below.', links: [
       { target: 'discussions', label: 'GitHub Discussions', desc: 'Ask a question or propose a change where others can examine it.' },
       { target: 'goodFirstIssues', label: 'Good first issues', desc: 'Start with a bounded change and its acceptance conditions.' },
       { target: 'contributing', label: 'Contributing guide', desc: 'Follow the repository path from a clone to a reviewed change.' },
@@ -314,15 +314,15 @@ export const principlesCopy = {
     ], orgLabel: 'Star Awaken on GitHub' },
   },
   zh: {
-    eyebrow: '我们的原则', heroTitle: '让强大的系统依然容易理解。', heroSubtitle: 'Agent 系统可能长时间运行，也可能调用许多工具。真正为工作负责的人，仍然应该看得见发生了什么，能够决定什么可以做，也能够随时改变方向。',
-    believe: { heading: '先说清工作，以及谁为它负责', body: '一个有用的系统，首先要有明确的工作、负责人和可验收的结果。Agent 可以规划和行动，但不能替负责人重新定义什么叫完成。' },
-    developers: { heading: '让控制权靠近真正做事的人', body: '以下选择同时影响软件如何构建，也影响我们如何与采用它的团队合作。', values: [
+    eyebrow: '我们的原则', heroTitle: 'AwakenWorks 如何构建和说明产品。', heroSubtitle: '运营人员必须能够检查 Agent 活动、设置权限，并停止或调整工作。这些要求同时约束产品设计和公开说明。',
+    believe: { heading: '定义工作、负责人和验收结果', body: '每项工作都需要明确的负责人和可检查的结果。Agent 可以规划和行动，但由负责人判断工作是否完成。' },
+    developers: { heading: '部署和产品决定由运营团队掌握', body: '这些规则用于指导产品设计和实施支持。', values: [
       { title: '开放源码', desc: 'Awaken 采用 Apache-2.0。你可以阅读代码、追踪一项决定，也可以提出更好的做法。' },
       { title: '把运营留在自己的边界内', desc: '在你选择的基础设施上运行控制面，让 Session 记录和凭据留在这条运营边界内。' },
       { title: '保留改变方向的余地', desc: '显式选择供应商和执行后端。开放协议与可读格式会让后续变化更容易，但不会让成本凭空消失。' },
     ] },
-    honesty: { heading: '说清什么已经可用，什么还没有', badge: '清楚标注', body: '我们区分当前可用、仍在预览和只是目标的内容。当某项限制会影响你的决定时，我们会把它放在相关说明旁边，而不是藏进脚注。', linkLabel: '查看当前实现边界' },
-    open: { heading: '让质疑和改进都容易发生', body: '参与不以认同为前提。你可以追问一项设计，指出一个说不清的边界，或改进系统中的一小部分。下面这些链接会直接带你进入相应工作。', links: [
+    honesty: { heading: '说明产品可用状态和限制', badge: '清楚标注', body: '我们区分当前可用、仍在预览和只是目标的内容。当某项限制会影响你的决定时，我们会把它放在相关说明旁边，而不是藏进脚注。', linkLabel: '查看当前实现边界' },
+    open: { heading: '提出问题或参与贡献', body: '你可以通过下面的链接询问设计、报告不清楚的限制，或提交改动。', links: [
       { target: 'discussions', label: 'GitHub Discussions', desc: '提出问题或改动建议，让更多人一起检查。' },
       { target: 'goodFirstIssues', label: '入门 issue', desc: '从范围清楚、验收条件明确的改动开始。' },
       { target: 'contributing', label: '贡献指南', desc: '沿着仓库路径，从 clone 走到经过评审的改动。' },

@@ -550,7 +550,7 @@ const rules = [
     entityDefinition: 'Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications.',
     runtimeConcept: '/docs/agents/concepts/agent-runtime',
     workflow: ['Connect model', 'Publish Agent', 'Run Session', 'Inspect evidence', 'Connect application'],
-    values: ['Keep work continuous', 'Keep the operating boundary', 'Keep one foundation'],
+    values: ['Resume the same Session', 'Choose where it runs', 'Reuse the same Agent'],
     proofHrefs: ['/docs/agents/concepts/production-reliability', '/docs/agents/how-to/self-host', '/docs/agents/concepts/architecture'],
   },
   {
@@ -569,7 +569,7 @@ const rules = [
     entityDefinition: 'Awaken Agents 是开源、可自托管的 Agent 应用基础设施，用于构建和运营生产级 AI Agent 应用。',
     runtimeConcept: '/zh/docs/agents/concepts/agent-runtime',
     workflow: ['连接模型', '发布 Agent', '运行 Session', '检查证据', '接入应用'],
-    values: ['让工作保持连续', '保留运营边界', '复用同一底座'],
+    values: ['恢复同一个 Session', '选择运行位置', '复用同一个 Agent'],
     proofHrefs: ['/zh/docs/agents/concepts/production-reliability', '/zh/docs/agents/how-to/self-host', '/zh/docs/agents/concepts/architecture'],
   },
 ];
@@ -696,8 +696,8 @@ rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-
 //     of explaining the practical consequence in the page's existing voice.
 // C8: lifecycle adjectives can occupy the headline without showing the first
 //     observable result a buyer can run and inspect.
-// E1: both locales lead with building and shipping Agent applications without
-//     turning the adopter into an Agent infrastructure team.
+// C9: a rhetorical contrast or slogan can obscure the literal product action.
+// E1: both locales state the product action and operating control directly.
 // E2: supporting copy admits all three technical starts and preserves the
 //     application's UX, domain-model, and acceptance ownership.
 // E3: the promise reads as one sentence on wide screens and remains responsive.
@@ -710,21 +710,23 @@ rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-
 // E7: the hero reuses the recommended scenario's finish condition as supporting
 //     evidence without delaying its two actions or creating a second result authority.
 // Decision table:
-// | Rule | existing Agent required | boundary intact | evidence | renderer | finished copy | Outcome |
-// | H1   | no                      | yes             | present  | string   | yes           | accept  |
-// | H2   | yes                     | any             | any      | any      | any           | reject  |
-// | H3   | no                      | no              | any      | any      | any           | reject  |
-// | H4   | no                      | yes             | missing  | any      | any           | reject  |
-// | H5   | no                      | yes             | present  | array    | any           | reject  |
-// | H6   | no                      | yes             | present  | string   | no            | reject  |
+// | Rule | existing Agent required | boundary intact | evidence | renderer | literal copy | Outcome |
+// | H1   | no                      | yes             | present  | string   | yes          | accept  |
+// | H2   | yes                     | any             | any      | any      | any          | reject  |
+// | H3   | no                      | no              | any      | any      | any          | reject  |
+// | H4   | no                      | yes             | missing  | any      | any          | reject  |
+// | H5   | no                      | yes             | present  | array    | any          | reject  |
+// | H6   | no                      | yes             | present  | string   | no           | reject  |
 requirePattern(homeSourcePath, /\{home\.hero\.title\}/, 'home must render the vision as one responsive sentence');
 rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the vision');
 requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as supporting first-result evidence');
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
-requirePattern(contentSourcePath, /title: 'Build and ship Agent applications without becoming an Agent infrastructure team\.'[\s\S]*title: '构建并交付 Agent 应用，不必把团队变成 Agent 基础设施团队。'/, 'both locales must lead with the Agent application job without requiring an existing Agent');
-requirePattern(contentSourcePath, /the path can start from a real job, a compatible Agent, or an Agent you already own\.[\s\S]*可以从一项真实工作、一个兼容 Agent，或自有 Agent 开始。/, 'both locales must expose the three technical starting paths in one supporting-copy owner');
-requirePattern(contentSourcePath, /application keeps its UX, domain model, and acceptance rules[\s\S]*应用继续掌握用户体验、领域模型和验收规则/, 'both locales must preserve the application ownership boundary');
+requirePattern(contentSourcePath, /title: 'Build Agent applications on infrastructure you control\.'[\s\S]*title: '在自己掌控的基础设施上构建 Agent 应用。'/, 'both locales must state the Agent application job and operating control directly');
+requirePattern(contentSourcePath, /start with a real job, a compatible Agent, or an Agent you already own\.[\s\S]*可以从一项真实工作、兼容 Agent 或自有 Agent 开始。/, 'both locales must expose the three technical starting points in one supporting-copy owner');
+requirePattern(contentSourcePath, /application keeps its UX, domain model, and acceptance rules[\s\S]*应用继续负责用户体验、领域模型和验收规则/, 'both locales must preserve the application ownership boundary');
 rejectPattern(contentSourcePath, /Ship your working Agent as an application customers can keep using|把能运行的 Agent，交付成客户可以持续使用的应用|Your Agent already works\. Now ship the application|Agent 已经能运行，现在把应用交付出去/, 'homepage copy must not require an existing working Agent or imply unverified continued customer use');
+rejectPattern(contentSourcePath, /without becoming an Agent infrastructure team|不必把团队变成 Agent 基础设施团队|The form is shared\. The promise is not\.|入口可以共用，承诺不能混用|Managed-compatible\. Awaken-enhanced\./, 'core pages must use literal product language instead of rhetorical contrast or slogans');
+rejectPattern(contentSourcePath, /—/, 'site copy must use plain punctuation instead of decorative em dashes');
 requirePattern(contentSourcePath, /export const canonicalEntities[\s\S]*AwakenWorks builds open infrastructure designed for production AI Agent applications\.[\s\S]*Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\.[\s\S]*Awaken Runtime is the Rust execution core inside Awaken Agents\./, 'one catalog must own the company, product, and runtime entity definitions');
 rejectPattern(contentSourcePath, /pages:\s*\{[\s\S]*awaken:/, 'the retired hidden Awaken page copy must not compete with canonical entity definitions');
 rejectPattern(contentSourcePath, /Turn an Agent prototype into a shippable, operable, reusable product|让 Agent 原型，变成可交付、可运营、可复用的产品|Make Agents shippable, operable, and reusable|让 Agent 可交付、可运营、可复用/, 'result headlines must not regress to lifecycle adjectives');
@@ -834,6 +836,7 @@ for (const rule of productRules) {
 }
 const productLandingSourcePath = resolve(root, 'src/components/ProductLanding.astro');
 const uiSourcePath = resolve(root, 'src/i18n/ui.ts');
+rejectPattern(uiSourcePath, /—/, 'UI copy must use plain punctuation instead of decorative em dashes');
 requirePattern(productLandingSourcePath, /id="agents-quickstart"[\s\S]*\{p\.ctaPrimary\.label\}/, 'Agents Quickstart must reuse the primary CTA label authority');
 rejectPattern(uiSourcePath, /quickstartCta:/, 'UI copy must not maintain a second Agents Quickstart CTA label');
 
@@ -858,7 +861,7 @@ rejectPattern(uiSourcePath, /quickstartCta:/, 'UI copy must not maintain a secon
 for (const rule of [
   {
     path: resolve(root, 'dist/objects/index.html'),
-    title: 'Let people and Agents act from the same business facts.',
+    title: 'Give applications and Agents the same typed business records.',
     docsHref: '/docs/objects',
     task: 'Choose one important business object',
     maturity: 'Early preview',
@@ -867,7 +870,7 @@ for (const rule of [
   },
   {
     path: resolve(root, 'dist/zh/objects/index.html'),
-    title: '让人和 Agent 基于同一份业务事实行动。',
+    title: '让应用和 Agent 使用同一份类型化业务记录。',
     docsHref: '/zh/docs/objects',
     task: '选择一类关键业务对象',
     maturity: '提前预览',
@@ -978,7 +981,7 @@ for (const path of [resolve(root, 'dist/agents/index.html'), resolve(root, 'dist
 for (const rule of [
   {
     path: resolve(root, 'dist/workforce/index.html'),
-    title: 'Commission a result. Keep work moving until it is accepted.',
+    title: 'Track work, responsibility, and acceptance across Agent and human steps.',
     docsHref: '/docs/workforce',
     cooperationHref: '/enterprise\\?product=workforce#enterprise-workforce',
     workspaceHref: '/workforce#workforce-preview',
@@ -987,7 +990,7 @@ for (const rule of [
   },
   {
     path: resolve(root, 'dist/zh/workforce/index.html'),
-    title: '委托一个结果，让工作持续推进，直到可以验收。',
+    title: '跟踪 Agent 和人工步骤中的工作、责任与验收。',
     docsHref: '/zh/docs/workforce',
     cooperationHref: '/zh/enterprise\\?product=workforce#enterprise-workforce',
     workspaceHref: '/zh/workforce#workforce-preview',
@@ -1040,7 +1043,7 @@ const enterpriseRules = [
     path: resolve(root, 'dist/enterprise/index.html'),
     productHref: '/agents',
     privacyHref: '/privacy',
-    title: 'Implement Agents now, or shape an Objects and Workforce early preview.',
+    title: 'Implement Agents or request an Objects or Workforce preview.',
     intent: 'cooperation',
     boundary: 'Agents is open source, with its first stable release coming soon. Objects and Workforce are available through focused early-access collaboration.',
     pathFacts: [
@@ -1055,7 +1058,7 @@ const enterpriseRules = [
     path: resolve(root, 'dist/zh/enterprise/index.html'),
     productHref: '/zh/agents',
     privacyHref: '/zh/privacy',
-    title: '现在实施 Agents，或共同定义 Objects 与 Workforce 提前预览。',
+    title: '实施 Agents，或申请 Objects 与 Workforce 提前预览。',
     intent: 'cooperation',
     boundary: 'Agents 已开源，首个稳定版即将发布。Objects 与 Workforce 通过聚焦的提前体验合作提供。',
     pathFacts: [
@@ -1218,8 +1221,8 @@ requireOccurrenceCount(docsShellPath, '<DocsNavigation', 2, 'desktop and mobile 
 rejectPattern(docsShellPath, /<nav class="[^"]*overflow-x-auto[^"]*" aria-label=\{isZh \? '产品文档'/, 'mobile product navigation must not hide exits in a horizontal rail');
 
 for (const rule of [
-  { path: resolve(root, 'dist/principles/index.html'), owner: 'Begin with the work and its owner', participation: 'Make it easy to question and improve' },
-  { path: resolve(root, 'dist/zh/principles/index.html'), owner: '先说清工作，以及谁为它负责', participation: '让质疑和改进都容易发生' },
+  { path: resolve(root, 'dist/principles/index.html'), owner: 'Define the work, owner, and acceptance result', participation: 'Ask questions and contribute' },
+  { path: resolve(root, 'dist/zh/principles/index.html'), owner: '定义工作、负责人和验收结果', participation: '提出问题或参与贡献' },
 ]) {
   requireOrderedText(rule.path, ['id="principles-hero"', 'id="principles-owner"', 'id="principles-commitments"', 'id="principles-status"', 'id="principles-participate"'], 'principles must move from ownership through commitments and status to participation');
   requirePattern(rule.path, new RegExp(rule.owner), 'principles must begin from the work and its human owner');

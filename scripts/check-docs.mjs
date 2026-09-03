@@ -2359,7 +2359,7 @@ requireText(siteContentPath, [
   [/Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\./, 'English public copy must own the canonical Agents category'],
   [/en:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: 'Awaken Objects'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'English home must expose exactly the three public product owners'],
   [/zh:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: 'Awaken Objects'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'Chinese home must expose exactly the three public product owners'],
-  [/Create an Agent, adopt a supported one, or connect existing behavior/, 'English Awaken copy must preserve all Agent entry modes'],
+  [/creating an Agent, adopting a supported Agent, or connecting behavior you already own/, 'English Awaken copy must preserve all Agent entry modes'],
   [/创建 Agent、采用受支持的 Agent，或接入已有行为/, 'Chinese Awaken copy must preserve all Agent entry modes'],
   [/en:\s*{[\s\S]*slug: 'pilot'[\s\S]*adoption: 'Create a thin Agent application'[\s\S]*slug: 'deepseek-harness'[\s\S]*adoption: 'Build an advanced Agent workbench'[\s\S]*slug: 'design'[\s\S]*adoption: 'Build a domain-rich AI product'/, 'English cases must cover thin app, workbench, and domain-rich product shapes'],
   [/zh:\s*{[\s\S]*slug: 'pilot'[\s\S]*adoption: '创建轻量 Agent 应用'[\s\S]*slug: 'deepseek-harness'[\s\S]*adoption: '开发高级 Agent Workbench'[\s\S]*slug: 'design'[\s\S]*adoption: '构建领域型 AI 产品'/, 'Chinese cases must cover thin app, workbench, and domain-rich product shapes'],
