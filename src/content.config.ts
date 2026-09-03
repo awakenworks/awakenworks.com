@@ -33,6 +33,9 @@ const docs = defineCollection({
     // Pages may name page-owned implementation evidence when a checked source
     // coordinate is available; check-docs.mjs validates every supplied value.
     evidence: z.array(z.string()).min(1).optional(),
+    // The canonical English peer owns the last substantive review date. It is
+    // optional for legacy pages and projected into TechArticle metadata.
+    lastReviewed: z.coerce.date().optional(),
     // Structural fields belong only to the English peer. Chinese pages keep
     // these optional and derive the same navigation from English at build time.
     audience: z.enum(DOC_AUDIENCES).optional(),

@@ -1,12 +1,13 @@
 ---
-title: "连接 Anthropic Managed Agents 客户端"
-description: "把官方 Anthropic SDK 指向自托管 Awaken，同时让 Agent、Session 与执行状态继续由同一套运行时拥有。"
+title: "什么是 Managed Agents，Awaken 如何接入？"
+description: "Managed Agents 提供 Agent 与 Session 的应用契约；Awaken 通过一套自托管 adapter 实现已测试子集。"
 evidence:
   - "crates/server/awaken-protocol-managed/src/lib.rs"
 ---
 
-如果应用已经使用官方 Anthropic SDK，并希望在团队自己运行的基础设施上创建和继续
-Agent 与 Session，就选择这个协议。
+**Managed Agents** 提供通过 Anthropic SDK 创建有版本 Agent 并继续 Session 的应用契约。
+Awaken Agents 把已测试子集实现为自托管协议 adapter，复用已有 Agent、Session 与执行
+权威。如果应用已经使用这套 SDK 模型，并希望由团队自己运营基础设施，就选择这个协议。
 
 如果是新应用，先完成 **[运行第一个 Awaken Session](/zh/docs/agents/get-started/)**。
 这是从 SDK 配置到 Session 回到 `idle` 的最短已测试路径。本页解释这条路径之下的边界。

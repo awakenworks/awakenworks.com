@@ -1,11 +1,11 @@
-import type { Lang } from './locales';
+import { canonicalEntities, type Lang } from './content';
 
 export const ui = {
   en: {
     routes: {
       blog: { title: 'Blog — AwakenWorks', description: 'Engineering notes, product progress, and reproducible build records from AwakenWorks.' },
       principles: { title: 'Our principles — AwakenWorks', description: 'Four commitments that guide how AwakenWorks builds, operates, and describes Agent infrastructure.' },
-      docs: { title: 'Documentation — AwakenWorks', description: 'Find Awaken getting-started, building, architecture, operations, and reference documentation by task.' },
+      docs: { title: 'Awaken Agents documentation — Runtime, Sessions, deployment, and APIs', description: 'Build and operate Agent applications with Awaken Agents, then inspect its Rust Runtime, durable Sessions, protocols, permissions, Sandboxes, and recovery.' },
       objectsDocs: { title: 'Awaken Objects documentation | AwakenWorks', description: 'Model business objects, Resources, Relations, Connectors, and governed actions with Awaken Objects.' },
       caseTitle: (name: string) => `${name} | Built on Awaken`,
       blogTitle: (title: string) => `${title} — AwakenWorks`,
@@ -85,7 +85,7 @@ export const ui = {
     routes: {
       blog: { title: '博客 — AwakenWorks', description: '来自 AwakenWorks 的工程笔记、产品进展与可复现的构建记录。' },
       principles: { title: '我们的原则 — AwakenWorks', description: '四项承诺，说明 AwakenWorks 如何构建、运营并描述 Agent 基础设施。' },
-      docs: { title: '文档中心 — AwakenWorks', description: '按任务查找 Awaken 的入门、构建、架构、运维与参考文档。' },
+      docs: { title: 'Awaken Agents 文档｜Runtime、Session、部署与 API', description: '使用 Awaken Agents 构建和运营 Agent 应用，并了解其 Rust Runtime、持久 Session、协议、权限、Sandbox 与恢复机制。' },
       objectsDocs: { title: 'Awaken Objects 文档｜AwakenWorks', description: '使用 Awaken Objects 建模业务对象、Resource、Relation、Connector 与受控动作。' },
       caseTitle: (name: string) => `${name}｜基于 Awaken 构建`,
       blogTitle: (title: string) => `${title} — AwakenWorks`,
@@ -261,7 +261,7 @@ export const docsIndexCopy = {
       ['Manage work that must keep progressing', 'Create an Issue in Workforce, name its owner and acceptance conditions, then assign a person, rule, or Agent.', '/docs/workforce/quickstart', 'Awaken Workforce', 'workforce'],
     ],
     products: [
-      { key: 'agents', tone: 'iris', label: 'Agent platform', title: 'Awaken Agents', body: 'Create or connect Agents, keep application work in one Session history, and run the control plane, Workers, and Sandboxes on infrastructure you choose.', href: '/docs/agents', links: [['Get started', '/docs/agents/get-started'], ['Compatibility boundary', '/docs/agents/compatibility'], ['Deploy and operate', '/docs/agents/how-to/self-host']] },
+      { key: 'agents', tone: 'iris', label: 'Agent application infrastructure', title: 'Awaken Agents', body: canonicalEntities.en.agents, href: '/docs/agents', links: [['What is an Agent Runtime?', '/docs/agents/concepts/agent-runtime'], ['Get started', '/docs/agents/get-started'], ['Deploy and operate', '/docs/agents/how-to/self-host']] },
       { key: 'objects', tone: 'amber', label: 'Business objects', title: 'Awaken Objects', body: 'Organize ResourceType, Resource, Relation, Action, and Connector into typed, versioned business facts with provenance.', href: '/docs/objects', links: [['Object model', '/docs/objects/concepts/object-model'], ['Resource model', '/docs/objects/concepts/resource-model'], ['Connectors', '/docs/objects/concepts/connectors']] },
       { key: 'workforce', tone: 'rust', label: 'Work and acceptance', title: 'Awaken Workforce', body: 'Start from work that must be completed, retain responsibility and process, coordinate people, rules, and Agents, and accept outcomes from external facts.', href: '/docs/workforce', links: [['Get started', '/docs/workforce/quickstart'], ['Manage work', '/docs/workforce/how-to'], ['Handle exceptions', '/docs/workforce/operating/attention-recovery']] },
     ],
@@ -283,7 +283,7 @@ export const docsIndexCopy = {
       ['管理一项持续推进的工作', '在 Workforce 中创建 Issue，写下负责人和验收条件，再选择人、规则或 Agent 执行。', '/docs/workforce/quickstart', 'Awaken Workforce', 'workforce'],
     ],
     products: [
-      { key: 'agents', tone: 'iris', label: 'Agent 平台', title: 'Awaken Agents', body: '创建或接入 Agent，让应用通过同一份 Session 记录继续工作，并在你选择的基础设施上运行控制面、Worker 与 Sandbox。', href: '/docs/agents', links: [['快速开始', '/docs/agents/get-started'], ['兼容边界', '/docs/agents/compatibility'], ['部署与运营', '/docs/agents/how-to/self-host']] },
+      { key: 'agents', tone: 'iris', label: 'Agent 应用基础设施', title: 'Awaken Agents', body: canonicalEntities.zh.agents, href: '/docs/agents', links: [['什么是 Agent Runtime？', '/docs/agents/concepts/agent-runtime'], ['快速开始', '/docs/agents/get-started'], ['部署与运营', '/docs/agents/how-to/self-host']] },
       { key: 'objects', tone: 'amber', label: '业务对象', title: 'Awaken Objects', body: '把 ResourceType、Resource、Relation、Action 与 Connector 组织成有类型、有版本、有来源的业务事实。', href: '/docs/objects', links: [['对象模型', '/docs/objects/concepts/object-model'], ['Resource 模型', '/docs/objects/concepts/resource-model'], ['Connector', '/docs/objects/concepts/connectors']] },
       { key: 'workforce', tone: 'rust', label: '工作与验收', title: 'Awaken Workforce', body: '从必须完成的工作开始，保存责任与流程，协调人、规则和 Agent，并用外部事实验收结果。', href: '/docs/workforce', links: [['开始使用', '/docs/workforce/quickstart'], ['管理工作', '/docs/workforce/how-to'], ['处理例外', '/docs/workforce/operating/attention-recovery']] },
     ],

@@ -1,6 +1,6 @@
 ---
-title: "Keep Session, Thread, Run, and events in their own roles"
-description: "Know which identity an application should retain, where execution history lives, and how committed events make a long-running Agent conversation recoverable."
+title: "What is an Agent Session? Session, Thread, Run, and event roles"
+description: "An Agent Session is the durable application identity for continuing one Agent conversation across turns, reconnects, and process restarts."
 evidence:
   - "crates/server/awaken-session-application/src/creation.rs"
   - "crates/contract/awaken-session-contract/src/resource.rs"
@@ -8,12 +8,13 @@ evidence:
 section: "Understand"
 subsection: "System model"
 order: 12
+lastReviewed: 2026-09-03
 ---
 
-Use a Session when an application must continue the same Agent conversation
-across turns, reconnects, or process restarts. Keep its identifier and send new
-input to that Session. Do not rebuild durable history from browser state or a
-partially received stream.
+An **Agent Session** is the durable application identity for continuing one
+Agent conversation across turns, reconnects, or process restarts. Keep its
+identifier and send new input to that Session. Do not rebuild durable history
+from browser state or a partially received stream.
 
 ## Choose the durable identity first
 

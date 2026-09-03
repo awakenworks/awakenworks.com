@@ -1,16 +1,19 @@
 ---
-title: "Connect an Anthropic Managed Agents client"
-description: "Point the official Anthropic SDK at self-hosted Awaken while keeping Agent, Session, and execution state in one runtime."
+title: "What are Managed Agents, and how does Awaken connect?"
+description: "Managed Agents provides an application contract for Agents and Sessions; Awaken implements a tested subset through one self-hosted adapter."
 evidence:
   - "crates/server/awaken-protocol-managed/src/lib.rs"
 section: "Connect"
 subsection: "Connect applications"
 order: 23
+lastReviewed: 2026-09-03
 ---
 
-Choose this protocol when an application already uses the official Anthropic
-SDK and you want that client to create and continue Agents and Sessions on
-infrastructure your team operates.
+**Managed Agents** provides an application contract for creating versioned
+Agents and continuing Sessions through the Anthropic SDK. Awaken Agents
+implements a tested subset as a self-hosted protocol adapter over its existing
+Agent, Session, and execution authorities. Choose it when an application
+already uses that SDK model and your team wants to operate the infrastructure.
 
 If you are building a new application, begin with **[Run your first Awaken
 Session](/docs/agents/get-started/)**. It provides the shortest tested path

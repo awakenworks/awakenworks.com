@@ -542,11 +542,13 @@ const rules = [
     casePrefix: '/cases/',
     releaseStatus: 'Open source · stable release coming soon',
     deploymentStatus: 'Self-hostable',
-    primaryAudience: 'for AI product teams',
+    primaryAudience: 'For AI product teams',
     firstResult: 'One real application creates, runs, reconnects, and reopens the same Session',
+    entityDefinition: 'Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications.',
+    runtimeConcept: '/docs/agents/concepts/agent-runtime',
     workflow: ['Connect model', 'Publish Agent', 'Run Session', 'Inspect evidence', 'Connect application'],
     reliability: ['A user reconnects', 'A Worker or process stops', 'A tool requests sensitive action', 'An operator needs an explanation', 'Data and tools must stay inside'],
-    proofHrefs: ['/docs/agents/concepts/sessions-and-events', '/docs/agents/concepts/architecture', '/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/docs/agents/runtime/how-to/enable-observability', '/docs/agents/how-to/self-host'],
+    proofHrefs: ['/docs/agents/concepts/sessions-and-events', '/docs/agents/concepts/production-reliability', '/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/docs/agents/runtime/how-to/enable-observability', '/docs/agents/how-to/self-host'],
   },
   {
     path: resolve(root, 'dist/zh/index.html'),
@@ -560,9 +562,11 @@ const rules = [
     deploymentStatus: '可自托管',
     primaryAudience: '面向 AI 产品团队',
     firstResult: '一个真实应用创建、运行、重连并重新打开同一个 Session',
+    entityDefinition: 'Awaken Agents 是开源、可自托管的 Agent 应用基础设施，用于构建和运营生产级 AI Agent 应用。',
+    runtimeConcept: '/zh/docs/agents/concepts/agent-runtime',
     workflow: ['连接模型', '发布 Agent', '运行 Session', '检查证据', '接入应用'],
     reliability: ['用户重新连接', 'Worker 或进程中断', '工具请求敏感操作', '操作者需要解释过程', '数据与工具必须留在内部'],
-    proofHrefs: ['/zh/docs/agents/concepts/sessions-and-events', '/zh/docs/agents/concepts/architecture', '/zh/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/zh/docs/agents/runtime/how-to/enable-observability', '/zh/docs/agents/how-to/self-host'],
+    proofHrefs: ['/zh/docs/agents/concepts/sessions-and-events', '/zh/docs/agents/concepts/production-reliability', '/zh/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/zh/docs/agents/runtime/how-to/enable-observability', '/zh/docs/agents/how-to/self-host'],
   },
 ];
 
@@ -571,13 +575,17 @@ const rules = [
 //     application lifecycle; C2: an enterprise visitor needs a private boundary;
 // C3: a proof-seeker needs current product UI and reference-build status;
 // C4: a visitor asks about the broader portfolio; C5: execution reconnects,
-//     stops, requests permission, needs inspection, or must remain private.
-// E1: the hero names the product-team job and one observable result; E2: exactly
+//     stops, requests permission, needs inspection, or must remain private;
+// C6: a crawler or answer engine must classify the visible product before it
+//     follows implementation detail.
+// E1: the hero names the product category, product-team job, and one observable result; E2: exactly
 //     two decision CTAs reach self-evaluation and the existing enterprise path;
 // E3: one five-step Console path appears before reliability claims; E4: five
 //     cause/effect rows link to their detailed evidence owners; E5: reference
 //     builds remain explicitly non-customer evidence; E6: Agents maturity leads,
-//     while Objects and Workforce appear later with their registry-owned status.
+//     while Objects and Workforce appear later with their registry-owned status;
+// E7: the visible definition and ordinary concept link expose the same product
+//     identity without adding another conversion CTA.
 // Decision table:
 // | Rule | visitor cause | required effect | terminal route |
 // | H1 | working Agent | product promise + first result | quickstart |
@@ -586,6 +594,7 @@ const rules = [
 // | H4 | failure/control question | one bounded consequence | owning docs |
 // | H5 | reference interest | maturity + non-customer boundary | case detail |
 // | H6 | portfolio interest | Agents first + preview status | product page |
+// | H7 | category question | visible canonical definition | runtime concept |
 for (const rule of rules) {
   requireOrderedText(rule.path, [
     'id="home-hero"',
@@ -608,7 +617,10 @@ for (const rule of rules) {
   requireOccurrenceCount(rule.path, '<h1', 1, 'home must have one primary heading');
   requireSectionOccurrenceCount(rule.path, 'id="home-hero"', '</section>', '<a ', 2, 'home hero must expose exactly the two intent actions');
   requireOccurrenceCount(rule.path, 'data-home-first-result', 1, 'home hero must expose one observable first result');
-  requirePattern(rule.path, new RegExp(`data-home-first-result[\\s\\S]*${rule.firstResult}`), 'home hero must state the recommended scenario result before its actions');
+  requireOccurrenceCount(rule.path, 'data-home-entity-definition', 1, 'home hero must expose one canonical product definition');
+  requirePattern(rule.path, new RegExp(`data-home-entity-definition[\\s\\S]*${rule.entityDefinition}`), 'home hero must make the Agents category directly quotable');
+  requirePattern(rule.path, new RegExp(`data-home-runtime-concept href="${rule.runtimeConcept}"`), 'home workflow must link to the localized canonical Agent Runtime concept');
+  requirePattern(rule.path, new RegExp(`data-home-first-result[\\s\\S]*${rule.firstResult}`), 'home hero must state the recommended scenario result as supporting evidence');
   requirePattern(rule.path, new RegExp(rule.primaryAudience), 'home hero must name AI product teams as the primary audience');
   requirePattern(rule.path, new RegExp(`data-home-maturity[\\s\\S]*${rule.releaseStatus}[\\s\\S]*${rule.deploymentStatus}`), 'home hero must separate product maturity and deployment capability from the value headline');
   for (const product of ['agents', 'objects', 'workforce']) {
@@ -682,8 +694,8 @@ rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-
 //     claiming measured customer ROI or available Workforce outcomes.
 // E5: comparison rows connect capability to consequence with natural reader-facing
 //     labels and contain no third-person "customer gets" drafting language.
-// E6: the hero reuses the recommended scenario's finish condition before its
-//     two actions, avoiding a second result authority.
+// E6: the hero reuses the recommended scenario's finish condition as supporting
+//     evidence without delaying its two actions or creating a second result authority.
 // Decision table:
 // | Rule | customer result | evidence | renderer | result owner | Outcome |
 // | H1   | observable      | present  | string   | scenario     | accept  |
@@ -694,9 +706,11 @@ rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-
 // | H6   | observable      | present  | string   | draft marker | reject  |
 requirePattern(homeSourcePath, /\{home\.hero\.title\}/, 'home must render the vision as one responsive sentence');
 rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the vision');
-requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as its first result');
+requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as supporting first-result evidence');
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
 requirePattern(contentSourcePath, /title: 'Ship your working Agent as an application customers can keep using\.'[\s\S]*title: '把能运行的 Agent，交付成客户可以持续使用的应用。'/, 'both locales must lead with the application result a buyer can recognize');
+requirePattern(contentSourcePath, /export const canonicalEntities[\s\S]*AwakenWorks builds open infrastructure designed for production AI Agent applications\.[\s\S]*Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\.[\s\S]*Awaken Runtime is the Rust execution core inside Awaken Agents\./, 'one catalog must own the company, product, and runtime entity definitions');
+rejectPattern(contentSourcePath, /pages:\s*\{[\s\S]*awaken:/, 'the retired hidden Awaken page copy must not compete with canonical entity definitions');
 rejectPattern(contentSourcePath, /Turn an Agent prototype into a shippable, operable, reusable product|让 Agent 原型，变成可交付、可运营、可复用的产品|Make Agents shippable, operable, and reusable|让 Agent 可交付、可运营、可复用/, 'result headlines must not regress to lifecycle adjectives');
 requirePattern(contentSourcePath, /experience, business logic, and customer relationship[\s\S]*产品体验、业务逻辑和客户关系/, 'both locales must state what the adopting product team keeps');
 requirePattern(contentSourcePath, /Objects and Workforce remain early product directions, not prerequisites[\s\S]*Objects 与 Workforce 仍是早期产品方向，不是采用 Agents 的前置条件/, 'both locales must keep future products out of the current adoption prerequisite');
@@ -721,32 +735,32 @@ rejectPattern(homeSourcePath, /home-display-title-zh[\s\S]{0,120}white-space: no
 const productRules = [
   {
     path: resolve(root, 'dist/agents/index.html'),
-    title: 'Use one Agent platform from first run to enterprise deployment.',
+    title: 'Build and operate Agent applications on infrastructure you control.',
     agentsHref: '/docs/agents/get-started',
     outcomes: ['Ship one real Agent application', 'Keep existing application investment', 'Keep differentiated Agent behavior', 'Run inside enterprise boundaries'],
     decisions: [
       ['/docs/agents/compatibility', 'Migrate an existing client'],
       ['/docs/agents/concepts/architecture', 'Review authority and recovery'],
       ['/docs/agents/how-to/self-host', 'Choose a deployment boundary'],
-      ['/docs/agents/runtime', 'Extend the execution engine'],
+      ['/docs/agents/concepts/agent-runtime', 'Understand the runtime boundary'],
     ],
   },
   {
     path: resolve(root, 'dist/zh/agents/index.html'),
-    title: '用一套 Agent 平台，支撑从首次运行到企业部署。',
+    title: '在自己掌控的基础设施上构建并运营 Agent 应用。',
     agentsHref: '/zh/docs/agents/get-started',
     outcomes: ['交付一个真实 Agent 应用', '保留现有应用投入', '保留有差异的 Agent 行为', '在企业边界内运行'],
     decisions: [
       ['/zh/docs/agents/compatibility', '迁移已有客户端'],
       ['/zh/docs/agents/concepts/architecture', '审阅权威与恢复'],
       ['/zh/docs/agents/how-to/self-host', '选择部署边界'],
-      ['/zh/docs/agents/runtime', '扩展执行内核'],
+      ['/zh/docs/agents/concepts/agent-runtime', '理解 Runtime 边界'],
     ],
   },
 ];
 
 for (const rule of productRules) {
-  requirePattern(rule.path, new RegExp(`<h1[^>]*>[\\s\\S]*${rule.title.replaceAll('.', '\\.')}[\\s\\S]*</h1>`), 'Awaken product page must own the Managed Agents-compatible product promise');
+  requirePattern(rule.path, new RegExp(`<h1[^>]*>[\\s\\S]*${rule.title.replaceAll('.', '\\.')}[\\s\\S]*</h1>`), 'Awaken product page must own the production Agent application promise');
   requireOrderedText(rule.path, ['id="agents-hero"', 'id="agents-quickstart"', 'id="agents-outcomes"', 'id="managed-relation"', 'id="platform-preview"', 'id="agents-decisions"'], 'Agents must move from value through a first success, differentiation, evidence, and four Docs-owned next decisions');
   requireOccurrenceCount(rule.path, '<dialog data-console-dialog', 1, 'Agents must expose one native dialog owner for screenshot inspection');
   requireOccurrenceCount(rule.path, '<img data-console-dialog-image', 1, 'Agents must expose one dialog image target');
@@ -881,6 +895,30 @@ for (const [path, name, brand, currentHref] of [
   requirePattern(absolute, new RegExp(`"@type":"SoftwareApplication"[\\s\\S]*"name":"${name}"`), `${name} must expose product discovery metadata`);
   requirePattern(absolute, new RegExp(`<html[^>]*data-brand="${brand}"`), `${name} must render its route-owned visual identity`);
   requirePattern(absolute, new RegExp(`href="${currentHref}" aria-current="page"`), `${name} direct entry must expose semantic current navigation`);
+}
+
+// Cause/effect design for entity graph consistency:
+// C1: visual copy can name Agents while machine-readable data names a generic
+//     Awaken application; C2: Runtime can be collapsed into the product; C3:
+//     product and Runtime identifiers can vary by route or locale.
+// E1: Organization, Agents, and Runtime remain separate nodes; E2: Agents owns
+//     Runtime through hasPart and Runtime points back through isPartOf; E3: the
+//     same stable IDs and Rust repository facts appear on home and Agents pages.
+// Decision table: G1 all nodes + both edges + stable ids -> accept; G2 any node,
+// edge, or id absent -> reject. Rich-result eligibility is deliberately not an
+// effect because schema markup cannot promise search-engine presentation.
+for (const path of [
+  resolve(root, 'dist/index.html'),
+  resolve(root, 'dist/zh/index.html'),
+  resolve(root, 'dist/agents/index.html'),
+  resolve(root, 'dist/zh/agents/index.html'),
+]) {
+  requirePattern(path, /"@id":"https:\/\/awakenworks\.com\/#organization"/, 'entity graph must retain one Organization id');
+  requirePattern(path, /"@id":"https:\/\/awakenworks\.com\/#awaken-agents"/, 'entity graph must retain one Awaken Agents id');
+  requirePattern(path, /"@type":"SoftwareSourceCode","@id":"https:\/\/awakenworks\.com\/#awaken-runtime"/, 'entity graph must model Runtime separately as source code');
+  requirePattern(path, /"hasPart":\{"@id":"https:\/\/awakenworks\.com\/#awaken-runtime"\}/, 'Agents must own Runtime through hasPart');
+  requirePattern(path, /"programmingLanguage":"Rust"[\s\S]*"isPartOf":\{"@id":"https:\/\/awakenworks\.com\/#awaken-agents"\}/, 'Runtime must expose Rust and point back to Agents');
+  requirePattern(path, /"codeRepository":"https:\/\/github\.com\/AwakenWorks\/awaken"/, 'Runtime graph must identify the canonical source repository');
 }
 
 for (const path of [resolve(root, 'dist/agents/index.html'), resolve(root, 'dist/zh/agents/index.html')]) {
@@ -1348,12 +1386,14 @@ for (const rule of [
 // C1: a full /harness landing duplicates the Awaken product narrative and lets
 //     an implementation layer look like a second product.
 // C2: removing that landing can orphan maintainers unless the product page
-//     exposes one concise Runtime decision linked to its stable documentation owner.
+//     exposes one concise Runtime decision linked to its canonical definition,
+//     which in turn links to the stable internal documentation owner.
 // C3: repeating the control-plane and execution-semantics explanation on the
 //     product page creates a second architecture owner.
 // C4: retired aliases can recreate a second landing or documentation URL.
 // E1: /agents is the single product landing and links one Runtime decision after proof.
-// E2: /docs/agents/runtime owns applicability and the exact authority boundary.
+// E2: the concept page defines the public category boundary and links maintainers
+//     to /docs/agents/runtime for internal extension detail.
 // E3: the landing does not recreate a Runtime section or architecture explanation.
 // E4: retired aliases are absent from the generated artifact.
 // Decision table:
@@ -1366,17 +1406,19 @@ for (const rule of [
 const runtimeIdentityRules = [
   {
     landing: resolve(root, 'dist/agents/index.html'),
-    docs: resolve(root, 'src/content/docs/harness/current/en/index.md'),
-    decision: /Extend the execution engine/,
-    docsOwnership: /not a separate product|not a second product/,
-    docsHref: '/docs/agents/runtime',
+    docs: resolve(root, 'src/content/docs/platform/current/en/concepts/agent-runtime.md'),
+    decision: /Understand the runtime boundary/,
+    docsOwnership: /Awaken Runtime[\s\S]*Rust execution core inside[\s\S]*Awaken Agents/,
+    docsHref: '/docs/agents/concepts/agent-runtime',
+    internalHref: '/docs/agents/runtime/',
   },
   {
     landing: resolve(root, 'dist/zh/agents/index.html'),
-    docs: resolve(root, 'src/content/docs/harness/current/zh/index.md'),
-    decision: /扩展执行内核/,
-    docsOwnership: /不是独立产品|不是第二个\s*产品/,
-    docsHref: '/zh/docs/agents/runtime',
+    docs: resolve(root, 'src/content/docs/platform/current/zh/concepts/agent-runtime.md'),
+    decision: /理解 Runtime 边界/,
+    docsOwnership: /Awaken Runtime[\s\S]*Rust 执行内核[\s\S]*Awaken Agents/,
+    docsHref: '/zh/docs/agents/concepts/agent-runtime',
+    internalHref: '/zh/docs/agents/runtime/',
   },
 ];
 
@@ -1385,7 +1427,8 @@ for (const rule of runtimeIdentityRules) {
   requirePattern(rule.landing, rule.decision, 'Awaken must name the Runtime extension decision without recreating the guide');
   requirePattern(rule.landing, new RegExp(`href="${rule.docsHref}"`), 'Awaken must route Runtime maintainers to the stable technical documentation');
   requireOccurrenceCount(rule.landing, 'id="runtime"', 0, 'Agents landing must not recreate a Runtime explanation section');
-  requirePattern(rule.docs, rule.docsOwnership, 'Runtime docs entry must state that Harness is not a second product');
+  requirePattern(rule.docs, rule.docsOwnership, 'Runtime concept must keep the product and execution-core identities distinct');
+  requirePattern(rule.docs, new RegExp(rule.internalHref), 'Runtime concept must keep internal extension documentation reachable');
   rejectPattern(rule.docs, /title: "Awaken Runtime\s*[（(]Harness[）)]"|Awaken Harness (?:is|是)(?: the)? product/, 'Runtime docs must not recreate a Harness product identity');
 }
 

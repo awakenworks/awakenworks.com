@@ -87,7 +87,7 @@ const titlesByScope = new Map();
 const descriptionsByScope = new Map();
 const ordersBySection = new Map();
 const currentEnglishSections = new Set();
-const retiredAwakenProductIdentity = /\bHarness\b|Awaken Runtime|Awaken runtime internals|Agents Runtime|00-platform-overview|Client → Platform|Remote Agent → Platform|Platform → Remote Agent|Maintain or extend Runtime|维护或扩展 Runtime/;
+const retiredAwakenProductIdentity = /\bHarness\b|Agents Runtime|00-platform-overview|Client → Platform|Remote Agent → Platform|Platform → Remote Agent|Maintain or extend Runtime|维护或扩展 Runtime/;
 
 for (const path of trackedWebsiteMarkdown) {
   const text = readFileSync(path, 'utf8');
@@ -508,7 +508,7 @@ for (const [docsRel, required, rejected] of [
     [/\/v1\/agents|managed-agents-2026-04-01|mcp_bearer_token/, 'Chinese protocol index duplicates exact connection or compatibility detail'],
   ]],
   ['platform/current/en/protocols/managed-agents.md', [
-    [/title: "Connect an Anthropic Managed Agents client"/, 'English Managed page must name the client task'],
+    [/title: "What are Managed Agents, and how does Awaken connect\?"/, 'English Managed page must own the direct definition query'],
     [/## What changes, and what stays the same/, 'English Managed page must separate changed and preserved application contracts'],
     [/\/docs\/agents\/get-started\//, 'English Managed page must lead to the first Session'],
     [/\/docs\/agents\/compatibility\//, 'English Managed page must delegate the exact SDK matrix'],
@@ -517,7 +517,7 @@ for (const [docsRel, required, rejected] of [
     [/managed-agents-2026-04-01|\/v1\/agents/, 'English Managed page duplicates exact compatibility or route detail'],
   ]],
   ['platform/current/zh/protocols/managed-agents.md', [
-    [/title: "连接 Anthropic Managed Agents 客户端"/, 'Chinese Managed page must name the client task'],
+    [/title: "什么是 Managed Agents，Awaken 如何接入？"/, 'Chinese Managed page must own the direct definition query'],
     [/## 哪些会改变，哪些保持不变/, 'Chinese Managed page must separate changed and preserved application contracts'],
     [/\/zh\/docs\/agents\/get-started\//, 'Chinese Managed page must lead to the first Session'],
     [/\/zh\/docs\/agents\/compatibility\//, 'Chinese Managed page must delegate the exact SDK matrix'],
@@ -601,12 +601,12 @@ for (const [docsRel, patterns] of [
     [/@anthropic-ai\/sdk` 0\.122\.0[\s\S]*Python `anthropic` 1\.2\.0[\s\S]*已测试版本[\s\S]*不是依赖要求[\s\S]*baseURL[\s\S]*Awaken 认证[\s\S]*beta selector/, 'Chinese compatibility must separate the validation record from customer dependency choice and retain the same connection changes'],
   ]],
   ['platform/current/en/concepts/production-reliability.md', [
-    [/title: "Know when a failed Run needs intervention"/, 'Reliability must name the intervention decision'],
+    [/title: "What is durable Agent execution and recovery\?"/, 'Reliability must own the direct durable-execution query'],
     [/^## First decide whether any action is needed/m, 'Reliability must separate automatic recovery before asking for action'],
     [/same `operation_id`[\s\S]*retry budget is exhausted[\s\S]*ToolRecoveryPolicy[\s\S]*does not create a dead letter[\s\S]*Public HTTP API/, 'Reliability must distinguish automatic terminalization from explicit quarantine'],
   ]],
   ['platform/current/zh/concepts/production-reliability.md', [
-    [/title: "判断失败的 Run 是否需要介入"/, 'Chinese reliability must name the intervention decision'],
+    [/title: "什么是持久 Agent 执行与恢复？"/, 'Chinese reliability must own the direct durable-execution query'],
     [/^## 先判断是否需要处理/m, 'Chinese reliability must separate automatic recovery before asking for action'],
     [/相同 `operation_id`[\s\S]*retry budget 耗尽[\s\S]*ToolRecoveryPolicy[\s\S]*不会产生 dead letter[\s\S]*公共 HTTP API/, 'Chinese reliability must distinguish automatic terminalization from explicit quarantine'],
   ]],
@@ -635,13 +635,13 @@ for (const [docsRel, patterns] of [
     [/^## 只处理 dispatch 之前明确返回的错误/m, 'Chinese configuration path must reserve action for surfaced pre-dispatch results'],
   ]],
   ['platform/current/en/concepts/sessions-and-events.md', [
-    [/title: "Keep Session, Thread, Run, and events in their own roles"/, 'Sessions page must name the state-ownership task'],
+    [/title: "What is an Agent Session\? Session, Thread, Run, and event roles"/, 'Sessions page must own the direct Session query and state roles'],
     [/^## Choose the durable identity first/m, 'Sessions page must define the durable identity before event details'],
     [/Session[\s\S]*Thread[\s\S]*Run[\s\S]*Event stream[\s\S]*not another store/, 'Sessions page must preserve four distinct state owners'],
     [/committed Thread facts[\s\S]*reconnect[\s\S]*does not\s+require repair/i, 'Sessions page must describe replay as automatic behavior'],
   ]],
   ['platform/current/zh/concepts/sessions-and-events.md', [
-    [/title: "让 Session、Thread、Run 与事件各守其位"/, 'Chinese sessions page must name the state-ownership task'],
+    [/title: "什么是 Agent Session？Session、Thread、Run 与事件的职责"/, 'Chinese sessions page must own the direct Session query and state roles'],
     [/^## 先选择持久身份/m, 'Chinese sessions page must define the durable identity before event details'],
     [/Session[\s\S]*Thread[\s\S]*Run[\s\S]*Event stream[\s\S]*不是另一份存储/, 'Chinese sessions page must preserve four distinct state owners'],
     [/已提交的 Thread facts[\s\S]*重连[\s\S]*不需要修复/, 'Chinese sessions page must describe replay as automatic behavior'],
@@ -2355,7 +2355,7 @@ for (const locale of ['en', 'zh']) {
 
 const siteContentPath = join(root, 'src/i18n/content.ts');
 requireText(siteContentPath, [
-  [/Ship and operate Agent applications on infrastructure you control/, 'English public copy must own the current Agents category and deployment-control benefit'],
+  [/Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\./, 'English public copy must own the canonical Agents category'],
   [/en:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: 'Awaken Objects'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'English home must expose exactly the three public product owners'],
   [/zh:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: 'Awaken Objects'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'Chinese home must expose exactly the three public product owners'],
   [/Create an Agent, adopt a supported one, or connect existing behavior/, 'English Awaken copy must preserve all Agent entry modes'],
@@ -2367,6 +2367,83 @@ rejectText(siteContentPath, [
   [/\bCoding Agent\b/, 'public site must not collapse the product category into Coding Agent'],
   [/AI Workforce Operating System/i, 'vision-only AI Workforce Operating System label must not appear as current public product copy'],
 ]);
+
+// Cause-effect design for the GEO/SEO concept layer:
+// C1: a reader or answer engine asks what an Agent Runtime is; C2: framework,
+// Runtime, and application infrastructure are treated as interchangeable;
+// C3: a translated page drifts from the canonical implementation evidence;
+// C4: a discoverable page has visible prose but no article relationship to the
+// product; C5: a second /concepts route tree duplicates Docs ownership.
+// E1: one answer-first bilingual definition lives inside the existing Agents
+// Docs collection; E2: one neutral three-layer comparison states ownership;
+// E3: both locales cite identical verified code coordinates; E4: generated
+// pages, search index, and llms.txt expose the concepts; E5: TechArticle and
+// BreadcrumbList nodes point at the stable Agents entity; E6: no parallel
+// public concept route exists.
+// Decision table:
+// | Rule | definition | comparison | locale/evidence | outputs/schema | route owner | Outcome |
+// | G1   | present    | present    | same            | complete       | Docs        | accept  |
+// | G2   | missing    | any        | any             | any            | any         | reject  |
+// | G3   | present    | missing    | any             | any            | any         | reject  |
+// | G4   | present    | present    | drift           | any            | any         | reject  |
+// | G5   | present    | present    | same            | incomplete     | any         | reject  |
+// | G6   | present    | present    | same            | complete       | parallel    | reject  |
+const geoConcepts = [
+  {
+    source: join(docsRoot, 'platform/current/en/concepts/agent-runtime.md'),
+    peer: join(docsRoot, 'platform/current/zh/concepts/agent-runtime.md'),
+    output: join(distRoot, 'docs/agents/concepts/agent-runtime/index.html'),
+    peerOutput: join(distRoot, 'zh/docs/agents/concepts/agent-runtime/index.html'),
+    title: 'What is an AI Agent Runtime?',
+    definition: /An <strong>AI Agent runtime<\/strong> is the execution layer/,
+  },
+  {
+    source: join(docsRoot, 'platform/current/en/concepts/framework-runtime-infrastructure.md'),
+    peer: join(docsRoot, 'platform/current/zh/concepts/framework-runtime-infrastructure.md'),
+    output: join(distRoot, 'docs/agents/concepts/framework-runtime-infrastructure/index.html'),
+    peerOutput: join(distRoot, 'zh/docs/agents/concepts/framework-runtime-infrastructure/index.html'),
+    title: 'Agent Framework vs Agent Runtime vs Agent Application Infrastructure',
+    definition: /An <strong>Agent framework<\/strong> helps developers define Agent behavior/,
+  },
+];
+for (const concept of geoConcepts) {
+  for (const path of [concept.source, concept.peer, concept.output, concept.peerOutput]) {
+    if (!existsSync(path)) failures.push(`${relative(root, path)}: canonical GEO concept or localized output is missing`);
+  }
+  requireText(concept.source, [
+    [new RegExp(`title: "${concept.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`), 'canonical concept must retain its direct query title'],
+    [/## Static structure[\s\S]*## Dynamic behavior/, 'concept must explain both ownership and execution behavior'],
+  ]);
+  requireText(concept.output, [
+    [concept.definition, 'concept must answer the query in the first visible paragraph'],
+    [/"@type":"TechArticle"/, 'concept output must expose TechArticle metadata'],
+    [/"@type":"BreadcrumbList"/, 'concept output must expose breadcrumb metadata'],
+    [/"dateModified":"2026-09-03T00:00:00\.000Z"/, 'concept output must expose its reviewed date'],
+    [/"about":\{"@id":"https:\/\/awakenworks\.com\/#awaken-agents"\}/, 'concept article must point at the stable Agents entity'],
+  ]);
+  requireText(concept.peerOutput, [
+    [/"@type":"TechArticle"/, 'localized concept output must expose TechArticle metadata'],
+    [/"about":\{"@id":"https:\/\/awakenworks\.com\/#awaken-agents"\}/, 'localized concept article must point at the same Agents entity'],
+  ]);
+}
+if (existsSync(join(root, 'src/pages/concepts'))) {
+  failures.push('src/pages/concepts: concepts must remain in the canonical Docs collection instead of a parallel route tree');
+}
+for (const [path, patterns] of [
+  [join(distRoot, 'docs/search-index.json'), [/What is an AI Agent Runtime\?/, /Agent Framework vs Agent Runtime vs Agent Application Infrastructure/]],
+  [join(distRoot, 'docs/llms.txt'), [/What is an AI Agent Runtime\?/, /Agent Framework vs Agent Runtime vs Agent Application Infrastructure/]],
+  [join(distRoot, 'zh/docs/search-index.json'), [/什么是 AI Agent Runtime/, /Agent Framework、Agent Runtime 与 Agent 应用基础设施的区别/]],
+  [join(distRoot, 'zh/docs/llms.txt'), [/什么是 AI Agent Runtime/, /Agent Framework、Agent Runtime 与 Agent 应用基础设施的区别/]],
+]) requireText(path, patterns.map((pattern) => [pattern, 'generated discovery output must include both canonical GEO concepts']));
+
+for (const [path, href] of [
+  [join(distRoot, 'index.html'), '/docs/agents/concepts/agent-runtime'],
+  [join(distRoot, 'zh/index.html'), '/zh/docs/agents/concepts/agent-runtime'],
+  [join(distRoot, 'agents/index.html'), '/docs/agents/concepts/agent-runtime'],
+  [join(distRoot, 'zh/agents/index.html'), '/zh/docs/agents/concepts/agent-runtime'],
+  [join(distRoot, 'docs/index.html'), '/docs/agents/concepts/agent-runtime'],
+  [join(distRoot, 'zh/docs/index.html'), '/zh/docs/agents/concepts/agent-runtime'],
+]) requireText(path, [[new RegExp(`href="${href}"`), 'home, product, and Docs hub must link to the canonical Runtime concept']]);
 
 const docsIndexPath = join(root, 'src/components/DocsIndex.astro');
 const uiCatalogPath = join(root, 'src/i18n/ui.ts');

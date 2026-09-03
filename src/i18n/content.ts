@@ -9,12 +9,29 @@ import { localePath, type Lang } from './locales';
 
 export const AWAKEN_GITHUB_URL = 'https://github.com/AwakenWorks/awaken';
 
+// Canonical public entity definitions. Homepage, product metadata, and
+// structured data reuse these exact sentences so company, product, and Runtime
+// cannot silently collapse into one category.
+export const canonicalEntities = {
+  en: {
+    company: 'AwakenWorks builds open infrastructure designed for production AI Agent applications.',
+    agents: 'Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications.',
+    runtime: 'Awaken Runtime is the Rust execution core inside Awaken Agents. It runs Agent loops, tools, typed state, permissions, and atomic step commits.',
+    composition: 'Awaken Agents combines its Rust Agent runtime with durable Sessions, multi-protocol APIs, permissions, Workers, Sandboxes, configuration, and recovery.',
+  },
+  zh: {
+    company: 'AwakenWorks 构建面向生产级 AI Agent 应用的开放基础设施。',
+    agents: 'Awaken Agents 是开源、可自托管的 Agent 应用基础设施，用于构建和运营生产级 AI Agent 应用。',
+    runtime: 'Awaken Runtime 是 Awaken Agents 内部的 Rust 执行内核，负责 Agent loop、工具、类型化状态、权限与原子 step commit。',
+    composition: 'Awaken Agents 将 Rust Agent runtime 与持久 Session、多协议 API、权限、Worker、Sandbox、配置和恢复组合在一起。',
+  },
+} as const satisfies Record<Lang, Record<'company' | 'agents' | 'runtime' | 'composition', string>>;
+
 export const content = {
   en: {
     meta: {
-      title: 'AwakenWorks | Ship Agent applications customers can keep using',
-      description:
-        'Awaken Agents provides durable Sessions, permissions, resources, isolated execution, and recovery so teams can ship Agent applications on infrastructure they control.',
+      title: 'Awaken Agents | Open-source infrastructure for production AI Agent applications',
+      description: 'Awaken Agents is open-source, self-hostable infrastructure for production AI Agent applications, with durable Sessions, permissions, Sandboxes, and recovery.',
     },
     nav: {
       awaken: 'Awaken internals',
@@ -63,10 +80,9 @@ export const content = {
     },
     home: {
       hero: {
-        eyebrow: 'Awaken Agents · for AI product teams',
+        eyebrow: 'Open-source infrastructure for production AI Agents',
         title: 'Ship your working Agent as an application customers can keep using.',
-        subtitle:
-          'Use one foundation for durable Sessions, permissions, resources, isolated execution, and recovery. Keep the product experience, business logic, and customer relationship, and run it on infrastructure you control.',
+        definition: `${canonicalEntities.en.agents} For AI product teams, it supplies durable Sessions, permissions, isolated execution, and recovery while your team keeps the product experience, business logic, and customer relationship.`,
         ctaPrimary: 'Run the quickstart',
         ctaSecondary: 'Discuss private deployment',
         deploymentLabel: 'Self-hostable',
@@ -77,6 +93,7 @@ export const content = {
         body: 'The current Awaken Console makes the product path visible without turning the application into another control plane.',
         steps: ['Connect model', 'Publish Agent', 'Run Session', 'Inspect evidence', 'Connect application'],
         recovery: 'If permission or interruption blocks execution, the decision and recovery stay with the same durable Session.',
+        concept: { label: 'What is an AI Agent Runtime?', href: '/docs/agents/concepts/agent-runtime' },
       },
       advantages: {
         eyebrow: 'When Agent work must keep going',
@@ -84,7 +101,7 @@ export const content = {
         body: 'Awaken makes specific failure and control boundaries visible. Recovery follows committed facts and an explicit policy; it does not assume every external side effect is safe to replay.',
         items: [
           { key: 'reconnect', value: 'A user reconnects', label: 'Reopen the same Session from committed events instead of depending on one browser or process.', proof: 'Durable Session', href: '/docs/agents/concepts/sessions-and-events' },
-          { key: 'interrupt', value: 'A Worker or process stops', label: 'Recover from committed facts and continue under the configured recovery policy.', proof: 'Recovery boundary', href: '/docs/agents/concepts/architecture' },
+          { key: 'interrupt', value: 'A Worker or process stops', label: 'Recover from committed facts and continue under the configured recovery policy.', proof: 'Recovery boundary', href: '/docs/agents/concepts/production-reliability' },
           { key: 'permission', value: 'A tool requests sensitive action', label: 'Allow, deny, or suspend for a human decision before the tool executes.', proof: 'Permission and HITL', href: '/docs/agents/runtime/how-to/enable-tool-permission-hitl' },
           { key: 'inspect', value: 'An operator needs an explanation', label: 'Inspect events, traces, and audit history across the execution path.', proof: 'Observability', href: '/docs/agents/runtime/how-to/enable-observability' },
           { key: 'boundary', value: 'Data and tools must stay inside', label: 'Place control, Session data, credentials, Workers, and Sandboxes in the approved infrastructure boundary.', proof: 'Self-hosting', href: '/docs/agents/how-to/self-host' },
@@ -269,7 +286,7 @@ export const content = {
         audience: 'For Agent product, AI platform, infrastructure, and delivery teams',
         name: 'Awaken Agents',
         role: 'Execution and recovery',
-        tagline: 'Ship and operate Agent applications on infrastructure you control.',
+        tagline: canonicalEntities.en.agents,
         points: [
           'Bring Managed Agents, AI SDK, AG-UI, and A2A clients into the same Session history.',
           'Choose models, Agent runtimes, and tool locations without changing the application-facing contract.',
@@ -314,7 +331,7 @@ export const content = {
       },
     },
     footer: {
-      tagline: 'Durable Agent execution on infrastructure you control.',
+      tagline: canonicalEntities.en.company,
       rights: '© 2026 AwakenWorks. Product licenses vary.',
       cols: [
         {
@@ -355,112 +372,16 @@ export const content = {
       ],
     },
 
-    // ── Per-product pages ──────────────────────────────────────────
-    pages: {
-      awaken: {
-        meta: {
-          title: 'Awaken Agents internals: extend the Rust execution core',
-          description:
-            'Awaken Agents includes a programmable Rust execution core for typed Agent loops, tools, state, policies, and atomic step commits.',
-        },
-        tone: 'bone',
-        audience: 'For Rust agent developers',
-        title: 'Build production AI agents in Rust.',
-        subtitle:
-          'A programmable model/tool loop with typed state, bounded plugins, explicit permission gates, and one authoritative step-commit boundary.',
-        ctaPrimary: 'Read the docs',
-        ctaSecondary: 'View on GitHub',
-        problem: {
-          eyebrow: 'The problem',
-          title: "Agent behavior shouldn't live in fragile scripts.",
-          body: 'Hard-coded prompts, models, and permissions turn every tweak into a deployment. Runs become hard to audit and each Agent grows into a one-off script. Awaken Agents separates stable execution behavior from the parts a product team tunes.',
-          points: [
-            {
-              k: 'Code stays stable',
-              v: 'Tools, typed state, and providers live in compiled Rust.',
-            },
-            {
-              k: 'Policy is executable',
-              v: 'Hooks, gates, and guards are typed runtime seams, not prompt conventions.',
-            },
-            {
-              k: 'Steps commit together',
-              v: 'Messages, events, run state, and staged state cross one boundary.',
-            },
-          ],
-        },
-        compare: {
-          eyebrow: 'How it compares',
-          title: 'Not more checkboxes. Stronger execution invariants.',
-          intro:
-            'Modern agent frameworks already provide tools, persistence, guardrails, and human approval. Awaken Agents does not claim those checkboxes as unique; its execution core makes their authority, state effects, and recovery semantics explicit and enforceable.',
-          them: 'Common SDK / graph-runtime baseline',
-          us: 'Awaken Agents execution core',
-          rows: [
-            {
-              axis: 'Extension authority',
-              them: 'Callbacks and plugins follow framework or application conventions',
-              us: 'Fail-closed bounds over declared tools, state keys, hooks, actions, guards, and gates',
-            },
-            {
-              axis: 'Parallel state',
-              them: 'Reducer, shared object, or application-defined conflict handling',
-              us: 'Staged Commands with explicit Disjoint, Commutative, or Exclusive merge policy',
-            },
-            {
-              axis: 'Human decisions',
-              them: 'Interrupt or middleware state coordinated by the application',
-              us: 'A typed permission verdict and durable waiting outcome on the same execution path',
-            },
-            {
-              axis: 'Recovery truth',
-              them: 'Checkpoints, messages, side effects, and logs may have different boundaries',
-              us: 'Messages, state commands, audit, run state, and disposition cross one step commit boundary',
-            },
-          ],
-          footnote:
-            'Choose a lightweight SDK for fastest prototyping, LangGraph for graph-centric orchestration, or Rig for broader Rust integrations. Choose Awaken Agents when a tool call has consequences and execution invariants matter more than minimum setup.',
-        },
-        highlights: {
-          eyebrow: 'Highlights',
-          title: 'What the Awaken Agents execution core is actually strong at.',
-          items: [
-            {
-              no: '01',
-              title: 'A programmable loop',
-              body: 'Explicit hooks, gates, and guards extend runtime behavior without replacing the engine.',
-              tags: ['PhaseHook', 'ToolGateHook', 'RunEndGuard'],
-            },
-            {
-              no: '02',
-              title: 'Capabilities with bounds',
-              body: 'Plugins declare which tools, state, and lifecycle seams they may touch before installation.',
-              tags: ['CapabilityBound', 'Typed tools', 'Typed state'],
-            },
-            {
-              no: '03',
-              title: 'One authoritative step',
-              body: 'Messages, events, run state, resume state, and commands commit together or not at all.',
-              tags: ['CommitCoordinator', 'AgentEvent', 'RunState'],
-            },
-          ],
-          footnote:
-            'Inside Awaken Agents, the execution core owns loop semantics; public protocols, managed configuration, durable dispatch, Sandboxes, and operations remain parts of the same product.',
-        },
-      },
-    },
-
     landing: {
       managed: {
         tone: 'iris',
         eyebrow: 'Awaken Agents · tested with the official Anthropic SDK',
         status: { label: publicVersionLabel('platform', 'en'), tone: 'iris' },
-        title: 'Use one Agent platform from first run to enterprise deployment.',
-        subtitle:
-          'Publish an Agent, keep one durable Session, control resources and permissions, resume after interruption, and place control, data, and execution inside infrastructure you operate.',
+        title: 'Build and operate Agent applications on infrastructure you control.',
+        subtitle: canonicalEntities.en.agents,
         ctaPrimary: { label: 'Run the Agents quickstart', href: '/docs/agents/get-started' },
         audience:
-          'Create an Agent, adopt a supported one, or connect existing behavior, then make one application create, run, reconnect, and reopen the same Session. When you build the next application, reuse the Agent, Session, resource, permission, Worker, Sandbox, and recovery foundation instead of creating another backend.',
+          `${canonicalEntities.en.composition} Create an Agent, adopt a supported one, or connect existing behavior, then make one application create, run, reconnect, and reopen the same Session.`,
         outcomes: {
           eyebrow: 'What changes for your team',
           title: 'Build the Agent product your customers see. Reuse the platform work behind it.',
@@ -515,7 +436,7 @@ export const content = {
             { key: 'compatibility', title: 'Migrate an existing client', body: 'Check reviewed SDK versions, supported resources, required selectors, and known differences before changing an application.', action: 'Review compatibility', href: '/docs/agents/compatibility' },
             { key: 'architecture', title: 'Review authority and recovery', body: 'Follow publication, Session, dispatch, Worker execution, committed facts, failures, and recovery through their owning boundaries.', action: 'Read the architecture', href: '/docs/agents/concepts/architecture' },
             { key: 'self-host', title: 'Choose a deployment boundary', body: 'Plan AllInOne or split services, data and credential custody, Workers, Sandboxes, observation, backup, and operating ownership.', action: 'Open the self-hosting guide', href: '/docs/agents/how-to/self-host' },
-            { key: 'runtime', title: 'Extend the execution engine', body: 'Enter Runtime documentation only when you need to change Agent-loop, tool, plugin, state, or execution-backend behavior.', action: 'Open Runtime internals', href: '/docs/agents/runtime' },
+            { key: 'runtime', title: 'Understand the runtime boundary', body: 'Separate Agent execution from the Sessions, Workers, Sandboxes, protocols, and operations around it before choosing an integration path.', action: 'Define Agent Runtime', href: '/docs/agents/concepts/agent-runtime' },
           ],
         },
         closer: {
@@ -670,9 +591,8 @@ export const content = {
 
   zh: {
     meta: {
-      title: 'AwakenWorks｜交付客户可以持续使用的 Agent 应用',
-      description:
-        'Awaken Agents 提供持久 Session、权限、资源、隔离执行与恢复底座，让团队在自己掌控的基础设施上交付 Agent 应用。',
+      title: 'Awaken Agents｜面向生产级 AI Agent 应用的开源基础设施',
+      description: 'Awaken Agents 是面向生产级 AI Agent 应用的开源、可自托管基础设施，提供持久 Session、权限、Sandbox 与恢复能力。',
     },
     nav: {
       awaken: 'Awaken 内部机制',
@@ -721,10 +641,9 @@ export const content = {
     },
     home: {
       hero: {
-        eyebrow: 'Awaken Agents · 面向 AI 产品团队',
+        eyebrow: '面向生产级 AI Agent 的开源基础设施',
         title: '把能运行的 Agent，交付成客户可以持续使用的应用。',
-        subtitle:
-          '用一套底座承载持久 Session、权限、资源、隔离执行与恢复。团队继续掌握产品体验、业务逻辑和客户关系，并在自己控制的基础设施上运行。',
+        definition: `${canonicalEntities.zh.agents}面向 AI 产品团队，它提供持久 Session、权限、隔离执行与恢复，团队继续掌握产品体验、业务逻辑和客户关系。`,
         ctaPrimary: '运行快速开始',
         ctaSecondary: '沟通私有部署',
         deploymentLabel: '可自托管',
@@ -735,6 +654,7 @@ export const content = {
         body: '当前 Awaken Console 把产品路径直接呈现出来，同时不让应用再建立一套控制面。',
         steps: ['连接模型', '发布 Agent', '运行 Session', '检查证据', '接入应用'],
         recovery: '如果权限决定或中断阻塞执行，决定与恢复仍然留在同一个持久 Session 中。',
+        concept: { label: '什么是 AI Agent Runtime？', href: '/docs/agents/concepts/agent-runtime' },
       },
       advantages: {
         eyebrow: '当 Agent 工作必须持续推进',
@@ -742,7 +662,7 @@ export const content = {
         body: 'Awaken 让具体的失败与控制边界可见。恢复依据已提交事实和明确策略，不假定所有外部副作用都可以安全重放。',
         items: [
           { key: 'reconnect', value: '用户重新连接', label: '从已提交事件重新打开同一个 Session，不依赖某个浏览器或进程。', proof: '持久 Session', href: '/docs/agents/concepts/sessions-and-events' },
-          { key: 'interrupt', value: 'Worker 或进程中断', label: '依据已提交事实恢复，并按照配置的恢复策略继续。', proof: '恢复边界', href: '/docs/agents/concepts/architecture' },
+          { key: 'interrupt', value: 'Worker 或进程中断', label: '依据已提交事实恢复，并按照配置的恢复策略继续。', proof: '恢复边界', href: '/docs/agents/concepts/production-reliability' },
           { key: 'permission', value: '工具请求敏感操作', label: '在工具执行前允许、拒绝，或暂停并等待人工决定。', proof: '权限与 HITL', href: '/docs/agents/runtime/how-to/enable-tool-permission-hitl' },
           { key: 'inspect', value: '操作者需要解释过程', label: '沿执行路径检查事件、trace 与审计历史。', proof: '可观测性', href: '/docs/agents/runtime/how-to/enable-observability' },
           { key: 'boundary', value: '数据与工具必须留在内部', label: '把控制、Session 数据、凭据、Worker 与 Sandbox 放在获准的基础设施边界内。', proof: '自托管', href: '/docs/agents/how-to/self-host' },
@@ -927,7 +847,7 @@ export const content = {
         audience: '面向 Agent 产品、AI 平台、基础设施与交付团队',
         name: 'Awaken Agents',
         role: '执行与恢复',
-        tagline: '在自己掌控的基础设施上交付并运营 Agent 应用。',
+        tagline: canonicalEntities.zh.agents,
         points: [
           '让 Managed Agents、AI SDK、AG-UI 与 A2A 客户端进入同一份 Session 历史。',
           '选择模型、Agent Runtime 与工具位置，不改变应用面对的契约。',
@@ -972,7 +892,7 @@ export const content = {
       },
     },
     footer: {
-      tagline: '在自己掌控的基础设施上持久运行 Agent。',
+      tagline: canonicalEntities.zh.company,
       rights: '© 2026 AwakenWorks. 产品许可因产品而异。',
       cols: [
         {
@@ -1013,103 +933,16 @@ export const content = {
       ],
     },
 
-    // ── Per-product pages ──────────────────────────────────────────
-    pages: {
-      awaken: {
-        meta: {
-          title: 'Awaken Agents 内部机制：扩展 Rust 执行内核',
-          description:
-            'Awaken Agents 包含可嵌入的 Rust 执行内核：可编程 loop、类型化工具与状态、有边界 plugins、显式 gates 和原子 step commit。',
-        },
-        tone: 'bone',
-        audience: '面向 Rust agent 开发者',
-        title: '用 Rust 构建生产级 AI agent。',
-        subtitle:
-          '把 agent loop 做成可编程的系统组件：类型化 state、有边界 plugins、显式 gates 与原子 step commit；I/O、持久化和部署仍由你的应用拥有。',
-        ctaPrimary: '阅读文档',
-        ctaSecondary: '在 GitHub 查看',
-        problem: {
-          eyebrow: '我们要解决的问题',
-          title: 'Agent 的行为，不该藏在脆弱的脚本里。',
-          body: '多数 Agent loop 把执行、策略和副作用揉成一团，直到并发、等待或失败恢复才暴露问题。Awaken Agents 把生命周期、能力与提交边界变成显式契约。',
-          points: [
-            { k: '代码保持稳定', v: '工具、类型化状态与 provider 编译进 Rust。' },
-            { k: '策略在 loop 内', v: '每次工具调用都经过 gate，等待和恢复是类型化结果。' },
-            { k: '状态原子提交', v: '并行工具先暂存 Command，再在 step 边界统一调和。' },
-          ],
-        },
-        compare: {
-          eyebrow: '与同类对比',
-          title: '不是增加更多勾选项，而是强化执行不变量。',
-          intro:
-            '现代 Agent 框架已经普遍提供 tools、持久化、guardrail 与人工审批。Awaken Agents 不把这些勾选项包装成独有功能；其执行内核让背后的权力、状态影响与恢复语义显式且可强制执行。',
-          them: '常见 SDK / graph runtime 基线',
-          us: 'Awaken Agents 执行内核',
-          rows: [
-            {
-              axis: '扩展的权力',
-              them: 'Callbacks 与 plugins 遵循框架或应用约定',
-              us: '对已声明 tools、state keys、hooks、actions、guards 与 gates 执行 fail-closed 边界',
-            },
-            {
-              axis: '并行状态',
-              them: 'Reducer、共享对象，或由应用自定义冲突处理',
-              us: '暂存 Command，并显式选择 Disjoint、Commutative 或 Exclusive merge policy',
-            },
-            {
-              axis: '人的决定',
-              them: '由应用协调 interrupt 或 middleware state',
-              us: '同一执行路径上的类型化 permission verdict 与 durable waiting outcome',
-            },
-            {
-              axis: '恢复真相',
-              them: 'Checkpoint、message、副作用与日志可能采用不同边界',
-              us: 'Messages、state commands、audit 与 RunDisposition 共用一个 step commit 边界',
-            },
-          ],
-          footnote:
-            '最快原型请选择轻量 SDK；以图为中心的编排请选择 LangGraph；更广的 Rust 集成请选择 Rig。当工具调用会产生真实后果、执行不变量比最少配置更重要时，选择 Awaken Agents。',
-        },
-        highlights: {
-          eyebrow: '亮点',
-          title: 'Awaken Agents 执行内核真正强在哪。',
-          items: [
-            {
-              no: '01',
-              title: '可编程的 Agent loop',
-              body: '显式生命周期 hooks、tool gates 与 run-end guards，让扩展行为无需 fork engine。',
-              tags: ['PhaseHook', 'ToolGateHook', 'RunEndGuard'],
-            },
-            {
-              no: '02',
-              title: '能力边界可验证',
-              body: '类型化 tools 与 state 配合有边界 plugins；扩展不能越过预先声明的 keys、tools 与生命周期接缝。',
-              tags: ['类型化工具', 'StateKey', 'Plugin'],
-            },
-            {
-              no: '03',
-              title: '提交与等待是契约',
-              body: '工具先暂存 Command，再原子提交 step；权限 Ask 产出可恢复的 ResumeTicket，而不是 UI 特例。',
-              tags: ['Command', 'MergePolicy', 'ResumeTicket'],
-            },
-          ],
-          footnote:
-            '需要托管协议、配置与凭证、持久调度、恢复和 fleet 运维时，进入 Awaken 的服务与运营文档。',
-        },
-      },
-    },
-
     landing: {
       managed: {
         tone: 'iris',
         eyebrow: 'Awaken Agents · 已通过官方 Anthropic SDK 测试',
         status: { label: publicVersionLabel('platform', 'zh'), tone: 'iris' },
-        title: '用一套 Agent 平台，支撑从首次运行到企业部署。',
-        subtitle:
-          '发布 Agent，保持同一个持久 Session，控制资源与权限，在中断后继续执行，并把控制、数据和执行环境部署在自己的基础设施中。',
+        title: '在自己掌控的基础设施上构建并运营 Agent 应用。',
+        subtitle: canonicalEntities.zh.agents,
         ctaPrimary: { label: '运行 Agents 快速开始', href: '/docs/agents/get-started' },
         audience:
-          '创建 Agent、采用受支持的 Agent，或接入已有行为，再让一个应用能够创建、运行、重连并重新打开同一个 Session。开发下一个应用时，继续复用 Agent、Session、资源、权限、Worker、Sandbox 与恢复底座，而不是再建另一套后台。',
+          `${canonicalEntities.zh.composition}创建 Agent、采用受支持的 Agent，或接入已有行为，再让一个应用能够创建、运行、重连并重新打开同一个 Session。`,
         outcomes: {
           eyebrow: '您的团队会发生什么变化',
           title: '把工程投入用在客户看得见的 Agent 产品上，复用背后的平台工作。',
@@ -1164,7 +997,7 @@ export const content = {
             { key: 'compatibility', title: '迁移已有客户端', body: '改变应用前，检查已审阅 SDK 版本、支持资源、必需 selector 与已知差异。', action: '查看兼容范围', href: '/docs/agents/compatibility' },
             { key: 'architecture', title: '审阅权威与恢复', body: '沿着各自权威边界，理解 publication、Session、dispatch、Worker 执行、已提交事实、失败与恢复。', action: '阅读架构', href: '/docs/agents/concepts/architecture' },
             { key: 'self-host', title: '选择部署边界', body: '规划 AllInOne 或拆分服务，以及数据和凭据保管、Worker、Sandbox、观测、备份与运营责任。', action: '打开自托管指南', href: '/docs/agents/how-to/self-host' },
-            { key: 'runtime', title: '扩展执行内核', body: '只有需要改变 Agent loop、工具、Plugin、状态或执行后端行为时，才进入 Runtime 文档。', action: '进入 Runtime 内部机制', href: '/docs/agents/runtime' },
+            { key: 'runtime', title: '理解 Runtime 边界', body: '在选择接入路径前，先区分 Agent 执行与外围 Session、Worker、Sandbox、协议和运营责任。', action: '定义 Agent Runtime', href: '/docs/agents/concepts/agent-runtime' },
           ],
         },
         closer: {

@@ -1,15 +1,15 @@
 ---
-title: "让 Session、Thread、Run 与事件各守其位"
-description: "明确应用应保留哪个身份、执行历史存在哪里，以及已提交事件如何让长时 Agent 对话可恢复。"
+title: "什么是 Agent Session？Session、Thread、Run 与事件的职责"
+description: "Agent Session 是跨多轮输入、网络重连与进程重启继续同一段 Agent 对话的持久应用身份。"
 evidence:
   - "crates/server/awaken-session-application/src/creation.rs"
   - "crates/contract/awaken-session-contract/src/resource.rs"
   - "crates/server/awaken-session-application/src/application.rs"
 ---
 
-当应用需要跨多轮输入、网络重连或进程重启继续同一段 Agent 对话时，应使用 Session。
-应用保留 Session id，并把后续输入继续发送到该 Session。不要用浏览器状态或未接收完整的
-stream 重建持久历史。
+**Agent Session** 是跨多轮输入、网络重连与进程重启继续同一段 Agent 对话的持久应用
+身份。应用应保留 Session id，并把后续输入继续发送到该 Session；不要用浏览器状态或
+未接收完整的 stream 重建持久历史。
 
 ## 先选择持久身份
 

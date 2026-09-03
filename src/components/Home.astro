@@ -30,25 +30,16 @@ const copy = ui[lang].home;
 <main>
   <section id="home-hero" class="home-hero relative overflow-hidden">
     <div class="grid-backdrop absolute inset-0"></div>
-    <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-28 lg:py-32">
+    <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-24 lg:py-24">
       <div class="max-w-4xl">
         <p class="eyebrow text-accent-400">{home.hero.eyebrow}</p>
         <h1 class={`home-display-title mt-6 font-semibold text-fog-100 ${copy.titleClass}`}>
           {home.hero.title}
         </h1>
-        <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300 sm:text-xl">
-          {home.hero.subtitle}
+        <p data-home-entity-definition class="mt-7 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg sm:leading-8">
+          {home.hero.definition}
         </p>
-        <p data-home-maturity class="mt-5 font-mono text-xs leading-6 text-fog-500">
-          {t.products.managed.status} · {home.hero.deploymentLabel}
-        </p>
-        {featuredScenario && (
-          <p data-home-first-result class="mt-6 max-w-3xl border-l-2 border-accent-500/70 pl-4 text-sm leading-7 text-fog-300">
-            <span class="font-mono text-[0.68rem] tracking-wider text-accent-400 uppercase">{home.scenarios.labels.finish}</span>
-            <span class="mt-1 block">{featuredScenario.finish}</span>
-          </p>
-        )}
-        <div class="mt-9 flex flex-wrap items-center gap-3">
+        <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
             href={agentsDocsHref}
             data-umami-event="developer_evaluation_selected"
@@ -60,6 +51,15 @@ const copy = ui[lang].home;
             class="rounded-xl border border-ink-600 bg-ink-950/20 px-6 py-3 font-medium text-fog-100 backdrop-blur-sm transition hover:border-fog-500"
           >{home.hero.ctaSecondary}</a>
         </div>
+        <p data-home-maturity class="mt-5 font-mono text-xs leading-6 text-fog-500">
+          {t.products.managed.status} · {home.hero.deploymentLabel}
+        </p>
+        {featuredScenario && (
+          <p data-home-first-result class="mt-6 max-w-3xl border-l-2 border-accent-500/70 pl-4 text-sm leading-7 text-fog-300">
+            <span class="font-mono text-[0.68rem] tracking-wider text-accent-400 uppercase">{home.scenarios.labels.finish}</span>
+            <span class="mt-1 block">{featuredScenario.finish}</span>
+          </p>
+        )}
       </div>
     </div>
   </section>
@@ -74,6 +74,7 @@ const copy = ui[lang].home;
     body={home.workflow.body}
     steps={home.workflow.steps}
     recovery={home.workflow.recovery}
+    concept={{ ...home.workflow.concept, href: localePath(lang, home.workflow.concept.href) }}
   />
 
   <section id="home-reliability" class="scroll-mt-16 border-y border-ink-800 bg-ink-850">

@@ -1,6 +1,6 @@
 ---
-title: "Know when a failed Run needs intervention"
-description: "Separate failures Awaken resolves from external effects and explicit quarantines that still require a decision."
+title: "What is durable Agent execution and recovery?"
+description: "Durable Agent execution commits recoverable facts so work can survive process, network, wake, and lease failures without guessing external outcomes."
 evidence:
   - "crates/contract/awaken-agent-contract/src/stream/checkpoint.rs"
   - "crates/contract/awaken-agent-contract/src/thread/commit/operation.rs"
@@ -11,13 +11,15 @@ evidence:
 section: "Understand"
 subsection: "Governance and reliability"
 order: 21
+lastReviewed: 2026-09-03
 ---
 
-Most process, network, wake, and lease failures do not need manual repair.
-Awaken reclaims durable work and reconstructs it from committed facts. Start
-investigating only when the application exposes a terminal result, a typed
-dependency error persists, an external side effect is indeterminate, or a Run
-was explicitly quarantined.
+**Durable Agent execution** commits the facts required to reclaim and continue
+work after process, network, wake, or lease failures. Recovery reconstructs a
+Run from those committed facts instead of browser state or process memory.
+Start investigating only when the application exposes a terminal result, a
+typed dependency error persists, an external side effect is indeterminate, or
+a Run was explicitly quarantined.
 
 ## First decide whether any action is needed
 

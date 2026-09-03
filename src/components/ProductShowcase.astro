@@ -14,6 +14,7 @@ interface Props {
   body?: string;
   steps?: readonly string[];
   recovery?: string;
+  concept?: { label: string; href: string };
 }
 
 const {
@@ -26,6 +27,7 @@ const {
   body,
   steps = [],
   recovery,
+  concept,
 } = Astro.props;
 const consoleTour = agentsConsoleTour[lang];
 const overviewSrc = withSiteBase('/awaken/assets/console-current/overview.png');
@@ -62,6 +64,13 @@ const consoleDetails = consoleTour.details.map((item) => ({
             </ol>
           )}
           {recovery && <p class="mt-4 border-l-2 border-accent-500/70 pl-4 text-sm leading-6 text-fog-400">{recovery}</p>}
+          {concept && (
+            <a
+              data-home-runtime-concept
+              href={withSiteBase(concept.href)}
+              class="mt-5 inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
+            >{concept.label} →</a>
+          )}
         </div>
       )
     }

@@ -14,6 +14,7 @@ import {
 } from '../lib/docsRoutes';
 import DocsShell from './DocsShell.astro';
 import { ui } from '../i18n/ui';
+import { docsPageLd } from '../lib/jsonld';
 
 interface Props {
   lang: Lang;
@@ -38,12 +39,22 @@ const displaySection = canonical.data.section
   : undefined;
 const audience = docAudience(parsed.product, canonical.data.section, canonical.data.audience);
 const neighborSection = (section: string) => docSectionLabel(section, lang);
-const pageTitle = copy.title(entry.data.title, docsProductName(publicId.product));
+const productName = docsProductName(publicId.product);
+const pageTitle = copy.title(entry.data.title, productName);
+const pageUrl = new URL(localePath(lang, basePath), Astro.site).href;
 ---
 
 <Base
   title={pageTitle}
   description={entry.data.description}
+  jsonLd={docsPageLd({
+    title: entry.data.title,
+    description: entry.data.description,
+    url: pageUrl,
+    lang,
+    product: productName,
+    dateModified: canonical.data.lastReviewed?.toISOString(),
+  })}
 >
   <div data-doc-copy data-copy={copy.copy} data-copy-aria={copy.copyAria} data-copied={copy.copied} data-copy-failed={copy.copyFailed} data-scroll-table={copy.scrollTable} hidden></div>
   <DocsShell

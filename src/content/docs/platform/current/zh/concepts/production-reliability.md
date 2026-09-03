@@ -1,6 +1,6 @@
 ---
-title: "判断失败的 Run 是否需要介入"
-description: "区分 Awaken 能自动消解的故障，以及仍需处理的外部副作用与显式隔离。"
+title: "什么是持久 Agent 执行与恢复？"
+description: "持久 Agent 执行会提交可恢复事实，使工作跨进程、网络、wake 与 lease 故障继续，同时不猜测外部结果。"
 evidence:
   - "crates/contract/awaken-agent-contract/src/stream/checkpoint.rs"
   - "crates/contract/awaken-agent-contract/src/thread/commit/operation.rs"
@@ -10,9 +10,10 @@ evidence:
   - "crates/server/awaken-run-ingress-http/src/durable_ops.rs"
 ---
 
-大多数进程、网络、wake 与 lease 故障不需要人工修复。Awaken 会重新领取持久任务，并从
-已提交事实恢复。只有应用已经给出终态、明确的 dependency error 持续存在、外部副作用
-无法判断，或 Run 被显式隔离时，才需要开始排查。
+**持久 Agent 执行**会提交恢复所需的事实，使工作可以在进程、网络、wake 或 lease 故障
+后被重新领取并继续。恢复依据这些已提交事实重建 Run，而不依赖浏览器状态或进程内存。
+只有应用已经给出终态、明确的 dependency error 持续存在、外部副作用无法判断，或 Run
+被显式隔离时，才需要开始排查。
 
 ## 先判断是否需要处理
 
