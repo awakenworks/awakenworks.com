@@ -12,12 +12,14 @@ export const AWAKEN_GITHUB_URL = 'https://github.com/AwakenWorks/awaken';
 export const content = {
   en: {
     meta: {
-      title: 'AwakenWorks | Ship and operate self-hosted Agent applications',
+      title: 'AwakenWorks | Ship Agent applications customers can keep using',
       description:
-        'Awaken Agents provides self-hosted Sessions, permissions, isolated execution, and recovery so teams can turn a working Agent into an application customers can keep using.',
+        'Awaken Agents provides durable Sessions, permissions, resources, isolated execution, and recovery so teams can ship Agent applications on infrastructure they control.',
     },
     nav: {
       awaken: 'Awaken internals',
+      products: 'Products',
+      resources: 'Resources',
       managed: 'Agents',
       objects: 'Objects',
       workforce: 'Workforce',
@@ -25,8 +27,8 @@ export const content = {
       cases: 'Reference builds',
       blog: 'Blog',
       docs: 'Docs',
-      github: 'Star',
-      run: 'Start',
+      github: 'GitHub',
+      run: 'Get started',
       menu: 'Menu',
       theme: 'Toggle light / dark theme',
     },
@@ -61,22 +63,31 @@ export const content = {
     },
     home: {
       hero: {
-        eyebrow: 'Awaken Agents · self-hostable Agent application platform',
-        title: 'Turn a working Agent into an application customers can keep using.',
+        eyebrow: 'Awaken Agents · for AI product teams',
+        title: 'Ship your working Agent as an application customers can keep using.',
         subtitle:
-          'Stop rebuilding the Session, permission, file and memory, isolated execution, and recovery backend behind every Agent application. Keep your product experience, business logic, and customer relationship, then carry the same foundation into the next application and customer deployment.',
-        ctaPrimary: 'Run the first durable Session',
-        ctaSecondary: 'Review enterprise deployment boundaries',
+          'Use one foundation for durable Sessions, permissions, resources, isolated execution, and recovery. Keep the product experience, business logic, and customer relationship, and run it on infrastructure you control.',
+        ctaPrimary: 'Run the quickstart',
+        ctaSecondary: 'Discuss private deployment',
+        deploymentLabel: 'Self-hostable',
+      },
+      workflow: {
+        eyebrow: 'From Agent to application',
+        title: 'See one path from setup to an application connection.',
+        body: 'The current Awaken Console makes the product path visible without turning the application into another control plane.',
+        steps: ['Connect model', 'Publish Agent', 'Run Session', 'Inspect evidence', 'Connect application'],
+        recovery: 'If permission or interruption blocks execution, the decision and recovery stay with the same durable Session.',
       },
       advantages: {
-        eyebrow: 'Why adopt Awaken',
-        title: 'Put engineering into the Agent product customers see, not another backend.',
-        body: 'A working Agent proves the behavior. Shipping means the same application can reconnect to durable state, stay inside approved permissions, recover from interruption, and remain operable after release. Awaken owns those repeatable platform paths while your team owns the product and customer relationship.',
+        eyebrow: 'When Agent work must keep going',
+        title: 'Reliable means the work remains inspectable and can continue safely.',
+        body: 'Awaken makes specific failure and control boundaries visible. Recovery follows committed facts and an explicit policy; it does not assume every external side effect is safe to replay.',
         items: [
-          { key: 'launch', value: 'Ship the first real application', label: 'Use working publication, Session, resource, permission, execution, and recovery paths so one application can run, reconnect, and reopen committed state.', proof: 'See the product path', href: '/agents' },
-          { key: 'private', value: 'Run inside the approved boundary', label: 'Keep control, Session data, credentials, model routes, Workers, and Sandboxes inside the approved infrastructure and responsibility boundary.', proof: 'Compare deployment choices', href: '/agents#deployment' },
-          { key: 'reuse', value: 'Deliver the next application on the same foundation', label: 'Keep each product\'s UX and domain model independent while sharing Agent publication, Sessions, resources, policies, and operations underneath.', proof: 'See first-party application shapes', href: '/cases' },
-          { key: 'delivery', value: 'Deliver customer solutions without copying platform code', label: 'Change the vertical experience, tools, and rules for each customer while retaining one platform model for execution, security, upgrades, and support.', proof: 'Discuss an implementation', href: '/enterprise' },
+          { key: 'reconnect', value: 'A user reconnects', label: 'Reopen the same Session from committed events instead of depending on one browser or process.', proof: 'Durable Session', href: '/docs/agents/concepts/sessions-and-events' },
+          { key: 'interrupt', value: 'A Worker or process stops', label: 'Recover from committed facts and continue under the configured recovery policy.', proof: 'Recovery boundary', href: '/docs/agents/concepts/architecture' },
+          { key: 'permission', value: 'A tool requests sensitive action', label: 'Allow, deny, or suspend for a human decision before the tool executes.', proof: 'Permission and HITL', href: '/docs/agents/runtime/how-to/enable-tool-permission-hitl' },
+          { key: 'inspect', value: 'An operator needs an explanation', label: 'Inspect events, traces, and audit history across the execution path.', proof: 'Observability', href: '/docs/agents/runtime/how-to/enable-observability' },
+          { key: 'boundary', value: 'Data and tools must stay inside', label: 'Place control, Session data, credentials, Workers, and Sandboxes in the approved infrastructure boundary.', proof: 'Self-hosting', href: '/docs/agents/how-to/self-host' },
         ],
       },
       scenarios: {
@@ -94,10 +105,10 @@ export const content = {
       },
       cta: {
         eyebrow: 'One next step',
-        title: 'Run one complete Agent path, or scope one enterprise deployment.',
-        body: 'Start independently by publishing an Agent and reopening its durable Session. Talk with us when control, data, credentials, models, Workers, or Sandboxes must stay inside a dedicated boundary.',
-        primary: 'Run the Agents quickstart',
-        secondary: 'Discuss enterprise implementation',
+        title: 'Your Agent already works. Now ship the application.',
+        body: 'Run the quickstart independently, or discuss the boundary when control, data, credentials, Workers, or Sandboxes must stay inside dedicated infrastructure.',
+        primary: 'Run the quickstart',
+        secondary: 'Discuss private deployment',
       },
     },
     enterprise: {
@@ -182,7 +193,7 @@ export const content = {
           audience: 'Agent product teams that want the shortest path from product UX to durable execution.',
           owned: 'Product copy, Mission interaction flow, acceptance criteria, and UI projections.',
           reused: 'Agent, Deployment, Session, Run, events, files, tools, policy, Worker, Sandbox, and recovery.',
-          status: 'Local reference build · public source pending',
+          status: 'Local reference build',
           sourceStatus: 'The build is currently local. An external team cannot reproduce it independently until a pinned public revision is available.',
           proof: [
             { level: 'Tested', claim: 'Execute and Plan paths share one Session log.', owner: 'Pilot web and API test suites' },
@@ -207,7 +218,7 @@ export const content = {
           audience: 'Teams building Agent IDEs, coding workbenches, or other interaction-rich Agent products.',
           owned: 'Preset UX, browser preferences, product projections, and a stateless workbench Session API and Interaction MCP.',
           reused: 'Managed Sessions, events, model routing, credentials, tools, permissions, compaction, resources, subagents, Worker, and Sandbox.',
-          status: 'Local deterministic demo · live run not published',
+          status: 'Local deterministic reference demo',
           sourceStatus: 'The deterministic path is local. A public revision and a fresh credentialed run are still required for independent reproduction.',
           proof: [
             { level: 'Fixture-tested', claim: 'The deterministic Managed API demo exercises the browser, workbench Session API, official SDK, and committed-event projection.', owner: 'e2e/harness.spec.ts' },
@@ -232,7 +243,7 @@ export const content = {
           audience: 'AI-native product teams that need a durable domain model, human review, safe publication, and business facts beyond chat.',
           owned: 'DesignProject, immutable DesignRevision, review targets, Preview safety, explicit acceptance, and the published Artifact.',
           reused: 'Agent, Environment, Session, Run, execution-stage Files, tools, events, Worker, Sandbox, and recovery.',
-          status: 'Local source and test evidence · live and field gates pending',
+          status: 'Local source-tested reference build',
           sourceStatus: 'This first-party reference implementation is currently local; a pinned public revision, a fresh live demonstration, and observed external user outcomes are missing.',
           proof: [
             { level: 'Source-checked', claim: 'The current implementation preserves one immutable Revision and Artifact publication owner.', owner: 'Awaken Design architecture and ADRs' },
@@ -303,7 +314,7 @@ export const content = {
       },
     },
     footer: {
-      tagline: 'Reliable, self-hosted execution for AI agents.',
+      tagline: 'Durable Agent execution on infrastructure you control.',
       rights: '© 2026 AwakenWorks. Product licenses vary.',
       cols: [
         {
@@ -659,12 +670,14 @@ export const content = {
 
   zh: {
     meta: {
-      title: 'AwakenWorks｜交付并运营自托管 Agent 应用',
+      title: 'AwakenWorks｜交付客户可以持续使用的 Agent 应用',
       description:
-        'Awaken Agents 提供可自托管的 Session、权限、隔离执行与恢复底座，让团队把能运行的 Agent 交付成客户可以持续使用的应用。',
+        'Awaken Agents 提供持久 Session、权限、资源、隔离执行与恢复底座，让团队在自己掌控的基础设施上交付 Agent 应用。',
     },
     nav: {
       awaken: 'Awaken 内部机制',
+      products: '产品',
+      resources: '资源',
       managed: 'Agents',
       objects: 'Objects',
       workforce: 'Workforce',
@@ -672,8 +685,8 @@ export const content = {
       cases: '参考实现',
       blog: '博客',
       docs: '文档',
-      github: 'Star',
-      run: '开始使用',
+      github: 'GitHub',
+      run: '快速开始',
       menu: '菜单',
       theme: '切换明暗主题',
     },
@@ -708,22 +721,31 @@ export const content = {
     },
     home: {
       hero: {
-        eyebrow: 'Awaken Agents · 可自托管的 Agent 应用平台',
+        eyebrow: 'Awaken Agents · 面向 AI 产品团队',
         title: '把能运行的 Agent，交付成客户可以持续使用的应用。',
         subtitle:
-          '不必为每个 Agent 应用从零开发 Session、权限、文件与记忆、隔离执行和故障恢复后台。团队继续掌握产品体验、业务逻辑和客户关系，并把同一套底座用于下一个应用和客户部署。',
-        ctaPrimary: '运行第一个持久 Session',
-        ctaSecondary: '检查企业部署边界',
+          '用一套底座承载持久 Session、权限、资源、隔离执行与恢复。团队继续掌握产品体验、业务逻辑和客户关系，并在自己控制的基础设施上运行。',
+        ctaPrimary: '运行快速开始',
+        ctaSecondary: '沟通私有部署',
+        deploymentLabel: '可自托管',
+      },
+      workflow: {
+        eyebrow: '从 Agent 到应用',
+        title: '看清从首次配置到应用接入的一条完整路径。',
+        body: '当前 Awaken Console 把产品路径直接呈现出来，同时不让应用再建立一套控制面。',
+        steps: ['连接模型', '发布 Agent', '运行 Session', '检查证据', '接入应用'],
+        recovery: '如果权限决定或中断阻塞执行，决定与恢复仍然留在同一个持久 Session 中。',
       },
       advantages: {
-        eyebrow: '为什么选择 Awaken',
-        title: '把工程投入留给客户看得见的 Agent 产品，不再重做另一套后台。',
-        body: '能运行的 Agent 证明了行为可行。真正发布还要让同一个应用能够重连持久状态、遵守权限、中断后继续，并在上线后由团队持续负责。Awaken 承担这些可重复的平台路径，您的团队继续掌握产品与客户关系。',
+        eyebrow: '当 Agent 工作必须持续推进',
+        title: '可靠意味着工作可以被检查，也可以安全地继续。',
+        body: 'Awaken 让具体的失败与控制边界可见。恢复依据已提交事实和明确策略，不假定所有外部副作用都可以安全重放。',
         items: [
-          { key: 'launch', value: '交付第一个真实应用', label: '使用现成的发布、Session、资源、权限、执行与恢复路径，让一个应用可以运行、重连并重新打开已提交状态。', proof: '查看产品路径', href: '/agents' },
-          { key: 'private', value: '在获准边界内运行', label: '把控制、Session 数据、凭据、模型路由、Worker 与 Sandbox 留在获准的基础设施和责任边界内。', proof: '对比部署方式', href: '/agents#deployment' },
-          { key: 'reuse', value: '下一个应用继续复用同一底座', label: '每个产品保持独立体验与领域模型，底层共享 Agent 发布、Session、资源、策略与运维能力。', proof: '查看第一方应用形态', href: '/cases' },
-          { key: 'delivery', value: '交付客户方案，不复制平台代码', label: '针对客户改变垂直体验、工具和规则，同时保留同一套执行、安全、升级与支持模型。', proof: '沟通实施服务', href: '/enterprise' },
+          { key: 'reconnect', value: '用户重新连接', label: '从已提交事件重新打开同一个 Session，不依赖某个浏览器或进程。', proof: '持久 Session', href: '/docs/agents/concepts/sessions-and-events' },
+          { key: 'interrupt', value: 'Worker 或进程中断', label: '依据已提交事实恢复，并按照配置的恢复策略继续。', proof: '恢复边界', href: '/docs/agents/concepts/architecture' },
+          { key: 'permission', value: '工具请求敏感操作', label: '在工具执行前允许、拒绝，或暂停并等待人工决定。', proof: '权限与 HITL', href: '/docs/agents/runtime/how-to/enable-tool-permission-hitl' },
+          { key: 'inspect', value: '操作者需要解释过程', label: '沿执行路径检查事件、trace 与审计历史。', proof: '可观测性', href: '/docs/agents/runtime/how-to/enable-observability' },
+          { key: 'boundary', value: '数据与工具必须留在内部', label: '把控制、Session 数据、凭据、Worker 与 Sandbox 放在获准的基础设施边界内。', proof: '自托管', href: '/docs/agents/how-to/self-host' },
         ],
       },
       scenarios: {
@@ -741,10 +763,10 @@ export const content = {
       },
       cta: {
         eyebrow: '只选一个下一步',
-        title: '运行一条完整 Agent 路径，或界定一期企业部署。',
-        body: '自行发布一个 Agent，并重新打开它的持久 Session；当控制、数据、凭据、模型、Worker 或 Sandbox 必须留在专属边界内时，再与我们沟通。',
-        primary: '运行 Agents 快速开始',
-        secondary: '沟通企业实施',
+        title: 'Agent 已经能运行，现在把应用交付出去。',
+        body: '自行运行快速开始；当控制、数据、凭据、Worker 或 Sandbox 必须留在专属基础设施内时，再与我们沟通边界。',
+        primary: '运行快速开始',
+        secondary: '沟通私有部署',
       },
     },
     enterprise: {
@@ -829,7 +851,7 @@ export const content = {
           audience: '希望用最短路径把产品体验连接到持久执行的 Agent 产品团队。',
           owned: '产品文案、Mission 交互、验收标准与 UI 投影。',
           reused: 'Agent、Deployment、Session、Run、事件、文件、工具、策略、Worker、Sandbox 与恢复。',
-          status: '本地参考实现 · 公开源码待发布',
+          status: '本地参考实现',
           sourceStatus: '当前构建仍在本地。固定公开版本发布之前，外部团队还不能独立复现。',
           proof: [
             { level: '测试通过', claim: 'Execute 与 Plan 共用一份 Session 日志。', owner: 'Pilot Web 与 API 测试套件' },
@@ -854,7 +876,7 @@ export const content = {
           audience: '正在开发 Agent IDE、编码工作台或其他强交互 Agent 产品的团队。',
           owned: 'Preset UX、浏览器偏好、产品投影，以及无状态 Workbench Session API 与 Interaction MCP。',
           reused: 'Managed Session、事件、模型路由、凭据、工具、权限、压缩、资源、子 Agent、Worker 与 Sandbox。',
-          status: '本地确定性 Demo · 真实运行尚未发布',
+          status: '本地确定性参考演示',
           sourceStatus: '确定性路径目前仍在本地。独立复现还需要公开版本，以及一次新的带凭据运行结果。',
           proof: [
             { level: 'Fixture 测试通过', claim: '确定性 Managed API Demo 贯穿浏览器、Workbench Session API、官方 SDK 与已提交事件投影。', owner: 'e2e/harness.spec.ts' },
@@ -879,7 +901,7 @@ export const content = {
           audience: '需要持久领域模型、人工评审、安全发布和聊天之外业务事实的 AI 原生产品团队。',
           owned: 'DesignProject、不可变 DesignRevision、评审目标、Preview 安全、明确验收和已发布 Artifact。',
           reused: 'Agent、Environment、Session、Run、执行期 File、工具、事件、Worker、Sandbox 与恢复。',
-          status: '本地源码与测试证据 · 真实运行和现场结果待验证',
+          status: '本地源码与测试已验证的参考实现',
           sourceStatus: '这个第一方参考实现仍在本地，尚缺固定公开版本、一次新的真实运行演示，以及外部用户或客户结果。',
           proof: [
             { level: '源码已核对', claim: '当前实现保留唯一的不可变 Revision 与 Artifact 发布 owner。', owner: 'Awaken Design architecture 与 ADR' },
@@ -950,7 +972,7 @@ export const content = {
       },
     },
     footer: {
-      tagline: '可靠、自托管的 AI Agent 执行基础设施。',
+      tagline: '在自己掌控的基础设施上持久运行 Agent。',
       rights: '© 2026 AwakenWorks. 产品许可因产品而异。',
       cols: [
         {

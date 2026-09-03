@@ -262,7 +262,7 @@ requireOccurrenceCount(baseLayoutPath, "localStorage.setItem('theme', next)", 1,
 // false active link; locale change -> same logical route in the other locale.
 const siteHeaderPath = resolve(root, 'src/components/SiteHeader.astro');
 requirePattern(siteHeaderPath, /const isActive = \(candidate: string\)[\s\S]*path\.startsWith/, 'shared navigation must derive root and descendant state from the logical path');
-requireOccurrenceCount(siteHeaderPath, 'aria-current=', 6, 'desktop and mobile navigation must expose semantic active state without a second link registry');
+requireOccurrenceCount(siteHeaderPath, 'aria-current=', 4, 'grouped desktop and mobile navigation must expose semantic active state from the same product and resource registries');
 
 // Cause-effect design for the company-to-three-product positioning journey:
 // C1: the visitor enters through English or Chinese and may land on the company
@@ -522,8 +522,8 @@ requireOccurrenceCount(siteHeaderPath, 'aria-current=', 6, 'desktop and mobile n
 // | R38 | company/workforce | en/zh | understand Workflow | current | Workforce-owned definition, never fourth product |
 // | R39 | benchmark owner | n/a | portfolio voice | current | ten official pages -> strengths/debts -> editorial decision |
 // | R40 | company hero | en/zh | choose intent | current | exactly two conversion choices |
-// | R41 | company advantage | en/zh | understand difference | current | four business values + adjacent evidence owner |
-// | R42 | company scenario | en/zh | choose adoption | current | five concrete facts + canonical product/service path |
+// | R41 | company reliability | en/zh | understand difference | current | five failure/control causes + inspectable effect + evidence owner |
+// | R42 | company home | en/zh | recognize primary audience | current | product-team promise + workflow proof; secondary ICP detail remains off-home |
 // | R43 | enterprise | en/zh | understand purchase | current | concrete implementation -> scope -> outputs -> delivery -> form |
 // | R44 | cooperation form | en/zh | submitted | current | review sequence + one-business-day boundary |
 // | R45 | enterprise | en/zh | custom delivery | current | reusable products + bounded service SOW |
@@ -534,47 +534,67 @@ requireOccurrenceCount(siteHeaderPath, 'aria-current=', 6, 'desktop and mobile n
 const rules = [
   {
     path: resolve(root, 'dist/index.html'),
-    primary: 'Run the first durable Session',
+    primary: 'Run the quickstart',
     primaryHref: '/docs/agents/get-started',
-    secondary: 'Review enterprise deployment boundaries',
+    secondary: 'Discuss private deployment',
     secondaryHref: '/enterprise',
     agentsHref: '/docs/agents/get-started',
     casePrefix: '/cases/',
     releaseStatus: 'Open source · stable release coming soon',
+    deploymentStatus: 'Self-hostable',
+    primaryAudience: 'for AI product teams',
     firstResult: 'One real application creates, runs, reconnects, and reopens the same Session',
-    advantages: ['Ship the first real application', 'Run inside the approved boundary', 'Deliver the next application on the same foundation', 'Deliver customer solutions without copying platform code'],
-    proofHrefs: ['/agents', '/agents#deployment', '/cases', '/enterprise'],
-    featuredScenario: 'AI-native product team',
-    featuredScenarioHref: '/docs/agents/get-started',
-    privateScenarioHref: '/enterprise?product=agents&#38;scenario=enterprise-private-agent#apply',
+    workflow: ['Connect model', 'Publish Agent', 'Run Session', 'Inspect evidence', 'Connect application'],
+    reliability: ['A user reconnects', 'A Worker or process stops', 'A tool requests sensitive action', 'An operator needs an explanation', 'Data and tools must stay inside'],
+    proofHrefs: ['/docs/agents/concepts/sessions-and-events', '/docs/agents/concepts/architecture', '/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/docs/agents/runtime/how-to/enable-observability', '/docs/agents/how-to/self-host'],
   },
   {
     path: resolve(root, 'dist/zh/index.html'),
-    primary: '运行第一个持久 Session',
+    primary: '运行快速开始',
     primaryHref: '/zh/docs/agents/get-started',
-    secondary: '检查企业部署边界',
+    secondary: '沟通私有部署',
     secondaryHref: '/zh/enterprise',
     agentsHref: '/zh/docs/agents/get-started',
     casePrefix: '/zh/cases/',
     releaseStatus: '已开源 · 稳定版即将发布',
+    deploymentStatus: '可自托管',
+    primaryAudience: '面向 AI 产品团队',
     firstResult: '一个真实应用创建、运行、重连并重新打开同一个 Session',
-    advantages: ['交付第一个真实应用', '在获准边界内运行', '下一个应用继续复用同一底座', '交付客户方案，不复制平台代码'],
-    proofHrefs: ['/zh/agents', '/zh/agents#deployment', '/zh/cases', '/zh/enterprise'],
-    featuredScenario: 'AI 原生产品团队',
-    featuredScenarioHref: '/zh/docs/agents/get-started',
-    privateScenarioHref: '/zh/enterprise?product=agents&#38;scenario=enterprise-private-agent#apply',
+    workflow: ['连接模型', '发布 Agent', '运行 Session', '检查证据', '接入应用'],
+    reliability: ['用户重新连接', 'Worker 或进程中断', '工具请求敏感操作', '操作者需要解释过程', '数据与工具必须留在内部'],
+    proofHrefs: ['/zh/docs/agents/concepts/sessions-and-events', '/zh/docs/agents/concepts/architecture', '/zh/docs/agents/runtime/how-to/enable-tool-permission-hitl', '/zh/docs/agents/runtime/how-to/enable-observability', '/zh/docs/agents/how-to/self-host'],
   },
 ];
 
+// Cause/effect design for the compressed company-home decision:
+// C1: an AI product team arrives with working Agent behavior but no reusable
+//     application lifecycle; C2: an enterprise visitor needs a private boundary;
+// C3: a proof-seeker needs current product UI and reference-build status;
+// C4: a visitor asks about the broader portfolio; C5: execution reconnects,
+//     stops, requests permission, needs inspection, or must remain private.
+// E1: the hero names the product-team job and one observable result; E2: exactly
+//     two decision CTAs reach self-evaluation and the existing enterprise path;
+// E3: one five-step Console path appears before reliability claims; E4: five
+//     cause/effect rows link to their detailed evidence owners; E5: reference
+//     builds remain explicitly non-customer evidence; E6: Agents maturity leads,
+//     while Objects and Workforce appear later with their registry-owned status.
+// Decision table:
+// | Rule | visitor cause | required effect | terminal route |
+// | H1 | working Agent | product promise + first result | quickstart |
+// | H2 | private boundary | concise control benefit | enterprise |
+// | H3 | implementation proof | workflow + current Console | evidence link |
+// | H4 | failure/control question | one bounded consequence | owning docs |
+// | H5 | reference interest | maturity + non-customer boundary | case detail |
+// | H6 | portfolio interest | Agents first + preview status | product page |
 for (const rule of rules) {
   requireOrderedText(rule.path, [
     'id="home-hero"',
-    'id="home-advantages"',
-    'id="home-products"',
-    'id="home-scenarios"',
+    'id="platform-preview"',
+    'id="home-reliability"',
     'id="home-cases"',
+    'id="home-products"',
     'id="home-cta"',
-  ], 'home must move from verified Agents proof through portfolio maturity, adoption paths, evidence, and action');
+  ], 'home must move from the primary promise through product proof, reliability, reference evidence, portfolio maturity, and action');
   requirePattern(
     rule.path,
     new RegExp(`href="${rule.primaryHref}"[^>]*>${rule.primary}`),
@@ -589,6 +609,8 @@ for (const rule of rules) {
   requireSectionOccurrenceCount(rule.path, 'id="home-hero"', '</section>', '<a ', 2, 'home hero must expose exactly the two intent actions');
   requireOccurrenceCount(rule.path, 'data-home-first-result', 1, 'home hero must expose one observable first result');
   requirePattern(rule.path, new RegExp(`data-home-first-result[\\s\\S]*${rule.firstResult}`), 'home hero must state the recommended scenario result before its actions');
+  requirePattern(rule.path, new RegExp(rule.primaryAudience), 'home hero must name AI product teams as the primary audience');
+  requirePattern(rule.path, new RegExp(`data-home-maturity[\\s\\S]*${rule.releaseStatus}[\\s\\S]*${rule.deploymentStatus}`), 'home hero must separate product maturity and deployment capability from the value headline');
   for (const product of ['agents', 'objects', 'workforce']) {
     requireOccurrenceCount(rule.path, `data-umami-event="home-${product}-details"`, 1, `home must expose one ${product} product path`);
   }
@@ -600,17 +622,15 @@ for (const rule of rules) {
   requireOccurrenceCount(rule.path, 'data-umami-event-location="header"', 1, 'desktop header Star exit must identify its placement');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="mobile-menu"', 1, 'mobile Star exit must identify its placement');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="footer"', 1, 'footer Star exit must identify its placement');
-  requireOccurrenceCount(rule.path, 'data-scenario-card', 3, 'home must present three bounded application situations');
-  requireOccurrenceCount(rule.path, 'data-scenario-priority="primary"', 1, 'home must identify exactly one recommended first validation shape');
-  requireOccurrenceCount(rule.path, 'data-scenario-priority="secondary"', 2, 'home must keep exactly two secondary evaluation shapes');
-  requirePattern(rule.path, new RegExp(rule.featuredScenario), 'home must lead the adoption choice with the Agent product team');
-  requirePattern(rule.path, new RegExp(`href="${rule.featuredScenarioHref}"`), 'the primary adoption path must reach the localized Agents quickstart');
-  requireOccurrenceCount(rule.path, `href="${rule.privateScenarioHref}"`, 1, 'the enterprise adoption path must carry allowlisted context to the shared form exactly once');
-  requireOccurrenceCount(rule.path, 'data-scenario-fact', 9, 'each adoption path must keep its three critical facts visible');
-  requireOccurrenceCount(rule.path, 'data-scenario-detail', 6, 'each adoption path must preserve retained ownership and verification in progressive detail');
-  requireOccurrenceCount(rule.path, 'data-home-advantage=', 4, 'home must render the four differentiated value claims exactly once');
-  for (const advantage of rule.advantages) {
-    requirePattern(rule.path, new RegExp(advantage), `home must explain the ${advantage} advantage in buyer language`);
+  requireOccurrenceCount(rule.path, 'data-scenario-card', 0, 'home must keep secondary ICP detail in its existing product and enterprise owners');
+  requireOccurrenceCount(rule.path, 'data-home-workflow class=', 1, 'home must show one product path instead of another adoption-card set');
+  requireOccurrenceCount(rule.path, 'data-home-workflow-step', 5, 'home product path must retain five visible steps');
+  for (const step of rule.workflow) {
+    requirePattern(rule.path, new RegExp(step), `home workflow must show ${step}`);
+  }
+  requireOccurrenceCount(rule.path, 'data-home-reliability=', 5, 'home must render five bounded reliability causes exactly once');
+  for (const cause of rule.reliability) {
+    requirePattern(rule.path, new RegExp(cause), `home must connect ${cause} to an inspectable consequence`);
   }
   for (const href of rule.proofHrefs) {
     requirePattern(rule.path, new RegExp(`href="${href}"`), `home advantage must link to ${href}`);
@@ -625,6 +645,7 @@ for (const rule of rules) {
     requireOccurrenceCount(rule.path, `data-case-card="${slug}"`, 1, `home must show the ${slug} case exactly once`);
     requirePattern(rule.path, new RegExp(`href="${rule.casePrefix}${slug}"`), `${slug} must lead to its localized case page`);
   }
+  requireOccurrenceCount(rule.path, 'data-home-case-boundary', 1, 'home reference builds must retain one explicit non-customer evidence boundary');
   rejectPattern(rule.path, /Awaken Flow|Oversight/, 'home must expose only the Agents, Objects, and Workforce product names');
   requireOccurrenceCount(rule.path, '<astro-island', 0, 'home proof must remain available without client hydration');
   requirePattern(rule.path, new RegExp(rule.releaseStatus.replaceAll('.', '\\.')), 'home must render the registry-owned product maturity');
@@ -635,8 +656,9 @@ for (const rule of rules) {
 }
 
 const homeSourcePath = resolve(root, 'src/components/Home.astro');
-requireOrderedText(homeSourcePath, ['id="home-hero"', 'id="home-advantages"', 'id="home-products"', 'id="home-scenarios"', 'id="home-cases"'], 'source must move from current Agents proof through product maturity, adoption, and evidence');
+requireOrderedText(homeSourcePath, ['id="home-hero"', '<ProductShowcase', 'id="home-reliability"', 'id="home-cases"', 'id="home-products"'], 'source must move from the Agents promise through product proof, reliability, reference evidence, and late portfolio context');
 rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"/, 'source must not restore duplicate entry cards or promote Workforce outcome mechanics on the Agents-led home');
+rejectPattern(homeSourcePath, /id="home-scenarios"|data-scenario-card/, 'source must keep secondary ICP detail in the existing Agents and enterprise owners');
 rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-event-location="home-closing"/, 'home source must keep explanatory and GitHub links out of the two-choice hero and closing action');
 // Cause/effect design for the Agents-led promise and its responsive rendering:
 // C1: future portfolio outcomes can become the headline and leave a buyer unable
@@ -674,7 +696,7 @@ requirePattern(homeSourcePath, /\{home\.hero\.title\}/, 'home must render the vi
 rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the vision');
 requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as its first result');
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
-requirePattern(contentSourcePath, /title: 'Turn a working Agent into an application customers can keep using\.'[\s\S]*title: '把能运行的 Agent，交付成客户可以持续使用的应用。'/, 'both locales must lead with the application result a buyer can recognize');
+requirePattern(contentSourcePath, /title: 'Ship your working Agent as an application customers can keep using\.'[\s\S]*title: '把能运行的 Agent，交付成客户可以持续使用的应用。'/, 'both locales must lead with the application result a buyer can recognize');
 rejectPattern(contentSourcePath, /Turn an Agent prototype into a shippable, operable, reusable product|让 Agent 原型，变成可交付、可运营、可复用的产品|Make Agents shippable, operable, and reusable|让 Agent 可交付、可运营、可复用/, 'result headlines must not regress to lifecycle adjectives');
 requirePattern(contentSourcePath, /experience, business logic, and customer relationship[\s\S]*产品体验、业务逻辑和客户关系/, 'both locales must state what the adopting product team keeps');
 requirePattern(contentSourcePath, /Objects and Workforce remain early product directions, not prerequisites[\s\S]*Objects 与 Workforce 仍是早期产品方向，不是采用 Agents 的前置条件/, 'both locales must keep future products out of the current adoption prerequisite');

@@ -2355,7 +2355,7 @@ for (const locale of ['en', 'zh']) {
 
 const siteContentPath = join(root, 'src/i18n/content.ts');
 requireText(siteContentPath, [
-  [/Ship and operate self-hosted Agent applications/, 'English public copy must own the current Agents category'],
+  [/Ship and operate Agent applications on infrastructure you control/, 'English public copy must own the current Agents category and deployment-control benefit'],
   [/en:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: 'Awaken Objects'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'English home must expose exactly the three public product owners'],
   [/zh:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: 'Awaken Objects'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'Chinese home must expose exactly the three public product owners'],
   [/Create an Agent, adopt a supported one, or connect existing behavior/, 'English Awaken copy must preserve all Agent entry modes'],

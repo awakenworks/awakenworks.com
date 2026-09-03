@@ -19,17 +19,21 @@ const enterpriseHref = localePath(lang, '/enterprise');
 const githubHref = AWAKEN_GITHUB_URL;
 const startHref = localePath(lang, '/docs/agents/get-started');
 
-const navLinks = [
-  { path: '/agents', label: t.nav.managed, href: localePath(lang, '/agents') },
-  { path: '/objects', label: t.nav.objects, href: localePath(lang, '/objects') },
-  { path: '/workforce', label: t.nav.workforce, href: localePath(lang, '/workforce') },
+const productLinks = [
+  { path: '/agents', label: t.nav.managed, status: t.products.managed.status, href: localePath(lang, '/agents') },
+  { path: '/objects', label: t.nav.objects, status: t.products.objects.status, href: localePath(lang, '/objects') },
+  { path: '/workforce', label: t.nav.workforce, status: t.products.workforce.status, href: localePath(lang, '/workforce') },
+];
+const resourceLinks = [
   { path: '/cases', label: t.nav.cases, href: localePath(lang, '/cases') },
+  { path: '/docs', label: t.nav.docs, href: docsHref },
   { path: '/blog', label: t.nav.blog, href: localePath(lang, '/blog') },
+  { path: '/enterprise', label: t.nav.enterprise, href: enterpriseHref },
 ];
 const isActive = (candidate: string) =>
   path === candidate || path.startsWith(`${candidate}/`);
-const docsActive = isActive('/docs');
-const enterpriseActive = isActive('/enterprise');
+const productsActive = productLinks.some((link) => isActive(link.path));
+const resourcesActive = resourceLinks.some((link) => isActive(link.path));
 ---
 
 <header
@@ -40,33 +44,39 @@ const enterpriseActive = isActive('/enterprise');
       <ProductMark product="works" class="h-5 w-5" />
       AwakenWorks
     </a>
-    <div class="flex items-center gap-3 text-sm sm:gap-5">
-      {
-        navLinks.map((link) => (
-          <a
-            href={link.href}
-            aria-current={isActive(link.path) ? 'page' : undefined}
-            class:list={[
-              'hidden border-b border-transparent py-1 text-fog-300 transition hover:text-fog-100 md:block',
-              isActive(link.path) && 'border-accent-400 text-fog-100',
-            ]}
-          >
-            {link.label}
-          </a>
-        ))
-      }
-      <a href={docsHref} aria-current={docsActive ? 'page' : undefined} class:list={['hidden border-b border-transparent py-1 text-fog-300 transition hover:text-fog-100 sm:block', docsActive && 'border-accent-400 text-fog-100']}
-        >{t.nav.docs}</a
-      >
-      <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="header" class="hidden text-fog-300 hover:text-fog-100 sm:block"
-        >{t.nav.github}</a
-      >
-      <a
-        href={enterpriseHref}
-        aria-current={enterpriseActive ? 'page' : undefined}
-        data-umami-event="enterprise_intent_selected"
-        class="hidden rounded-full bg-accent-500 px-3.5 py-1.5 text-xs font-semibold text-onaccent transition hover:bg-accent-400 lg:inline-flex"
-      >{t.nav.enterprise}</a>
+    <div class="flex items-center gap-3 text-sm sm:gap-4">
+      <div class="hidden items-center gap-4 md:flex">
+        <details name="site-nav-desktop" class="group relative">
+          <summary class:list={['cursor-pointer list-none border-b border-transparent py-1 text-fog-300 transition hover:text-fog-100', productsActive && 'border-accent-400 text-fog-100']}>
+            {t.nav.products}
+          </summary>
+          <div class="absolute left-0 mt-3 grid min-w-72 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl">
+            {productLinks.map((link) => (
+              <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} class:list={['rounded-lg px-3 py-2.5 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>
+                <span class="block font-medium">{link.label}</span>
+                <span class="mt-1 block font-mono text-[0.62rem] leading-4 text-fog-600">{link.status}</span>
+              </a>
+            ))}
+          </div>
+        </details>
+        <details name="site-nav-desktop" class="group relative">
+          <summary class:list={['cursor-pointer list-none border-b border-transparent py-1 text-fog-300 transition hover:text-fog-100', resourcesActive && 'border-accent-400 text-fog-100']}>
+            {t.nav.resources}
+          </summary>
+          <div class="absolute left-0 mt-3 grid min-w-60 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl">
+            {resourceLinks.map((link) => (
+              <a
+                href={link.href}
+                aria-current={isActive(link.path) ? 'page' : undefined}
+                data-umami-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined}
+                class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}
+              >{link.label}</a>
+            ))}
+          </div>
+        </details>
+      </div>
+      <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="header" class="hidden text-fog-300 hover:text-fog-100 sm:block">{t.nav.github}</a>
+      <a href={startHref} data-umami-event="developer_evaluation_selected" class="hidden rounded-full bg-accent-500 px-3.5 py-1.5 text-xs font-semibold text-onaccent transition hover:bg-accent-400 md:inline-flex">{t.nav.run}</a>
       <button
         data-theme-toggle
         type="button"
@@ -109,11 +119,12 @@ const enterpriseActive = isActive('/enterprise');
           {t.nav.menu}
         </summary>
         <div class="absolute right-0 mt-3 grid min-w-56 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl">
-          {navLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
-          <a href={docsHref} aria-current={docsActive ? 'page' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', docsActive && 'bg-ink-850 text-fog-100']}>{t.nav.docs}</a>
-          <a href={startHref} data-umami-event="developer_evaluation_selected" class="rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100">{t.nav.run}</a>
+          <p class="px-3 pt-1 font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">{t.nav.products}</p>
+          {productLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
+          <p class="mt-2 border-t border-ink-700 px-3 pt-3 font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">{t.nav.resources}</p>
+          {resourceLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} data-umami-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
           <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="mobile-menu" class="rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100">{t.nav.github}</a>
-          <a href={enterpriseHref} aria-current={enterpriseActive ? 'page' : undefined} data-umami-event="enterprise_intent_selected" class="mt-1 rounded-lg bg-accent-500 px-3 py-2 font-semibold text-onaccent">{t.nav.enterprise}</a>
+          <a href={startHref} data-umami-event="developer_evaluation_selected" class="mt-1 rounded-lg bg-accent-500 px-3 py-2 font-semibold text-onaccent">{t.nav.run}</a>
         </div>
       </details>
     </div>
