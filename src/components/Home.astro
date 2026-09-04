@@ -31,10 +31,12 @@ const copy = ui[lang].home;
   <section id="home-hero" class="home-hero relative overflow-hidden">
     <div class="grid-backdrop absolute inset-0"></div>
     <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-24 lg:py-24">
-      <div class="max-w-4xl">
+      <div>
         <p class="eyebrow text-accent-400">{home.hero.eyebrow}</p>
-        <h1 class={`home-display-title mt-6 font-semibold text-fog-100 ${copy.titleClass}`}>
-          {home.hero.title}
+        <h1 data-home-speed-promise class={`home-display-title mt-6 font-semibold text-fog-100 ${copy.titleClass}`}>
+          <span class="home-display-title-line">
+            {home.hero.title} <span data-home-title-highlight class="text-accent-400">{home.hero.titleHighlight}</span>
+          </span>
         </h1>
         <p data-home-company-definition class="mt-7 max-w-3xl text-base font-medium leading-7 text-fog-200 sm:text-lg sm:leading-8">
           {home.hero.companyDefinition}
@@ -224,7 +226,7 @@ const copy = ui[lang].home;
   }
 
   .home-display-title {
-    font-size: clamp(3.25rem, 6.2vw, 6rem);
+    font-size: clamp(3rem, 5vw, 4.5rem);
     line-height: 0.98;
     letter-spacing: -0.06em;
     text-wrap: balance;
@@ -232,6 +234,12 @@ const copy = ui[lang].home;
 
   .home-display-title-zh {
     font-size: clamp(2.8rem, 4.4vw, 4.5rem);
+  }
+
+  @media (min-width: 1024px) {
+    .home-display-title-line {
+      white-space: nowrap;
+    }
   }
 
   .home-section-title {

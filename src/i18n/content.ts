@@ -85,7 +85,8 @@ export const content = {
     home: {
       hero: {
         eyebrow: 'AwakenWorks · Open infrastructure for production AI Agent applications',
-        title: 'Ship Agent applications without rebuilding the platform underneath.',
+        title: 'Build Agent applications',
+        titleHighlight: 'faster.',
         companyDefinition: canonicalEntities.en.company,
         definition: `${canonicalEntities.en.agents} For AI product teams: start with a real job, a compatible Agent, or an Agent you already own. Your application keeps its UX, domain model, and acceptance rules.`,
         ctaPrimary: 'Run the quickstart',
@@ -719,7 +720,8 @@ export const content = {
     home: {
       hero: {
         eyebrow: 'AwakenWorks · 面向生产级 AI Agent 应用的开放基础设施',
-        title: '交付 Agent 应用，不必重建下层平台。',
+        title: '开发 Agent 应用',
+        titleHighlight: '更快。',
         companyDefinition: canonicalEntities.zh.company,
         definition: `${canonicalEntities.zh.agents}面向 AI 产品团队：可以从一项真实工作、兼容 Agent 或自有 Agent 开始。应用继续负责用户体验、领域模型和验收规则。`,
         ctaPrimary: '运行快速开始',

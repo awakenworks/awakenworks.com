@@ -544,6 +544,8 @@ const rules = [
     casePrefix: '/cases/',
     releaseStatus: 'Open source · stable release coming soon',
     deploymentStatus: 'Self-hostable',
+    speedPromise: 'Build Agent applications',
+    speedHighlight: 'faster.',
     primaryAudience: 'For AI product teams',
     firstResult: 'One real application creates, runs, reconnects, and reopens the same Session',
     companyDefinition: 'AwakenWorks builds open infrastructure designed for production AI Agent applications.',
@@ -563,6 +565,8 @@ const rules = [
     casePrefix: '/zh/cases/',
     releaseStatus: '已开源 · 稳定版即将发布',
     deploymentStatus: '可自托管',
+    speedPromise: '开发 Agent 应用',
+    speedHighlight: '更快。',
     primaryAudience: '面向 AI 产品团队',
     firstResult: '一个真实应用创建、运行、重连并重新打开同一个 Session',
     companyDefinition: 'AwakenWorks 构建面向生产级 AI Agent 应用的开放基础设施。',
@@ -621,6 +625,12 @@ for (const rule of rules) {
     'home secondary action must reach localized enterprise-deployment services',
   );
   requireOccurrenceCount(rule.path, '<h1', 1, 'home must have one primary heading');
+  requireOccurrenceCount(rule.path, 'data-home-title-highlight', 1, 'home hero must highlight exactly one speed phrase');
+  requirePattern(
+    rule.path,
+    new RegExp(`data-home-speed-promise[\\s\\S]*${rule.speedPromise}[\\s\\S]*data-home-title-highlight[\\s\\S]*${rule.speedHighlight}`),
+    'home hero must render the localized development-speed promise and highlight',
+  );
   requireSectionOccurrenceCount(rule.path, 'id="home-hero"', '</section>', '<a ', 2, 'home hero must expose exactly the two intent actions');
   requireOccurrenceCount(rule.path, 'data-home-first-result', 1, 'home hero must expose one observable first result');
   requireOccurrenceCount(rule.path, 'data-home-company-definition', 1, 'home hero must expose one canonical company definition');
@@ -717,22 +727,26 @@ rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-
 //     labels and contain no third-person "customer gets" drafting language.
 // E7: the hero reuses the recommended scenario's finish condition as supporting
 //     evidence without delaying its two actions or creating a second result authority.
+// E8: the speed promise is the only H1, highlights its differentiating word,
+//     stays on one line at desktop width, and makes no quantified speed claim.
 // Decision table:
-// | Rule | existing Agent required | boundary intact | evidence | renderer | literal copy | Outcome |
-// | H1   | no                      | yes             | present  | string   | yes          | accept  |
-// | H2   | yes                     | any             | any      | any      | any          | reject  |
-// | H3   | no                      | no              | any      | any      | any          | reject  |
-// | H4   | no                      | yes             | missing  | any      | any          | reject  |
-// | H5   | no                      | yes             | present  | array    | any          | reject  |
-// | H6   | no                      | yes             | present  | string   | no           | reject  |
-requirePattern(homeSourcePath, /\{home\.hero\.title\}/, 'home must render the vision as one responsive sentence');
-rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the vision');
+// | Rule | existing Agent required | boundary intact | evidence | speed highlight | quantified | Outcome |
+// | H1   | no                      | yes             | present  | one             | no         | accept  |
+// | H2   | yes                     | any             | any      | any             | any        | reject  |
+// | H3   | no                      | no              | any      | any             | any        | reject  |
+// | H4   | no                      | yes             | missing  | any             | any        | reject  |
+// | H5   | no                      | yes             | present  | missing/multiple| any        | reject  |
+// | H6   | no                      | yes             | present  | one             | yes        | reject  |
+requirePattern(homeSourcePath, /data-home-speed-promise[\s\S]*home-display-title-line[\s\S]*data-home-title-highlight/, 'home must render one speed promise with one highlighted phrase');
+requirePattern(homeSourcePath, /@media \(min-width: 1024px\)[\s\S]*\.home-display-title-line[\s\S]*white-space: nowrap/, 'home speed promise must stay on one line at desktop width');
+rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the speed promise');
 requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as supporting first-result evidence');
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
-requirePattern(contentSourcePath, /title: 'Ship Agent applications without rebuilding the platform underneath\.'[\s\S]*title: '交付 Agent 应用，不必重建下层平台。'/, 'both locales must lead with the buyer outcome instead of a product definition');
+requirePattern(contentSourcePath, /title: 'Build Agent applications',[\s\S]*titleHighlight: 'faster\.'[\s\S]*title: '开发 Agent 应用',[\s\S]*titleHighlight: '更快。'/, 'both locales must lead with an unquantified development-speed promise and one highlight');
+rejectPattern(contentSourcePath, /titleHighlight: '(?:much|far) faster|titleHighlight: '快得多/, 'home speed promise must not imply an unverified magnitude');
 requirePattern(contentSourcePath, /start with a real job, a compatible Agent, or an Agent you already own\.[\s\S]*可以从一项真实工作、兼容 Agent 或自有 Agent 开始。/, 'both locales must expose the three technical starting points in one supporting-copy owner');
 requirePattern(contentSourcePath, /application keeps its UX, domain model, and acceptance rules[\s\S]*应用继续负责用户体验、领域模型和验收规则/, 'both locales must preserve the application ownership boundary');
-rejectPattern(contentSourcePath, /Ship your working Agent as an application customers can keep using|把能运行的 Agent，交付成客户可以持续使用的应用|Your Agent already works\. Now ship the application|Agent 已经能运行，现在把应用交付出去/, 'homepage copy must not require an existing working Agent or imply unverified continued customer use');
+rejectPattern(contentSourcePath, /Ship Agent applications without rebuilding the platform underneath|交付 Agent 应用，不必重建下层平台|Ship your working Agent as an application customers can keep using|把能运行的 Agent，交付成客户可以持续使用的应用|Your Agent already works\. Now ship the application|Agent 已经能运行，现在把应用交付出去/, 'homepage copy must not retain the weaker infrastructure contrast, require an existing working Agent, or imply unverified continued customer use');
 rejectPattern(contentSourcePath, /without becoming an Agent infrastructure team|不必把团队变成 Agent 基础设施团队|The form is shared\. The promise is not\.|入口可以共用，承诺不能混用|Managed-compatible\. Awaken-enhanced\./, 'core pages must use literal product language instead of rhetorical contrast or slogans');
 rejectPattern(contentSourcePath, /—/, 'site copy must use plain punctuation instead of decorative em dashes');
 requirePattern(contentSourcePath, /export const canonicalEntities[\s\S]*AwakenWorks builds open infrastructure designed for production AI Agent applications\.[\s\S]*Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\.[\s\S]*Awaken Runtime is the Rust execution core inside Awaken Agents\./, 'one catalog must own the company, product, and runtime entity definitions');
