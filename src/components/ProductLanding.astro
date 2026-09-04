@@ -57,7 +57,19 @@ const closerHref = p.closer.cta.href.startsWith('/')
           {p.title}
         </h1>
         <p class="mt-6 max-w-3xl text-lg text-fog-300 sm:text-xl">{p.subtitle}</p>
-        <div class="mt-10 flex flex-wrap items-center gap-4">
+        <a
+          href={compatibilityHref}
+          data-agent-compatibility-entry
+          data-umami-event="awaken-view-compatibility"
+          class="mt-8 flex max-w-3xl items-center justify-between gap-5 rounded-xl border border-iris-500/30 bg-iris-500/5 px-5 py-4 transition hover:border-iris-400/60 hover:bg-iris-500/10"
+        >
+          <span>
+            <span class={`eyebrow block ${c.eyebrow}`}>{p.advantage.eyebrow}</span>
+            <span class="mt-2 block text-sm leading-6 text-fog-200">{copy.compatibility}</span>
+          </span>
+          <span aria-hidden="true" class="shrink-0 text-xl text-iris-400">→</span>
+        </a>
+        <div class="mt-7 flex flex-wrap items-center gap-4">
           <a
             href={ctaPrimaryHref}
             data-umami-event="developer_evaluation_selected"
@@ -75,9 +87,6 @@ const closerHref = p.closer.cta.href.startsWith('/')
           >★ {copy.star}</a>
         </div>
         <p class="mt-5 max-w-3xl text-sm leading-6 text-fog-500">{p.audience}</p>
-        <a href={compatibilityHref} data-umami-event="awaken-view-compatibility" class={`mt-5 inline-flex text-sm font-medium ${c.eyebrow}`}>
-          {copy.compatibility} →
-        </a>
       </div>
     </div>
   </section>

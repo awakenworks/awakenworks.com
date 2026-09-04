@@ -543,9 +543,9 @@ const rules = [
     agentsHref: '/docs/agents/get-started',
     casePrefix: '/cases/',
     releaseStatus: 'Open source · stable release coming soon',
-    deploymentStatus: 'Self-hostable',
     speedPromise: 'Build Agent applications',
     speedHighlight: 'faster.',
+    compatibilityProof: ['Tested Managed Agents API baseline', 'Official Anthropic SDK', 'One durable Session'],
     primaryAudience: 'For AI product teams',
     firstResult: 'One real application creates, runs, reconnects, and reopens the same Session',
     companyDefinition: 'AwakenWorks builds open infrastructure designed for production AI Agent applications.',
@@ -564,9 +564,9 @@ const rules = [
     agentsHref: '/zh/docs/agents/get-started',
     casePrefix: '/zh/cases/',
     releaseStatus: '已开源 · 稳定版即将发布',
-    deploymentStatus: '可自托管',
     speedPromise: '开发 Agent 应用',
     speedHighlight: '更快。',
+    compatibilityProof: ['经测试的 Managed Agents API 基线', '官方 Anthropic SDK', '同一个持久 Session'],
     primaryAudience: '面向 AI 产品团队',
     firstResult: '一个真实应用创建、运行、重连并重新打开同一个 Session',
     companyDefinition: 'AwakenWorks 构建面向生产级 AI Agent 应用的开放基础设施。',
@@ -595,6 +595,9 @@ const rules = [
 //     while Objects and Workforce appear later with their registry-owned status;
 // E7: the visible definition and ordinary concept link expose the same product
 //     identity without adding another conversion CTA.
+// E8: one compact, Agents-scoped proof strip connects development speed to the
+//     tested Managed Agents baseline without copying compatibility details or
+//     adding a third hero action.
 // Decision table:
 // | Rule | visitor cause | required effect | terminal route |
 // | H1 | any of three technical starts | product promise + first result | quickstart |
@@ -604,6 +607,7 @@ const rules = [
 // | H5 | reference interest | maturity + non-customer boundary | case detail |
 // | H6 | portfolio interest | Agents first + preview status | product page |
 // | H7 | category question | visible canonical definition | runtime concept |
+// | H8 | SDK migration interest | compact tested-baseline proof | Agents path |
 for (const rule of rules) {
   requireOrderedText(rule.path, [
     'id="home-hero"',
@@ -640,7 +644,12 @@ for (const rule of rules) {
   requirePattern(rule.path, new RegExp(`data-home-runtime-concept href="${rule.runtimeConcept}"`), 'home workflow must link to the localized canonical Agent Runtime concept');
   requirePattern(rule.path, new RegExp(`data-home-first-result[\\s\\S]*${rule.firstResult}`), 'home hero must state the recommended scenario result as supporting evidence');
   requirePattern(rule.path, new RegExp(rule.primaryAudience), 'home hero must name AI product teams as the primary audience');
-  requirePattern(rule.path, new RegExp(`data-home-maturity[\\s\\S]*${rule.releaseStatus}[\\s\\S]*${rule.deploymentStatus}`), 'home hero must separate product maturity and deployment capability from the value headline');
+  requirePattern(rule.path, new RegExp(`data-home-maturity[\\s\\S]*${rule.releaseStatus}`), 'home hero must separate product maturity from the value headline');
+  requireOccurrenceCount(rule.path, 'data-home-compatibility-proof', 1, 'home hero must expose one compact compatibility proof owner');
+  requireOccurrenceCount(rule.path, 'data-home-compatibility-fact', 3, 'home compatibility proof must contain exactly three bounded facts');
+  for (const fact of rule.compatibilityProof) {
+    requirePattern(rule.path, new RegExp(fact), `home compatibility proof must state ${fact}`);
+  }
   for (const product of ['agents', 'objects', 'workforce']) {
     requireOccurrenceCount(rule.path, `data-umami-event="home-${product}-details"`, 1, `home must expose one ${product} product path`);
   }
@@ -766,14 +775,16 @@ rejectPattern(homeSourcePath, /home-display-title-zh[\s\S]{0,120}white-space: no
 //     external execution changes the legal recovery outcome; C5: full Agents
 //     pages need verified captures while home needs one compact capture;
 // C6: JavaScript may be absent, reduced motion requested, or keyboard close
-//     required; C7: one Quickstart href can drift across placements.
+//     required; C7: one Quickstart href can drift across placements; C8: the
+//     official-SDK migration route can be buried below architecture detail.
 // E1: four fit conditions and one non-fit boundary precede evaluation; E2: one
 //     three-owner static view and six-step dynamic path preserve the source
 //     authority direction; E3: three failure rules keep awaiting, reclaim, and
 //     indeterminate outcomes distinct; E4: five reliability consequences link
 //     to their Docs owners; E5: compact/full proof reuses one renderer and stays
 //     visible without hydration; E6: native dialog and reduced-motion behavior
-//     remain intact; E7: one CTA object owns its label and href.
+//     remain intact; E7: one CTA object owns its label and href; E8: one early,
+//     bounded compatibility entry links to the canonical matrix.
 // Decision table:
 // | Rule | durable/controlled need | authority path | terminal outcome | proof | Outcome |
 // | A1   | yes                     | single         | explicit         | linked| accept  |
@@ -786,6 +797,7 @@ const productRules = [
     path: resolve(root, 'dist/agents/index.html'),
     title: 'Run production Agent applications on infrastructure you control.',
     agentsHref: '/docs/agents/get-started',
+    compatibilityHref: '/docs/agents/compatibility',
     fit: ['Embed an Agent in your product', 'Keep work beyond one connection', 'Choose execution without forking the product', 'Control and grow the operating boundary'],
     owners: ['Control', 'Coordinator', 'Worker + Runtime'],
     failures: ['Permission required', 'Worker interrupted', 'External outcome ambiguous'],
@@ -803,6 +815,7 @@ const productRules = [
     path: resolve(root, 'dist/zh/agents/index.html'),
     title: '在自己掌控的基础设施上运行生产级 Agent 应用。',
     agentsHref: '/zh/docs/agents/get-started',
+    compatibilityHref: '/zh/docs/agents/compatibility',
     fit: ['把 Agent 接入自己的产品', '让工作跨越单次连接', '改变执行方式而不分叉产品', '掌控并扩展运营边界'],
     owners: ['Control', 'Coordinator', 'Worker + Runtime'],
     failures: ['需要权限决定', 'Worker 中断', '外部结果不确定'],
@@ -820,6 +833,8 @@ const productRules = [
 
 for (const rule of productRules) {
   requirePattern(rule.path, new RegExp(`<h1[^>]*>[\\s\\S]*${rule.title.replaceAll('.', '\\.')}[\\s\\S]*</h1>`), 'Awaken product page must own the production Agent application promise');
+  requireOccurrenceCount(rule.path, 'data-agent-compatibility-entry', 1, 'Agents hero must expose one prominent compatibility entry');
+  requirePattern(rule.path, new RegExp(`<a href="${rule.compatibilityHref}" data-agent-compatibility-entry`), 'Agents hero compatibility entry must reach the localized canonical matrix');
   requireOrderedText(rule.path, ['id="agents-hero"', 'id="agents-fit"', 'id="agents-quickstart"', 'id="agents-boundary"', 'id="agents-outcomes"', 'id="agents-reliability"', 'id="managed-relation"', 'id="platform-preview"', 'id="agents-decisions"'], 'Agents must move from fit through first success, authority and recovery, outcomes, evidence, compatibility, and Docs-owned decisions');
   requireOccurrenceCount(rule.path, 'data-agent-fit', 4, 'Agents must expose exactly four product-fit conditions');
   requireOccurrenceCount(rule.path, 'data-agent-not-fit', 1, 'Agents must expose one explicit non-fit boundary');

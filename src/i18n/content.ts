@@ -89,9 +89,9 @@ export const content = {
         titleHighlight: 'faster.',
         companyDefinition: canonicalEntities.en.company,
         definition: `${canonicalEntities.en.agents} For AI product teams: start with a real job, a compatible Agent, or an Agent you already own. Your application keeps its UX, domain model, and acceptance rules.`,
+        compatibilityProof: ['Tested Managed Agents API baseline', 'Official Anthropic SDK', 'One durable Session'],
         ctaPrimary: 'Run the quickstart',
         ctaSecondary: 'Discuss private deployment',
-        deploymentLabel: 'Self-hostable',
       },
       workflow: {
         eyebrow: 'Product workflow',
@@ -724,9 +724,9 @@ export const content = {
         titleHighlight: '更快。',
         companyDefinition: canonicalEntities.zh.company,
         definition: `${canonicalEntities.zh.agents}面向 AI 产品团队：可以从一项真实工作、兼容 Agent 或自有 Agent 开始。应用继续负责用户体验、领域模型和验收规则。`,
+        compatibilityProof: ['经测试的 Managed Agents API 基线', '官方 Anthropic SDK', '同一个持久 Session'],
         ctaPrimary: '运行快速开始',
         ctaSecondary: '沟通私有部署',
-        deploymentLabel: '可自托管',
       },
       workflow: {
         eyebrow: '产品流程',
