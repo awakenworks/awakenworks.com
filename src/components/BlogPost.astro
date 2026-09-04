@@ -16,7 +16,7 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
 
 <SiteHeader lang={lang} path="/blog" />
 
-<main class="mx-auto max-w-2xl px-6 py-20 sm:py-24">
+<main id="main-content" tabindex="-1" class="mx-auto max-w-2xl px-6 py-20 sm:py-24">
   <a
     href={localePath(lang, '/blog')}
     class="font-mono text-xs text-fog-500 hover:text-fog-100"

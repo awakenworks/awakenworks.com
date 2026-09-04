@@ -9,6 +9,7 @@ import {
   localeRegistry,
   unlocalizedPath,
 } from '../i18n/locales';
+import { ui } from '../i18n/ui';
 
 interface Props {
   title: string;
@@ -69,6 +70,10 @@ const umamiWebsiteId =
 const umamiSrc =
   import.meta.env.PUBLIC_UMAMI_SRC ?? 'https://cloud.umami.is/script.js';
 const enableAnalytics = import.meta.env.PROD && Boolean(umamiWebsiteId);
+// The release workflow supplies the exact website commit. Local builds keep an
+// explicit `local` value so a published page can never be mistaken for an
+// unidentifiable artifact.
+const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'local';
 ---
 
 <!doctype html>
@@ -117,6 +122,7 @@ const enableAnalytics = import.meta.env.PROD && Boolean(umamiWebsiteId);
     </script>
     <link rel="icon" type="image/svg+xml" href={withSiteBase('/favicon.svg')} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="awakenworks-build-revision" content={buildRevision} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={abs(canonicalPath)} />
@@ -166,6 +172,7 @@ const enableAnalytics = import.meta.env.PROD && Boolean(umamiWebsiteId);
     }
   </head>
   <body class="bg-ink-950 text-fog-300 antialiased">
+    <a class="skip-link" href="#main-content">{ui[lang].common.skip}</a>
     <slot />
     <script is:inline>
       // Delegated theme toggle — works on every page without bundling.

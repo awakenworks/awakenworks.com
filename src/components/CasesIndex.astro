@@ -1,5 +1,6 @@
 ---
-import { content, localePath, type Lang } from '../i18n/content';
+import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
+import { currentVersion } from '../i18n/docsVersions';
 import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
 import { ui } from '../i18n/ui';
@@ -9,11 +10,14 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = content[lang];
 const copy = ui[lang].cases;
+const agentsVersion = currentVersion('platform');
+if (!agentsVersion) throw new Error('Awaken Agents documentation must pin one source revision');
+const sourceHref = `${AWAKEN_GITHUB_URL}/tree/${agentsVersion.sourceRevision}`;
 ---
 
 <SiteHeader lang={lang} path="/cases" />
 
-<main>
+<main id="main-content" tabindex="-1">
   <section id="reference-hero" class="relative overflow-hidden border-b border-ink-800">
     <div class="grid-backdrop absolute inset-0"></div>
     <div class="relative mx-auto max-w-6xl px-6 py-24 sm:py-32">
@@ -23,6 +27,38 @@ const copy = ui[lang].cases;
       <p data-reference-disclaimer class="mt-7 max-w-3xl border-l-2 border-iris-500/60 pl-4 text-sm leading-6 text-fog-500">
         {copy.disclaimer}
       </p>
+    </div>
+  </section>
+
+  <section id="reference-source" class="border-b border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-accent-400">{copy.sourceEvidence.eyebrow}</p>
+      <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{copy.sourceEvidence.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300">{copy.sourceEvidence.body}</p>
+      <dl class="mt-8 grid gap-4 sm:grid-cols-2">
+        <div class="rounded-xl border border-ink-700 bg-ink-850 p-5">
+          <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{copy.sourceEvidence.revisionLabel}</dt>
+          <dd class="mt-2 break-all font-mono text-sm text-fog-200">{agentsVersion.sourceRevision}</dd>
+        </div>
+        <div class="rounded-xl border border-ink-700 bg-ink-850 p-5">
+          <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{copy.sourceEvidence.verifiedLabel}</dt>
+          <dd class="mt-2 font-mono text-sm text-fog-200">{agentsVersion.verifiedOn}</dd>
+        </div>
+      </dl>
+      <div class="mt-6 flex flex-wrap gap-4">
+        <a href={sourceHref} target="_blank" rel="noopener noreferrer" data-evidence-source-revision class="rounded-xl border border-ink-600 px-5 py-3 text-sm font-medium text-fog-200 hover:border-accent-500">{copy.sourceEvidence.sourceAction} →</a>
+        <a href={localePath(lang, '/docs/agents/get-started')} class="rounded-xl bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent hover:bg-accent-400">{copy.sourceEvidence.quickstart} →</a>
+      </div>
+
+      <h3 class="mt-12 text-xl font-semibold text-fog-100">{copy.sourceEvidence.standardsTitle}</h3>
+      <div class="mt-5 grid gap-4 lg:grid-cols-3">
+        {copy.sourceEvidence.standards.map((standard) => (
+          <article data-evidence-standard class="rounded-xl border border-ink-700 bg-ink-850 p-5">
+            <p class="font-mono text-xs text-accent-300">{standard.level}</p>
+            <p class="mt-3 text-sm leading-6 text-fog-400">{standard.body}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 

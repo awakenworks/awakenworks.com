@@ -85,7 +85,7 @@ export const content = {
     home: {
       hero: {
         eyebrow: 'AwakenWorks · Open infrastructure for production AI Agent applications',
-        title: 'Build Agent applications on infrastructure you control.',
+        title: 'Ship Agent applications without rebuilding the platform underneath.',
         companyDefinition: canonicalEntities.en.company,
         definition: `${canonicalEntities.en.agents} For AI product teams: start with a real job, a compatible Agent, or an Agent you already own. Your application keeps its UX, domain model, and acceptance rules.`,
         ctaPrimary: 'Run the quickstart',
@@ -154,6 +154,25 @@ export const content = {
           { product: 'Awaken Objects', status: 'Early preview', body: 'Shape a preview around one business fact and the system that already owns it.', bring: 'One business object, its source authority and provenance, one governed change, and the application or Agent that consumes it.', decision: 'Decide whether a shared typed-object boundary fits the job and which source connection or governed action a preview should validate next.', boundary: 'This is product discovery for an unreleased preview, not an Agents implementation, production commitment, or availability promise.', href: '/objects', docsHref: '/docs/objects', view: 'View Objects', docs: 'Review the object model', apply: 'Request an Objects preview', query: 'objects' },
           { product: 'Awaken Workforce', status: 'Early preview', body: 'Shape a preview around one recurring outcome that must survive hand-offs and exceptions.', bring: 'One real job, responsible owner, execution systems, human decisions, exception path, evidence, and external acceptance fact.', decision: 'Decide whether the Issue, responsibility, and acceptance model fits the job and which end-to-end loop a preview should validate next.', boundary: 'This is product discovery for an unreleased preview, not a packaged workflow, Agents implementation, or production commitment.', href: '/workforce', docsHref: '/docs/workforce', view: 'View Workforce', docs: 'Review work and acceptance', apply: 'Request a Workforce preview', query: 'workforce' },
         ],
+      },
+      delivery: {
+        eyebrow: 'Bounded Agents implementation',
+        title: 'Know what the 4–6 week decision includes.',
+        body: 'The implementation tests one real application or job in one approved environment. Scope, responsibilities, evidence, and the terminal decision are agreed before delivery begins.',
+        facts: [
+          { value: 'One application', label: 'One application or recurring job in one approved environment' },
+          { value: 'One integration', label: 'One standard system connection; additional systems require a scope change' },
+          { value: '2–4 checks', label: 'A baseline, normal path, permission decision, and interruption-and-recovery path' },
+          { value: 'Go / change / stop', label: 'A named acceptor makes the next decision from recorded evidence' },
+        ],
+        deliverablesTitle: 'What you receive',
+        deliverables: ['A running end-to-end path', 'An acceptance record against the agreed checks', 'A risk list with operating and acceptance owners', 'A final report and explicit next decision'],
+        responsibilitiesTitle: 'Who owns what',
+        responsibilities: [
+          { owner: 'AwakenWorks', body: 'Scope the target and boundaries, configure the agreed deployment and integration, run the normal, permission, and recovery paths, and record the result.' },
+          { owner: 'Your team', body: 'Provide the job, baseline, environment, restricted access, business rules, technical owner, decision maker, and final acceptor.' },
+        ],
+        boundary: 'Production SLA, broad rollout, additional integrations, unlimited customization, and long-term operations are not included. They require a separate bounded scope on the same Agents foundation.',
       },
       process: {
         eyebrow: 'One request form',
@@ -369,6 +388,7 @@ export const content = {
           title: 'Contact',
           links: [
             { label: 'hello@awakenworks.com', href: 'mailto:hello@awakenworks.com' },
+            { label: 'Principles and trust', href: '/principles' },
             { label: 'Privacy', href: '/privacy' },
           ],
         },
@@ -699,7 +719,7 @@ export const content = {
     home: {
       hero: {
         eyebrow: 'AwakenWorks · 面向生产级 AI Agent 应用的开放基础设施',
-        title: '在自己掌控的基础设施上构建 Agent 应用。',
+        title: '交付 Agent 应用，不必重建下层平台。',
         companyDefinition: canonicalEntities.zh.company,
         definition: `${canonicalEntities.zh.agents}面向 AI 产品团队：可以从一项真实工作、兼容 Agent 或自有 Agent 开始。应用继续负责用户体验、领域模型和验收规则。`,
         ctaPrimary: '运行快速开始',
@@ -768,6 +788,25 @@ export const content = {
           { product: 'Awaken Objects', status: '提前预览', body: '围绕一项业务事实和已经拥有它的系统，共同定义预览。', bring: '一个业务对象、来源权威与 provenance、一项受控变化，以及使用它的应用或 Agent。', decision: '判断共享、类型化对象边界是否适合这项工作，以及预览下一步应验证哪条来源连接或受控 Action。', boundary: '这是未发布产品的发现过程，不是 Agents 实施、生产交付承诺或可用性承诺。', href: '/objects', docsHref: '/docs/objects', view: '查看 Objects', docs: '审阅对象模型', apply: '申请 Objects 预览', query: 'objects' },
           { product: 'Awaken Workforce', status: '提前预览', body: '围绕一项必须跨越交接与例外的重复结果，共同定义预览。', bring: '一项真实工作、责任人、执行系统、人工决定、例外路径、证据与外部验收事实。', decision: '判断 Issue、责任与验收模型是否适合这项工作，以及预览下一步应验证哪条端到端闭环。', boundary: '这是未发布产品的发现过程，不是打包 Workflow、Agents 实施或生产交付承诺。', href: '/workforce', docsHref: '/docs/workforce', view: '查看 Workforce', docs: '审阅工作与验收', apply: '申请 Workforce 预览', query: 'workforce' },
         ],
+      },
+      delivery: {
+        eyebrow: '范围受控的 Agents 实施',
+        title: '提前知道 4–6 周决策包含什么。',
+        body: '实施围绕一个真实应用或 Job，在一个获准环境内验证。开始交付前，双方先确认范围、责任、证据与终止决定。',
+        facts: [
+          { value: '一个应用', label: '一个获准环境中的一个应用或重复 Job' },
+          { value: '一个集成', label: '连接一个标准系统；增加系统需要变更范围' },
+          { value: '2–4 项检查', label: '基线、正常路径、权限决定与一次中断恢复路径' },
+          { value: '继续 / 调整 / 停止', label: '由具名验收人依据已记录证据作出下一步决定' },
+        ],
+        deliverablesTitle: '你会收到',
+        deliverables: ['一条可以运行的端到端路径', '按约定检查形成的验收记录', '包含运营与验收负责人的风险清单', '最终报告和明确的下一步决定'],
+        responsibilitiesTitle: '双方分别负责什么',
+        responsibilities: [
+          { owner: 'AwakenWorks', body: '界定目标与边界，配置约定部署和集成，跑通正常、权限与恢复路径，并记录结果。' },
+          { owner: '你的团队', body: '提供工作、基线、环境、受限访问、业务规则、技术负责人、决策人与最终验收人。' },
+        ],
+        boundary: '生产 SLA、大范围推广、额外集成、无限定制与长期运维不在本次范围内；这些工作需要在同一 Agents 底座上另行界定。',
       },
       process: {
         eyebrow: '统一申请表',
@@ -983,6 +1022,7 @@ export const content = {
           title: '联系',
           links: [
             { label: 'hello@awakenworks.com', href: 'mailto:hello@awakenworks.com' },
+            { label: '原则与可信度', href: '/principles' },
             { label: '隐私说明', href: '/privacy' },
           ],
         },

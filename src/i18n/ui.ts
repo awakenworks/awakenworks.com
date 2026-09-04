@@ -14,6 +14,7 @@ export const ui = {
       theme: 'Toggle light / dark theme',
       githubStar: 'Star on GitHub',
       openPath: 'Open path →',
+      skip: 'Skip to main content',
     },
     home: { titleClass: '', allCases: 'View every reference build and evidence boundary' },
     blog: {
@@ -29,6 +30,18 @@ export const ui = {
       situation: 'The situation', firstResult: 'First useful result', productShape: 'Product shape', applicationKeeps: 'Your application keeps', awakenProvides: 'Awaken provides',
       tryPath: 'Try this path', smallest: 'Build the smallest useful version first.', availability: 'What is available today', invest: 'Check the status before you invest more.', checkAt: 'Where to check: ',
       situationPrefix: 'The situation: ', startPrefix: 'Start with: ', bestPrefix: 'Best for: ',
+      sourceEvidence: {
+        eyebrow: 'Public source anchor',
+        title: 'Start from the exact source revision behind these product claims.',
+        body: 'The current Agents documentation and product screens are checked against one frozen public revision. Reference applications still state their own, usually narrower, evidence boundary below.',
+        revisionLabel: 'Source revision', verifiedLabel: 'Claims checked on', sourceAction: 'Inspect the pinned source', quickstart: 'Run the matching quickstart',
+        standardsTitle: 'How to read the evidence',
+        standards: [
+          { level: 'Source or test checked', body: 'A named source coordinate or automated check supports the claim. This does not prove a current live deployment.' },
+          { level: 'Externally reproducible', body: 'A public pinned revision, steps, inputs, and expected result let another team repeat the check.' },
+          { level: 'Externally accepted', body: 'A named outside user or customer accepts a same-definition result, with permission to publish the evidence.' },
+        ],
+      },
     },
     landing: {
       exploreObjects: 'Explore the product model',
@@ -149,6 +162,7 @@ export const ui = {
       theme: '切换明暗主题',
       githubStar: '在 GitHub Star',
       openPath: '进入路径 →',
+      skip: '跳到主要内容',
     },
     home: { titleClass: 'home-display-title-zh', allCases: '查看全部参考实现与证据边界' },
     blog: {
@@ -164,6 +178,18 @@ export const ui = {
       situation: '你可能正遇到', firstResult: '第一个可用结果', productShape: '产品形态', applicationKeeps: '应用保留', awakenProvides: 'Awaken 提供',
       tryPath: '试一试这条路径', smallest: '先完成最小可用版本。', availability: '当前可以使用什么', invest: '先看状态，再决定投入多少。', checkAt: '检查位置：',
       situationPrefix: '你可能正遇到：', startPrefix: '先得到：', bestPrefix: '适合谁：',
+      sourceEvidence: {
+        eyebrow: '公开源码锚点',
+        title: '从支撑当前产品主张的精确源码 revision 开始。',
+        body: '当前 Agents 文档和产品界面均依据一个冻结的公开 revision 核对；下方每个参考应用仍会说明自己通常更窄的证据边界。',
+        revisionLabel: '源码 revision', verifiedLabel: '主张核对日期', sourceAction: '检查固定源码', quickstart: '运行对应快速开始',
+        standardsTitle: '怎样理解证据等级',
+        standards: [
+          { level: '源码或测试已核对', body: '具名源码位置或自动化检查支持该项主张，但这不证明当前存在真实线上部署。' },
+          { level: '外部可复现', body: '公开固定 revision、步骤、输入与预期结果，让另一支团队能够重复验证。' },
+          { level: '外部已验收', body: '外部用户或客户按同一口径验收结果，并明确允许发布相关证据。' },
+        ],
+      },
     },
     landing: {
       exploreObjects: '查看产品模型',
@@ -418,6 +444,13 @@ export const principlesCopy = {
       { title: 'Leave room to change course', desc: 'Choose providers and execution backends explicitly. Open protocols and readable formats make later changes easier, though never free.' },
     ] },
     honesty: { heading: 'State product availability and limits', badge: 'Plain status', body: 'We distinguish what is available now, what is still a preview, and what remains a target. When a limit matters to your decision, we state it near the claim instead of hiding it in a footnote.', linkLabel: 'Read the current implementation boundaries' },
+    trust: { heading: 'Check the public operating boundary', body: 'Use these existing owners to verify source, licensing, website data handling, implementation scope, or a security concern. AwakenWorks does not present an unpublished certification, customer result, or SLA as current evidence.', links: [
+      { target: 'source', label: 'Pinned product source', desc: 'Inspect the exact Awaken revision used by the current public documentation.' },
+      { target: 'license', label: 'Awaken Agents license', desc: 'Read the Apache-2.0 license attached to that source revision.' },
+      { target: 'privacy', label: 'Website data handling', desc: 'See what the public website and opportunity form collect and where it goes.' },
+      { target: 'enterprise', label: 'Implementation responsibility', desc: 'Review the bounded Agents scope, deliverables, owners, and exclusions.' },
+      { target: 'security', label: 'Report a security concern', desc: 'Send a private report or ask which disclosure path applies.' },
+    ] },
     open: { heading: 'Ask questions and contribute', body: 'Ask about a design, report an unclear limit, or submit a change through the links below.', links: [
       { target: 'discussions', label: 'GitHub Discussions', desc: 'Ask a question or propose a change where others can examine it.' },
       { target: 'goodFirstIssues', label: 'Good first issues', desc: 'Start with a bounded change and its acceptance conditions.' },
@@ -434,6 +467,13 @@ export const principlesCopy = {
       { title: '保留改变方向的余地', desc: '显式选择供应商和执行后端。开放协议与可读格式会让后续变化更容易，但不会让成本凭空消失。' },
     ] },
     honesty: { heading: '说明产品可用状态和限制', badge: '清楚标注', body: '我们区分当前可用、仍在预览和只是目标的内容。当某项限制会影响你的决定时，我们会把它放在相关说明旁边，而不是藏进脚注。', linkLabel: '查看当前实现边界' },
+    trust: { heading: '检查公开运营边界', body: '通过下列现有权威核对源码、许可、网站数据处理、实施范围或安全问题。AwakenWorks 不会把尚未发布的认证、客户结果或 SLA 当作当前证据。', links: [
+      { target: 'source', label: '固定的产品源码', desc: '检查当前公开文档所依据的精确 Awaken revision。' },
+      { target: 'license', label: 'Awaken Agents 许可', desc: '阅读该源码 revision 所附的 Apache-2.0 许可。' },
+      { target: 'privacy', label: '网站数据处理', desc: '查看官网和机会表单收集什么，以及数据会去往哪里。' },
+      { target: 'enterprise', label: '实施责任', desc: '查看 Agents 的范围、交付物、负责人和排除项。' },
+      { target: 'security', label: '报告安全问题', desc: '私下报告问题，或询问应使用哪条披露路径。' },
+    ] },
     open: { heading: '提出问题或参与贡献', body: '你可以通过下面的链接询问设计、报告不清楚的限制，或提交改动。', links: [
       { target: 'discussions', label: 'GitHub Discussions', desc: '提出问题或改动建议，让更多人一起检查。' },
       { target: 'goodFirstIssues', label: '入门 issue', desc: '从范围清楚、验收条件明确的改动开始。' },

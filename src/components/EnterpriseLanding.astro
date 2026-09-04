@@ -18,7 +18,7 @@ const pathTone = {
 
 <SiteHeader lang={lang} path="/enterprise" />
 
-<main>
+<main id="main-content" tabindex="-1">
   <section id="enterprise-hero" class="relative overflow-hidden border-b border-ink-800">
     <div class="grid-backdrop absolute inset-0"></div>
     <div class="relative mx-auto max-w-6xl px-6 py-16 sm:py-32">
@@ -69,6 +69,44 @@ const pathTone = {
           </article>
         ))}
       </div>
+    </div>
+  </section>
+
+  <section id="enterprise-agents-scope" class="border-b border-ink-800 bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-iris-400">{page.delivery.eyebrow}</p>
+      <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{page.delivery.title}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300">{page.delivery.body}</p>
+
+      <dl class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-ink-700 bg-ink-700 sm:grid-cols-2 lg:grid-cols-4">
+        {page.delivery.facts.map((fact) => (
+          <div data-enterprise-scope-fact class="bg-ink-900 p-6">
+            <dt class="font-mono text-sm font-semibold text-iris-300">{fact.value}</dt>
+            <dd class="mt-3 text-sm leading-6 text-fog-400">{fact.label}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="mt-8 grid gap-6 lg:grid-cols-2">
+        <article class="rounded-2xl border border-ink-700 bg-ink-900 p-7">
+          <h3 class="text-xl font-semibold text-fog-100">{page.delivery.deliverablesTitle}</h3>
+          <ul class="mt-5 space-y-3">
+            {page.delivery.deliverables.map((item) => <li data-enterprise-deliverable class="flex gap-3 text-sm leading-6 text-fog-300"><span class="text-iris-400">✓</span><span>{item}</span></li>)}
+          </ul>
+        </article>
+        <article class="rounded-2xl border border-ink-700 bg-ink-900 p-7">
+          <h3 class="text-xl font-semibold text-fog-100">{page.delivery.responsibilitiesTitle}</h3>
+          <dl class="mt-5 space-y-5">
+            {page.delivery.responsibilities.map((item) => (
+              <div data-enterprise-responsibility>
+                <dt class="font-mono text-xs text-iris-300">{item.owner}</dt>
+                <dd class="mt-2 text-sm leading-6 text-fog-400">{item.body}</dd>
+              </div>
+            ))}
+          </dl>
+        </article>
+      </div>
+      <p data-enterprise-scope-boundary class="mt-7 max-w-4xl border-l-2 border-iris-500/60 pl-4 text-sm leading-7 text-fog-500">{page.delivery.boundary}</p>
     </div>
   </section>
 

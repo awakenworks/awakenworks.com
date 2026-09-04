@@ -605,6 +605,7 @@ for (const rule of rules) {
     'id="home-hero"',
     'id="platform-preview"',
     'id="home-value"',
+    'id="home-adoption"',
     'id="home-cases"',
     'id="home-products"',
     'id="home-cta"',
@@ -634,14 +635,22 @@ for (const rule of rules) {
     requireOccurrenceCount(rule.path, `data-umami-event="home-${product}-details"`, 1, `home must expose one ${product} product path`);
   }
   requireOccurrenceCount(rule.path, 'data-home-work-step=', 0, 'home must not present the Workforce outcome loop as current Agents value');
-  requireOccurrenceCount(rule.path, 'data-home-entry=', 0, 'home must not duplicate adoption paths with a second entry-card section');
+  // Cause/effect design for the compact adoption chooser:
+  // C1 three canonical starts exist in home.scenarios; C2 rendering only the
+  // featured start hides enterprise and repeat-delivery buyers; C3 copying the
+  // detailed facts would duplicate the Agents and enterprise owners.
+  // E1 render all three starts once from the existing catalog; E2 keep only
+  // audience, situation, first result, and one context-preserving action.
+  // Decision table: canonical three + compact fields -> accept; missing path,
+  // second catalog, or detailed checklist -> reject.
+  requireOccurrenceCount(rule.path, 'data-home-adoption=', 3, 'home must render the three canonical Agents adoption starts once');
   requireOccurrenceCount(rule.path, 'data-product-role', 3, 'every product card must retain one visible role');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="home-hero"', 0, 'home hero must not add a third GitHub choice beside the two intent exits');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="home-closing"', 0, 'home closing action must preserve the same two-intent decision');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="header"', 1, 'desktop header Star exit must identify its placement');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="mobile-menu"', 1, 'mobile Star exit must identify its placement');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="footer"', 1, 'footer Star exit must identify its placement');
-  requireOccurrenceCount(rule.path, 'data-scenario-card', 0, 'home must keep secondary ICP detail in its existing product and enterprise owners');
+  requireOccurrenceCount(rule.path, 'data-scenario-card', 0, 'home must not restore the old detailed scenario-card implementation');
   requireOccurrenceCount(rule.path, 'data-home-workflow class=', 1, 'home must show one product path instead of another adoption-card set');
   requireOccurrenceCount(rule.path, 'data-home-workflow-step', 5, 'home product path must retain five visible steps');
   for (const step of rule.workflow) {
@@ -675,9 +684,8 @@ for (const rule of rules) {
 }
 
 const homeSourcePath = resolve(root, 'src/components/Home.astro');
-requireOrderedText(homeSourcePath, ['id="home-hero"', '<ProductShowcase', 'id="home-value"', 'id="home-cases"', 'id="home-products"'], 'source must move from the company promise through product proof, buyer value, reference evidence, and late portfolio context');
-rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"/, 'source must not restore duplicate entry cards or promote Workforce outcome mechanics on the Agents-led home');
-rejectPattern(homeSourcePath, /id="home-scenarios"|data-scenario-card/, 'source must keep secondary ICP detail in the existing Agents and enterprise owners');
+requireOrderedText(homeSourcePath, ['id="home-hero"', '<ProductShowcase', 'id="home-value"', 'id="home-adoption"', 'id="home-cases"', 'id="home-products"'], 'source must move from the company promise through product proof, buyer value, compact adoption choice, reference evidence, and late portfolio context');
+rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"|id="home-scenarios"|data-scenario-card/, 'source must use the one compact adoption renderer without restoring older parallel sections');
 rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-event-location="home-closing"/, 'home source must keep explanatory and GitHub links out of the two-choice hero and closing action');
 // Cause/effect design for the Agents-led promise and its responsive rendering:
 // C1: requiring a working Agent in the headline excludes teams that start from
@@ -721,7 +729,7 @@ requirePattern(homeSourcePath, /\{home\.hero\.title\}/, 'home must render the vi
 rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the vision');
 requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as supporting first-result evidence');
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
-requirePattern(contentSourcePath, /title: 'Build Agent applications on infrastructure you control\.'[\s\S]*title: '在自己掌控的基础设施上构建 Agent 应用。'/, 'both locales must state the Agent application job and operating control directly');
+requirePattern(contentSourcePath, /title: 'Ship Agent applications without rebuilding the platform underneath\.'[\s\S]*title: '交付 Agent 应用，不必重建下层平台。'/, 'both locales must lead with the buyer outcome instead of a product definition');
 requirePattern(contentSourcePath, /start with a real job, a compatible Agent, or an Agent you already own\.[\s\S]*可以从一项真实工作、兼容 Agent 或自有 Agent 开始。/, 'both locales must expose the three technical starting points in one supporting-copy owner');
 requirePattern(contentSourcePath, /application keeps its UX, domain model, and acceptance rules[\s\S]*应用继续负责用户体验、领域模型和验收规则/, 'both locales must preserve the application ownership boundary');
 rejectPattern(contentSourcePath, /Ship your working Agent as an application customers can keep using|把能运行的 Agent，交付成客户可以持续使用的应用|Your Agent already works\. Now ship the application|Agent 已经能运行，现在把应用交付出去/, 'homepage copy must not require an existing working Agent or imply unverified continued customer use');
@@ -1079,7 +1087,7 @@ requirePattern(resolve(root, '.env.example'), /PUBLIC_OPPORTUNITY_ENDPOINT=https
 for (const rule of enterpriseRules) {
   requireOccurrenceCount(rule.path, '<h1', 1, 'business page must have one primary heading');
   requirePattern(rule.path, new RegExp(rule.title.replaceAll('.', '\\.')), 'services page must lead with the three-product decision and honest maturity boundary');
-  requireOrderedText(rule.path, ['id="enterprise-hero"', 'id="enterprise-paths"', 'id="enterprise-process"', 'id="apply"'], 'services page must move from product choice through product-specific decisions and one shared process to one form');
+  requireOrderedText(rule.path, ['id="enterprise-hero"', 'id="enterprise-paths"', 'id="enterprise-agents-scope"', 'id="enterprise-process"', 'id="apply"'], 'services page must move from product choice through bounded Agents delivery and one shared process to one form');
   requireOccurrenceCount(rule.path, 'data-enterprise-product-path=', 3, 'enterprise must present exactly the Agents, Objects, and Workforce paths');
   requireOccurrenceCount(rule.path, 'data-enterprise-path-fact=', 9, 'each product path must expose bring, first decision, and current boundary once');
   for (const [id, bring, decision] of rule.pathFacts) {
@@ -1093,6 +1101,21 @@ for (const rule of enterpriseRules) {
   requirePattern(rule.path, /a permission decision|权限决定/, 'implementation must exercise an explicit permission decision');
   requirePattern(rule.path, /interruption-and-recovery|中断恢复路径/, 'implementation must exercise an interruption and recovery path');
   requirePattern(rule.path, /go, change, or stop decision|继续、调整或停止决定/, 'the current Agents path must end in an explicit terminal decision');
+  // Cause/effect design for enterprise purchase completeness:
+  // C1 a duration without scope looks like open consulting; C2 scope without
+  // deliverables or owners cannot be accepted; C3 preview requests must not
+  // inherit the Agents promise; C4 price, SLA, rollout, and unlimited changes
+  // are outside this public bounded decision.
+  // E1 state one app, one integration, 2–4 checks, and a terminal decision;
+  // E2 list four deliverables and both responsibility owners; E3 keep one
+  // explicit exclusions boundary before the existing shared process and form.
+  // Decision table: complete bounded Agents facts -> accept; missing owner,
+  // deliverable, exclusion, or preview separation -> reject.
+  requireOccurrenceCount(rule.path, 'data-enterprise-scope-fact', 4, 'Agents scope must expose its four bounded buying facts');
+  requireOccurrenceCount(rule.path, 'data-enterprise-deliverable', 4, 'Agents scope must expose four concrete handover artifacts');
+  requireOccurrenceCount(rule.path, 'data-enterprise-responsibility', 2, 'Agents scope must name both delivery responsibility owners');
+  requireOccurrenceCount(rule.path, 'data-enterprise-scope-boundary', 1, 'Agents scope must state excluded production commitments once');
+  requirePattern(rule.path, /Production SLA|生产 SLA/, 'Agents scope must keep production SLA outside the bounded implementation');
   requirePattern(rule.path, /product discovery for an unreleased preview|未发布产品的发现过程/, 'Objects and Workforce must not inherit the current Agents implementation promise');
   for (const removedSection of ['enterprise-first-implementation', 'enterprise-responsibility', 'enterprise-validation', 'enterprise-package', 'delivery']) {
     requireOccurrenceCount(rule.path, `id="${removedSection}"`, 0, `${removedSection} must not restore the old Agents-only long narrative`);
@@ -1184,13 +1207,25 @@ for (const path of [
   );
 }
 
+// Cause/effect design for public evidence:
+// C1 moving product main can make a claim unrepeatable; C2 a source check can
+// be mistaken for a live deployment; C3 a local reference build can be mistaken
+// for customer acceptance. E1 expose the exact registry-owned source revision
+// and verification date; E2 define three increasing evidence thresholds; E3
+// keep each case's narrower limitation. Decision table: pin + date + three
+// levels + disclaimer -> accept; floating source or collapsed levels -> reject.
 for (const rule of [
-  { path: resolve(root, 'dist/cases/index.html'), disclaimer: 'do not represent customer adoption or endorsement' },
-  { path: resolve(root, 'dist/zh/cases/index.html'), disclaimer: '不代表客户采用或背书' },
+  { path: resolve(root, 'dist/cases/index.html'), disclaimer: 'do not represent customer adoption or endorsement', quickstart: '/docs/agents/get-started' },
+  { path: resolve(root, 'dist/zh/cases/index.html'), disclaimer: '不代表客户采用或背书', quickstart: '/zh/docs/agents/get-started' },
 ]) {
-  requireOrderedText(rule.path, ['id="reference-hero"', 'id="reference-builds"'], 'reference-build index must move directly from product-shape choice to the three builds');
-  requireOccurrenceCount(rule.path, 'data-reference-disclaimer', 1, 'reference-build index must disclose its maturity once without an evidence tutorial');
+  requireOrderedText(rule.path, ['id="reference-hero"', 'id="reference-source"', 'id="reference-builds"'], 'reference-build index must move from evidence boundary through its exact public source anchor to the three builds');
+  requireOccurrenceCount(rule.path, 'data-reference-disclaimer', 1, 'reference-build index must disclose its non-customer boundary once');
   requirePattern(rule.path, new RegExp(rule.disclaimer), 'reference-build index must reject customer-adoption inference');
+  requirePattern(rule.path, /50d5035c68456c9106626f748cf4c169c2057beb/, 'reference-build index must expose the registry-owned Awaken source revision');
+  requirePattern(rule.path, /2026-08-31/, 'reference-build index must expose when product claims were checked');
+  requirePattern(rule.path, new RegExp(`href="${rule.quickstart}"`), 'reference evidence must lead to the matching localized quickstart');
+  requireOccurrenceCount(rule.path, 'data-evidence-source-revision', 1, 'reference evidence must link the exact public source revision once');
+  requireOccurrenceCount(rule.path, 'data-evidence-standard', 3, 'reference evidence must distinguish source checks, external reproduction, and external acceptance');
   requireOccurrenceCount(rule.path, 'data-case-index=', 3, 'reference-build index must expose exactly three product shapes');
 }
 
@@ -1242,11 +1277,33 @@ for (const rule of [
   { path: resolve(root, 'dist/principles/index.html'), owner: 'Define the work, owner, and acceptance result', participation: 'Ask questions and contribute' },
   { path: resolve(root, 'dist/zh/principles/index.html'), owner: '定义工作、负责人和验收结果', participation: '提出问题或参与贡献' },
 ]) {
-  requireOrderedText(rule.path, ['id="principles-hero"', 'id="principles-owner"', 'id="principles-commitments"', 'id="principles-status"', 'id="principles-participate"'], 'principles must move from ownership through commitments and status to participation');
+  requireOrderedText(rule.path, ['id="principles-hero"', 'id="principles-owner"', 'id="principles-commitments"', 'id="principles-status"', 'id="principles-trust"', 'id="principles-participate"'], 'principles must move from ownership through commitments, status, public trust owners, and participation');
   requirePattern(rule.path, new RegExp(rule.owner), 'principles must begin from the work and its human owner');
   requirePattern(rule.path, new RegExp(rule.participation), 'principles must end with a direct invitation to participate');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="principles"', 1, 'principles must retain one measurable GitHub Star exit');
+  requireOccurrenceCount(rule.path, 'data-trust-owner=', 5, 'principles must expose the five existing source, license, privacy, implementation, and security owners');
 }
+
+// Cause/effect design for keyboard, motion, and release identity:
+// C1 repeated navigation can delay keyboard users; C2 animations can violate a
+// reduced-motion preference; C3 healthy HTML can still be a stale release.
+// E1 one localized skip link targets one focusable main landmark; E2 global CSS
+// disables nonessential motion; E3 every representative artifact carries one
+// build revision marker. Decision table: all three present -> accept; a missing
+// target, duplicated marker, or component-specific locale branch -> reject.
+for (const path of [
+  resolve(root, 'dist/index.html'),
+  resolve(root, 'dist/zh/index.html'),
+  resolve(root, 'dist/enterprise/index.html'),
+  resolve(root, 'dist/zh/enterprise/index.html'),
+  resolve(root, 'dist/docs/agents/get-started/index.html'),
+  resolve(root, 'dist/zh/docs/agents/get-started/index.html'),
+]) {
+  requireOccurrenceCount(path, 'href="#main-content"', 1, 'every page must expose one skip link');
+  requireOccurrenceCount(path, 'id="main-content"', 1, 'every page must expose one skip-link target');
+  requireOccurrenceCount(path, 'name="awakenworks-build-revision"', 1, 'every page must expose one deployment revision marker');
+}
+requirePattern(resolve(root, 'src/styles/global.css'), /prefers-reduced-motion: reduce[\s\S]*animation-duration: 0\.01ms[\s\S]*transition-duration: 0\.01ms/, 'global styles must honor reduced-motion preferences');
 
 for (const rule of [
   { path: resolve(root, 'dist/blog/index.html'), headline: 'Start with a real problem', archive: 'Article archive' },

@@ -225,6 +225,23 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 0.5rem;
+  background: var(--color-accent-500);
+  padding: 0.65rem 0.9rem;
+  color: var(--color-onaccent);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 /* Eyebrow / technical labels — mono by default (a nod to Awaken's
    identity); the Workforce brand uses sans, matching its design system. */
 .eyebrow {
@@ -254,6 +271,21 @@ html[data-brand='workforce'] .eyebrow {
   .hero-title {
     font-size: clamp(2.25rem, 11vw, 3rem);
     line-height: 1.02;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

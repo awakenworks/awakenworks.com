@@ -8,7 +8,7 @@
     "brand:generate": "node scripts/generate-brand-marks.mjs",
     "build": "pnpm brand:generate && astro build",
     "check:home": "pnpm brand:generate && astro sync --force && astro build && node scripts/check-home.mjs",
-    "check:live": "node scripts/check-live.mjs",
+    "check:live": "AWAKENWORKS_EXPECTED_REVISION=${AWAKENWORKS_EXPECTED_REVISION:-$(git rev-parse HEAD)} node scripts/check-live.mjs",
     "check:pages": "pnpm build && node scripts/check-pages-base.mjs",
     "check:docs": "pnpm check:standalone && pnpm brand:generate && astro sync --force && astro build && node scripts/check-docs.mjs",
     "check:standalone": "node scripts/check-standalone.mjs",

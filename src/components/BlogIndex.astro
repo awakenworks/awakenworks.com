@@ -21,7 +21,8 @@ const copy = ui[lang].blog;
 
 <SiteHeader lang={lang} path="/blog" />
 
-<main id="blog-hero" class="mx-auto max-w-3xl px-6 py-20 sm:py-28">
+<main id="main-content" tabindex="-1" class="mx-auto max-w-3xl px-6 py-20 sm:py-28">
+  <div id="blog-hero">
   <p class="eyebrow text-accent-400">{copy.eyebrow}</p>
   <h1 class="hero-title mt-4 font-semibold text-fog-100">{copy.title}</h1>
   <p class="mt-6 text-lg leading-8 text-fog-300">{copy.intro}</p>
@@ -31,6 +32,7 @@ const copy = ui[lang].blog;
   <div class="mt-8 flex flex-wrap gap-4 border-b border-ink-700 pb-10">
     <a href={localePath(lang, '/docs')} class="text-sm font-medium text-accent-400">{copy.docs} →</a>
     <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="blog-index" class="text-sm font-medium text-fog-300 hover:text-accent-400">★ {ui[lang].common.githubStar} →</a>
+  </div>
   </div>
   <section id="blog-archive" class="mt-14 space-y-12" aria-label={copy.archive}>
     {

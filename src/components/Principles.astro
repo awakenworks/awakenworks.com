@@ -3,6 +3,7 @@ import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
 import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
 import { principlesCopy } from '../i18n/ui';
+import { currentVersion } from '../i18n/docsVersions';
 
 interface Props {
   lang: Lang;
@@ -21,15 +22,25 @@ const gh = {
     'https://github.com/AwakenWorks/awaken/issues?q=is%3Aissue+is%3Aopen+label%3A%22open+question%22',
 };
 const implementationEvidence = localePath(lang, '/docs/agents/runtime/explanation/architecture-invariants');
+const sourceRevision = currentVersion('platform')?.sourceRevision;
+if (!sourceRevision) throw new Error('Awaken Agents documentation must pin one source revision');
+const trustTargets = {
+  source: `${AWAKEN_GITHUB_URL}/tree/${sourceRevision}`,
+  license: `${AWAKEN_GITHUB_URL}/blob/${sourceRevision}/LICENSE`,
+  privacy: localePath(lang, '/privacy'),
+  enterprise: localePath(lang, '/enterprise#enterprise-agents-scope'),
+  security: 'mailto:hello@awakenworks.com?subject=Private%20security%20report',
+};
 
 const c = principlesCopy[lang];
 const links = c.open.links.map((link) => ({ ...link, href: gh[link.target] }));
+const trustLinks = c.trust.links.map((link) => ({ ...link, href: trustTargets[link.target] }));
 const isExternal = (href: string) => /^https?:\/\//.test(href);
 ---
 
 <SiteHeader lang={lang} path="/principles" />
 
-<main>
+<main id="main-content" tabindex="-1">
   <!-- Hero -->
   <section id="principles-hero" class="relative overflow-hidden">
     <div class="grid-backdrop absolute inset-0"></div>
@@ -103,6 +114,29 @@ const isExternal = (href: string) => /^https?:\/\//.test(href);
         {c.honesty.linkLabel}
         <span aria-hidden="true">→</span>
       </a>
+    </div>
+  </section>
+
+  <section id="principles-trust" class="border-t border-ink-800">
+    <div class="mx-auto max-w-4xl px-6 py-16 sm:py-20">
+      <h2 class="text-2xl font-semibold text-fog-100 sm:text-3xl">{c.trust.heading}</h2>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg">{c.trust.body}</p>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        {trustLinks.map((link) => (
+          <a
+            href={link.href}
+            data-trust-owner={link.target}
+            class="group rounded-2xl border border-ink-700 bg-ink-850 p-5 transition hover:border-accent-600/60"
+            {...(isExternal(link.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="font-semibold text-fog-100">{link.label}</h3>
+              <span class="text-fog-500 transition group-hover:text-accent-400" aria-hidden="true">→</span>
+            </div>
+            <p class="mt-2 text-sm leading-6 text-fog-500">{link.desc}</p>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 

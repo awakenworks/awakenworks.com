@@ -34,8 +34,10 @@ pnpm preview
 5. 在 Pages 设置中绑定 `awakenworks.com`。
 
 绑定完成后运行 `pnpm check:live`。该只读门禁会检查 DNS、HTTP 到 HTTPS、根域与
-`www`、首页资源类型、核心产品与中文路由，以及 AwakenWorks canonical 身份；它不会
-修改域名或 Pages 设置。
+`www`、首页资源类型、核心产品与中文路由、AwakenWorks canonical 身份，以及线上
+页面是否携带当前 Git commit。Pages 工作流也会在部署后用同一门禁核对 `github.sha`；
+它不会修改域名或 Pages 设置。检查其他已知版本时可显式设置
+`AWAKENWORKS_EXPECTED_REVISION`。
 
 ## Structure
 
@@ -79,4 +81,4 @@ Awaken 页面引用的证据路径。更新后必须在同一变更中审查并�
 - `pnpm check:home`：检查产品路径、首页导航、GitHub Star 入口和逐页内容契约。
 - `pnpm check:standalone`：拒绝安装生命周期副作用、固定本机路径、兄弟仓读取和 Git 工作树依赖。
 - `pnpm check:docs`：检查文档路由、搜索索引、链接、架构图，以及仓内锁定的源码证据。
-- `pnpm check:live`：只读检查正式域名是否真正返回当前 AwakenWorks 站点，而非停放页或错误重定向。
+- `pnpm check:live`：只读检查正式域名是否返回当前 Git revision 的 AwakenWorks 站点，而非旧构建、停放页或错误重定向。

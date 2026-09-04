@@ -27,7 +27,7 @@ const copy = ui[lang].home;
 
 <SiteHeader lang={lang} path="/" />
 
-<main>
+<main id="main-content" tabindex="-1">
   <section id="home-hero" class="home-hero relative overflow-hidden">
     <div class="grid-backdrop absolute inset-0"></div>
     <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-24 lg:py-24">
@@ -98,6 +98,43 @@ const copy = ui[lang].home;
               data-umami-event={`home-value-${advantage.key}`}
               class="inline-flex whitespace-nowrap text-xs font-medium text-accent-400 hover:text-accent-300"
             >{advantage.proof} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="home-adoption" class="scroll-mt-16 border-b border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <div class="max-w-4xl">
+        <p class="eyebrow text-accent-400">{home.scenarios.eyebrow}</p>
+        <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{home.scenarios.title}</h2>
+        <p class="mt-6 max-w-3xl text-base leading-7 text-fog-300 sm:text-lg sm:leading-8">{home.scenarios.body}</p>
+      </div>
+      <div class="mt-10 grid gap-4 lg:grid-cols-3">
+        {home.scenarios.items.map((item) => (
+          <article
+            data-home-adoption={item.key}
+            class:list={[
+              'flex flex-col rounded-[1.2rem] border p-6',
+              item.featured ? 'border-accent-600/70 bg-accent-500/5' : 'border-ink-700 bg-ink-850',
+            ]}
+          >
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="font-mono text-[0.68rem] tracking-wider text-fog-500 uppercase">{item.label}</p>
+              {item.featured && <span class="rounded-full border border-accent-700/60 px-2.5 py-1 font-mono text-[0.62rem] text-accent-300">{home.scenarios.featuredLabel}</span>}
+            </div>
+            <h3 class="mt-4 text-xl font-semibold text-fog-100">{item.title}</h3>
+            <p class="mt-4 flex-1 text-sm leading-7 text-fog-400">{item.body}</p>
+            <div class="mt-6 border-t border-ink-700 pt-5">
+              <p class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{home.scenarios.labels.finish}</p>
+              <p class="mt-2 text-sm leading-6 text-fog-300">{item.finish}</p>
+              <a
+                href={item.href === '/enterprise' ? `${enterpriseHref}?product=agents&scenario=${item.key}#apply` : localePath(lang, item.href)}
+                data-umami-event={`scenario-${item.key}-selected`}
+                class="mt-5 inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
+              >{home.scenarios.cta} →</a>
+            </div>
           </article>
         ))}
       </div>

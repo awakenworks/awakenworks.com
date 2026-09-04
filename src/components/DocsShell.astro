@@ -192,7 +192,7 @@ const banner =
     </div>
   </aside>
 
-  <main class="min-w-0">
+  <main id="main-content" tabindex="-1" class="min-w-0">
     <div class="border-b border-ink-800 bg-ink-900/40 px-4 py-3 sm:px-6 lg:hidden">
       <nav class="grid grid-cols-3 gap-2 font-mono text-xs sm:grid-cols-4" aria-label={copy.productDocs}>
         {products.map((p) => <a href={localePath(lang, p.href)} class={`rounded-full border px-2 py-1 text-center ${product === p.key ? `${p.tone} border-current` : 'border-ink-600 text-fog-300'}`}>{p.key === 'agents' ? 'Agents' : p.key === 'objects' ? 'Objects' : 'Workforce'}</a>)}
