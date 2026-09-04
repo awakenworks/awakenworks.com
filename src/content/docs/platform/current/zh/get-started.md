@@ -192,6 +192,7 @@ node -e "import('@anthropic-ai/sdk').then(async ({default:Anthropic}) => { const
 
 ## 接下来
 
+- 如果来自旧版 Runtime 或本地 Server，请先按照 [Awaken 1.0 迁移指南](./how-to/migrate-to-1-0)处理配置和数据。
 - 通过其他应用协议[接入已发布 Agent](./how-to/connect-a-published-agent)。
 - 核对 [Managed Agents 兼容边界](./compatibility)。
 - 使用显式身份、数据库、备份和 Sandbox 边界[部署与运营 Awaken](./how-to/self-host)。

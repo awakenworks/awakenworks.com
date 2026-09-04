@@ -31,6 +31,8 @@ Coordinator、Resources、Worker 与 Runtime 职责。
 ## 前置条件
 
 - 完成[开始使用](../get-started)，并让同一个 Agent 在 AllInOne 中运行成功；
+- 替换旧版 Runtime 或本地 Server 时，先在独立数据边界中完成
+  [Awaken 1.0 迁移](./migrate-to-1-0)；
 - 明确持久存储、secret 托管、入口、身份与备份的负责人；
 - 拆分服务需要 PostgreSQL 和经过认证的私有网络；
 - schema migration 前确定维护窗口与回滚点。

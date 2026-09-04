@@ -33,6 +33,9 @@ If you are deploying one machine, continue with the
 changing how configuration becomes a running Agent, read
 [Configuration to committed execution](./configuration-to-execution) after this
 page.
+If you are upgrading an earlier runtime or local server, first use the
+[Awaken 1.0 migration guide](/docs/agents/how-to/migrate-to-1-0/); this page
+remains the owner of the deployment model it references.
 
 This page owns the whole-system context map. The exact publication-to-commit
 state machine belongs to [Configuration to committed execution](./configuration-to-execution),

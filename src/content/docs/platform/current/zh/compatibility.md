@@ -8,6 +8,10 @@ evidence:
 请在修改现有 Anthropic Managed Agents 客户端前使用本页。先列出客户端所用的 SDK
 版本和资源族，再从下面四种结果中选择一项。请求能够到达服务器，不等于整个客户端已经兼容。
 
+本页不负责旧版 Awaken Runtime 或本地 Server 的产品迁移。请先用
+[Awaken 1.0 迁移指南](./how-to/migrate-to-1-0)处理产品、配置、存储与部署变化，再回到本页完成
+Managed 客户端判断。
+
 ## 先做兼容性判断
 
 | 查到的结果 | 应采取的动作 |

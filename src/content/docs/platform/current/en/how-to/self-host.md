@@ -37,6 +37,8 @@ responsibilities.
 ## Prerequisites
 
 - complete [Get started](../get-started) and run the same Agent in AllInOne;
+- when replacing an earlier runtime or local server, complete the
+  [Awaken 1.0 migration](./migrate-to-1-0) against a separate data boundary first;
 - choose persistent storage, secret custody, ingress, identity, and backup owners;
 - for split services, provide PostgreSQL and a private authenticated network;
 - choose a maintenance window and rollback point before schema migration.

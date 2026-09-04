@@ -98,6 +98,7 @@ events again.
 
 | Next task | Continue with |
 | --- | --- |
+| Move an earlier runtime or local server to 1.0 | [Migrate to Awaken 1.0](/docs/agents/how-to/migrate-to-1-0/) |
 | Connect a frontend, backend, or compatible Agent | [Connect a published Agent](/docs/agents/how-to/connect-a-published-agent/) |
 | Choose local, durable, or multi-Worker deployment | [Self-host Agents](/docs/agents/how-to/self-host/) |
 | Understand control, persistence, execution, and isolation | [Agents architecture](/docs/agents/concepts/architecture/) |

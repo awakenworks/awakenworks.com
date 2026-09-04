@@ -25,6 +25,8 @@ Coordinator 与 Worker。Agent 的发布和执行方式不会随部署形态改�
 如果要在一台机器上部署，下一步进入
 [自托管指南](/zh/docs/agents/how-to/self-host/)。如果要修改配置如何变成一次
 Agent 运行，读完本页后进入[从配置到已提交执行](./configuration-to-execution)。
+如果要升级旧版 Runtime 或本地 Server，请先使用
+[Awaken 1.0 迁移指南](/zh/docs/agents/how-to/migrate-to-1-0/)；本页继续作为其引用的部署模型权威。
 
 本文只说明全局 context map。发布到提交的精确状态机见
 [从配置到已提交执行](./configuration-to-execution)；租约、重试与恢复见

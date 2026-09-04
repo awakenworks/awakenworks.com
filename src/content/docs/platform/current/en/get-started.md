@@ -214,6 +214,7 @@ need. Never remove a broad parent directory.
 
 ## Continue from here
 
+- Coming from an earlier runtime or local server? Follow the [Awaken 1.0 migration guide](./how-to/migrate-to-1-0) before reusing configuration or data.
 - [Connect the published Agent](./how-to/connect-a-published-agent) through another application protocol.
 - Check the [Managed Agents compatibility boundary](./compatibility).
 - [Deploy and operate Awaken](./how-to/self-host) with explicit identity, database, backup, and Sandbox boundaries.

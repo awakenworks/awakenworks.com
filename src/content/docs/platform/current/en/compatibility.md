@@ -12,6 +12,11 @@ the SDK version and resource family you use, then choose one of the four outcome
 below. Do not treat “the request reached the server” as proof that the whole
 client is compatible.
 
+This page does not cover migration from an earlier Awaken runtime or local
+server. Use the [Awaken 1.0 migration guide](./how-to/migrate-to-1-0) for product,
+configuration, storage, and deployment changes, then return here for the
+Managed client decision.
+
 ## Make the compatibility decision first
 
 | What you find | What to do |

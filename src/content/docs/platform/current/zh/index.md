@@ -90,6 +90,7 @@ Session。
 
 | 下一项任务 | 前往 |
 | --- | --- |
+| 把旧版 Runtime 或本地 Server 迁移到 1.0 | [迁移到 Awaken 1.0](/zh/docs/agents/how-to/migrate-to-1-0/) |
 | 连接前端、后端或兼容 Agent | [接入已发布 Agent](/zh/docs/agents/how-to/connect-a-published-agent/) |
 | 选择本地、持久化或多 Worker 部署 | [自托管 Agents](/zh/docs/agents/how-to/self-host/) |
 | 理解控制、持久化、执行与隔离 | [Agents 架构](/zh/docs/agents/concepts/architecture/) |

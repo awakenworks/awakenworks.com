@@ -558,6 +558,55 @@ for (const [docsRel, required, rejected] of [
   rejectText(path, rejected);
 }
 
+// Cause/effect test design for the single Awaken release-migration owner:
+// C1: either locale loses the earlier-runtime/local-server to 1.0 mapping.
+// C2: startup/configuration coordinates are renamed mechanically without a
+//     separate-data and rollback boundary.
+// C3: release migration duplicates protocol compatibility or deployment
+//     architecture instead of delegating to their existing owners.
+// C4: the reader journey does not link the migration owner from Start.
+// E1: both locales expose one actionable old-to-new decision matrix.
+// E2: in-place data reuse remains fail-closed unless an exact release path is
+//     documented, while AllInOne is the first behavioral acceptance target.
+// E3: compatibility, architecture, and self-hosting retain their own authority.
+// E4: existing users can discover the migration before copying configuration.
+// Decision table: R1 both locale mappings + separate data + delegated owners +
+// Start links -> accept; R2 any mapping or locale absent -> reject; R3 migration
+// lacks the data guard or owner links -> reject; R4 pages exist but Start and
+// compatibility do not route to them -> reject.
+for (const [docsRel, patterns] of [
+  ['platform/current/en/how-to/migrate-to-1-0.md', [
+    [/^## Choose the 1\.0 entry point$/m, '1.0 migration must begin with an entry-point decision'],
+    [/Rust runtime library[\s\S]*ai-sdk-starter-agent[\s\S]*Separately started Admin Console[\s\S]*Managed Agents client/, '1.0 migration must map the earlier embedding, server, Console, and client paths'],
+    [/AWAKEN_HTTP_ADDR[\s\S]*Earlier storage-directory environment variable[\s\S]*AWAKEN_ADMIN_API_BEARER_TOKEN[\s\S]*Typed TOML configuration/, '1.0 migration must map earlier startup configuration to the typed authority'],
+    [/does not promise that an earlier local store can be[\s\S]*opened in place[\s\S]*separate `data_dir`[\s\S]*rollback/, '1.0 migration must fail closed on unproven in-place data reuse'],
+    [/Managed Agents compatibility matrix[\s\S]*Agents architecture[\s\S]*self-hosting/, '1.0 migration must delegate compatibility and deployment details to their owners'],
+    [/Awaken 1\.0 AllInOne[\s\S]*Split Control and Coordinator[\s\S]*database-free Workers/, '1.0 migration must show the local-first deployment transition'],
+  ]],
+  ['platform/current/zh/how-to/migrate-to-1-0.md', [
+    [/^## 选择 1\.0 入口$/m, 'Chinese 1.0 migration must begin with the same entry-point decision'],
+    [/Rust Runtime library[\s\S]*ai-sdk-starter-agent[\s\S]*单独启动的 Admin Console[\s\S]*Managed Agents 客户端/, 'Chinese 1.0 migration must map the same earlier application paths'],
+    [/AWAKEN_HTTP_ADDR[\s\S]*旧版 storage-directory 环境变量[\s\S]*AWAKEN_ADMIN_API_BEARER_TOKEN[\s\S]*类型化 TOML 配置/, 'Chinese 1.0 migration must map earlier startup configuration to the typed authority'],
+    [/没有承诺 1\.0 可以原地打开旧版本地 store[\s\S]*独立 `data_dir`[\s\S]*回滚/, 'Chinese 1.0 migration must fail closed on unproven in-place data reuse'],
+    [/Managed Agents 兼容矩阵[\s\S]*Agents 架构[\s\S]*自托管指南/, 'Chinese 1.0 migration must delegate compatibility and deployment details to their owners'],
+    [/Awaken 1\.0 AllInOne[\s\S]*拆分 Control 与 Coordinator[\s\S]*无数据库 Worker/, 'Chinese 1.0 migration must show the same local-first deployment transition'],
+  ]],
+  ['platform/current/en/index.md', [
+    [/\/docs\/agents\/how-to\/migrate-to-1-0\//, 'Agents Start must link the 1.0 migration owner'],
+  ]],
+  ['platform/current/zh/index.md', [
+    [/\/zh\/docs\/agents\/how-to\/migrate-to-1-0\//, 'Chinese Agents Start must link the 1.0 migration owner'],
+  ]],
+  ['platform/current/en/compatibility.md', [
+    [/does not cover migration from an earlier Awaken runtime[\s\S]*\.\/how-to\/migrate-to-1-0/, 'Managed compatibility must delegate product migration'],
+  ]],
+  ['platform/current/zh/compatibility.md', [
+    [/不负责旧版 Awaken Runtime[\s\S]*\.\/how-to\/migrate-to-1-0/, 'Chinese Managed compatibility must delegate product migration'],
+  ]],
+]) {
+  requireText(join(docsRoot, docsRel), patterns);
+}
+
 for (const [docsRel, patterns] of [
   ['platform/current/en/concepts/architecture.md', [
     [/title: "Awaken Agents system and deployment architecture"/, 'Platform architecture must name the system and deployment decision'],
