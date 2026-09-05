@@ -56,11 +56,17 @@ const copy = ui[lang].home;
           <a
             href={agentsDocsHref}
             data-umami-event="developer_evaluation_selected"
+            data-umami-event-location="home-hero"
+            data-umami-event-product="agents"
+            data-umami-event-destination="quickstart"
             class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400"
           >{home.hero.ctaPrimary}</a>
           <a
             href={enterpriseHref}
             data-umami-event="private_deployment_cooperation_selected"
+            data-umami-event-location="home-hero"
+            data-umami-event-product="agents"
+            data-umami-event-destination="enterprise"
             class="rounded-xl border border-ink-600 bg-ink-950/20 px-6 py-3 font-medium text-fog-100 backdrop-blur-sm transition hover:border-fog-500"
           >{home.hero.ctaSecondary}</a>
         </div>
@@ -216,8 +222,8 @@ const copy = ui[lang].home;
       <h2 class="home-section-title mx-auto mt-5 max-w-4xl text-fog-100">{home.cta.title}</h2>
       <p class="mx-auto mt-7 max-w-2xl text-lg leading-8 text-fog-300">{home.cta.body}</p>
       <div class="mt-10 flex flex-wrap justify-center gap-4">
-        <a href={agentsDocsHref} data-umami-event="developer_evaluation_selected" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{home.cta.primary}</a>
-        <a href={enterpriseHref} data-umami-event="private_deployment_cooperation_selected" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{home.cta.secondary}</a>
+        <a href={agentsDocsHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="home-closing" data-umami-event-product="agents" data-umami-event-destination="quickstart" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{home.cta.primary}</a>
+        <a href={enterpriseHref} data-umami-event="private_deployment_cooperation_selected" data-umami-event-location="home-closing" data-umami-event-product="agents" data-umami-event-destination="enterprise" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{home.cta.secondary}</a>
       </div>
     </div>
   </section>

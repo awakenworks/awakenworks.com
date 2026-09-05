@@ -1,0 +1,12 @@
+---
+import IntegrationsIndex from '../../components/IntegrationsIndex.astro';
+import { content } from '../../i18n/content';
+import { DEFAULT_LANG } from '../../i18n/locales';
+import Base from '../../layouts/Base.astro';
+
+const t = content[DEFAULT_LANG];
+---
+
+<Base title={t.integrations.meta.title} description={t.integrations.meta.description}>
+  <IntegrationsIndex lang={DEFAULT_LANG} />
+</Base>

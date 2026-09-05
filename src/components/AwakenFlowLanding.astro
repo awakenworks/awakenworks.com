@@ -36,10 +36,10 @@ const copy = ui[lang].landing;
       <h1 class="hero-title mt-6 max-w-3xl font-semibold text-fog-100">{o.title}</h1>
       <p class="mt-6 max-w-2xl text-lg text-fog-300 sm:text-xl">{o.subtitle}</p>
       <div class="mt-9 flex flex-wrap items-center gap-4">
-        <a href={localePath(lang, o.ctaPrimary.href)} data-umami-event="workforce_workspace_selected" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-semibold text-ink-950 hover:bg-accent-400">
+        <a href={localePath(lang, o.ctaPrimary.href)} data-umami-event="workforce_workspace_selected" data-umami-event-location="workforce-hero" data-umami-event-product="workforce" data-umami-event-destination="workspace-preview" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-semibold text-ink-950 hover:bg-accent-400">
           {o.ctaPrimary.label}
         </a>
-        <a href={localePath(lang, o.ctaSecondary.href)} data-umami-event="paid_validation_selected" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-semibold text-fog-200 hover:border-fog-500">
+        <a href={localePath(lang, o.ctaSecondary.href)} data-umami-event="paid_validation_selected" data-umami-event-location="workforce-hero" data-umami-event-product="workforce" data-umami-event-destination="enterprise" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-semibold text-fog-200 hover:border-fog-500">
           {o.ctaSecondary.label}
         </a>
       </div>
@@ -131,10 +131,10 @@ const copy = ui[lang].landing;
         {copy.workforceCloseBody}
       </p>
       <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-        <a href={localePath(lang, o.ctaPrimary.href)} data-umami-event="workforce_workspace_selected" class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-ink-950 transition hover:bg-accent-400">{o.ctaPrimary.label}</a>
-        <a href={localePath(lang, o.ctaSecondary.href)} data-umami-event="paid_validation_selected" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.ctaSecondary.label}</a>
-        <a href={localePath(lang, o.ctaDocs.href)} data-umami-event="developer_evaluation_selected" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400">{o.ctaDocs.label} →</a>
-        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="workforce-close" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400">★ {copy.workforceStar}</a>
+        <a href={localePath(lang, o.ctaPrimary.href)} data-umami-event="workforce_workspace_selected" data-umami-event-location="workforce-closing" data-umami-event-product="workforce" data-umami-event-destination="workspace-preview" class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-ink-950 transition hover:bg-accent-400">{o.ctaPrimary.label}</a>
+        <a href={localePath(lang, o.ctaSecondary.href)} data-umami-event="paid_validation_selected" data-umami-event-location="workforce-closing" data-umami-event-product="workforce" data-umami-event-destination="enterprise" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.ctaSecondary.label}</a>
+        <a href={localePath(lang, o.ctaDocs.href)} data-umami-event="developer_evaluation_selected" data-umami-event-location="workforce-closing" data-umami-event-product="workforce" data-umami-event-destination="docs" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400">{o.ctaDocs.label} →</a>
+        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="workforce-close" data-umami-event-product="workforce" data-umami-event-destination="github" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400">★ {copy.workforceStar}</a>
       </div>
     </div>
   </section>

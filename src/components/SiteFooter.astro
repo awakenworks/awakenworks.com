@@ -44,6 +44,8 @@ function externalEvent(href: string): string | undefined {
                     }
                     data-umami-event={externalEvent(link.href)}
                     data-umami-event-location={link.href === AWAKEN_GITHUB_URL ? 'footer' : undefined}
+                    data-umami-event-product={link.href === AWAKEN_GITHUB_URL ? 'unselected' : undefined}
+                    data-umami-event-destination={link.href === AWAKEN_GITHUB_URL ? 'github' : undefined}
                     class="text-fog-300 hover:text-fog-100"
                   >
                     {link.label}

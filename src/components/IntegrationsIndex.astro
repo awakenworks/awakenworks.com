@@ -1,0 +1,42 @@
+---
+import { content, localePath, type Lang } from '../i18n/content';
+import SiteFooter from './SiteFooter.astro';
+import SiteHeader from './SiteHeader.astro';
+
+interface Props { lang: Lang }
+
+const { lang } = Astro.props;
+const page = content[lang].integrations;
+---
+
+<SiteHeader lang={lang} path="/integrations" />
+
+<main id="main-content" tabindex="-1">
+  <section class="relative overflow-hidden border-b border-ink-800">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-28">
+      <p class="eyebrow text-accent-400">{page.eyebrow}</p>
+      <h1 class="mt-5 max-w-5xl text-5xl font-semibold tracking-tight text-fog-100 sm:text-7xl">{page.title}</h1>
+      <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300">{page.body}</p>
+      <p data-integration-authority class="mt-7 max-w-3xl border-l-2 border-accent-500/60 pl-4 text-sm leading-7 text-fog-500">{page.boundary}</p>
+      <div class="mt-9 flex flex-wrap gap-4">
+        <a href={localePath(lang, '/docs/agents/get-started')} data-umami-event="developer_evaluation_selected" data-umami-event-location="integrations-hero" data-umami-event-product="agents" data-umami-event-destination="quickstart" class="rounded-xl bg-accent-500 px-5 py-3 font-medium text-onaccent hover:bg-accent-400">{page.quickstart}</a>
+        <a href={localePath(lang, '/docs/agents/compatibility')} data-umami-event="awaken-view-compatibility" data-umami-event-location="integrations-hero" data-umami-event-product="agents" data-umami-event-destination="compatibility" class="rounded-xl border border-ink-600 px-5 py-3 font-medium text-fog-100 hover:border-fog-500">{page.compatibility}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-ink-950">
+    <div class="mx-auto grid max-w-6xl gap-5 px-6 py-20 sm:grid-cols-2 sm:py-28 lg:grid-cols-3">
+      {page.items.map((item) => (
+        <article data-integration-card={item.key} class="flex flex-col rounded-2xl border border-ink-700 bg-ink-850 p-6">
+          <p class="font-mono text-xs text-accent-400">{item.name}</p>
+          <p class="mt-4 flex-1 text-sm leading-7 text-fog-400">{item.body}</p>
+          <a href={localePath(lang, item.href)} data-umami-event="integration_selected" data-umami-event-location="integration-catalog" data-umami-event-product="agents" data-umami-event-destination={item.key} class="mt-6 font-medium text-fog-100 hover:text-accent-300">{item.action} →</a>
+        </article>
+      ))}
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />

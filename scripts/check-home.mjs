@@ -1,6 +1,16 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
+  attributionFormValues,
+  captureAttribution,
+  evolveAttribution,
+} from '../src/lib/attribution.mjs';
+import {
+  buildCanaryPayload,
+  checkAnalyticsLive,
+  hasCanary,
+} from './check-analytics-live.mjs';
+import {
   brandMarkAssetStem,
   brandMarkBody,
   brandMarkPalette,
@@ -12,6 +22,118 @@ import {
 
 const root = resolve(import.meta.dirname, '..');
 const failures = [];
+
+function requireDeepEqual(actual, expected, message) {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    failures.push(`${message}; expected ${JSON.stringify(expected)}, found ${JSON.stringify(actual)}`);
+  }
+}
+
+// Cause/effect design for the one session-scoped attribution authority:
+// C1 no prior state; C2 a later page has no campaign; C3 a later campaign has
+// only some UTM fields; C4 legacy flat state exists; C5 stored JSON is corrupt;
+// C6 storage writes fail; C7 schema-shaped state has malformed touches. E1 capture first and last once; E2 keep both touches;
+// E3 preserve first and replace last without leaking old UTM fields; E4 migrate
+// one flat record without loss; E5 recover to valid schema; E6 page/form work.
+// Decision table:
+// | Rule | prior | incoming UTM | storage | Effect |
+// | A1 | none | yes | works | first=last=incoming |
+// | A2 | v2 | no | works | first/last unchanged |
+// | A3 | v2 | yes | works | first unchanged, last replaced |
+// | A4 | legacy | no | works | first=last=legacy |
+// | A5 | corrupt | any | works | valid v2 fallback |
+// | A6 | any | any | write fails | valid return, no page failure |
+// | A7 | malformed v2 | any | works | valid current-page fallback |
+const firstCampaign = evolveAttribution({}, 'https://awakenworks.com/?utm_source=x&utm_medium=social&utm_campaign=launch&utm_content=hero', 'https://x.com/');
+const laterPage = evolveAttribution(firstCampaign, 'https://awakenworks.com/agents', 'https://awakenworks.com/');
+const laterCampaign = evolveAttribution(laterPage, 'https://awakenworks.com/integrations?utm_source=hn&utm_campaign=integration', 'https://news.ycombinator.com/');
+requireDeepEqual(laterPage, firstCampaign, 'A2 no-campaign navigation must not rewrite attribution');
+requireDeepEqual(laterCampaign.first, firstCampaign.first, 'A3 later campaign must preserve first touch');
+requireDeepEqual(
+  laterCampaign.last,
+  {
+    landing_page: 'https://awakenworks.com/integrations?utm_source=hn&utm_campaign=integration',
+    referrer: 'https://news.ycombinator.com/',
+    utm_source: 'hn',
+    utm_medium: '',
+    utm_campaign: 'integration',
+    utm_content: '',
+  },
+  'A3 later campaign must replace the complete last touch',
+);
+const legacy = evolveAttribution({ landing_page: 'https://awakenworks.com/old', referrer: 'https://example.com/', utm_source: 'legacy' }, 'https://awakenworks.com/agents');
+requireDeepEqual(legacy.first, legacy.last, 'A4 legacy flat attribution must seed both touches');
+const projected = attributionFormValues(laterCampaign);
+if (projected.utm_source !== 'hn' || projected.first_utm_source !== 'x') failures.push('form projection must expose explicit last and first campaign fields');
+let recoveredWrite = '';
+const recovered = captureAttribution({
+  storage: {
+    getItem: () => '{bad json',
+    setItem: (_key, value) => { recoveredWrite = value; },
+  },
+  href: 'https://awakenworks.com/',
+});
+if (recovered.schema !== 2 || !recoveredWrite) failures.push('A5 corrupt storage must recover to persisted schema v2');
+const writeFailure = captureAttribution({
+  storage: { getItem: () => '{}', setItem: () => { throw new Error('quota'); } },
+  href: 'https://awakenworks.com/',
+});
+if (writeFailure.schema !== 2) failures.push('A6 storage write failure must still return valid attribution');
+const malformedV2 = evolveAttribution({ schema: 2, first: 'bad', last: [] }, 'https://awakenworks.com/current');
+if (malformedV2.first.landing_page !== 'https://awakenworks.com/current') failures.push('A7 malformed schema-shaped attribution must recover to the current page');
+
+// Cause/effect design for the analytics data-plane release gate:
+// C1 a release has a revision/run ID; C2 the query contains the exact event;
+// C3 it contains another run/revision; C4 the response is malformed.
+// E1 emit one anonymous bounded canary; E2 accept only the exact pair; E3/E4
+// reject false positives. Decision table: exact -> pass; mismatch/malformed -> fail.
+const canaryPayload = buildCanaryPayload({ websiteId: 'website', host: 'awakenworks.com', revision: 'abc123', runId: 'run-1' });
+requireDeepEqual(Object.keys(canaryPayload.payload.data).sort(), ['kind', 'revision', 'run_id'], 'canary must contain only bounded deployment fields');
+const canaryRows = { data: [{ eventName: 'analytics_canary', propertyKeys: ['revision', 'run_id'], propertyValues: ['abc123', 'run-1'] }] };
+if (!hasCanary(canaryRows, 'run-1', 'abc123')) failures.push('exact analytics canary must pass');
+if (hasCanary(canaryRows, 'run-2', 'abc123') || hasCanary({}, 'run-1', 'abc123')) failures.push('mismatched or malformed analytics canary must fail');
+async function expectCanaryFailure(options, pattern, message) {
+  try {
+    await checkAnalyticsLive(options);
+    failures.push(`${message}; expected failure`);
+  } catch (error) {
+    if (!pattern.test(error.message)) failures.push(`${message}; unexpected error: ${error.message}`);
+  }
+}
+await expectCanaryFailure({ revision: 'abc123' }, /UMAMI_API_KEY is required/, 'missing analytics credential must fail before sending');
+await expectCanaryFailure({ apiKey: 'secret' }, /AWAKENWORKS_EXPECTED_REVISION is required/, 'missing release revision must fail before sending');
+let mockCalls = 0;
+const observedCanary = await checkAnalyticsLive({
+  apiKey: 'secret',
+  websiteId: 'website',
+  revision: 'abc123',
+  runId: 'run-1',
+  attempts: 2,
+  intervalMs: 0,
+  fetchImpl: async (url, options) => {
+    mockCalls += 1;
+    if (mockCalls === 1) {
+      const body = JSON.parse(options.body);
+      if (body.payload.data.run_id !== 'run-1' || !options.headers['User-Agent']) failures.push('canary send must carry exact run ID and user agent');
+      return new Response('{}', { status: 200 });
+    }
+    if (!String(url).includes('/event-data-pivot?') || options.headers.Authorization !== 'Bearer secret') failures.push('canary query must use the pivot endpoint and bearer credential');
+    return new Response(JSON.stringify(mockCalls === 2 ? { data: [] } : canaryRows), { status: 200 });
+  },
+});
+if (observedCanary.attempt !== 2 || mockCalls !== 3) failures.push('delayed canary must retry and terminate on the exact observed event');
+await expectCanaryFailure({
+  apiKey: 'secret', revision: 'abc123', attempts: 1, intervalMs: 0,
+  fetchImpl: async () => new Response('rejected', { status: 503 }),
+}, /Umami canary send failed: status=503/, 'send rejection must remain distinguishable');
+let exhaustionCalls = 0;
+await expectCanaryFailure({
+  apiKey: 'secret', revision: 'abc123', attempts: 1, intervalMs: 0,
+  fetchImpl: async () => {
+    exhaustionCalls += 1;
+    return new Response(exhaustionCalls === 1 ? '{}' : JSON.stringify({ data: [] }), { status: 200 });
+  },
+}, /was not observable after 1 attempts/, 'unobserved canary must fail instead of reporting success');
 
 function requireOrderedText(path, markers, message) {
   const text = readFileSync(path, 'utf8');
@@ -108,6 +230,7 @@ for (const path of [
   'src/pages/[lang]/index.astro',
   'src/pages/[lang]/blog/[...slug].astro',
   'src/pages/[lang]/cases/[slug].astro',
+  'src/pages/[lang]/integrations/index.astro',
   'src/pages/[lang]/docs/[...slug].astro',
   'src/pages/[lang]/docs/search-index.json.ts',
   'src/pages/[lang]/docs/llms.txt.ts',
@@ -664,10 +787,10 @@ for (const rule of rules) {
   // second catalog, or detailed checklist -> reject.
   requireOccurrenceCount(rule.path, 'data-home-adoption=', 3, 'home must render the three canonical Agents adoption starts once');
   requireOccurrenceCount(rule.path, 'data-product-role', 3, 'every product card must retain one visible role');
-  requireOccurrenceCount(rule.path, 'data-umami-event-location="home-hero"', 0, 'home hero must not add a third GitHub choice beside the two intent exits');
-  requireOccurrenceCount(rule.path, 'data-umami-event-location="home-closing"', 0, 'home closing action must preserve the same two-intent decision');
-  requireOccurrenceCount(rule.path, 'data-umami-event-location="header"', 1, 'desktop header Star exit must identify its placement');
-  requireOccurrenceCount(rule.path, 'data-umami-event-location="mobile-menu"', 1, 'mobile Star exit must identify its placement');
+  requireOccurrenceCount(rule.path, 'data-umami-event-location="home-hero"', 2, 'both existing home hero intents must identify their placement without adding a third action');
+  requireOccurrenceCount(rule.path, 'data-umami-event-location="home-closing"', 2, 'both existing closing intents must identify their placement without adding another action');
+  requireOccurrenceCount(rule.path, 'data-umami-event-location="header"', 2, 'desktop GitHub and Quickstart exits must identify their placement');
+  requireOccurrenceCount(rule.path, 'data-umami-event-location="mobile-menu"', 2, 'mobile GitHub and Quickstart exits must identify their placement');
   requireOccurrenceCount(rule.path, 'data-umami-event-location="footer"', 1, 'footer Star exit must identify its placement');
   requireOccurrenceCount(rule.path, 'data-scenario-card', 0, 'home must not restore the old detailed scenario-card implementation');
   requireOccurrenceCount(rule.path, 'data-home-workflow class=', 1, 'home must show one product path instead of another adoption-card set');
@@ -697,15 +820,16 @@ for (const rule of rules) {
   requireOccurrenceCount(rule.path, '<astro-island', 0, 'home proof must remain available without client hydration');
   requirePattern(rule.path, new RegExp(rule.releaseStatus.replaceAll('.', '\\.')), 'home must render the registry-owned product maturity');
   requireOccurrenceCount(rule.path, 'data-umami-event="footer-youtube"', 1, 'footer video exit must be measurable');
-  requirePattern(rule.path, /awakenworks_attribution/, 'company entry must preserve first-touch attribution across navigation');
   rejectPattern(rule.path, /fonts\.googleapis\.com|fonts\.gstatic\.com/, 'public entry must not depend on third-party font delivery');
   rejectPattern(rule.path, /Download Awaken 1\.0|下载 Awaken 1\.0/, 'pre-release Agents must not claim a stable download');
 }
 
 const homeSourcePath = resolve(root, 'src/components/Home.astro');
+requirePattern(resolve(root, 'src/layouts/Base.astro'), /import \{ captureAttribution \} from '\.\.\/lib\/attribution\.mjs'[\s\S]*captureAttribution\(\)/, 'the shared layout must capture attribution through the canonical module');
 requireOrderedText(homeSourcePath, ['id="home-hero"', '<ProductShowcase', 'id="home-value"', 'id="home-adoption"', 'id="home-cases"', 'id="home-products"'], 'source must move from the company promise through product proof, buyer value, compact adoption choice, reference evidence, and late portfolio context');
 rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"|id="home-scenarios"|data-scenario-card/, 'source must use the one compact adoption renderer without restoring older parallel sections');
-rejectPattern(homeSourcePath, /data-umami-event-location="home-hero"|data-umami-event-location="home-closing"/, 'home source must keep explanatory and GitHub links out of the two-choice hero and closing action');
+requireOccurrenceCount(homeSourcePath, 'data-umami-event-location="home-hero"', 2, 'home source must measure the existing two hero intents without adding another action');
+requireOccurrenceCount(homeSourcePath, 'data-umami-event-location="home-closing"', 2, 'home source must measure the existing two closing intents without adding another action');
 // Cause/effect design for the Agents-led promise and its responsive rendering:
 // C1: requiring a working Agent in the headline excludes teams that start from
 //     a real job or adopt a compatible third-party Agent.
@@ -1111,6 +1235,18 @@ const enterpriseRules = [
 const opportunityFormSourcePath = resolve(root, 'src/components/OpportunityForm.astro');
 requirePattern(opportunityFormSourcePath, /import\.meta\.env\.PUBLIC_OPPORTUNITY_ENDPOINT[\s\S]*https:\/\/formspree\.io\/f\/mrewzorl/, 'the shared opportunity form must have one documented endpoint configuration with the current transport fallback');
 rejectPattern(opportunityFormSourcePath, /PUBLIC_WAITLIST_ENDPOINT/, 'the opportunity form must not retain the legacy parallel endpoint configuration');
+requirePattern(opportunityFormSourcePath, /import \{ attributionFormValues, captureAttribution \} from '\.\.\/lib\/attribution\.mjs'/, 'the opportunity form must reuse the shared attribution authority');
+requirePattern(opportunityFormSourcePath, /\['agents', 'objects', 'workforce'\]\.includes\(requestedProduct\)/, 'shared form must accept only known product context from early-preview links');
+requirePattern(opportunityFormSourcePath, /Object\.prototype\.hasOwnProperty\.call\(scenarioLabels, requestedScenario\)/, 'shared form must accept only known scenario context from company links');
+requirePattern(opportunityFormSourcePath, /setAttribute\('aria-busy', 'true'\)/, 'progressive submission must expose its busy state');
+requirePattern(opportunityFormSourcePath, /getAttribute\('aria-busy'\) === 'true'\) return/, 'progressive submission must reject a second submit while transport is pending');
+requirePattern(opportunityFormSourcePath, /globalThis\.crypto\?\.randomUUID\?\.\(\)/, 'progressive submission must create a traceable submission identifier with a fallback');
+requirePattern(opportunityFormSourcePath, /success\.focus\(\)/, 'successful submission must move focus to the next-step panel');
+requirePattern(opportunityFormSourcePath, /opportunity_form_submission_failed[\s\S]*reason: failureReason/, 'rejected transport must emit one bounded failure reason');
+for (const dimension of ['product', 'location']) {
+  requirePattern(opportunityFormSourcePath, new RegExp(`${dimension}:`), `opportunity events must include the bounded ${dimension} dimension`);
+}
+rejectPattern(opportunityFormSourcePath, /window\.umami\.track\([\s\S]{0,500}(?:email|company|additional_context|submission_id)/, 'Umami opportunity events must not include contact, free text, or submission identifiers');
 requirePattern(resolve(root, '.env.example'), /PUBLIC_OPPORTUNITY_ENDPOINT=https:\/\/formspree\.io\/f\/mrewzorl/, 'deployment configuration must document the one opportunity endpoint');
 
 for (const rule of enterpriseRules) {
@@ -1177,13 +1313,11 @@ for (const rule of enterpriseRules) {
   // | F6   | any| concrete job    | any | n/a          | short required text |
   // | F7   | any| multiple systems| any | n/a          | optional checkboxes |
   // | F8   | any| no extra context| any | n/a          | submit without extras |
-  for (const field of ['intent', 'product', 'source_page', 'landing_page', 'referrer', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'scenario_context', 'submission_id', 'submitted_at', 'page_url', 'contact_consent']) {
+  for (const field of ['intent', 'product', 'source_page', 'landing_page', 'referrer', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'first_landing_page', 'first_referrer', 'first_utm_source', 'first_utm_medium', 'first_utm_campaign', 'first_utm_content', 'scenario_context', 'submission_id', 'submitted_at', 'page_url', 'contact_consent']) {
     requirePattern(rule.path, new RegExp(`name="${field}"`), `opportunity form must carry ${field}`);
   }
   requirePattern(rule.path, new RegExp(`name="intent" value="${rule.intent}"`), 'shared form must reuse the canonical cooperation intent instead of creating a second paid-validation schema');
   rejectPattern(rule.path, /name="budget_path"/, 'business contact form must not ask for a public budget path');
-  requirePattern(rule.path, /awakenworks_attribution/, 'opportunity form must restore first-touch attribution from the shared session snapshot');
-  requirePattern(rule.path, /\['agents', 'objects', 'workforce'\]\.includes\(requestedProduct\)/, 'shared form must accept only known product context from early-preview links');
   requirePattern(rule.path, /<select name="product"[\s\S]*Awaken Agents[\s\S]*Awaken Objects[\s\S]*Awaken Workforce/, 'shared form must let no-JavaScript visitors select one product with visible maturity');
   requirePattern(rule.path, /<option value="agents" selected>/, 'no-context intake must default to the current Agents path');
   requirePattern(rule.path, /<select name="frequency" class=/, 'frequency must remain optional for previews where cadence is not yet known');
@@ -1197,14 +1331,9 @@ for (const rule of enterpriseRules) {
   requirePattern(rule.path, /<select name="target_timing" class=/, 'target timing must use an optional bounded choice');
   requirePattern(rule.path, /<textarea name="additional_context" rows="2"/, 'unmatched context must retain one short optional text escape hatch');
   rejectPattern(rule.path, /<textarea name="current_loss"|<textarea name="systems_and_risks"|<input type="text" name="target_timing"|<input type="text" name="role"/, 'bounded form facts must not regress to long open-ended fields');
-  requirePattern(rule.path, /Object\.prototype\.hasOwnProperty\.call\(scenarioLabels, requestedScenario\)/, 'shared form must accept only known scenario context from company links');
   requirePattern(rule.path, /data-submitting="(?:Submitting…|提交中…)"/, 'shared form must expose localized submitting state');
-  requirePattern(rule.path, /aria-busy/, 'progressive submission must expose its busy state');
-  requirePattern(rule.path, /getAttribute\('aria-busy'\) === 'true'\) return/, 'progressive submission must reject a second submit while transport is pending');
-  requirePattern(rule.path, /globalThis\.crypto\?\.randomUUID\?\.\(\)/, 'progressive submission must create a traceable submission identifier with a fallback');
   requireOccurrenceCount(rule.path, '<section data-opportunity-success', 1, 'shared form must expose one progressive success panel');
   requirePattern(rule.path, /<section data-opportunity-success role="status" aria-live="polite" tabindex="-1"/, 'the progressive success panel must be announced and programmatically focusable');
-  requirePattern(rule.path, /success\.focus\(\)/, 'successful submission must move focus to the next-step panel');
   requirePattern(rule.path, new RegExp(rule.success), 'successful submission must name the received state');
   requireOccurrenceCount(rule.path, '<li data-opportunity-success-step', 3, 'successful submission must explain exactly three next steps');
   requirePattern(rule.path, new RegExp(`href="${rule.privacyHref}"`), 'contact consent must link to the localized privacy notice');
@@ -1660,6 +1789,67 @@ for (const path of [
   rejectPattern(path, /—/, 'primary public copy must use direct punctuation instead of em-dash cadence');
 }
 
+// Cause/effect design for measurable conversion exits:
+// C1 the same intent appears in several components; C2 page URL alone cannot
+// distinguish placement or originating product; C3 event names have history.
+// E1 preserve event names; E2 require bounded location/product/destination on
+// every literal conversion link. Decision table: all three dimensions ->
+// accept; renamed event or any missing dimension -> reject.
+const conversionEvents = new Set([
+  'developer_evaluation_selected',
+  'github_star_selected',
+  'private_deployment_cooperation_selected',
+  'enterprise_intent_selected',
+]);
+for (const path of filesBelow(resolve(root, 'src/components'), (candidate) => candidate.endsWith('.astro'))) {
+  const source = readFileSync(path, 'utf8');
+  for (const match of source.matchAll(/<a\b[^>]*data-umami-event="([^"]+)"[^>]*>/gsu)) {
+    if (!conversionEvents.has(match[1])) continue;
+    for (const dimension of ['location', 'product', 'destination']) {
+      if (!match[0].includes(`data-umami-event-${dimension}=`)) {
+        failures.push(`${path}: ${match[1]} link must declare ${dimension}`);
+      }
+    }
+  }
+}
+
+// Cause/effect design for the integration growth entry:
+// C1 visitors search by an existing protocol; C2 technical scope already has
+// canonical Docs owners; C3 locale routes can drift; C4 an empty SEO page could
+// imply unsupported integrations. E1 render six verified entry cards in both
+// locales; E2 link each card to existing Docs; E3 state that this directory is
+// not a compatibility authority; E4 expose one measurable Quickstart path.
+// Decision table: bilingual route + six Docs links + boundary + CTA -> accept;
+// missing peer, copied matrix, missing target, or unmeasured CTA -> reject.
+const integrationRules = [
+  { path: resolve(root, 'dist/integrations/index.html'), prefix: '', title: 'Connect through the protocol your application already uses.' },
+  { path: resolve(root, 'dist/zh/integrations/index.html'), prefix: '/zh', title: '从应用已经使用的协议接入。' },
+];
+for (const rule of integrationRules) {
+  requirePattern(rule.path, new RegExp(rule.title), 'integration directory must render its localized decision headline');
+  requireOccurrenceCount(rule.path, 'data-integration-card=', 6, 'integration directory must project six verified documentation entries');
+  requireOccurrenceCount(rule.path, 'data-umami-event="integration_selected"', 6, 'every integration entry must be measurable');
+  requireOccurrenceCount(rule.path, 'data-integration-authority', 1, 'integration directory must state its non-authoritative projection boundary once');
+  for (const href of [
+    '/docs/agents/protocols/managed-agents',
+    '/docs/agents/how-to/integrate-ai-sdk-frontend',
+    '/docs/agents/how-to/integrate-copilotkit-ag-ui',
+    '/docs/agents/protocols/mcp',
+    '/docs/agents/protocols/a2a',
+    '/docs/agents/protocols/acp',
+  ]) requirePattern(rule.path, new RegExp(`href="${rule.prefix}${href}"`), `integration directory must link to ${rule.prefix}${href}`);
+  requirePattern(rule.path, /data-umami-event="developer_evaluation_selected"[^>]*data-umami-event-location="integrations-hero"[^>]*data-umami-event-product="agents"[^>]*data-umami-event-destination="quickstart"/, 'integration hero must expose one fully dimensioned Quickstart exit');
+}
+
+const analyticsGatePath = resolve(root, 'scripts/check-analytics-live.mjs');
+const liveGatePath = resolve(root, 'scripts/check-live.mjs');
+const pagesWorkflowPath = resolve(root, '.github/workflows/pages.yml');
+requirePattern(analyticsGatePath, /User-Agent[\s\S]*event-data-pivot[\s\S]*Authorization: `Bearer \$\{apiKey\}`/, 'analytics gate must send with a user agent and query authenticated event data');
+requirePattern(analyticsGatePath, /UMAMI_API_KEY is required[\s\S]*AWAKENWORKS_EXPECTED_REVISION is required/, 'analytics gate must reject missing credentials or release identity');
+requirePattern(pagesWorkflowPath, /Verify deployed revision[\s\S]*Verify analytics data plane[\s\S]*secrets\.UMAMI_API_KEY/, 'Pages must verify revision before the analytics data plane with a private secret');
+rejectPattern(pagesWorkflowPath, /PUBLIC_UMAMI_API_KEY/, 'Umami API credentials must never enter the public build environment');
+requirePattern(liveGatePath, /'\/integrations\/'[\s\S]*'\/zh\/integrations\/'/, 'live release gate must verify both integration directory locales');
+
 for (const path of [
   resolve(root, 'dist/docs/agents/index.html'),
   resolve(root, 'dist/zh/docs/agents/index.html'),
@@ -1687,8 +1877,8 @@ for (const path of [
 }
 
 const sitemap = readFileSync(resolve(root, 'dist/sitemap-0.xml'), 'utf8');
-if (!/\/docs\/agents\//.test(sitemap) || !/\/docs\/objects\//.test(sitemap) || !/\/docs\/workforce\//.test(sitemap) || !/\/cases\/pilot\//.test(sitemap)) {
-  failures.push('sitemap: all three product docs and case pages must be discoverable');
+if (!/\/docs\/agents\//.test(sitemap) || !/\/docs\/objects\//.test(sitemap) || !/\/docs\/workforce\//.test(sitemap) || !/\/cases\/pilot\//.test(sitemap) || !/\/integrations\//.test(sitemap)) {
+  failures.push('sitemap: all three product docs, case pages, and the integration directory must be discoverable');
 }
 if (/(?:\/zh)?\/(?:platform|harness|flow)(?:\/|<)|\/docs\/(?:platform|harness|flow)(?:\/|<)/.test(sitemap)) {
   failures.push('sitemap: legacy product routes must not be discoverable');

@@ -30,7 +30,7 @@ const host = process.env.AWAKENWORKS_LIVE_HOST ?? 'awakenworks.com';
 const origin = `https://${host}`;
 const expectedRevision = process.env.AWAKENWORKS_EXPECTED_REVISION;
 const canonicalPattern = /<link rel="canonical" href="https:\/\/awakenworks\.com(?:\/[^"#?]*)?">/;
-const coreRoutes = ['/', '/agents/', '/objects/', '/workforce/', '/enterprise/', '/zh/'];
+const coreRoutes = ['/', '/agents/', '/objects/', '/workforce/', '/enterprise/', '/integrations/', '/zh/', '/zh/integrations/'];
 const assetPattern = /(?:href|src|poster)="(\/(?:[^"?#]+\.(?:css|js|svg|png|webp|jpe?g|gif|woff2?)))(?:[?#][^"]*)?"/gu;
 
 function requireCondition(condition, message) {

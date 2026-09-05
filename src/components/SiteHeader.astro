@@ -25,6 +25,7 @@ const productLinks = [
   { path: '/workforce', label: t.nav.workforce, status: t.products.workforce.status, href: localePath(lang, '/workforce') },
 ];
 const resourceLinks = [
+  { path: '/integrations', label: t.nav.integrations, href: localePath(lang, '/integrations') },
   { path: '/cases', label: t.nav.cases, href: localePath(lang, '/cases') },
   { path: '/docs', label: t.nav.docs, href: docsHref },
   { path: '/blog', label: t.nav.blog, href: localePath(lang, '/blog') },
@@ -34,6 +35,13 @@ const isActive = (candidate: string) =>
   path === candidate || path.startsWith(`${candidate}/`);
 const productsActive = productLinks.some((link) => isActive(link.path));
 const resourcesActive = resourceLinks.some((link) => isActive(link.path));
+const analyticsProduct = path.startsWith('/objects')
+  ? 'objects'
+  : path.startsWith('/workforce')
+    ? 'workforce'
+    : path.startsWith('/agents') || path.startsWith('/docs')
+      ? 'agents'
+      : 'unselected';
 ---
 
 <header
@@ -69,14 +77,17 @@ const resourcesActive = resourceLinks.some((link) => isActive(link.path));
                 href={link.href}
                 aria-current={isActive(link.path) ? 'page' : undefined}
                 data-umami-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined}
+                data-umami-event-location={link.path === '/enterprise' ? 'header-resources' : undefined}
+                data-umami-event-product={link.path === '/enterprise' ? analyticsProduct : undefined}
+                data-umami-event-destination={link.path === '/enterprise' ? 'enterprise' : undefined}
                 class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}
               >{link.label}</a>
             ))}
           </div>
         </details>
       </div>
-      <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="header" class="hidden text-fog-300 hover:text-fog-100 sm:block">{t.nav.github}</a>
-      <a href={startHref} data-umami-event="developer_evaluation_selected" class="hidden rounded-full bg-accent-500 px-3.5 py-1.5 text-xs font-semibold text-onaccent transition hover:bg-accent-400 md:inline-flex">{t.nav.run}</a>
+      <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="header" data-umami-event-product={analyticsProduct} data-umami-event-destination="github" class="hidden text-fog-300 hover:text-fog-100 sm:block">{t.nav.github}</a>
+      <a href={startHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="header" data-umami-event-product="agents" data-umami-event-destination="quickstart" class="hidden rounded-full bg-accent-500 px-3.5 py-1.5 text-xs font-semibold text-onaccent transition hover:bg-accent-400 md:inline-flex">{t.nav.run}</a>
       <button
         data-theme-toggle
         type="button"
@@ -122,9 +133,9 @@ const resourcesActive = resourceLinks.some((link) => isActive(link.path));
           <p class="px-3 pt-1 font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">{t.nav.products}</p>
           {productLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
           <p class="mt-2 border-t border-ink-700 px-3 pt-3 font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">{t.nav.resources}</p>
-          {resourceLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} data-umami-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
-          <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="mobile-menu" class="rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100">{t.nav.github}</a>
-          <a href={startHref} data-umami-event="developer_evaluation_selected" class="mt-1 rounded-lg bg-accent-500 px-3 py-2 font-semibold text-onaccent">{t.nav.run}</a>
+          {resourceLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} data-umami-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined} data-umami-event-location={link.path === '/enterprise' ? 'mobile-resources' : undefined} data-umami-event-product={link.path === '/enterprise' ? analyticsProduct : undefined} data-umami-event-destination={link.path === '/enterprise' ? 'enterprise' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
+          <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="mobile-menu" data-umami-event-product={analyticsProduct} data-umami-event-destination="github" class="rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100">{t.nav.github}</a>
+          <a href={startHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="mobile-menu" data-umami-event-product="agents" data-umami-event-destination="quickstart" class="mt-1 rounded-lg bg-accent-500 px-3 py-2 font-semibold text-onaccent">{t.nav.run}</a>
         </div>
       </details>
     </div>

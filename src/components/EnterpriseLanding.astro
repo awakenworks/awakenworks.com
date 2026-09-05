@@ -26,8 +26,8 @@ const pathTone = {
       <h1 class="hero-title mt-6 max-w-5xl font-semibold text-fog-100">{page.hero.title}</h1>
       <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300 sm:text-xl">{page.hero.body}</p>
       <div class="mt-10 flex flex-wrap gap-4">
-        <a href="#enterprise-paths" data-umami-event="private_deployment_cooperation_selected" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{page.hero.primary}</a>
-        <a href={productHref} data-umami-event="developer_evaluation_selected" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{page.hero.secondary}</a>
+        <a href="#enterprise-paths" data-umami-event="private_deployment_cooperation_selected" data-umami-event-location="enterprise-hero" data-umami-event-product="unselected" data-umami-event-destination="enterprise-paths" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{page.hero.primary}</a>
+        <a href={productHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="enterprise-hero" data-umami-event-product="agents" data-umami-event-destination="agents" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{page.hero.secondary}</a>
       </div>
       <p data-enterprise-now class="mt-8 max-w-3xl border-l-2 border-accent-500/60 pl-4 text-sm leading-6 text-fog-500">{page.boundary}</p>
     </div>
@@ -64,7 +64,7 @@ const pathTone = {
             <div class="mt-6 flex flex-wrap gap-x-4 gap-y-3 border-t border-ink-700 pt-5 text-sm">
               <a href={localePath(lang, item.href)} class="text-fog-300 hover:text-fog-100">{item.view} →</a>
               <a href={localePath(lang, item.docsHref)} class="text-fog-300 hover:text-fog-100">{item.docs} →</a>
-              <a href={`${localePath(lang, '/enterprise')}?product=${item.query}#apply`} class="font-medium text-accent-400 hover:text-accent-300">{item.apply} →</a>
+              <a href={`${localePath(lang, '/enterprise')}?product=${item.query}#apply`} data-umami-event="enterprise_intent_selected" data-umami-event-location={`enterprise-path-${item.query}`} data-umami-event-product={item.query} data-umami-event-destination="enterprise-form" class="font-medium text-accent-400 hover:text-accent-300">{item.apply} →</a>
             </div>
           </article>
         ))}

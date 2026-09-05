@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { DEFAULT_UMAMI_SCRIPT_URL, DEFAULT_UMAMI_WEBSITE_ID } from '../config/analytics.mjs';
 import { withSiteBase } from '../config/siteDeployment.mjs';
 import {
   DEFAULT_LANG,
@@ -66,9 +67,9 @@ const socialImage = withSiteBase(ogImage);
 // Only loads in production builds.
 const umamiWebsiteId =
   import.meta.env.PUBLIC_UMAMI_WEBSITE_ID ??
-  '59dd9ed4-a538-4fd3-98f4-c9ab7ded1d57';
+  DEFAULT_UMAMI_WEBSITE_ID;
 const umamiSrc =
-  import.meta.env.PUBLIC_UMAMI_SRC ?? 'https://cloud.umami.is/script.js';
+  import.meta.env.PUBLIC_UMAMI_SRC ?? DEFAULT_UMAMI_SCRIPT_URL;
 const enableAnalytics = import.meta.env.PROD && Boolean(umamiWebsiteId);
 // The release workflow supplies the exact website commit. Local builds keep an
 // explicit `local` value so a published page can never be mistaken for an
@@ -98,27 +99,12 @@ const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'loca
         }
       })();
     </script>
-    <script is:inline>
-      // Keep first-touch campaign context across the company -> enterprise path.
-      // Opportunity forms read this session-scoped snapshot; CRM remains the
-      // authority for qualification and downstream sales state.
-      (function () {
-        try {
-          var key = 'awakenworks_attribution';
-          var names = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
-          var params = new URLSearchParams(window.location.search);
-          var current = JSON.parse(sessionStorage.getItem(key) || '{}');
-          var hasCampaign = names.some(function (name) { return params.has(name); });
-          if (!current.landing_page || hasCampaign) {
-            current.landing_page = window.location.href;
-            current.referrer = document.referrer;
-          }
-          names.forEach(function (name) {
-            if (params.has(name)) current[name] = params.get(name);
-          });
-          sessionStorage.setItem(key, JSON.stringify(current));
-        } catch (_error) {}
-      })();
+    <script>
+      import { captureAttribution } from '../lib/attribution.mjs';
+
+      // One shared state transition owns first/last campaign attribution.
+      // Forms project this session-scoped state; CRM owns qualification.
+      captureAttribution();
     </script>
     <link rel="icon" type="image/svg+xml" href={withSiteBase('/favicon.svg')} />
     <meta name="generator" content={Astro.generator} />

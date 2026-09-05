@@ -131,6 +131,8 @@ const banner =
         rel="noopener noreferrer"
         data-umami-event="github_star_selected"
         data-umami-event-location="docs-header"
+        data-umami-event-product={product === 'docs' ? 'unselected' : product}
+        data-umami-event-destination="github"
         class="hidden rounded-full border border-accent-500/40 px-3 py-1 font-mono text-xs text-accent-300 hover:border-accent-400 hover:text-accent-200 sm:block"
         aria-label={copy.starAria}
       >★ Star</a>
@@ -202,6 +204,8 @@ const banner =
           rel="noopener noreferrer"
           data-umami-event="github_star_selected"
           data-umami-event-location="docs-mobile-nav"
+          data-umami-event-product={product === 'docs' ? 'unselected' : product}
+          data-umami-event-destination="github"
           class="col-span-3 rounded-full border border-accent-500/40 px-3 py-1 text-center text-accent-300 sm:col-span-1"
         >★ {copy.mobileStar}</a>
       </nav>
