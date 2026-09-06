@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = resolve(import.meta.dirname, '..');
 const docsRoot = join(root, 'src/content/docs');
+const blogRoot = join(root, 'src/content/blog');
 const distRoot = join(root, 'dist');
 const docsPagePath = join(root, 'src/components/DocsPage.astro');
 const provenancePath = join(root, 'config/source-provenance.json');
@@ -99,6 +100,63 @@ for (const path of trackedWebsiteMarkdown) {
     if (/(?:--?>|→|←|[├└│▼▲┌┐┘┬┴─╭╮╰╯]|\+--|\|--)/u.test(match[1])) {
       failures.push(`${relative(root, path)}: relationship and sequence diagrams must use Mermaid, not a text code block`);
     }
+  }
+}
+
+// Cause/effect design for promoting an internal content-library item into the
+// public website:
+// C1: a promoted post keeps an internal comparison field, reply target, or
+//     workstation path after editorial work.
+// C2: two public posts claim the same source-library content ID.
+// C3: an item with a content ID omits its product, topic, audience meaning,
+//     source revision, or review date.
+// C4: a content ID or source revision has a shape that cannot be joined back to
+//     the internal library and exact released source.
+// E1: internal research stays internal and public Markdown remains portable.
+// E2: every promoted source item has one public owner.
+// E3: readers, maintainers, and release reviewers can see who the post is for,
+//     why it matters, and which implementation baseline it describes.
+// Decision table:
+// | Rule | Internal field/path | Duplicate ID | Required metadata | Valid IDs | Outcome |
+// | B1   | absent              | no           | complete          | yes       | accept  |
+// | B2   | present             | any          | any               | any       | reject  |
+// | B3   | absent              | yes          | any               | any       | reject  |
+// | B4   | absent              | no           | incomplete        | any       | reject  |
+// | B5   | absent              | no           | complete          | no        | reject  |
+const publicContentIds = new Map();
+for (const path of filesBelow(blogRoot, (candidate) => extname(candidate) === '.md')) {
+  const rel = relative(root, path);
+  const text = readFileSync(path, 'utf8');
+  const { frontmatter } = frontmatterData(text);
+  if (!frontmatter) {
+    failures.push(`${rel}: missing YAML frontmatter`);
+    continue;
+  }
+
+  if (/^\s*(?:similarSources|comparisonAnalysis|competitorNotes|replyTargets|sourcePaths):/mu.test(frontmatter)) {
+    failures.push(`${rel}: internal research metadata must be removed before publication`);
+  }
+  if (/(?:^|[\s"'(])(?:~\/|\/home\/|file:\/\/)/u.test(text)) {
+    failures.push(`${rel}: public content must not contain workstation-local paths`);
+  }
+
+  const scalar = (field) => new RegExp(`^${field}:\\s*["']?([^"'\\n]+)`, 'm').exec(frontmatter)?.[1]?.trim() ?? '';
+  const contentId = scalar('contentId');
+  if (!contentId) continue;
+  if (!/^\d{3,4}$/u.test(contentId)) failures.push(`${rel}: contentId must contain 3 or 4 digits`);
+  const previous = publicContentIds.get(contentId);
+  if (previous) failures.push(`${rel}: duplicate public contentId ${contentId}; already owned by ${previous}`);
+  else publicContentIds.set(contentId, rel);
+
+  for (const field of ['product', 'topic', 'audienceMeaning', 'sourceRevision', 'lastReviewed']) {
+    if (!new RegExp(`^${field}:`, 'm').test(frontmatter)) failures.push(`${rel}: promoted post ${contentId} is missing ${field}`);
+  }
+  if (!/^audience:\s*\[[^\]]+\]/m.test(frontmatter) && !/^audience:\n\s+-\s+/m.test(frontmatter)) {
+    failures.push(`${rel}: promoted post ${contentId} is missing a non-empty audience list`);
+  }
+  const sourceRevision = scalar('sourceRevision');
+  if (sourceRevision && !/^[0-9a-f]{40}$/u.test(sourceRevision)) {
+    failures.push(`${rel}: sourceRevision must be one exact 40-character Git revision`);
   }
 }
 

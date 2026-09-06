@@ -16,6 +16,16 @@ const blog = defineCollection({
     // Optional per-post brand override (e.g. an Awaken Workforce announcement → warm).
     brand: z.enum(['works', 'workforce']).optional(),
     draft: z.boolean().default(false),
+    // Promotion metadata becomes public only after internal comparison and
+    // reply-target research has been removed from the publication file.
+    contentId: z.string().regex(/^\d{3,4}$/u).optional(),
+    product: z.enum(['agents', 'objects', 'workforce', 'works', 'book']).optional(),
+    topic: z.string().min(3).optional(),
+    audience: z.array(z.string().min(2)).min(1).optional(),
+    audienceMeaning: z.string().min(12).optional(),
+    sourceRevision: z.string().regex(/^[0-9a-f]{40}$/u).optional(),
+    lastReviewed: z.coerce.date().optional(),
+    publishAfterContentIds: z.array(z.string().regex(/^\d{3,4}$/u)).default([]),
   }),
 });
 

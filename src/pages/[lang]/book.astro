@@ -1,0 +1,14 @@
+---
+import BookLanding from '../../components/BookLanding.astro';
+import Base from '../../layouts/Base.astro';
+import { localizedStaticPaths, type Lang } from '../../i18n/locales';
+import { ui } from '../../i18n/ui';
+
+export const getStaticPaths = localizedStaticPaths;
+const { lang } = Astro.props as { lang: Lang };
+const { title, description } = ui[lang].routes.book;
+---
+
+<Base title={title} description={description}>
+  <BookLanding lang={lang} />
+</Base>

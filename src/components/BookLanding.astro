@@ -1,0 +1,72 @@
+---
+import { localePath, type Lang } from '../i18n/content';
+import { bookCopy } from '../i18n/ui';
+import SiteFooter from './SiteFooter.astro';
+import SiteHeader from './SiteHeader.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = bookCopy[lang];
+---
+
+<SiteHeader lang={lang} path="/book" />
+
+<main id="main-content" tabindex="-1">
+  <section class="relative overflow-hidden">
+    <div class="grid-backdrop absolute inset-0"></div>
+    <div class="relative mx-auto max-w-5xl px-6 py-24 sm:py-32">
+      <p class="eyebrow text-accent-500">{c.eyebrow}</p>
+      <h1 class="hero-title mt-6 max-w-4xl font-semibold text-fog-100">{c.title}</h1>
+      <p class="mt-6 max-w-3xl text-lg leading-8 text-fog-300 sm:text-xl">{c.subtitle}</p>
+      <p class="mt-8 max-w-3xl rounded-2xl border border-ink-700 bg-ink-900/80 px-5 py-4 text-sm leading-6 text-fog-500">{c.status}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={localePath(lang, '/blog')} class="rounded-full bg-accent-500 px-5 py-2.5 text-sm font-semibold text-onaccent transition hover:bg-accent-400">{c.ctaPrimary}</a>
+        <a href={localePath(lang, '/agents')} class="rounded-full border border-ink-600 px-5 py-2.5 text-sm font-semibold text-fog-100 transition hover:border-fog-500">{c.ctaSecondary}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-accent-500">{c.themesEyebrow}</p>
+      <h2 class="mt-4 max-w-3xl text-3xl font-semibold text-fog-100">{c.themesTitle}</h2>
+      <div class="mt-10 grid gap-5 md:grid-cols-2">
+        {c.themes.map((theme) => (
+          <article class="rounded-2xl border border-ink-700 bg-ink-850 p-6">
+            <span class="font-mono text-xs text-accent-500">{theme.n}</span>
+            <h3 class="mt-3 text-xl font-semibold text-fog-100">{theme.title}</h3>
+            <p class="mt-3 text-sm leading-6 text-fog-500">{theme.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-ink-800">
+    <div class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-accent-500">{c.readersEyebrow}</p>
+      <h2 class="mt-4 text-3xl font-semibold text-fog-100">{c.readersTitle}</h2>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        {c.readers.map((reader) => (
+          <article class="flex flex-col rounded-2xl border border-ink-700 bg-ink-900 p-6">
+            <h3 class="text-lg font-semibold text-fog-100">{reader.title}</h3>
+            <p class="mt-3 flex-1 text-sm leading-6 text-fog-500">{reader.body}</p>
+            <a href={localePath(lang, reader.href)} class="mt-6 text-sm font-medium text-accent-400 hover:text-accent-500">{reader.label} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+      <h2 class="text-2xl font-semibold text-fog-100">{c.sourceTitle}</h2>
+      <p class="mt-4 max-w-3xl text-base leading-7 text-fog-300">{c.sourceBody}</p>
+    </div>
+  </section>
+</main>
+
+<SiteFooter lang={lang} />
