@@ -21,7 +21,8 @@
   "dependencies": {
     "astro": "^5.6.1",
     "astro-mermaid": "^2.0.4",
-    "mermaid": "^11.15.0"
+    "mermaid": "^11.15.0",
+    "@awaken/ui": "file:vendor/awaken-ui-0.5.0.tgz"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.3",

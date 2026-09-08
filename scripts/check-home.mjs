@@ -18,7 +18,7 @@ import {
   publicBrandMarks,
   renderAdaptiveFaviconSvg,
   renderBrandMarkSvg,
-} from '../src/lib/brandMarks.mjs';
+} from '@awaken/ui/brand';
 
 const root = resolve(import.meta.dirname, '..');
 const failures = [];
@@ -298,40 +298,28 @@ const expectedSilhouettes = Object.freeze({
   objects: 'O',
   workforce: 'W',
 });
-const brandMarkSource = resolve(root, 'src/lib/brandMarks.mjs');
-requireOccurrenceCount(
-  brandMarkSource,
-  'const awakenA = Object.freeze(',
-  1,
-  'AwakenWorks and Agents must reuse one original A geometry owner',
-);
-requireOccurrenceCount(
-  brandMarkSource,
-  'function decisionDot(',
-  1,
-  'the brand family must reuse one circular direction-point primitive',
-);
-rejectPattern(brandMarkSource, /decisionDiamond/, 'the geometric diamond must not replace the original circular Awaken motif');
+// Geometry construction invariants are tested by the package owner. This
+// consumer verifies emitted assets and chrome against the pinned public API.
 if (brandMarkBody('works') !== brandMarkBody('agents')) {
-  failures.push('brandMarks.mjs: AwakenWorks and Agents must share exactly one A geometry');
+  failures.push('@awaken/ui/brand: AwakenWorks and Agents must share exactly one A geometry');
 }
 for (const scheme of brandMarkSchemes) {
   const worksPalette = brandMarkPalette('works', scheme);
   const agentsPalette = brandMarkPalette('agents', scheme);
   if (worksPalette.primary === agentsPalette.primary) {
-    failures.push(`brandMarks.mjs: AwakenWorks and Agents need distinct ${scheme} primary hues`);
+    failures.push(`@awaken/ui/brand: AwakenWorks and Agents need distinct ${scheme} primary hues`);
   }
   if (worksPalette.decision !== agentsPalette.decision) {
-    failures.push(`brandMarks.mjs: AwakenWorks and Agents must share the ${scheme} judgment accent`);
+    failures.push(`@awaken/ui/brand: AwakenWorks and Agents must share the ${scheme} judgment accent`);
   }
 }
 for (const mark of publicBrandMarks) {
   const body = brandMarkBody(mark);
   if ((body.match(/data-role="decision"/g) ?? []).length !== 1) {
-    failures.push(`brandMarks.mjs: ${mark} must contain one decision point`);
+    failures.push(`@awaken/ui/brand: ${mark} must contain one decision point`);
   }
   if (!body.includes(`data-silhouette="${expectedSilhouettes[mark]}"`)) {
-    failures.push(`brandMarks.mjs: ${mark} must retain its ${expectedSilhouettes[mark]} silhouette`);
+    failures.push(`@awaken/ui/brand: ${mark} must retain its ${expectedSilhouettes[mark]} silhouette`);
   }
   for (const scheme of brandMarkSchemes) {
     const path = resolve(root, `public/brand/${brandMarkAssetStem(mark)}-${scheme}.svg`);
@@ -668,13 +656,13 @@ const rules = [
     releaseStatus: 'Open source · stable release coming soon',
     speedPromise: 'Build Agent applications',
     speedHighlight: 'faster.',
-    compatibilityProof: ['Tested Managed Agents API baseline', 'Official Anthropic SDK', 'One durable Session'],
+    compatibilityProof: ['Managed Agents API baseline checked', 'Works with the official Anthropic SDK', 'The same Session continues after reconnect'],
     primaryAudience: 'For AI product teams',
     firstResult: 'One real application creates, runs, reconnects, and reopens the same Session',
     companyDefinition: 'AwakenWorks builds open infrastructure designed for production AI Agent applications.',
     entityDefinition: 'Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications.',
     runtimeConcept: '/docs/agents/concepts/agent-runtime',
-    workflow: ['Connect model', 'Publish Agent', 'Run Session', 'Inspect evidence', 'Connect application'],
+    workflow: ['Connect model', 'Publish Agent', 'Run Session', 'Review the result', 'Connect application'],
     values: ['Resume the same Session', 'Choose where it runs', 'Reuse the same Agent'],
     proofHrefs: ['/docs/agents/concepts/production-reliability', '/docs/agents/how-to/self-host', '/docs/agents/concepts/architecture'],
   },
@@ -689,13 +677,13 @@ const rules = [
     releaseStatus: '已开源 · 稳定版即将发布',
     speedPromise: '开发 Agent 应用',
     speedHighlight: '更快。',
-    compatibilityProof: ['经测试的 Managed Agents API 基线', '官方 Anthropic SDK', '同一个持久 Session'],
+    compatibilityProof: ['已核对 Managed Agents API 基线', '可使用官方 Anthropic SDK', '重连后继续同一个 Session'],
     primaryAudience: '面向 AI 产品团队',
     firstResult: '一个真实应用创建、运行、重连并重新打开同一个 Session',
     companyDefinition: 'AwakenWorks 构建面向生产级 AI Agent 应用的开放基础设施。',
     entityDefinition: 'Awaken Agents 是开源、可自托管的 Agent 应用基础设施，用于构建和运营生产级 AI Agent 应用。',
     runtimeConcept: '/zh/docs/agents/concepts/agent-runtime',
-    workflow: ['连接模型', '发布 Agent', '运行 Session', '检查证据', '接入应用'],
+    workflow: ['连接模型', '发布 Agent', '运行 Session', '查看结果', '接入应用'],
     values: ['恢复同一个 Session', '选择运行位置', '复用同一个 Agent'],
     proofHrefs: ['/zh/docs/agents/concepts/production-reliability', '/zh/docs/agents/how-to/self-host', '/zh/docs/agents/concepts/architecture'],
   },
@@ -770,6 +758,9 @@ for (const rule of rules) {
   requirePattern(rule.path, new RegExp(`data-home-maturity[\\s\\S]*${rule.releaseStatus}`), 'home hero must separate product maturity from the value headline');
   requireOccurrenceCount(rule.path, 'data-home-compatibility-proof', 1, 'home hero must expose one compact compatibility proof owner');
   requireOccurrenceCount(rule.path, 'data-home-compatibility-fact', 3, 'home compatibility proof must contain exactly three bounded facts');
+  // R-H8: reviewed copy may change wording, but all three bounded baseline,
+  // SDK and reconnect facts must still appear. The old wording predated the
+  // current content authority; retain independent expected facts here.
   for (const fact of rule.compatibilityProof) {
     requirePattern(rule.path, new RegExp(fact), `home compatibility proof must state ${fact}`);
   }
@@ -1075,12 +1066,14 @@ for (const rule of [
 // | P3   | present    | no                | any          | any           | any      | reject  |
 // | P4   | present    | yes               | no           | any           | any      | reject  |
 // | P5   | present    | yes               | yes          | product form  | any      | reject  |
+// Screenshot provenance is rendered by the tour owner, including revision and
+// controlled-data disclosure; a retired caption is not a second evidence owner.
 // | P6   | present    | yes               | yes          | enterprise    | absent   | reject  |
 for (const rule of [
-  { path: resolve(root, 'dist/agents/index.html'), id: 'platform-preview', label: 'Current Awaken Console · verified release build' },
+  { path: resolve(root, 'dist/agents/index.html'), id: 'platform-preview', label: 'Captured from Awaken v1.0.0-dev release UI at revision' },
   { path: resolve(root, 'dist/objects/index.html'), id: 'objects-preview', label: 'Product model preview · example content' },
   { path: resolve(root, 'dist/workforce/index.html'), id: 'workforce-preview', label: 'Current product workspace · controlled example content, not customer activity' },
-  { path: resolve(root, 'dist/zh/agents/index.html'), id: 'platform-preview', label: '当前 Awaken Console · Release 构建实测' },
+  { path: resolve(root, 'dist/zh/agents/index.html'), id: 'platform-preview', label: '截图来自 Awaken v1.0.0-dev revision' },
   { path: resolve(root, 'dist/zh/objects/index.html'), id: 'objects-preview', label: '产品模型预览 · 示例内容' },
   { path: resolve(root, 'dist/zh/workforce/index.html'), id: 'workforce-preview', label: '当前产品工作空间 · 受控示例内容，不代表客户活动' },
 ]) {
@@ -1432,8 +1425,8 @@ requireOccurrenceCount(docsShellPath, '<DocsNavigation', 2, 'desktop and mobile 
 rejectPattern(docsShellPath, /<nav class="[^"]*overflow-x-auto[^"]*" aria-label=\{isZh \? '产品文档'/, 'mobile product navigation must not hide exits in a horizontal rail');
 
 for (const rule of [
-  { path: resolve(root, 'dist/principles/index.html'), owner: 'Define the work, owner, and acceptance result', participation: 'Ask questions and contribute' },
-  { path: resolve(root, 'dist/zh/principles/index.html'), owner: '定义工作、负责人和验收结果', participation: '提出问题或参与贡献' },
+  { path: resolve(root, 'dist/principles/index.html'), owner: 'Keep the work, responsibility, and completion decision connected', participation: 'Ask questions and contribute' },
+  { path: resolve(root, 'dist/zh/principles/index.html'), owner: '让工作、责任与完成决定始终连在一起', participation: '提出问题或参与贡献' },
 ]) {
   requireOrderedText(rule.path, ['id="principles-hero"', 'id="principles-owner"', 'id="principles-commitments"', 'id="principles-status"', 'id="principles-trust"', 'id="principles-participate"'], 'principles must move from ownership through commitments, status, public trust owners, and participation');
   requirePattern(rule.path, new RegExp(rule.owner), 'principles must begin from the work and its human owner');

@@ -6,7 +6,7 @@ import {
   publicBrandMarks,
   renderAdaptiveFaviconSvg,
   renderBrandMarkSvg,
-} from '../src/lib/brandMarks.mjs';
+} from '@awaken/ui/brand';
 
 const root = resolve(import.meta.dirname, '..');
 const output = resolve(root, 'public/brand');

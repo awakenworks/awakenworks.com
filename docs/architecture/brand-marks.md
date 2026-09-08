@@ -1,10 +1,12 @@
 # AwakenWorks brand marks
 
-`src/lib/brandMarks.mjs` is the single geometry and palette owner for the
+`@awaken/ui/brand` is the single geometry and palette owner for the
 AwakenWorks, Agents, Objects, and Workforce marks. `ProductMark.astro` renders
 that source in site chrome and product surfaces; `pnpm brand:generate` produces
 the downloadable SVG files and adaptive favicon. Do not copy path data into a
-page component or maintain a separate light/dark drawing.
+page component or maintain a separate light/dark drawing. The source lives in
+`awaken-ui/src/brand/marks.ts`; the website and React products pin the same UI
+artifact. Cloud uses the Works master mark with the Awaken Cloud name.
 
 ## Meaning
 
