@@ -1,6 +1,7 @@
 ---
 import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
 import ProductMark from './ProductMark.astro';
+import AppearanceSelect from './AppearanceSelect.astro';
 import { LANGS, localeRegistry } from '../i18n/locales';
 
 interface Props {
@@ -90,35 +91,7 @@ const analyticsProduct = path.startsWith('/objects')
       </div>
       <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="header" data-umami-event-product={analyticsProduct} data-umami-event-destination="github" class="hidden text-fog-300 hover:text-fog-100 sm:block">{t.nav.github}</a>
       <a href={startHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="header" data-umami-event-product="agents" data-umami-event-destination="quickstart" class="hidden rounded-full bg-accent-500 px-3.5 py-1.5 text-xs font-semibold text-onaccent transition hover:bg-accent-400 md:inline-flex">{t.nav.run}</a>
-      <button
-        data-theme-toggle
-        type="button"
-        aria-label={t.nav.theme}
-        class="flex h-7 w-7 items-center justify-center rounded-full border border-ink-600 text-fog-300 transition hover:border-fog-500 hover:text-fog-100"
-      >
-        <svg
-          class="icon-when-dark h-4 w-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          ><circle cx="12" cy="12" r="4"></circle><path
-            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
-          ></path></svg
-        >
-        <svg
-          class="icon-when-light h-4 w-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          ><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg
-        >
-      </button>
+      <AppearanceSelect lang={lang} />
       {alternateLocales.map((alternateLang) => (
         <a
           href={localePath(alternateLang, path)}

@@ -1,0 +1,12 @@
+---
+import type { Lang } from '../i18n/locales';
+import { ui } from '../i18n/ui';
+interface Props { lang: Lang; class?: string }
+const { lang, class: className } = Astro.props;
+const copy = ui[lang].common;
+---
+<select data-appearance-select aria-label={copy.theme} class:list={['ui-input', 'aw-appearance-select', className]}>
+  <option value="system">{copy.appearance.system}</option>
+  <option value="light">{copy.appearance.light}</option>
+  <option value="dark">{copy.appearance.dark}</option>
+</select>

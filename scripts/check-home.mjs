@@ -345,23 +345,18 @@ requirePattern(resolve(root, 'src/components/ProductMark.astro'), /scheme === 'a
 requirePattern(resolve(root, 'src/styles/global.css'), /data-theme='dark'[\s\S]*icon-when-light[\s\S]*data-theme='light'[\s\S]*icon-when-dark/, 'theme state must expose exactly the matching mark variant');
 rejectPattern(resolve(root, 'README.md'), /Agents：开发者预览|Objects：开发者预览|Workforce：设计伙伴预览/, 'README must not duplicate registry-owned product availability labels');
 
-// Cause/effect design for theme continuity:
-// C1: a visitor has an explicit stored theme; C2: no stored preference exists
-// and the operating system supplies one; C3: a route carries a different
-// product brand; C4: the visitor explicitly toggles the theme.
-// E1: stored preference wins; E2: the system preference is the one fallback on
-// every route; E3: product navigation changes hue but not brightness; E4: only
-// an explicit toggle persists a new preference.
-// Decision table:
-// | Rule | stored | system | route brand | toggle | Outcome |
-// | T1   | dark   | light  | any         | no     | dark    |
-// | T2   | none   | dark   | any         | no     | dark    |
-// | T3   | none   | light  | any         | no     | light   |
-// | T4   | any    | any    | any         | yes    | invert and persist |
+// Theme integration decision table (runtime combinations live with the shared tests):
+// T1 every route -> one prepaint shared controller and optional legacy migration.
+// T2 product identity changes -> hue changes, no product-specific mode decision.
+// T3 either shell -> same localized three-choice native projection, no local store.
 const baseLayoutPath = resolve(root, 'src/layouts/Base.astro');
-requirePattern(baseLayoutPath, /var theme = stored \|\| system;/, 'all routes must use one stored-or-system theme decision');
-rejectPattern(baseLayoutPath, /productDefault|brand === 'managed'|brand === 'workforce'/, 'product routes must not select their own light or dark default');
-requireOccurrenceCount(baseLayoutPath, "localStorage.setItem('theme', next)", 1, 'only the canonical explicit toggle may persist theme state');
+requirePattern(baseLayoutPath, /appearanceBootstrap\(\{ legacyStorageKeys: \['theme'\] \}\)/, 'all routes must initialize the shared appearance owner before paint');
+rejectPattern(baseLayoutPath, /localStorage|matchMedia|data-theme-toggle/, 'the website must not retain a second appearance state owner');
+requirePattern(resolve(root, 'src/styles/global.css'), /@awaken\/ui\/brand\/family\.css/, 'website colors and typography must map the shared family foundation');
+for (const shell of ['SiteHeader', 'DocsShell']) {
+  requirePattern(resolve(root, `src/components/${shell}.astro`), /<AppearanceSelect lang=\{lang\}/, 'both shells must use the same localized appearance projection');
+}
+requirePattern(resolve(root, 'src/components/AppearanceSelect.astro'), /data-appearance-select[\s\S]*value="system"[\s\S]*value="light"[\s\S]*value="dark"/, 'appearance must expose system, light, and dark choices');
 
 // Cause/effect design for shared navigation state:
 // C1 the visitor can be at a route root; C2 can be on a product/docs subroute;
@@ -1088,10 +1083,10 @@ for (const rule of [
 // E1 every product emits SoftwareApplication metadata; E2 Objects uses its own
 // governed-change accent; E3 current navigation is semantic on direct entry.
 for (const [path, name, brand, currentHref] of [
-  ['dist/agents/index.html', 'Awaken Agents', 'managed', '/agents'],
+  ['dist/agents/index.html', 'Awaken Agents', 'agents', '/agents'],
   ['dist/objects/index.html', 'Awaken Objects', 'objects', '/objects'],
   ['dist/workforce/index.html', 'Awaken Workforce', 'workforce', '/workforce'],
-  ['dist/zh/agents/index.html', 'Awaken Agents', 'managed', '/zh/agents'],
+  ['dist/zh/agents/index.html', 'Awaken Agents', 'agents', '/zh/agents'],
   ['dist/zh/objects/index.html', 'Awaken Objects', 'objects', '/zh/objects'],
   ['dist/zh/workforce/index.html', 'Awaken Workforce', 'workforce', '/zh/workforce'],
 ]) {
@@ -1415,7 +1410,7 @@ const docsShellPath = resolve(root, 'src/components/DocsShell.astro');
 requirePattern(docsShellPath, /flex min-w-0 items-center gap-2 text-sm sm:gap-3/, 'docs header must use compact spacing and permit shrinkage before the small breakpoint');
 requirePattern(docsShellPath, /product === 'agents' \? 'Agents'[\s\S]*class="hidden sm:inline">\{productLabel\}/, 'docs header must use a compact mobile product label');
 requirePattern(docsShellPath, /<details class="relative hidden md:block">/, 'docs header must leave the version selector out of the narrow mobile row');
-requirePattern(docsShellPath, /data-theme-toggle[\s\S]*class="hidden h-7 w-7[\s\S]*sm:flex"/, 'docs header must leave theme control out of the narrowest row');
+requirePattern(docsShellPath, /<AppearanceSelect lang=\{lang\}/, 'docs header must keep the appearance selection available with the shared compact control');
 requirePattern(docsShellPath, /<span class="sm:hidden">\{localeRegistry\[alternateLang\]\.shortName\}<\/span>/, 'docs header must use the registry-owned compact mobile language label');
 requirePattern(docsShellPath, /data-umami-event-location="docs-mobile-nav"/, 'docs mobile product nav must retain the measurable GitHub Star action');
 requirePattern(docsShellPath, /grid grid-cols-3 gap-2 font-mono text-xs sm:grid-cols-4/, 'docs mobile product navigation must wrap all exits instead of scrolling horizontally');

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { appearanceBootstrap } from '@awaken/ui/brand/appearance';
 import { DEFAULT_UMAMI_SCRIPT_URL, DEFAULT_UMAMI_WEBSITE_ID } from '../config/analytics.mjs';
 import { withSiteBase } from '../config/siteDeployment.mjs';
 import {
@@ -50,7 +51,7 @@ const brand = /^\/workforce(\/|$)/.test(basePath)
   : /^\/objects(\/|$)/.test(basePath)
     ? 'objects'
   : /^\/agents(\/|$)/.test(basePath)
-    ? 'managed'
+    ? 'agents'
     : 'works';
 
 // Canonical URL + hreflang alternates derive from the same registry as routing.
@@ -82,23 +83,7 @@ const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'loca
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script is:inline>
-      // Resolve one site-wide theme before paint. Routes may change product
-      // colour identity, but navigation must never change light/dark mode.
-      (function () {
-        try {
-          var stored = localStorage.getItem('theme');
-          var system =
-            window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
-          var theme = stored || system;
-          document.documentElement.dataset.theme = theme;
-        } catch (e) {
-          document.documentElement.dataset.theme = 'dark';
-        }
-      })();
-    </script>
+    <script is:inline set:html={appearanceBootstrap({ legacyStorageKeys: ['theme'] })} />
     <script>
       import { captureAttribution } from '../lib/attribution.mjs';
 
@@ -160,18 +145,5 @@ const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'loca
   <body class="bg-ink-950 text-fog-300 antialiased">
     <a class="skip-link" href="#main-content">{ui[lang].common.skip}</a>
     <slot />
-    <script is:inline>
-      // Delegated theme toggle — works on every page without bundling.
-      document.addEventListener('click', function (e) {
-        var btn = e.target.closest('[data-theme-toggle]');
-        if (!btn) return;
-        var next =
-          document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = next;
-        try {
-          localStorage.setItem('theme', next);
-        } catch (err) {}
-      });
-    </script>
   </body>
 </html>

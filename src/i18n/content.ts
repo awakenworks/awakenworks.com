@@ -50,7 +50,6 @@ export const content = {
       github: 'GitHub',
       run: 'Get started',
       menu: 'Menu',
-      theme: 'Toggle light / dark theme',
     },
     waitlist: {
       placeholder: 'you@company.com',
@@ -710,7 +709,6 @@ export const content = {
       github: 'GitHub',
       run: '快速开始',
       menu: '菜单',
-      theme: '切换明暗主题',
     },
     waitlist: {
       placeholder: 'you@company.com',

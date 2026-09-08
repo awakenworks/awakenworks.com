@@ -35,3 +35,7 @@ scripts/update-audience-transcripts.mjs
 /docs/reviews/
 /awaken-agent-studio-*.png
 /awakenworks-docs-code-*.tar.gz
+
+# Browser acceptance output
+/test-results/
+/playwright-report/

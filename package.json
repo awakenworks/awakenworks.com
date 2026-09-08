@@ -16,19 +16,21 @@
     "hooks:install": "lefthook install",
     "provenance:refresh": "node scripts/refresh-source-provenance.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:appearance": "pnpm build && playwright test"
   },
   "dependencies": {
     "astro": "^5.6.1",
     "astro-mermaid": "^2.0.4",
     "mermaid": "^11.15.0",
-    "@awaken/ui": "file:vendor/awaken-ui-0.5.0.tgz"
+    "@awaken/ui": "file:vendor/awaken-ui-0.6.0.tgz"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.1.3",
     "lefthook": "^1.10.0",
     "pptxgenjs": "^4.0.1",
-    "tailwindcss": "^4.1.3"
+    "tailwindcss": "^4.1.3",
+    "@playwright/test": "1.61.1"
   }
 }

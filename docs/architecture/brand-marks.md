@@ -60,3 +60,13 @@ palette through `prefers-color-scheme`.
 - Do not use color as the only product distinction.
 - Review all four marks together at 16, 24, and 48 pixels, in both palettes,
   before changing geometry or optical weight.
+
+## Family appearance
+
+The website and consoles consume `@awaken/ui/brand/family.css` for their light
+and dark palettes, font stacks and control metrics. `Base.astro` selects the
+canonical route identity; `global.css` only maps it to Tailwind tokens.
+`brand/appearance` owns the prepaint stored-or-system decision and subsequent
+changes. The native `AppearanceSelect.astro` supplies localized markup to that
+controller; it does not store or resolve theme state itself. Legacy `theme`
+preferences migrate to `awaken.theme` within this website origin.

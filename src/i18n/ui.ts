@@ -12,7 +12,8 @@ export const ui = {
       blogTitle: (title: string) => `${title} | AwakenWorks`,
     },
     common: {
-      theme: 'Toggle light / dark theme',
+      theme: 'Appearance',
+      appearance: { system: 'System', light: 'Light', dark: 'Dark' },
       githubStar: 'Star on GitHub',
       openPath: 'Open path →',
       skip: 'Skip to main content',
@@ -161,7 +162,8 @@ export const ui = {
       blogTitle: (title: string) => `${title} | AwakenWorks`,
     },
     common: {
-      theme: '切换明暗主题',
+      theme: '外观',
+      appearance: { system: '跟随系统', light: '浅色', dark: '深色' },
       githubStar: '在 GitHub Star',
       openPath: '进入路径 →',
       skip: '跳到主要内容',
