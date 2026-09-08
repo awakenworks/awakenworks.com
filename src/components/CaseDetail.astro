@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowLeft, ArrowRight } from "@awaken/ui/icons/data";
 import { content, localePath, type Lang } from '../i18n/content';
 import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
@@ -20,7 +22,7 @@ const isDeepSeek = item.slug === 'deepseek-harness';
   <section id="case-hero" class="relative overflow-hidden border-b border-ink-800">
     <div class="grid-backdrop absolute inset-0"></div>
     <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-28">
-      <a href={localePath(lang, '/cases')} class="font-mono text-xs text-iris-400">← {copy.all}</a>
+      <a href={localePath(lang, '/cases')} class="font-mono text-xs text-iris-400"><FunctionalIcon icon={ArrowLeft} /> {copy.all}</a>
       <p class="mt-10 font-mono text-xs uppercase tracking-wider text-iris-400">{item.kind}</p>
       <h1 class="mt-4 max-w-5xl text-5xl font-semibold tracking-tight text-fog-100 sm:text-7xl">{item.name}</h1>
       <p class="mt-5 max-w-3xl text-xl leading-9 text-fog-300">{item.title}</p>
@@ -79,7 +81,7 @@ const isDeepSeek = item.slug === 'deepseek-harness';
             href={localePath(lang, item.engineeringBlog.href)}
             data-umami-event={`case-${slug}-engineering-blog`}
             class="mt-5 inline-flex text-sm font-medium text-iris-400 hover:text-iris-300"
-          >{item.engineeringBlog.label} →</a>
+          >{item.engineeringBlog.label} <FunctionalIcon icon={ArrowRight} /></a>
         )}
         <ul class="mt-8 space-y-4">
           {item.proof.map((proof) => (

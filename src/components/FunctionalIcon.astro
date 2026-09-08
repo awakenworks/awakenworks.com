@@ -1,0 +1,16 @@
+---
+import { iconAttributes, type IconData } from '@awaken/ui/icons/data';
+
+interface Props {
+  icon: IconData;
+  class?: string;
+  size?: number;
+  label?: string;
+}
+const { icon, class: klass = '', size = 16, label } = Astro.props;
+---
+<svg {...iconAttributes} width={size} height={size} class={`ui-icon ${klass}`.trim()}
+  data-functional-icon role={label ? 'img' : undefined} aria-label={label}
+  aria-hidden={label ? undefined : 'true'} focusable="false">
+  {icon[2]?.map(([Tag, attributes]) => <Tag {...attributes} />)}
+</svg>

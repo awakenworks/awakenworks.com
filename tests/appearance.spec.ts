@@ -35,7 +35,20 @@ for (const lang of ["en", "zh"]) {
         await expect(appearance).toBeVisible();
         await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       }
-      await expect(page.getByRole("button", { name: lang === "zh" ? "搜索" : "Search" })).toBeVisible();
+      // I1 en/zh x narrow/desktop: one Astro SVG projects the same Search nodes
+      // as React; decoration is hidden while the native dialog trigger keeps its
+      // translated name, focus entry and Escape restoration.
+      const search = page.getByRole("button", { name: lang === "zh" ? "搜索" : "Search" });
+      const icon = search.locator("svg[data-functional-icon]");
+      await expect(icon).toHaveAttribute("viewBox", "0 0 24 24");
+      await expect(icon).toHaveAttribute("stroke-width", "2");
+      await expect(icon).toHaveAttribute("aria-hidden", "true");
+      await expect(icon.locator("circle")).toHaveAttribute("r", "8");
+      await search.click();
+      await expect(page.getByRole("dialog").getByRole("searchbox")).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("dialog")).not.toBeVisible();
+      await expect(search).toBeFocused();
       await page.reload();
       await expect(appearance).toHaveValue("dark");
       await page.screenshot({ path: `test-results/appearance-docs-${lang}-${width}.png`, fullPage: true });

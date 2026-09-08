@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { Star } from "@awaken/ui/icons/data";
 import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
 import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
@@ -116,7 +118,7 @@ const copy = ui[lang].landing;
       <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
         <a href={localePath(lang, '/docs/objects')} class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{o.docs}</a>
         <a href={`${localePath(lang, '/enterprise')}?product=objects#enterprise-objects`} data-umami-event="enterprise_intent_selected" data-umami-event-location="objects-closing" data-umami-event-product="objects" data-umami-event-destination="enterprise" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.closer.cooperation}</a>
-        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="objects-close" data-umami-event-product="objects" data-umami-event-destination="github" class="px-2 py-3 text-sm font-medium text-fog-300 hover:text-amber-400">★ {o.star}</a>
+        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="objects-close" data-umami-event-product="objects" data-umami-event-destination="github" class="px-2 py-3 text-sm font-medium text-fog-300 hover:text-amber-400"><FunctionalIcon icon={Star} /> {o.star}</a>
       </div>
     </div>
   </section>

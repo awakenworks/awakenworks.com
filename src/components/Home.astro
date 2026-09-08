@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight } from "@awaken/ui/icons/data";
 import { content, localePath, type Lang } from '../i18n/content';
 import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
@@ -113,7 +115,7 @@ const copy = ui[lang].home;
               href={localePath(lang, advantage.href)}
               data-umami-event={`home-value-${advantage.key}`}
               class="inline-flex whitespace-nowrap text-xs font-medium text-accent-400 hover:text-accent-300"
-            >{advantage.proof} →</a>
+            >{advantage.proof} <FunctionalIcon icon={ArrowRight} /></a>
           </article>
         ))}
       </div>
@@ -149,7 +151,7 @@ const copy = ui[lang].home;
                 href={item.href === '/enterprise' ? `${enterpriseHref}?product=agents&scenario=${item.key}#apply` : localePath(lang, item.href)}
                 data-umami-event={`scenario-${item.key}-selected`}
                 class="mt-5 inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
-              >{home.scenarios.cta} →</a>
+              >{home.scenarios.cta} <FunctionalIcon icon={ArrowRight} /></a>
             </div>
           </article>
         ))}
@@ -179,14 +181,14 @@ const copy = ui[lang].home;
                 href={localePath(lang, `/cases/${item.slug}`)}
                 data-umami-event={`home-case-${item.slug}`}
                 class="mt-4 inline-flex font-medium text-iris-400"
-              >{item.cta} →</a>
+              >{item.cta} <FunctionalIcon icon={ArrowRight} /></a>
             </div>
           </article>
         ))}
       </div>
 
       <a href={casesHref} data-umami-event="home-all-cases" class="mt-10 inline-flex rounded-xl border border-ink-600 px-5 py-3 font-medium text-fog-200 transition hover:border-iris-500">
-        {copy.allCases} →
+        {copy.allCases} <FunctionalIcon icon={ArrowRight} />
       </a>
     </div>
   </section>
@@ -208,7 +210,7 @@ const copy = ui[lang].home;
               <span class="mt-1 block font-mono text-[0.65rem] text-fog-600">{product.status}</span>
               <span data-product-role class="mt-3 block text-xs text-fog-500">{product.role}</span>
               <span class="mt-2 block text-sm leading-6 text-fog-400">{product.tagline}</span>
-              <span class={`mt-4 inline-flex text-sm transition group-hover:translate-x-1 ${tone}`}>→</span>
+              <span class={`mt-4 inline-flex text-sm transition group-hover:translate-x-1 ${tone}`}><FunctionalIcon icon={ArrowRight} /></span>
             </span>
           </a>
         ))}

@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight } from "@awaken/ui/icons/data";
 import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
 import { currentVersion } from '../i18n/docsVersions';
 import SiteHeader from './SiteHeader.astro';
@@ -46,8 +48,8 @@ const sourceHref = `${AWAKEN_GITHUB_URL}/tree/${agentsVersion.sourceRevision}`;
         </div>
       </dl>
       <div class="mt-6 flex flex-wrap gap-4">
-        <a href={sourceHref} target="_blank" rel="noopener noreferrer" data-evidence-source-revision class="rounded-xl border border-ink-600 px-5 py-3 text-sm font-medium text-fog-200 hover:border-accent-500">{copy.sourceEvidence.sourceAction} →</a>
-        <a href={localePath(lang, '/docs/agents/get-started')} class="rounded-xl bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent hover:bg-accent-400">{copy.sourceEvidence.quickstart} →</a>
+        <a href={sourceHref} target="_blank" rel="noopener noreferrer" data-evidence-source-revision class="rounded-xl border border-ink-600 px-5 py-3 text-sm font-medium text-fog-200 hover:border-accent-500">{copy.sourceEvidence.sourceAction} <FunctionalIcon icon={ArrowRight} /></a>
+        <a href={localePath(lang, '/docs/agents/get-started')} class="rounded-xl bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent hover:bg-accent-400">{copy.sourceEvidence.quickstart} <FunctionalIcon icon={ArrowRight} /></a>
       </div>
 
       <h3 class="mt-12 text-xl font-semibold text-fog-100">{copy.sourceEvidence.standardsTitle}</h3>
@@ -82,7 +84,7 @@ const sourceHref = `${AWAKEN_GITHUB_URL}/tree/${agentsVersion.sourceRevision}`;
                 href={localePath(lang, `/cases/${item.slug}`)}
                 data-umami-event={`cases-open-${item.slug}`}
                 class="mt-7 inline-flex rounded-xl bg-iris-500 px-5 py-3 font-medium text-white transition hover:bg-iris-400"
-              >{item.cta} →</a>
+              >{item.cta} <FunctionalIcon icon={ArrowRight} /></a>
             </div>
           </article>
         ))}

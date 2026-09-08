@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight } from "@awaken/ui/icons/data";
 import { content, type Lang } from '../i18n/content';
 import SiteFooter from './SiteFooter.astro';
 import SiteHeader from './SiteHeader.astro';
@@ -38,7 +40,7 @@ const sectionIds = [
       href={page.contactHref}
       class="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-accent-400 hover:text-accent-500"
     >
-      {page.contactLabel}<span aria-hidden="true">→</span>
+      {page.contactLabel}<span aria-hidden="true"><FunctionalIcon icon={ArrowRight} /></span>
     </a>
   </article>
 </main>

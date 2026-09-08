@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight, Star } from "@awaken/ui/icons/data";
 import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
 import { publicProductLabel, publicVersionLabel } from '../i18n/docsVersions';
 import DocsShell from './DocsShell.astro';
@@ -37,7 +39,7 @@ const toneClass: Record<string, string> = {
       <div class="mt-8 flex flex-wrap gap-4">
         <a href="#start" data-umami-event="docs-task-path-selected" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent transition hover:bg-accent-400">{copy.startCta}</a>
         <a href={localePath(lang, '/docs/agents')} data-umami-event="docs-agents-overview-selected" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-medium text-fog-100 transition hover:border-fog-500">{copy.agentsCta}</a>
-        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="docs-index" data-umami-event-product="unselected" data-umami-event-destination="github" class="px-3 py-3 text-sm font-medium text-fog-300 transition hover:text-accent-400">★ {ui[lang].common.githubStar} →</a>
+        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="docs-index" data-umami-event-product="unselected" data-umami-event-destination="github" class="px-3 py-3 text-sm font-medium text-fog-300 transition hover:text-accent-400"><FunctionalIcon icon={Star} /> {ui[lang].common.githubStar} <FunctionalIcon icon={ArrowRight} /></a>
       </div>
     </div>
   </section>

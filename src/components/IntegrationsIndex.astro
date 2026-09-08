@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight } from "@awaken/ui/icons/data";
 import { content, localePath, type Lang } from '../i18n/content';
 import SiteFooter from './SiteFooter.astro';
 import SiteHeader from './SiteHeader.astro';
@@ -32,7 +34,7 @@ const page = content[lang].integrations;
         <article data-integration-card={item.key} class="flex flex-col rounded-2xl border border-ink-700 bg-ink-850 p-6">
           <p class="font-mono text-xs text-accent-400">{item.name}</p>
           <p class="mt-4 flex-1 text-sm leading-7 text-fog-400">{item.body}</p>
-          <a href={localePath(lang, item.href)} data-umami-event="integration_selected" data-umami-event-location="integration-catalog" data-umami-event-product="agents" data-umami-event-destination={item.key} class="mt-6 font-medium text-fog-100 hover:text-accent-300">{item.action} →</a>
+          <a href={localePath(lang, item.href)} data-umami-event="integration_selected" data-umami-event-location="integration-catalog" data-umami-event-product="agents" data-umami-event-destination={item.key} class="mt-6 font-medium text-fog-100 hover:text-accent-300">{item.action} <FunctionalIcon icon={ArrowRight} /></a>
         </article>
       ))}
     </div>

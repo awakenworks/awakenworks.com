@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight, Check } from "@awaken/ui/icons/data";
 import { content, localePath, type Lang } from '../i18n/content';
 import OpportunityForm from './OpportunityForm.astro';
 import SiteFooter from './SiteFooter.astro';
@@ -62,9 +64,9 @@ const pathTone = {
               </div>
             </dl>
             <div class="mt-6 flex flex-wrap gap-x-4 gap-y-3 border-t border-ink-700 pt-5 text-sm">
-              <a href={localePath(lang, item.href)} class="text-fog-300 hover:text-fog-100">{item.view} →</a>
-              <a href={localePath(lang, item.docsHref)} class="text-fog-300 hover:text-fog-100">{item.docs} →</a>
-              <a href={`${localePath(lang, '/enterprise')}?product=${item.query}#apply`} data-umami-event="enterprise_intent_selected" data-umami-event-location={`enterprise-path-${item.query}`} data-umami-event-product={item.query} data-umami-event-destination="enterprise-form" class="font-medium text-accent-400 hover:text-accent-300">{item.apply} →</a>
+              <a href={localePath(lang, item.href)} class="text-fog-300 hover:text-fog-100">{item.view} <FunctionalIcon icon={ArrowRight} /></a>
+              <a href={localePath(lang, item.docsHref)} class="text-fog-300 hover:text-fog-100">{item.docs} <FunctionalIcon icon={ArrowRight} /></a>
+              <a href={`${localePath(lang, '/enterprise')}?product=${item.query}#apply`} data-umami-event="enterprise_intent_selected" data-umami-event-location={`enterprise-path-${item.query}`} data-umami-event-product={item.query} data-umami-event-destination="enterprise-form" class="font-medium text-accent-400 hover:text-accent-300">{item.apply} <FunctionalIcon icon={ArrowRight} /></a>
             </div>
           </article>
         ))}
@@ -91,7 +93,7 @@ const pathTone = {
         <article class="rounded-2xl border border-ink-700 bg-ink-900 p-7">
           <h3 class="text-xl font-semibold text-fog-100">{page.delivery.deliverablesTitle}</h3>
           <ul class="mt-5 space-y-3">
-            {page.delivery.deliverables.map((item) => <li data-enterprise-deliverable class="flex gap-3 text-sm leading-6 text-fog-300"><span class="text-iris-400">✓</span><span>{item}</span></li>)}
+            {page.delivery.deliverables.map((item) => <li data-enterprise-deliverable class="flex gap-3 text-sm leading-6 text-fog-300"><span class="text-iris-400"><FunctionalIcon icon={Check} /></span><span>{item}</span></li>)}
           </ul>
         </article>
         <article class="rounded-2xl border border-ink-700 bg-ink-900 p-7">
@@ -137,7 +139,7 @@ const pathTone = {
         <div class="mt-8 rounded-2xl border border-ink-700 bg-ink-950/70 p-6">
           <h3 class="font-semibold text-fog-100">{page.form.prepareTitle}</h3>
           <ul class="mt-4 space-y-3 text-sm leading-6 text-fog-400">
-            {page.form.prepare.map((item) => <li class="flex gap-3"><span class="text-accent-400">✓</span><span>{item}</span></li>)}
+            {page.form.prepare.map((item) => <li class="flex gap-3"><span class="text-accent-400"><FunctionalIcon icon={Check} /></span><span>{item}</span></li>)}
           </ul>
         </div>
       </div>

@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight, Star } from "@awaken/ui/icons/data";
 import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
 import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
@@ -70,7 +72,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
             <span class={`eyebrow block ${c.eyebrow}`}>{p.advantage.eyebrow}</span>
             <span class="mt-2 block text-sm leading-6 text-fog-200">{copy.compatibility}</span>
           </span>
-          <span aria-hidden="true" class="shrink-0 text-xl text-iris-400">→</span>
+          <span aria-hidden="true" class="shrink-0 text-xl text-iris-400"><FunctionalIcon icon={ArrowRight} /></span>
         </a>
         <div class="mt-7 flex flex-wrap items-center gap-4">
           <a
@@ -92,7 +94,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
             data-umami-event-product="agents"
             data-umami-event-destination="github"
             class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-iris-400"
-          >★ {copy.star}</a>
+          ><FunctionalIcon icon={Star} /> {copy.star}</a>
         </div>
         <p class="mt-5 max-w-3xl text-sm leading-6 text-fog-500">{p.audience}</p>
       </div>
@@ -129,7 +131,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
           </li>
         ))}
       </ol>
-      <a href={ctaPrimaryHref} class="mt-7 inline-flex font-medium text-iris-400 hover:text-iris-300">{p.ctaPrimary.label} →</a>
+      <a href={ctaPrimaryHref} class="mt-7 inline-flex font-medium text-iris-400 hover:text-iris-300">{p.ctaPrimary.label} <FunctionalIcon icon={ArrowRight} /></a>
     </div>
   </section>
 
@@ -169,7 +171,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
       </div>
 
       <a href={localePath(lang, p.boundary.link.href)} class="mt-9 inline-flex font-medium text-iris-400 hover:text-iris-300">
-        {p.boundary.link.label} →
+        {p.boundary.link.label} <FunctionalIcon icon={ArrowRight} />
       </a>
     </div>
   </section>
@@ -203,7 +205,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
           <article data-agent-reliability={item.key} class="grid gap-3 border-b border-ink-700 p-6 last:border-b-0 sm:grid-cols-[minmax(10rem,0.7fr)_minmax(16rem,1.4fr)_auto] sm:items-center sm:gap-7 sm:px-7">
             <p class="font-mono text-sm font-semibold text-fog-100">{item.value}</p>
             <p class="text-sm leading-7 text-fog-400">{item.label}</p>
-            <a href={localePath(lang, item.href)} class="inline-flex whitespace-nowrap text-xs font-medium text-iris-400 hover:text-iris-300">{item.proof} →</a>
+            <a href={localePath(lang, item.href)} class="inline-flex whitespace-nowrap text-xs font-medium text-iris-400 hover:text-iris-300">{item.proof} <FunctionalIcon icon={ArrowRight} /></a>
           </article>
         ))}
       </div>
@@ -242,7 +244,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
           >
             <h3 class="text-lg font-semibold text-fog-100 group-hover:text-iris-300">{item.title}</h3>
             <p class="mt-3 text-sm leading-7 text-fog-400">{item.body}</p>
-            <span class="mt-5 inline-flex text-sm font-medium text-iris-400">{item.action} →</span>
+            <span class="mt-5 inline-flex text-sm font-medium text-iris-400">{item.action} <FunctionalIcon icon={ArrowRight} /></span>
           </a>
         ))}
       </div>

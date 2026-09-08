@@ -70,3 +70,12 @@ canonical route identity; `global.css` only maps it to Tailwind tokens.
 changes. The native `AppearanceSelect.astro` supplies localized markup to that
 controller; it does not store or resolve theme state itself. Legacy `theme`
 preferences migrate to `awaken.theme` within this website origin.
+
+## Functional icons
+
+Functional icons use the Lucide nodes and SVG defaults from
+`@awaken/ui/icons/data`, the same geometry used by React consoles.
+`FunctionalIcon.astro` only renders those nodes as native SVG elements; it adds
+no icon paths, dependencies, persistence or event handling. Page components keep
+link destinations, actions and labels. Decorative icons stay out of accessible
+names; standalone meaningful images receive an explicit label.

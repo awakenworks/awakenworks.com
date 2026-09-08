@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowLeft } from "@awaken/ui/icons/data";
 import { render, type CollectionEntry } from 'astro:content';
 import { localePath, type Lang } from '../i18n/content';
 import SiteHeader from './SiteHeader.astro';
@@ -20,7 +22,7 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
   <a
     href={localePath(lang, '/blog')}
     class="font-mono text-xs text-fog-500 hover:text-fog-100"
-    >← {ui[lang].blog.back}</a
+    ><FunctionalIcon icon={ArrowLeft} /> {ui[lang].blog.back}</a
   >
   <p class="mt-8 font-mono text-xs text-fog-600">
     {fmt(post.data.date)} · {post.data.author}

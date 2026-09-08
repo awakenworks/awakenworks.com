@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight, Star } from "@awaken/ui/icons/data";
 import { getCollection } from 'astro:content';
 import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
 import SiteHeader from './SiteHeader.astro';
@@ -30,8 +32,8 @@ const copy = ui[lang].blog;
     {copy.topics.map((topic) => <span class="rounded-full border border-ink-600 px-3 py-1 font-mono text-xs text-fog-500">{topic}</span>)}
   </div>
   <div class="mt-8 flex flex-wrap gap-4 border-b border-ink-700 pb-10">
-    <a href={localePath(lang, '/docs')} class="text-sm font-medium text-accent-400">{copy.docs} →</a>
-    <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="blog-index" data-umami-event-product="unselected" data-umami-event-destination="github" class="text-sm font-medium text-fog-300 hover:text-accent-400">★ {ui[lang].common.githubStar} →</a>
+    <a href={localePath(lang, '/docs')} class="text-sm font-medium text-accent-400">{copy.docs} <FunctionalIcon icon={ArrowRight} /></a>
+    <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="blog-index" data-umami-event-product="unselected" data-umami-event-destination="github" class="text-sm font-medium text-fog-300 hover:text-accent-400"><FunctionalIcon icon={Star} /> {ui[lang].common.githubStar} <FunctionalIcon icon={ArrowRight} /></a>
   </div>
   </div>
   <section id="blog-archive" class="mt-14 space-y-12" aria-label={copy.archive}>
@@ -55,7 +57,7 @@ const copy = ui[lang].blog;
             href={localePath(lang, `/blog/${slugOf(p.id)}`)}
             class="mt-3 inline-block text-sm font-medium text-accent-400 hover:text-accent-500"
           >
-            {copy.read} →
+            {copy.read} <FunctionalIcon icon={ArrowRight} />
           </a>
         </article>
       ))

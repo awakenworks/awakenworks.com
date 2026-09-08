@@ -1,4 +1,6 @@
 ---
+import FunctionalIcon from "./FunctionalIcon.astro";
+import { ArrowRight } from "@awaken/ui/icons/data";
 import type { Lang } from '../i18n/content';
 import { withSiteBase } from '../config/siteDeployment.mjs';
 import ProductPreview from './ProductPreview.astro';
@@ -69,7 +71,7 @@ const consoleDetails = consoleTour.details.map((item) => ({
               data-home-runtime-concept
               href={withSiteBase(concept.href)}
               class="mt-5 inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
-            >{concept.label} →</a>
+            >{concept.label} <FunctionalIcon icon={ArrowRight} /></a>
           )}
         </div>
       )
