@@ -79,3 +79,15 @@ Functional icons use the Lucide nodes and SVG defaults from
 no icon paths, dependencies, persistence or event handling. Page components keep
 link destinations, actions and labels. Decorative icons stay out of accessible
 names; standalone meaningful images receive an explicit label.
+
+## Console capture provenance
+
+The five `public/awaken/assets/console-current` PNGs are actual local Console
+captures from Agents revision `cadf3816ab4003e977387be2f700ce03c0455e04`, using
+`@awaken/ui` 0.8.0. The existing Agents `web/e2e/ui-inventory.spec.ts` owns the
+capture procedure: desktop Overview, Deployments, Models & providers, API &
+protocols, plus the Agent configuration case. Images are extracted unchanged
+from its Playwright JSON attachments after those five cases pass. The browser
+uses the real local production backend and Vite-rendered source with controlled
+initial setup data. These images establish appearance, not customer activity,
+completed work, deployed-release status or provider interoperability.

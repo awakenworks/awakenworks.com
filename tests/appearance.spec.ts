@@ -38,6 +38,26 @@ for (const lang of ["en", "zh"]) {
         await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
         await expect(appearance).toHaveValue("dark");
         await expect(appearance).toBeVisible();
+        if (brand === "agents") {
+          // Capture rules: each actual image x en/zh x wide/narrow -> full
+          // intrinsic image, named native modal, bounded size and Escape focus
+          // restoration. Inspecting an image cannot change the selected theme.
+          const triggers = page.locator("button[data-console-image]");
+          await expect(triggers).toHaveCount(5);
+          for (const trigger of await triggers.all()) {
+            await trigger.click();
+            const modal = page.getByRole("dialog");
+            await expect(modal).toHaveAccessibleName(await trigger.getAttribute("data-console-alt") ?? "");
+            const image = modal.getByRole("img");
+            await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBe(1280);
+            await expect(image).toHaveAttribute("width", "1280");
+            const box = await modal.boundingBox();
+            expect(box!.width).toBeLessThanOrEqual(width);
+            await page.keyboard.press("Escape");
+            await expect(modal).not.toBeVisible();
+            await expect(trigger).toBeFocused();
+          }
+        }
         await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       }
       // I1 en/zh x narrow/desktop: one Astro SVG projects the same Search nodes
@@ -60,6 +80,14 @@ for (const lang of ["en", "zh"]) {
       await appearance.selectOption("system");
       await page.emulateMedia({ colorScheme: "light" });
       await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+      // Form focus uses the family ring instead of a local outline suppression.
+      // Only keyboard inspection is required; this case sends no form submission.
+      await page.goto(`${base}/enterprise`);
+      const email = page.locator('form[data-opportunity-form] input[name="email"]');
+      await email.focus();
+      await expect(email).toHaveCSS("outline-style", "solid");
+      await expect(email).toHaveCSS("outline-width", "2px");
+      await expect(email).toHaveCSS("border-top-left-radius", "4px");
       expect(errors).toEqual([]);
     });
   }

@@ -12,9 +12,13 @@
   --color-ink-700: var(--aw-border);
   --color-ink-600: var(--aw-border-strong);
   --color-fog-100: var(--aw-strong);
+  --color-fog-200: var(--aw-text);
+  --color-fog-400: var(--aw-muted);
   --color-fog-300: var(--aw-text);
   --color-fog-500: var(--aw-muted);
   --color-fog-600: var(--aw-faint);
+  --color-accent-200: var(--aw-accent-hover);
+  --color-accent-700: var(--aw-accent-hover);
   --color-accent-300: var(--aw-accent-hover);
   --color-accent-400: var(--aw-accent-hover);
   --color-accent-500: var(--aw-accent);
@@ -23,6 +27,8 @@
   --color-rust-400: var(--aw-workforce-hover);
   --color-rust-500: var(--aw-workforce-accent);
   --color-rust-600: var(--aw-workforce-hover);
+  --color-iris-300: var(--aw-agents-hover);
+  --color-iris-700: var(--aw-agents-hover);
   --color-iris-400: var(--aw-agents-hover);
   --color-iris-500: var(--aw-agents-accent);
   --color-iris-600: var(--aw-agents-hover);

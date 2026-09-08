@@ -90,7 +90,7 @@ const consoleDetails = consoleTour.details.map((item) => ({
             <img
               src={overviewSrc}
               alt={consoleTour.overviewAlt}
-              width="1440"
+              width="1280"
               height="900"
               loading="eager"
               decoding="async"
@@ -110,7 +110,7 @@ const consoleDetails = consoleTour.details.map((item) => ({
                 <img
                   src={item.src}
                   alt={item.alt}
-                  width="1440"
+                  width="1280"
                   height="900"
                   loading="lazy"
                   decoding="async"
@@ -141,7 +141,7 @@ const consoleDetails = consoleTour.details.map((item) => ({
     <form method="dialog" class="mb-3 flex justify-end">
       <button value="close" class="rounded-full border border-ink-600 px-3 py-1.5 text-sm text-fog-200 hover:border-fog-400">{consoleTour.close}</button>
     </form>
-    <img data-console-dialog-image alt="" width="1440" height="900" class="h-auto max-h-[80vh] w-full rounded-xl border border-ink-700 object-contain" />
+    <img data-console-dialog-image alt="" width="1280" height="900" class="h-auto max-h-[80vh] w-full rounded-xl border border-ink-700 object-contain" />
   </dialog>
 )}
 
@@ -156,6 +156,7 @@ const consoleDetails = consoleTour.details.map((item) => ({
         if (dialog && image) {
           image.src = trigger.dataset.consoleImage;
           image.alt = trigger.dataset.consoleAlt || '';
+          dialog.setAttribute("aria-label", image.alt);
           dialog.showModal();
         }
         return;

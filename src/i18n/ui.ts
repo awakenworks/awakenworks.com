@@ -311,11 +311,11 @@ export const agentsConsoleTour = {
     overviewCaption: 'The overview turns setup into five visible steps: connect a model, publish an Agent, run a Session, review the result, then connect an application.',
     details: [
       { src: '/awaken/assets/console-current/agent-editor.png', alt: 'Awaken Agent editor with quickstart, draft checks, and publication controls', title: 'Build and publish in Console', caption: 'Give the Agent a readable name, choose a runnable model and task, test the draft, then review the exact publication change.' },
-      { src: '/awaken/assets/console-current/models-and-providers.png', alt: 'Awaken model provider connection and discovered model catalog', title: 'Connect a model before you build', caption: 'Verify a provider credential and endpoint, import its model catalog, and expose only models the runtime can execute.' },
+      { src: '/awaken/assets/console-current/models-and-providers.png', alt: 'Awaken Models and providers page showing native and ACP runtime availability', title: 'Connect a model before you build', caption: 'Verify a provider credential and endpoint, import its model catalog, and expose only models the runtime can execute.' },
       { src: '/awaken/assets/console-current/api-and-protocols.png', alt: 'Awaken API and protocols directory with Managed Agents connection help', title: 'Connect through the protocol you use', caption: 'Open the protocol-specific guide, create the right API key for protected deployments, and inspect the same Session in Console.' },
-      { src: '/awaken/assets/console-current/deployments.png', alt: 'Awaken Deployments page showing schedules, manual runs, and result Sessions', title: 'Turn a tested Agent into repeatable work', caption: 'Each scheduled or manual trigger creates its own inspectable Session, with a direct path from the run to its result.' },
+      { src: '/awaken/assets/console-current/deployments.png', alt: 'Awaken Deployments setup page with empty schedule and run history tables', title: 'Turn a tested Agent into repeatable work', caption: 'Each scheduled or manual trigger creates its own inspectable Session, with a direct path from the run to its result.' },
     ],
-    provenance: 'Captured from Awaken v1.0.0-dev release UI at revision 50d5035c68456c9106626f748cf4c169c2057beb. Controlled local data is shown; these are product screens, not customer activity.',
+    provenance: 'Captured from the local Awaken v1.0.0-dev Console at revision cadf3816ab4003e977387be2f700ce03c0455e04. Uses @awaken/ui 0.8.0 and controlled local setup data; no customer activity or deployed release is implied.',
   },
   zh: {
     zoom: '放大查看产品界面',
@@ -324,11 +324,11 @@ export const agentsConsoleTour = {
     overviewCaption: '总览把首次配置整理为五步：连接模型、发布 Agent、运行 Session、查看结果，再接入应用。',
     details: [
       { src: '/awaken/assets/console-current/agent-editor.png', alt: 'Awaken Agent 编辑器，包含快速开始、草稿检查与发布控制', title: '在 Console 中构建并发布', caption: '设置易读名称，选择可运行模型与首个任务，测试草稿，再审阅精确的发布差异。' },
-      { src: '/awaken/assets/console-current/models-and-providers.png', alt: 'Awaken 模型供应商连接与自动发现的模型目录', title: '先连接模型，再构建 Agent', caption: '验证供应商凭据和 endpoint，导入模型目录，只把 Runtime 确实能够执行的模型交给 Agent。' },
+      { src: '/awaken/assets/console-current/models-and-providers.png', alt: 'Awaken 模型与供应商页面，显示 Native 和 ACP Runtime 的可用状态', title: '先连接模型，再构建 Agent', caption: '验证供应商凭据和 endpoint，导入模型目录，只把 Runtime 确实能够执行的模型交给 Agent。' },
       { src: '/awaken/assets/console-current/api-and-protocols.png', alt: 'Awaken API 与协议目录中的 Managed Agents 接入帮助', title: '按应用使用的协议接入', caption: '打开对应协议的连接说明，在受保护部署中创建合适的 API Key，并在 Console 检查同一个 Session。' },
-      { src: '/awaken/assets/console-current/deployments.png', alt: 'Awaken Deployments 页面，显示计划、手动运行和结果 Session', title: '把验证过的 Agent 变成重复工作', caption: '每次定时或手动触发都会建立独立、可检查的 Session，并可从运行记录直接进入结果。' },
+      { src: '/awaken/assets/console-current/deployments.png', alt: 'Awaken Deployments 初始配置页面，包含尚无记录的计划和运行历史表格', title: '把验证过的 Agent 变成重复工作', caption: '每次定时或手动触发都会建立独立、可检查的 Session，并可从运行记录直接进入结果。' },
     ],
-    provenance: '截图来自 Awaken v1.0.0-dev revision 50d5035c68456c9106626f748cf4c169c2057beb 的 Release UI。画面使用受控本地数据，不代表客户活动。',
+    provenance: '截图来自 Awaken v1.0.0-dev revision cadf3816ab4003e977387be2f700ce03c0455e04 的本地 Console，使用 @awaken/ui 0.8.0。画面为受控本地初始配置数据，不代表客户活动或已部署版本。',
   },
 } as const satisfies Record<Lang, object>;
 

@@ -311,7 +311,7 @@ const banner =
     for (const { record } of matches) {
       const link = document.createElement('a');
       link.href = record.href;
-      link.className = 'block rounded-xl px-4 py-3 hover:bg-ink-800 focus:bg-ink-800 focus:outline-none';
+      link.className = 'block rounded-xl px-4 py-3 hover:bg-ink-800 focus:bg-ink-800';
       const meta = document.createElement('span');
       meta.className = 'font-mono text-[0.68rem] uppercase tracking-wider text-accent-400';
       meta.textContent = record.product;

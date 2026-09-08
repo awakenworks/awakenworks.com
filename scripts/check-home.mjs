@@ -353,6 +353,17 @@ const baseLayoutPath = resolve(root, 'src/layouts/Base.astro');
 requirePattern(baseLayoutPath, /appearanceBootstrap\(\{ legacyStorageKeys: \['theme'\] \}\)/, 'all routes must initialize the shared appearance owner before paint');
 rejectPattern(baseLayoutPath, /localStorage|matchMedia|data-theme-toggle/, 'the website must not retain a second appearance state owner');
 requirePattern(resolve(root, 'src/styles/global.css'), /@awaken\/ui\/brand\/family\.css/, 'website colors and typography must map the shared family foundation');
+// T4 every existing family-color utility must resolve a shared alias. Missing
+// shades silently lose text/border styling, so inspect every Astro source rather
+// than maintaining a second list of the six originally missing shades.
+const familyStyles = readFileSync(resolve(root, 'src/styles/global.css'), 'utf8');
+const mappedColors = new Set([...familyStyles.matchAll(/--color-([a-z]+-\d+)\s*:/g)].map((match) => match[1]));
+for (const file of readdirSync(resolve(root, 'src'), { recursive: true }).filter((file) => file.endsWith('.astro'))) {
+  const source = readFileSync(resolve(root, 'src', file), 'utf8');
+  for (const match of source.matchAll(/\b(?:fog|ink|accent|iris|rust|bone)-\d+\b/g)) {
+    if (!mappedColors.has(match[0])) failures.push(`${file}: unmapped family color ${match[0]}`);
+  }
+}
 for (const shell of ['SiteHeader', 'DocsShell']) {
   requirePattern(resolve(root, `src/components/${shell}.astro`), /<AppearanceSelect lang=\{lang\}/, 'both shells must use the same localized appearance projection');
 }
@@ -1061,11 +1072,12 @@ for (const rule of [
 // | P3   | present    | no                | any          | any           | any      | reject  |
 // | P4   | present    | yes               | no           | any           | any      | reject  |
 // | P5   | present    | yes               | yes          | product form  | any      | reject  |
-// Screenshot provenance is rendered by the tour owner, including revision and
+// Capture source (local Console vs example) -> exact disclosure, never a release
+// claim inferred from a source screenshot. Screenshot provenance is rendered by the tour owner, including revision and
 // controlled-data disclosure; a retired caption is not a second evidence owner.
 // | P6   | present    | yes               | yes          | enterprise    | absent   | reject  |
 for (const rule of [
-  { path: resolve(root, 'dist/agents/index.html'), id: 'platform-preview', label: 'Captured from Awaken v1.0.0-dev release UI at revision' },
+  { path: resolve(root, 'dist/agents/index.html'), id: 'platform-preview', label: 'Captured from the local Awaken v1.0.0-dev Console at revision' },
   { path: resolve(root, 'dist/objects/index.html'), id: 'objects-preview', label: 'Product model preview · example content' },
   { path: resolve(root, 'dist/workforce/index.html'), id: 'workforce-preview', label: 'Current product workspace · controlled example content, not customer activity' },
   { path: resolve(root, 'dist/zh/agents/index.html'), id: 'platform-preview', label: '截图来自 Awaken v1.0.0-dev revision' },
@@ -1124,7 +1136,7 @@ for (const path of [resolve(root, 'dist/agents/index.html'), resolve(root, 'dist
   for (const asset of ['overview.png', 'agent-editor.png', 'models-and-providers.png', 'api-and-protocols.png', 'deployments.png']) {
     requirePattern(path, new RegExp(`/awaken/assets/console-current/${asset.replace('.', '\\.')}`), 'Agents must show every current Console journey screenshot');
   }
-  requirePattern(path, /50d5035c68456c9106626f748cf4c169c2057beb/, 'current Console screenshots must name their exact verified Awaken revision');
+  requirePattern(path, /cadf3816ab4003e977387be2f700ce03c0455e04/, 'current Console screenshots must name their exact verified Awaken revision');
 }
 
 for (const rule of [
