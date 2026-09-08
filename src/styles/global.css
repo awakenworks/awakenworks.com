@@ -29,6 +29,14 @@
   --color-bone-300: var(--aw-strong);
   --color-bone-400: var(--aw-muted);
   --color-bone-500: var(--aw-faint);
+  --radius-xs: var(--aw-radius-control);
+  --radius-sm: var(--aw-radius-control);
+  --radius-md: var(--aw-radius-control);
+  --radius-lg: var(--aw-radius-surface);
+  --radius-xl: var(--aw-radius-surface);
+  --radius-2xl: var(--aw-radius-surface);
+  --radius-3xl: var(--aw-radius-overlay);
+  --radius-4xl: var(--aw-radius-overlay);
   --font-sans: var(--aw-font-body);
   --font-mono: var(--aw-font-mono);
 }
@@ -51,7 +59,7 @@ body {
   left: 0.75rem;
   z-index: 100;
   transform: translateY(-200%);
-  border-radius: 0.5rem;
+  border-radius: var(--aw-radius-surface);
   background: var(--color-accent-500);
   padding: 0.65rem 0.9rem;
   color: var(--color-onaccent);
@@ -171,7 +179,7 @@ html[data-brand='workforce'] .eyebrow {
   font-size: 0.9em;
   background: var(--color-ink-850);
   border: 1px solid var(--color-ink-700);
-  border-radius: 4px;
+  border-radius: var(--aw-radius-surface);
   padding: 0.1em 0.35em;
 }
 .prose :not(pre) > code {
@@ -181,7 +189,7 @@ html[data-brand='workforce'] .eyebrow {
   margin: 1.4em 0;
   background: var(--color-ink-900);
   border: 1px solid var(--color-ink-700);
-  border-radius: 12px;
+  border-radius: var(--aw-radius-surface);
   padding: 1rem;
   overflow-x: auto;
 }
@@ -196,7 +204,7 @@ html[data-brand='workforce'] .eyebrow {
   margin: 1.5em 0;
   overflow-x: auto;
   border: 1px solid var(--color-ink-700);
-  border-radius: 12px;
+  border-radius: var(--aw-radius-surface);
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.875rem;
@@ -272,14 +280,14 @@ html[data-brand='workforce'] .eyebrow {
   height: auto;
   margin: 1.5em 0;
   border: 1px solid var(--color-ink-700);
-  border-radius: 16px;
+  border-radius: var(--aw-radius-surface);
   background: var(--color-ink-900);
 }
 .blog-prose .mermaid {
   margin: 1.5em 0;
   overflow-x: auto;
   border: 1px solid var(--color-ink-700);
-  border-radius: 16px;
+  border-radius: var(--aw-radius-surface);
   background: var(--color-ink-900);
   padding: 1rem;
 }

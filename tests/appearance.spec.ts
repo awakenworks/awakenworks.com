@@ -26,6 +26,11 @@ for (const lang of ["en", "zh"]) {
       await expect(appearance).toHaveValue("light");
       await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
       expect(await page.evaluate(() => localStorage.getItem("theme"))).toBeNull();
+      // Radius projection: existing Tailwind surfaces resolve the shared family
+      // radius rather than retaining an independent utility scale. Pill shapes
+      // remain semantic pills and are excluded from this surface rule.
+      const surface = page.locator(".rounded-xl").first();
+      await expect(surface).toHaveCSS("border-top-left-radius", "4px");
       await appearance.selectOption("dark");
       for (const [path, brand] of [["/", "works"], ["/agents", "agents"], ["/objects", "objects"], ["/workforce", "workforce"], ["/docs", "works"]]) {
         await page.goto(`${base}${path}`);

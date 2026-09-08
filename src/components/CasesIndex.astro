@@ -68,7 +68,7 @@ const sourceHref = `${AWAKEN_GITHUB_URL}/tree/${agentsVersion.sourceRevision}`;
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
       <div class="grid gap-7">
         {t.cases.items.map((item, index) => (
-          <article data-case-index={item.slug} class="grid gap-8 rounded-[1.5rem] border border-ink-700 bg-ink-850 p-7 sm:p-10 lg:grid-cols-[0.72fr_1.28fr]">
+          <article data-case-index={item.slug} class="grid gap-8 rounded-xl border border-ink-700 bg-ink-850 p-7 sm:p-10 lg:grid-cols-[0.72fr_1.28fr]">
             <div>
               <p class="font-mono text-xs text-iris-400">0{index + 1} · {item.kind}</p>
               <h2 class="mt-4 text-3xl font-semibold text-fog-100">{item.name}</h2>
