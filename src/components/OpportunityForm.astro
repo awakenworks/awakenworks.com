@@ -30,12 +30,10 @@ const selectedScenarioPrefix = ui[lang].landing.selectedScenario;
 const selectedProductPrefix = ui[lang].landing.selectedProduct;
 const productOptions = publicProductEntries(lang).map((product) => [product.key, `${product.name} · ${product.status}`]);
 const caseLabels = Object.fromEntries(content[lang].cases.items.map((item) => [item.slug, item.name]));
-const scenarioLabels = Object.fromEntries(
-  [
-    ...content[lang].home.scenarios.items.map((item) => [item.key, item.label]),
-    [REFUND_SCENARIO_KEY, content[lang].landing.workforce.loop.eyebrow],
-  ],
-);
+const scenarioLabels = {
+  ...content[lang].enterprise.contextLabels,
+  [REFUND_SCENARIO_KEY]: content[lang].landing.workforce.loop.eyebrow,
+};
 ---
 
 <form
@@ -90,6 +88,7 @@ const scenarioLabels = Object.fromEntries(
         <select name="product" class="w-full rounded-lg border border-accent-700/50 bg-accent-500/5 px-4 py-3 font-medium text-accent-300 focus:border-accent-500">
           {productOptions.map(([value, label]) => <option value={value} selected={value === product}>{label}</option>)}
         </select>
+        <span data-product-help class="text-sm leading-6 text-fog-400">{content[lang].enterprise.form.productHelp}</span>
       </label>
       <label class="grid gap-2 text-sm text-fog-300">
         {w.fields.scenario}

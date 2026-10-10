@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { currentVersion } from "../src/i18n/docsVersions";
 import { content, REFUND_SCENARIO_KEY } from "../src/i18n/content";
 import { localeNavigationHref } from "../src/i18n/locales";
+import { brandMarkPalette } from "@awaken/ui/brand";
 
 // Site integration decision table: language en/zh x desktop/narrow, across all
 // four route identities and the documentation shell. Legacy stored light wins
@@ -29,6 +30,9 @@ for (const lang of ["en", "zh"]) {
       const appearance = page.getByRole("combobox", { name: lang === "zh" ? "外观" : "Appearance" });
       await expect(appearance).toHaveValue("light");
       await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+      const headerMark = page.locator('header svg[data-brand-mark=works]');
+      await expect(headerMark).toHaveCount(1);
+      await expect(headerMark).toHaveCSS('--mark-primary', brandMarkPalette('works', 'on-light').primary);
       expect(await page.evaluate(() => localStorage.getItem("theme"))).toBeNull();
       // Radius projection: existing Tailwind surfaces resolve the shared family
       // radius rather than retaining an independent utility scale. Pill shapes
@@ -64,16 +68,24 @@ for (const lang of ["en", "zh"]) {
         await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
         await expect(appearance).toHaveValue("dark");
         await expect(appearance).toBeVisible();
+        // M2 explicit preference overrides OS on the same SVG; M3 component
+        // CSS defaults never override the caller's 20px utility size.
+        await expect(headerMark).toHaveCount(1);
+        await expect(headerMark).toHaveCSS('--mark-primary', brandMarkPalette('works', 'on-dark').primary);
+        await expect(headerMark).toHaveCSS('width', '20px');
+        await expect(headerMark).toHaveCSS('height', '20px');
         // V1 developer x language/width -> actual Console capture arrives early.
-        // V1b business reader -> the explicitly labelled refund illustration
-        // arrives early instead of an unrelated developer setup gallery.
+        // V1b first-time reader -> product purposes appear by the second screen,
+        // followed by the labelled example, not a developer setup gallery.
         if (path === '/agents') {
           const imageTop = await page.locator('#platform-preview img').first().evaluate((node) => node.getBoundingClientRect().top + scrollY);
           expect(imageTop).toBeLessThan(width < 640 ? 1800 : 1400);
         }
         if (path === '/') {
+          const productTop = await page.locator('#home-products').evaluate((node) => node.getBoundingClientRect().top + scrollY);
+          expect(productTop).toBeLessThan(width < 640 ? 850 : 750);
           const storyTop = await page.locator('[data-workforce-refund-example]').evaluate((node) => node.getBoundingClientRect().top + scrollY);
-          expect(storyTop).toBeLessThan(width < 640 ? 1800 : 1400);
+          expect(storyTop).toBeLessThan(width < 640 ? 2200 : 1600);
           await expect(page.locator('[data-workforce-refund-example]')).toHaveAttribute('data-preview-kind', 'illustration');
         }
         // V2 the Chinese promise keeps the meaningful phrase on one line;
@@ -522,7 +534,7 @@ for (const lang of ['en', 'zh']) {
         for (const path of ['/', '/workforce']) {
           await page.goto(`${base}${path}`, { waitUntil: 'domcontentloaded' });
           for (const contact of await page.locator('header a[data-awaken-event=business_job_evaluation_selected]').all()) {
-            await expect(contact).toHaveText(lang === 'zh' ? '评估一项业务工作' : 'Evaluate one business job');
+            await expect(contact).toHaveText(lang === 'zh' ? '告诉我们你的工作' : 'Describe your work');
             await expect(contact).toHaveAttribute('href', `${base}/enterprise?product=workforce#apply`);
             await expect(contact).toHaveAttribute('data-awaken-event-destination', 'enterprise');
           }
@@ -532,7 +544,7 @@ for (const lang of ['en', 'zh']) {
           await expect(story).toContainText(lang === 'zh' ? '订单已超过约定交付时间' : 'The order is past the promised delivery date');
           await expect(page.locator('main')).not.toContainText(/重复扣款|扣了两次|duplicate charge|charged twice/i);
           await expect(story.locator('[data-workforce-stage]').first()).toContainText(lang === 'zh' ? '物流进度' : 'shipment progress');
-          await expect(story.locator('[data-refund-example-boundary]')).toContainText(lang === 'zh' ? '研究候选' : 'research candidate');
+          await expect(story.locator('[data-refund-example-boundary]')).toContainText(lang === 'zh' ? '尚待客户验证' : 'Customer validation of this refund scenario is pending');
           await expect(story.locator('[data-workforce-stage]')).toHaveCount(4);
           const approval = story.locator('[data-workforce-stage]').nth(1);
           await approval.locator('summary').focus();
@@ -546,6 +558,13 @@ for (const lang of ['en', 'zh']) {
           await page.keyboard.press('Enter');
           await expect(execution.locator('p')).toBeVisible();
           await expect(execution).toContainText(lang === 'zh' ? '请求超时时先查询支付状态' : 'If a request times out, query the payment state');
+          const roles = story.locator('[data-refund-roles]');
+          if (path === '/') {
+            await expect(roles).not.toHaveAttribute('open', '');
+            await roles.locator('summary').focus();
+            await page.keyboard.press('Enter');
+          }
+          await expect(roles).toHaveAttribute('open', '');
           await expect(story.locator('[data-workforce-role]')).toHaveCount(3);
           await expect(story.locator('[data-workforce-role]').nth(1)).toContainText(lang === 'zh' ? '负责人' : 'Responsible person');
           await expect(story.locator('[data-refund-result-record]')).toHaveCount(3);
@@ -568,6 +587,106 @@ for (const lang of ['en', 'zh']) {
           await expect(form).toHaveAttribute('data-initial-product', 'workforce');
           await expect(form.locator('[name=scenario_context]')).toHaveValue(REFUND_SCENARIO_KEY);
           await expect(form.locator('[name=email]')).toHaveValue('refund-review@example.invalid');
+        }
+      } finally { await context.close(); }
+    });
+  }
+}
+
+// Reading/navigation decision table (not a simulated human study):
+// C1 en/zh x JS on/off x 390px; C2 business/developer purpose; C3 self-evaluation
+// versus requested preview; C4 prepare/setup/fees question; C5 known/unknown
+// request context after the old homepage catalog is removed.
+// E1 early two-product choice before one example, no duplicated value/chooser;
+// E2 concrete access facts and canonical exits; E3 native answers work by keyboard;
+// E4 partner and legacy contexts use the sole form, unknown context is omitted.
+// Rules: R1 C2+C3 -> E1+E2; R2 C4 -> E3; R3 known C5 -> E4; R4 unknown -> empty.
+// Separate human reading acceptance, still pending: five business visitors and
+// five developers unfamiliar with Awaken read for 30 seconds without coaching,
+// then describe who each product serves, what it does, current access, and the
+// next step. Record wrong assumptions and their navigation before explaining.
+// These browser rules verify delivery/navigation, not human comprehension.
+for (const lang of ['en', 'zh']) {
+  for (const javaScriptEnabled of [true, false]) {
+    test(`${lang} clear product choices and adoption questions with JS ${javaScriptEnabled}`, async ({ browser }) => {
+      const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 390, height: 900 } });
+      try {
+        await context.route('https://cloud.umami.is/**', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+        await context.route('https://formspree.io/**', (route) => route.abort());
+        const page = await context.newPage();
+        const base = lang === 'zh' ? '/zh' : '';
+        await page.goto(`${base}/`);
+        const products = page.locator('#home-products');
+        await expect(products.locator('[data-product-role]')).toHaveCount(2);
+        await expect(products).toContainText(lang === 'zh' ? '构建和运行 AI 应用' : 'Build and run AI applications');
+        await expect(products).toContainText(lang === 'zh' ? '让 AI 按流程完成业务工作' : 'Complete business work with AI');
+        await expect(products).toContainText(lang === 'zh' ? '尚无稳定发布包' : 'pre-release');
+        await expect(products).toContainText(lang === 'zh' ? '需申请预览' : 'Preview access by request');
+        const positions = await page.locator('#home-products, #workforce-preview').evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().top + scrollY));
+        expect(positions[0]).toBeLessThan(850);
+        expect(positions[0]).toBeLessThan(positions[1]!);
+        await expect(page.locator('#home-value, #home-adoption')).toHaveCount(0);
+        await expect(page.locator('main')).not.toContainText(/平台生命周期|具名验收人|Reference Reimplementation|责任与验收/);
+        await page.locator('[data-awaken-event-location=home-questions]').click();
+        await expect(page).toHaveURL(/enterprise#enterprise-questions$/);
+        await expect(page.locator('#enterprise-questions h2')).toBeInViewport();
+        const questions = page.locator('[data-adoption-question]');
+        await expect(questions).toHaveCount(4);
+        for (const question of await questions.all()) {
+          await question.locator('summary').focus();
+          await page.keyboard.press('Enter');
+          await expect(question.locator('p')).toBeVisible();
+        }
+        await expect(page.locator('[data-adoption-question=agent]')).toContainText(lang === 'zh' ? '可以先从想完成的工作开始' : 'You can start with the work you want done');
+        await expect(page.locator('[data-adoption-question=cost]')).toContainText(lang === 'zh' ? '付费实施开始前' : 'before a paid implementation starts');
+        const partnerLink = page.locator('#enterprise-partners a');
+        if (javaScriptEnabled) {
+          await partnerLink.click();
+        } else {
+          // R3 with JS absent: exercise native keyboard navigation after the
+          // expanded answers, without forcing a click during smooth scrolling.
+          await partnerLink.focus();
+          await page.keyboard.press('Enter');
+        }
+        await expect(page).toHaveURL(/product=agents&scenario=solution-delivery#apply$/);
+        const form = page.locator('[data-opportunity-form]');
+        await expect(form).toHaveCount(1);
+        await expect(form.locator('[data-product-help]')).toContainText('Workforce');
+        if (javaScriptEnabled) {
+          await expect(form).toHaveAttribute('data-initial-product', 'agents');
+          await expect(form.locator('[name=scenario_context]')).toHaveValue('solution-delivery');
+          await page.goto(`${base}/enterprise?scenario=unknown`);
+          await expect(form).toHaveAttribute('data-initial-product', 'workforce');
+          await expect(form.locator('[name=scenario_context]')).toHaveValue('');
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      } finally { await context.close(); }
+    });
+  }
+}
+
+// Adaptive-mark cause/effect graph: C1 JS absent; C2 OS light/dark; C3 en/zh
+// and 390px; C4 marketing/product/docs route. E1 one canonical SVG, never two
+// visible palette variants; E2 the package CSS resolves the matching palette;
+// E3 header size and mobile layout remain intact. Rules M1 C1 x C2 x C3 x C4
+// -> E1+E2+E3. Explicit JS preferences and utility size are covered above (M2/M3).
+for (const lang of ['en', 'zh']) {
+  for (const colorScheme of ['light', 'dark'] as const) {
+    test(`${lang} single adaptive brand mark without JavaScript in OS ${colorScheme}`, async ({ browser }) => {
+      const context = await browser.newContext({ javaScriptEnabled: false, colorScheme, viewport: { width: 390, height: 900 } });
+      try {
+        const page = await context.newPage();
+        const base = lang === 'zh' ? '/zh' : '';
+        for (const route of ['/', '/agents', '/workforce', '/docs']) {
+          await page.goto(`${base}${route}`);
+          const mark = page.locator('header svg[data-brand-mark=works]');
+          await expect(mark).toHaveCount(1);
+          await expect(mark).toHaveCSS('--mark-primary', brandMarkPalette('works', colorScheme === 'dark' ? 'on-dark' : 'on-light').primary);
+          await expect(mark).toHaveCSS('width', '20px');
+          await expect(mark).toHaveCSS('height', '20px');
+          // Documentation keeps its existing wrapped control row on phones.
+          if (route !== '/docs') expect(await page.getByRole('banner').evaluate(n => n.getBoundingClientRect().height)).toBeLessThanOrEqual(70);
+          expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
         }
       } finally { await context.close(); }
     });

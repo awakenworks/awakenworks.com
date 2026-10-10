@@ -97,5 +97,5 @@ Session。
 | 不重新构建即可修改提示词、模型、工具、Skills 或限制 | [配置 Agent 行为](/zh/docs/agents/how-to/configure-agent-behavior/) |
 | 添加 Rust Tool、provider adapter、Plugin 或执行行为 | [扩展 Awaken Agents 内部机制](/zh/docs/agents/runtime/build-agents/) |
 
-Awaken Agents 已开源，首个稳定版即将发布；在此之前，接口与行为仍可能变化。托管服务、
+Awaken Agents 已开源，当前尚无稳定发布包；稳定发布前，接口与行为仍可能变化。托管服务、
 支持承诺、安全认证或经过独立测量的生产结果，需要另行发布明确声明。

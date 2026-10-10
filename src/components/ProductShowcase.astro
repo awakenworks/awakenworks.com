@@ -110,7 +110,7 @@ const consoleDetails = consoleTour.details.map((item) => ({
     ) : (
       <div class="showcase-frame relative rounded-2xl">
         <span class="showcase-sheen" aria-hidden="true"></span>
-        <ProductPreview lang={lang} product={product} />
+        <ProductPreview lang={lang} product={product} compact={compact} />
       </div>
     )}
     {concept && <div class="mt-6">

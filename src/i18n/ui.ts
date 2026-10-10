@@ -385,8 +385,7 @@ export const productPreviewCopy = {
         ]
       ],
       decision: "The customer issue is resolved",
-      decisionBody: "Close the case after the refund and notification are confirmed. An AI response alone does not complete the work.",
-      boundary: "Workflow illustration using fictional records. Customer exception and refund handling is a research candidate. Product access, system connections and delivery scope must be agreed."
+      boundary: "Illustration using fictional records. Customer validation of this refund scenario is pending. Product access, system connections and delivery scope must be agreed."
     },
   },
   zh: {
@@ -437,8 +436,7 @@ export const productPreviewCopy = {
         ]
       ],
       decision: "这项客户异常已处理完成",
-      decisionBody: "确认退款和通知结果后，再关闭工单。只生成一段 AI 回复，还不能算完成工作。",
-      boundary: "流程示意，使用虚构记录。客户异常与退款目前是研究候选；实际产品访问、系统接入与交付范围需确认。"
+      boundary: "流程示意，使用虚构记录。这个退款场景尚待客户验证；实际产品访问、系统接入与交付范围需确认。"
     },
   },
 } as const satisfies Record<Lang, object>;

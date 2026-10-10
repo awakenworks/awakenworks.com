@@ -14,7 +14,7 @@ Agent from a small Node.js application. You are done when the application prints
 an `agent.message`, the Session returns to `idle`, and the same history is still
 available after restarting Awaken.
 
-Awaken Agents is open source. Its first stable release is coming soon, and
+Awaken Agents is open source. A stable release package is not yet available, and
 interfaces or behavior may still change before then.
 
 ## Before you start

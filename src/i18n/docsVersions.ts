@@ -21,12 +21,12 @@ export type DocsProduct = 'flow' | 'harness' | 'platform';
 // One public product catalog feeds navigation, cards, docs and request choices.
 // Objects retains its technical routes and domain ownership inside Workforce.
 export const publicProducts = {
-  agents: { path: '/agents', docsPath: '/docs/agents', tone: 'iris', status: 'open-source-release-coming-soon' },
+  agents: { path: '/agents', docsPath: '/docs/agents', tone: 'iris', status: 'source-available-pre-release' },
   workforce: { path: '/workforce', docsPath: '/docs/workforce', tone: 'rust', status: 'early-preview' },
 } as const;
 export type PublicProduct = keyof typeof publicProducts;
 export type PublicCapability = 'objects';
-export type ProductStatus = 'open-source-release-coming-soon' | 'early-preview';
+export type ProductStatus = 'source-available-pre-release' | 'early-preview';
 export const capabilityOwner: Record<PublicCapability, PublicProduct> = { objects: 'workforce' };
 
 export interface DocsVersion {
@@ -95,15 +95,15 @@ const docsProductOwner: Record<DocsProduct, PublicProduct> = {
 
 export function publicProductLabel(product: PublicProduct | PublicCapability, lang: Lang): string {
   const owner = product in capabilityOwner ? capabilityOwner[product as PublicCapability] : product as PublicProduct;
-  if (publicProducts[owner].status === 'open-source-release-coming-soon') {
+  if (publicProducts[owner].status === 'source-available-pre-release') {
     return publicProductLabels[lang].openSource;
   }
   return publicProductLabels[lang].earlyPreview;
 }
 
 const publicProductLabels: Record<Lang, { openSource: string; earlyPreview: string }> = {
-  en: { openSource: 'Open source · stable release coming soon', earlyPreview: 'Early preview' },
-  zh: { openSource: '已开源 · 稳定版即将发布', earlyPreview: '提前预览' },
+  en: { openSource: 'Source available · pre-release', earlyPreview: 'Preview access by request' },
+  zh: { openSource: '源码可评估 · 尚无稳定发布包', earlyPreview: '需申请预览' },
 };
 
 export function publicVersionLabel(product: DocsProduct, lang: Lang): string {

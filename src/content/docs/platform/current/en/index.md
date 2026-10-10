@@ -105,7 +105,7 @@ events again.
 | Change prompts, models, Tools, Skills, or limits without rebuilding | [Configure Agent behavior](/docs/agents/how-to/configure-agent-behavior/) |
 | Add a Rust Tool, provider adapter, Plugin, or execution behavior | [Extend Awaken Agents internals](/docs/agents/runtime/build-agents/) |
 
-Awaken Agents is open source, and its first stable release is coming soon. Its
+Awaken Agents is open source; a stable release package is not yet available. Its
 interfaces and behavior may still change before that release. A hosted service, support commitment, security
 certification, or independently measured production result requires a separate
 published statement.

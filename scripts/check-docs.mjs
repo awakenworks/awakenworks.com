@@ -507,7 +507,7 @@ for (const [docsRel, required, rejected] of [
     [/\| Agent \|[\s\S]*\| Environment \|[\s\S]*\| Session \|[\s\S]*\| Event \|/, 'Platform entry must preserve the four application objects'],
     [/flowchart LR[\s\S]*sequenceDiagram/, 'Platform entry must include static and dynamic Mermaid views'],
     [/Queueing, bounded retry, waiting for approval, and lease recovery stay inside/, 'Platform entry must classify built-in handling as normal behavior'],
-    [/Awaken Agents is open source[\s\S]*first stable release is coming soon[\s\S]*interfaces and behavior may still change[\s\S]*hosted service/, 'Agents entry must state open-source pre-stable maturity and missing delivery evidence'],
+    [/Awaken Agents is open source[\s\S]*stable release package is not yet available[\s\S]*interfaces and behavior may still change[\s\S]*hosted service/, 'Agents entry must state open-source pre-stable maturity and missing delivery evidence'],
   ], [
     [/^## (?:Deploy and operate|Contribute and extend|Troubleshooting)$/m, 'Platform entry must delegate neighboring procedures and troubleshooting'],
     [/End user|Application developer|Operator|Platform maintainer/, 'Platform entry diagram must describe components rather than roles'],
@@ -517,7 +517,7 @@ for (const [docsRel, required, rejected] of [
     [/\| Agent \|[\s\S]*\| Environment \|[\s\S]*\| Session \|[\s\S]*\| Event \|/, 'Chinese Platform entry must preserve the four application objects'],
     [/flowchart LR[\s\S]*sequenceDiagram/, 'Chinese Platform entry must include static and dynamic Mermaid views'],
     [/排队、有限重试、等待审批与 lease 恢复由各自机制处理/, 'Chinese Platform entry must classify built-in handling as normal behavior'],
-    [/Awaken Agents 已开源[\s\S]*首个稳定版即将发布[\s\S]*接口与行为仍可能变化[\s\S]*托管服务/, 'Chinese Agents entry must state open-source pre-stable maturity and missing delivery evidence'],
+    [/Awaken Agents 已开源[\s\S]*当前尚无稳定发布包[\s\S]*接口与行为仍可能变化[\s\S]*托管服务/, 'Chinese Agents entry must state open-source pre-stable maturity and missing delivery evidence'],
   ], [
     [/^## (?:部署与运营|贡献与扩展|故障排查)$/m, 'Chinese Platform entry must delegate neighboring procedures and troubleshooting'],
     [/最终用户|应用开发者|运营人员|平台维护者/, 'Chinese Platform entry diagram must describe components rather than roles'],

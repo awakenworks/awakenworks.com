@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import '@awaken/ui/styles.css';
 @import '@awaken/ui/brand/family.css';
+@import '@awaken/ui/brand/styles.css' layer(components);
 
 /* Routes select identity; the shared appearance controller selects brightness.
  * Tailwind utilities project the canonical family palette without local copies. */
@@ -323,12 +324,4 @@ details[open] > summary .sub-chevron {
   );
   background-size: 28px 28px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
-}
-
-/* Theme-toggle icon visibility */
-html[data-theme='dark'] .icon-when-light {
-  display: none;
-}
-html[data-theme='light'] .icon-when-dark {
-  display: none;
 }

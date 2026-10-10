@@ -1,7 +1,7 @@
 ---
 import {
   brandMarkBody,
-  brandMarkStyle,
+  brandMarkPalette,
   canonicalBrandMark,
 } from '@awaken/ui/brand';
 
@@ -13,25 +13,22 @@ interface Props {
 const { product, class: klass = 'h-5 w-5', scheme = 'auto' } = Astro.props;
 const canonical = canonicalBrandMark(product);
 const body = brandMarkBody(canonical);
-const variants = scheme === 'auto'
-  ? [
-      { scheme: 'on-dark' as const, visibility: 'icon-when-dark' },
-      { scheme: 'on-light' as const, visibility: 'icon-when-light' },
-    ]
-  : [{ scheme, visibility: '' }];
+// The same single-SVG contract as the package's React BrandMark adapter.
+// Package CSS resolves OS appearance before JavaScript and explicit preference
+// afterward; geometry, palettes and the appearance controller remain package-owned.
+const light = brandMarkPalette(canonical, scheme === 'auto' ? 'on-light' : scheme);
+const dark = brandMarkPalette(canonical, scheme === 'auto' ? 'on-dark' : scheme);
+const markStyle = `--mark-light-primary:${light.primary};--mark-light-decision:${light.decision};--mark-dark-primary:${dark.primary};--mark-dark-decision:${dark.decision}`;
 ---
-{
-  variants.map((variant) => (
-    <svg
-      class={`${variant.visibility} ${klass}`.trim()}
-      data-brand-mark={canonical}
-      data-mark-scheme={variant.scheme}
-      style={brandMarkStyle(canonical, variant.scheme)}
-      viewBox="0 0 32 32"
-      fill="none"
-      aria-hidden="true"
-    >
-      <Fragment set:html={body} />
-    </svg>
-  ))
-}
+<svg
+  class={`aw-brand-mark ${klass}`}
+  data-brand-mark={canonical}
+  data-mark-scheme={scheme}
+  style={markStyle}
+  viewBox="0 0 32 32"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <Fragment set:html={body} />
+</svg>

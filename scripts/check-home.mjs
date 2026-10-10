@@ -341,8 +341,15 @@ for (const path of [
   requirePattern(path, /<ProductMark product="works"/, 'shared chrome must render the canonical AwakenWorks mark');
   rejectPattern(path, /awmark-|M14\.2 6 H17\.8|linearGradient/, 'shared chrome must not copy brand geometry');
 }
-requirePattern(resolve(root, 'src/components/ProductMark.astro'), /scheme === 'auto'[\s\S]*on-dark[\s\S]*on-light/, 'theme-aware marks must render both explicit surface variants');
-requirePattern(resolve(root, 'src/styles/global.css'), /data-theme='dark'[\s\S]*icon-when-light[\s\S]*data-theme='light'[\s\S]*icon-when-dark/, 'theme state must expose exactly the matching mark variant');
+// M1 JS absent -> one SVG with package-owned OS palette; M2 JS preference ->
+// the same SVG follows the appearance controller; M3 size class -> utilities
+// still override package defaults. Browser tests cover all three effects.
+const markSource = resolve(root, 'src/components/ProductMark.astro');
+requireOccurrenceCount(markSource, '<svg', 1, 'each mark must render one SVG regardless of appearance');
+requirePattern(markSource, /brandMarkPalette[\s\S]*aw-brand-mark[\s\S]*data-mark-scheme=\{scheme\}/, 'marks must reuse the package palette and adaptive rendering contract');
+rejectPattern(markSource, /variants\.map|icon-when-dark|icon-when-light/, 'retired parallel mark variants must stay removed');
+requirePattern(resolve(root, 'src/styles/global.css'), /@import '@awaken\/ui\/brand\/styles\.css' layer\(components\)/, 'package CSS must own adaptive marks while preserving utility sizes');
+rejectPattern(resolve(root, 'src/styles/global.css'), /icon-when-dark|icon-when-light/, 'local visibility policy must not duplicate package appearance rules');
 rejectPattern(resolve(root, 'README.md'), /Agents：开发者预览|Objects：开发者预览|Workforce：设计伙伴预览/, 'README must not duplicate registry-owned product availability labels');
 
 // Theme integration decision table (runtime combinations live with the shared tests):
@@ -653,47 +660,43 @@ requireOccurrenceCount(siteHeaderPath, 'aria-current=', 4, 'grouped desktop and 
 const rules = [
   {
     path: resolve(root, 'dist/index.html'),
-    primary: 'See how the work gets done',
+    primary: 'Business teams: see the workflow',
     primaryHref: '#workforce-preview',
     secondary: 'Developer quickstart',
     secondaryHref: '/docs/agents/get-started',
     agentsHref: '/docs/agents/get-started',
     casePrefix: '/cases/',
-    releaseStatus: 'Open source · stable release coming soon',
+    releaseStatus: 'Source available · pre-release',
     speedPromise: 'Make AI part of',
     speedHighlight: 'enterprise production.',
     primaryAudience: 'People keep important decisions',
-    entityDefinition: 'Hand repetitive lookups, actions and follow-ups to AI',
-    values: ['Check the facts first', 'Approve important actions', 'Check the result'],
-    proofHrefs: ['/workforce#workforce-stage-1', '/workforce#workforce-stage-2', '/workforce#workforce-example-result'],
+    entityDefinition: 'Business teams use Workforce',
   },
   {
     path: resolve(root, 'dist/zh/index.html'),
-    primary: '看看工作如何完成',
+    primary: '业务团队：看工作流程',
     primaryHref: '#workforce-preview',
     secondary: '开发者开始使用',
     secondaryHref: '/zh/docs/agents/get-started',
     agentsHref: '/zh/docs/agents/get-started',
     casePrefix: '/zh/cases/',
-    releaseStatus: '已开源 · 稳定版即将发布',
+    releaseStatus: '源码可评估 · 尚无稳定发布包',
     speedPromise: '让 AI 成为',
     speedHighlight: '受控的生产力。',
     primaryAudience: '重要决定由人掌握',
-    entityDefinition: '把重复的查询、处理和催办工作交给 AI',
-    values: ['资料先核对', '重要操作先批准', '处理结果可检查'],
-    proofHrefs: ['/zh/workforce#workforce-stage-1', '/zh/workforce#workforce-stage-2', '/zh/workforce#workforce-example-result'],
+    entityDefinition: '业务团队用 Workforce',
   },
 ];
 
 // Company-home cause/effect graph: C1 business owner; C2 developer; C3 proof
 // seeker; C4 en/zh; C5 module mistaken for independently available product.
-// E1 company value -> labelled refund illustration -> work -> two products -> choice;
+// E1 company value -> two product purposes -> labelled illustration -> contact;
 // E2 business intent previews the work then reaches the existing enterprise form; E3 developer intent
 // reaches canonical Quickstart; E4 registry-owned availability stays explicit;
 // E5 reference evidence cannot become a customer outcome.
 // Decision rules: H1 C1 -> E1+E2+E4; H2 C2 -> E1+E3+E4; H3 C3 -> E5;
 // H4 every rule x C4 -> localized equivalent; H5 C5 -> reject third product.
-// UX decision table: U1 first-time reader -> concise promise then the labelled business example;
+// UX decision table: U1 first-time reader -> concise promise, product purposes, then the labelled business example;
 // U2 identity -> canonical JSON-LD/footer, no repeated hero slogan; U3 business
 // request -> three required controls, bounded optional detail in one disclosure;
 // U4 deployment -> three delivery modes, still exactly two public products.
@@ -703,13 +706,11 @@ const rules = [
 for (const rule of rules) {
   requireOrderedText(rule.path, [
     'id="home-hero"',
-    'id="workforce-preview"',
-    'id="home-value"',
     'id="home-products"',
-    'id="home-adoption"',
+    'id="workforce-preview"',
     'id="home-cases"',
     'id="home-cta"',
-  ], 'home must move from the primary promise through product proof, reliability, reference evidence, portfolio maturity, and action');
+  ], 'home must move from the primary promise through product purposes, the shared example, references, and contact');
   requirePattern(
     rule.path,
     new RegExp(`href="${rule.primaryHref}"[^>]*>${rule.primary}`),
@@ -731,20 +732,15 @@ for (const rule of rules) {
   requireOccurrenceCount(rule.path, 'data-home-entity-definition', 1, 'home hero must expose one canonical product definition');
   requirePattern(rule.path, new RegExp(`data-home-entity-definition[\\s\\S]*${rule.entityDefinition}`), 'home hero must make the Agents category directly quotable');
   requirePattern(rule.path, new RegExp(rule.primaryAudience), 'home must state that people retain important decisions');
-  requirePattern(rule.path, new RegExp(`data-home-maturity[\\s\\S]*${rule.releaseStatus}`), 'home hero must separate product maturity from the value headline');
+  requirePattern(rule.path, new RegExp(`data-product-access[\\s\\S]*${rule.releaseStatus}`), 'early product choices must disclose registry-owned access');
   for (const product of ['agents', 'workforce']) {
     requireOccurrenceCount(rule.path, `data-awaken-event="home-${product}-details"`, 1, `home must expose one ${product} product path`);
   }
   requireOccurrenceCount(rule.path, 'data-home-work-step=', 0, 'home must not present the Workforce outcome loop as current Agents value');
-  // Cause/effect design for the compact adoption chooser:
-  // C1 three canonical starts exist in home.scenarios; C2 rendering only the
-  // featured start hides enterprise and repeat-delivery buyers; C3 copying the
-  // detailed facts would duplicate the Agents and enterprise owners.
-  // E1 render all three starts once from the existing catalog; E2 keep only
-  // audience, situation, first result, and one context-preserving action.
-  // Decision table: canonical three + compact fields -> accept; missing path,
-  // second catalog, or detailed checklist -> reject.
-  requireOccurrenceCount(rule.path, 'data-home-adoption=', 3, 'home must render the three canonical Agents adoption starts once');
+  // C-Read1 business/developer -> two early catalog-owned purposes, no third
+  // adoption chooser; C-Read2 the same story already owns facts/approval/result
+  // -> no repeated value section. Width and JS cases live in the browser tests.
+  rejectPattern(rule.path, /id="home-adoption"|id="home-value"|data-home-adoption=|data-home-value=/, 'retired overlapping home sections must stay removed');
   requireOccurrenceCount(rule.path, 'data-product-role', 2, 'every product card must retain one visible role');
   requireOccurrenceCount(rule.path, 'data-awaken-event-location="home-hero"', 2, 'both existing home hero intents must identify their placement without adding a third action');
   requireOccurrenceCount(rule.path, 'data-awaken-event-location="home-closing"', 2, 'both existing closing intents must identify their placement without adding another action');
@@ -760,13 +756,6 @@ for (const rule of rules) {
   requireOccurrenceCount(rule.path, 'data-workforce-stage', 4, 'home must reuse the four canonical refund stages');
   requireOccurrenceCount(rule.path, 'data-refund-result-record', 3, 'home must explain refund, notification and closure evidence');
   rejectPattern(rule.path, /data-home-compatibility-proof|data-home-workflow-step|data-home-runtime-concept/, 'home must not retain the retired developer setup projection');
-  requireOccurrenceCount(rule.path, 'data-home-value=', 3, 'home must render continuity, control, and reuse exactly once');
-  for (const value of rule.values) {
-    requirePattern(rule.path, new RegExp(value), `home must make ${value} visible as a buyer outcome`);
-  }
-  for (const href of rule.proofHrefs) {
-    requirePattern(rule.path, new RegExp(`href="${href}"`), `home advantage must link to ${href}`);
-  }
   requirePattern(rule.path, new RegExp(`href="${rule.agentsHref}"`), 'closing developer action must reach the localized task-first Agents entry');
   rejectPattern(rule.path, /A demo proves possibility|演示证明可能|First evidence:|第一项证据：|Choose your next proof|选择下一份证据/, 'company-page voice must lead with reader action instead of internal proof language');
   rejectPattern(rule.path, /Start here:|可以先做：/, 'company home must not copy test or evaluation instructions into scenarios');
@@ -794,8 +783,8 @@ for (const path of [resolve(root, 'dist/index.html'), resolve(root, 'dist/zh/ind
 }
 
 requirePattern(resolve(root, 'src/layouts/Base.astro'), /import \{ captureAttribution \} from '\.\.\/lib\/attribution\.mjs'[\s\S]*captureAttribution\(\)/, 'the shared layout must capture attribution through the canonical module');
-requireOrderedText(homeSourcePath, ['id="home-hero"', '<ProductShowcase', 'id="home-value"', 'id="home-products"', 'id="home-adoption"', 'id="home-cases"'], 'source must move from the company promise through product proof, buyer value, compact adoption choice, reference evidence, and late portfolio context');
-rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"|id="home-scenarios"|data-scenario-card/, 'source must use the one compact adoption renderer without restoring older parallel sections');
+requireOrderedText(homeSourcePath, ['id="home-hero"', 'id="home-products"', '<ProductShowcase', 'id="home-cases"'], 'source must show the existing product catalog before the shared example and references');
+rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"|id="home-scenarios"|data-scenario-card/, 'source must not restore overlapping homepage choosers');
 requireOccurrenceCount(homeSourcePath, 'data-awaken-event-location="home-hero"', 2, 'home source must measure the existing two hero intents without adding another action');
 requireOccurrenceCount(homeSourcePath, 'data-awaken-event-location="home-closing"', 2, 'home source must measure the existing two closing intents without adding another action');
 // Responsive promise graph: C1 company value changes; C2 either locale;
@@ -809,15 +798,15 @@ rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force edi
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
 requirePattern(contentSourcePath, /title: 'Make AI part of',[\s\S]*titleHighlight: 'enterprise production\.'[\s\S]*title: '让 AI 成为',[\s\S]*titleHighlight: '受控的生产力。'/, 'both locales must lead with company value and one highlight');
 rejectPattern(contentSourcePath, /titleHighlight: '(?:much|far) faster|titleHighlight: '快得多/, 'home speed promise must not imply an unverified magnitude');
-requirePattern(contentSourcePath, /Workforce connects business systems and keeps work moving; Agents runs the AI[\s\S]*Workforce 连接业务系统并按流程推进，Agents 提供执行/, 'both locales must explain Agents and Workforce uses in one supporting-copy owner');
-requirePattern(contentSourcePath, /application owns its UX, domain model, workflow, and result acceptance|产品体验、领域模型、工作流与结果验收仍由应用掌握/, 'both locales must preserve the application ownership boundary');
+requirePattern(contentSourcePath, /Business teams use Workforce[\s\S]*Developers use Agents to build and run AI applications[\s\S]*业务团队用 Workforce[\s\S]*开发团队用 Agents 构建和运行 AI 应用/, 'both locales must explain Agents and Workforce uses in one supporting-copy owner');
+requirePattern(contentSourcePath, /application owns its product experience|应用负责产品体验、领域状态、工作流、结果验收和商业关系/, 'both locales must preserve the application ownership boundary');
 rejectPattern(contentSourcePath, /Ship Agent applications without rebuilding the platform underneath|交付 Agent 应用，不必重建下层平台|Ship your working Agent as an application customers can keep using|把能运行的 Agent，交付成客户可以持续使用的应用|Your Agent already works\. Now ship the application|Agent 已经能运行，现在把应用交付出去/, 'homepage copy must not retain the weaker infrastructure contrast, require an existing working Agent, or imply unverified continued customer use');
 rejectPattern(contentSourcePath, /without becoming an Agent infrastructure team|不必把团队变成 Agent 基础设施团队|The form is shared\. The promise is not\.|入口可以共用，承诺不能混用|Managed-compatible\. Awaken-enhanced\./, 'core pages must use literal product language instead of rhetorical contrast or slogans');
 rejectPattern(contentSourcePath, /—/, 'site copy must use plain punctuation instead of decorative em dashes');
 requirePattern(contentSourcePath, /export const canonicalEntities[\s\S]*AwakenWorks makes AI a governed part of enterprise production\.[\s\S]*Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\.[\s\S]*Awaken Runtime is the Rust execution core inside Awaken Agents\./, 'one catalog must own the company, product, and runtime entity definitions');
 rejectPattern(contentSourcePath, /pages:\s*\{[\s\S]*awaken:/, 'the retired hidden Awaken page copy must not compete with canonical entity definitions');
 rejectPattern(contentSourcePath, /Turn an Agent prototype into a shippable, operable, reusable product|让 Agent 原型，变成可交付、可运营、可复用的产品|Make Agents shippable, operable, and reusable|让 Agent 可交付、可运营、可复用/, 'result headlines must not regress to lifecycle adjectives');
-requirePattern(contentSourcePath, /Workforce is a public product; its capabilities remain scoped early previews[\s\S]*Workforce 是正式对外产品，具体能力按范围提前预览/, 'both locales must separate Workforce product placement from available scope');
+requirePattern(contentSourcePath, /Current access is shown in the product choices[\s\S]*当前访问方式见产品说明/, 'both locales must separate Workforce product placement from available scope');
 requirePattern(contentSourcePath, /proofLabel: 'What this changes'[\s\S]*proofLabel: '这意味着'/, 'Agents comparison must connect each capability to its consequence in both locales');
 rejectPattern(contentSourcePath, /REFERENCE ACCOUNT|REPLACE WITH|本页故意|客户需要纠正|外发前确认|受控外发|【\s*】/, 'public content must not expose editor prompts, distribution reminders, or visible placeholders');
 rejectPattern(contentSourcePath, /Customer result|客户得到/, 'public comparison copy must not address the reader with an internal third-person sales label');
@@ -957,7 +946,7 @@ for (const rule of [
     title: 'Give applications and Agents the same typed business records.',
     docsHref: '/docs/objects',
     task: 'Choose one important business object',
-    maturity: 'Early preview',
+    maturity: 'Preview access by request',
     previewHref: '/enterprise\\?product=workforce#apply',
     star: 'Star the Awaken open foundation',
   },
@@ -966,7 +955,7 @@ for (const rule of [
     title: '让应用和 Agent 使用同一份类型化业务记录。',
     docsHref: '/zh/docs/objects',
     task: '选择一类关键业务对象',
-    maturity: '提前预览',
+    maturity: '需申请预览',
     previewHref: '/zh/enterprise\\?product=workforce#apply',
     star: 'Star Awaken 开源基础',
   },
@@ -1071,7 +1060,7 @@ for (const rule of [
     docsHref: '/docs/workforce',
     cooperationHref: '/enterprise\\?product=workforce(?:&amp;|&#38;|&)scenario=customer-exception-refund#apply',
     workspaceHref: '/workforce#workforce-preview',
-    maturity: 'Early preview',
+    maturity: 'Preview access by request',
     boundary: 'work remains open while a required system result, notification or acceptance condition is missing.',
   },
   {
@@ -1080,7 +1069,7 @@ for (const rule of [
     docsHref: '/zh/docs/workforce',
     cooperationHref: '/zh/enterprise\\?product=workforce(?:&amp;|&#38;|&)scenario=customer-exception-refund#apply',
     workspaceHref: '/zh/workforce#workforce-preview',
-    maturity: '提前预览',
+    maturity: '需申请预览',
     boundary: '所需的系统结果、通知或验收条件缺失时，工作仍保持未完成。',
   },
 ]) {
@@ -1116,7 +1105,7 @@ for (const rule of [
 // context remains covered by the existing request rules and browser suite.
 // R4 fulfilment exception + human judgment -> delivery/shipments/terms remain
 // explicit; the retired billing-error narrative is rejected in both locales.
-for (const [prefix, boundary] of [['', 'research candidate'], ['/zh', '研究候选']]) {
+for (const [prefix, boundary] of [['', 'Customer validation of this refund scenario is pending'], ['/zh', '尚待客户验证']]) {
   for (const route of ['/index.html', '/workforce/index.html']) {
     const path = resolve(root, `dist${prefix}${route}`);
     requireOccurrenceCount(path, 'data-refund-example-boundary', 1, 'each story must disclose its research boundary');
@@ -1147,13 +1136,12 @@ const enterpriseRules = [
     privacyHref: '/privacy',
     title: 'Evaluate one job with a result you can check.',
     intent: 'cooperation',
-    boundary: 'Agents has a public source preview. Workforce is a public product; its capabilities remain scoped early previews.',
+    boundary: 'Current access is shown in the product choices.',
     pathFacts: [
-      ['enterprise-agents', 'One working Agent application', '4–6 week implementation uses 2–4 release checks'],
+      ['enterprise-agents', 'An application you want to build', '4–6 week implementation uses 2–4 release checks'],
       ['enterprise-workforce', 'One real job', 'one bounded paid validation'],
     ],
-    processBoundary: 'Scope, product access, implementation period, support, and acceptance are agreed separately.',
-    success: 'Application received',
+    success: 'Request received',
   },
   {
     path: resolve(root, 'dist/zh/enterprise/index.html'),
@@ -1161,13 +1149,12 @@ const enterpriseRules = [
     privacyHref: '/zh/privacy',
     title: '评估一项工作，约定可以检查的结果。',
     intent: 'cooperation',
-    boundary: 'Agents 提供公开源码预览。Workforce 是正式对外产品，具体能力按范围提前预览。',
+    boundary: '当前访问方式见产品说明。',
     pathFacts: [
-      ['enterprise-agents', '一个可运行的 Agent 应用', '4–6 周实施以 2–4 项发布检查为边界'],
+      ['enterprise-agents', '一个希望构建或已在使用的应用', '4–6 周实施以 2–4 项发布检查为边界'],
       ['enterprise-workforce', '一项真实工作', '范围受控付费验证'],
     ],
-    processBoundary: '范围、产品访问、实施周期、支持和验收分别约定',
-    success: '申请已收到',
+    success: '需求已收到',
   },
 ];
 
@@ -1176,6 +1163,9 @@ requirePattern(opportunityFormSourcePath, /import\.meta\.env\.PUBLIC_OPPORTUNITY
 rejectPattern(opportunityFormSourcePath, /PUBLIC_WAITLIST_ENDPOINT/, 'the opportunity form must not retain the legacy parallel endpoint configuration');
 requirePattern(opportunityFormSourcePath, /import \{ attributionFormValues, captureAttribution \} from '\.\.\/lib\/attribution\.mjs'/, 'the opportunity form must reuse the shared attribution authority');
 requirePattern(opportunityFormSourcePath, /Array\.from\(product\.options\)\.some/, 'shared form must accept only known product context from early-preview links');
+requirePattern(opportunityFormSourcePath, /content\[lang\]\.enterprise\.contextLabels/, 'enterprise must own all request-context labels');
+rejectPattern(contentSourcePath, /home\.scenarios|home\.advantages/, 'retired home catalogs must not remain referenced');
+requirePattern(resolve(root, 'src/components/EnterpriseLanding.astro'), /followUp\.successSteps\.map/, 'before and after contact must share follow-up steps');
 requirePattern(opportunityFormSourcePath, /Object\.prototype\.hasOwnProperty\.call\(scenarioLabels, requestedScenario\)/, 'shared form must accept only known scenario context from company links');
 requirePattern(opportunityFormSourcePath, /setAttribute\('aria-busy', 'true'\)/, 'progressive submission must expose its busy state');
 requirePattern(opportunityFormSourcePath, /getAttribute\('aria-busy'\) === 'true'\) return/, 'progressive submission must reject a second submit while transport is pending');
@@ -1189,9 +1179,18 @@ rejectPattern(opportunityFormSourcePath, /window\.umami\.track\([\s\S]{0,500}(?:
 requirePattern(resolve(root, '.env.example'), /PUBLIC_OPPORTUNITY_ENDPOINT=https:\/\/formspree\.io\/f\/mrewzorl/, 'deployment configuration must document the one opportunity endpoint');
 
 for (const rule of enterpriseRules) {
+  // C-Read3 first contact -> one follow-up owner, four native adoption answers;
+  // C-Read4 partner -> existing form with known context, no separate intake;
+  // C-Read5 legacy URLs -> migrated context labels without a retired home catalog.
+  requireOccurrenceCount(rule.path, 'data-adoption-question=', 4, 'adoption questions must cover starting, preparation, setup and fees');
+  requireOccurrenceCount(rule.path, 'data-contact-next-steps', 1, 'pre-contact guidance must reuse the one submission follow-up owner');
+  requireOccurrenceCount(rule.path, 'id="enterprise-process"', 0, 'duplicated contact-process section must stay removed');
+  requirePattern(rule.path, /data-product-help/, 'existing product selector must explain the business and developer choices');
+  requirePattern(rule.path, /scenario=solution-delivery#apply/, 'partners must use the existing scenario-aware request');
+
   requireOccurrenceCount(rule.path, '<h1', 1, 'business page must have one primary heading');
   requirePattern(rule.path, new RegExp(rule.title.replaceAll('.', '\\.')), 'services page must lead with the two-product decision and honest maturity boundary');
-  requireOrderedText(rule.path, ['id="enterprise-hero"', 'id="delivery-modes"', 'id="apply"', 'id="enterprise-paths"', 'id="enterprise-agents-scope"', 'id="enterprise-process"'], 'services must explain delivery then offer the single short form before detailed product and implementation scope');
+  requireOrderedText(rule.path, ['id="enterprise-hero"', 'id="apply"', 'id="delivery-modes"', 'id="enterprise-paths"', 'id="enterprise-agents-scope"', 'id="enterprise-questions"', 'id="enterprise-partners"'], 'services must offer the single short form before detailed delivery, product and implementation scope');
   requireOccurrenceCount(rule.path, 'data-enterprise-product-path=', 2, 'enterprise must present exactly the Agents and Workforce paths');
   requireOccurrenceCount(rule.path, 'data-enterprise-path-fact=', 6, 'each product path must expose bring, first decision, and current boundary once');
   for (const [id, bring, decision] of rule.pathFacts) {
@@ -1199,9 +1198,6 @@ for (const rule of enterpriseRules) {
     requirePattern(rule.path, new RegExp(bring), `${id} must say what the visitor brings`);
     requirePattern(rule.path, new RegExp(decision), `${id} must say what the first product decision is`);
   }
-  requireOccurrenceCount(rule.path, 'data-enterprise-process-step', 3, 'enterprise must explain the shared intake in exactly three steps');
-  requireOccurrenceCount(rule.path, 'data-enterprise-promise-boundary', 1, 'enterprise must state once that product promises do not transfer across maturity levels');
-  requirePattern(rule.path, new RegExp(rule.processBoundary), 'enterprise must preserve the selected product promise boundary');
   requirePattern(rule.path, /a permission decision|权限决定/, 'implementation must exercise an explicit permission decision');
   requirePattern(rule.path, /interruption-and-recovery|中断恢复路径/, 'implementation must exercise an interruption and recovery path');
   requirePattern(rule.path, /go, change, or stop decision|继续、调整或停止决定/, 'the current Agents path must end in an explicit terminal decision');
@@ -1220,7 +1216,7 @@ for (const rule of enterpriseRules) {
   requireOccurrenceCount(rule.path, 'data-enterprise-responsibility', 2, 'Agents scope must name both delivery responsibility owners');
   requireOccurrenceCount(rule.path, 'data-enterprise-scope-boundary', 1, 'Agents scope must state excluded production commitments once');
   requirePattern(rule.path, /Production SLA|生产 SLA/, 'Agents scope must keep production SLA outside the bounded implementation');
-  requirePattern(rule.path, /Workforce is a public product with early-preview capabilities|Workforce 是正式对外产品，具体能力处于提前预览/, 'Objects and Workforce must not inherit the current Agents implementation promise');
+  requirePattern(rule.path, /Request preview access, then confirm available capabilities|申请预览后，先确认可提供的能力/, 'Objects and Workforce must not inherit the current Agents implementation promise');
   for (const removedSection of ['enterprise-first-implementation', 'enterprise-responsibility', 'enterprise-validation', 'enterprise-package', 'delivery']) {
     requireOccurrenceCount(rule.path, `id="${removedSection}"`, 0, `${removedSection} must not restore the old Agents-only long narrative`);
   }
