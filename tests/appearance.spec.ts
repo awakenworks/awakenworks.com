@@ -501,6 +501,9 @@ for (const lang of ['en', 'zh']) {
 // and the native request still has the existing Workforce default.
 // R5 Home hero previews the story while the header requests contact -> each
 // label names its own native destination, independent of JS or viewport.
+// R6 a delivery commitment is missed -> investigate shipment, terms and payment;
+// the person decides the resolution. Retired billing-error wording must not
+// turn this business judgment example back into a mechanical correction.
 // These are website comprehension cues and navigation contracts, not proof
 // of a deployed refund solution or observed user comprehension.
 for (const lang of ['en', 'zh']) {
@@ -526,7 +529,9 @@ for (const lang of ['en', 'zh']) {
           const story = page.locator('[data-workforce-refund-example]');
           await expect(story).toHaveCount(1);
           await expect(story).toHaveAttribute('data-preview-kind', 'illustration');
-          await expect(story).toContainText(lang === 'zh' ? '同一个订单扣了两次款' : 'This order was charged twice');
+          await expect(story).toContainText(lang === 'zh' ? '订单已超过约定交付时间' : 'The order is past the promised delivery date');
+          await expect(page.locator('main')).not.toContainText(/重复扣款|扣了两次|duplicate charge|charged twice/i);
+          await expect(story.locator('[data-workforce-stage]').first()).toContainText(lang === 'zh' ? '物流进度' : 'shipment progress');
           await expect(story.locator('[data-refund-example-boundary]')).toContainText(lang === 'zh' ? '研究候选' : 'research candidate');
           await expect(story.locator('[data-workforce-stage]')).toHaveCount(4);
           const approval = story.locator('[data-workforce-stage]').nth(1);
@@ -535,6 +540,7 @@ for (const lang of ['en', 'zh']) {
           await expect(approval).toHaveAttribute('open', '');
           await expect(approval.locator('p')).toBeVisible();
           await expect(approval).toContainText(lang === 'zh' ? '方案未获批准时，操作保持等待' : 'Execution waits until the proposal is approved');
+          await expect(approval).toContainText(lang === 'zh' ? '订单条款与客户诉求' : 'order terms and customer request');
           const execution = story.locator('[data-workforce-stage]').nth(2);
           await execution.locator('summary').focus();
           await page.keyboard.press('Enter');

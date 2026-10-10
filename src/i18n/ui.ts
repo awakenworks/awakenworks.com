@@ -345,21 +345,21 @@ export const productPreviewCopy = {
     workforce: {
       brand: "Awaken Workforce",
       status: "Workflow illustration",
-      caseTitle: "Resolve a duplicate charge",
+      caseTitle: "Handle a refund request after a delivery delay",
       requestLabel: "The work to hand over",
-      request: "“This order was charged twice. Check what happened and refund the duplicate.”",
+      request: "“The order is past the promised delivery date. Please check its progress and handle my cancellation and refund request.”",
       pathAria: "Refund handling steps",
       rolesTitle: "Who does what",
       roles: [
         {
           label: "AI",
           title: "Investigate and carry out approved work",
-          body: "Read permitted order and payment records, prepare a proposal, then carry out the approved action."
+          body: "Bring together the order terms, shipment and payment records, explain the delay and prepare a refund proposal. Carry out the agreed action after approval."
         },
         {
           label: "Responsible person",
           title: "Approve the refund",
-          body: "Check the evidence, amount and recipient. Handle cases that fall outside the agreed rules."
+          body: "Review the delivery commitment, refund terms and customer request. Approve the resolution, amount and recipient."
         },
         {
           label: "Business systems",
@@ -397,21 +397,21 @@ export const productPreviewCopy = {
     workforce: {
       brand: "Awaken Workforce",
       status: "流程示例",
-      caseTitle: "处理一笔重复扣款",
+      caseTitle: "处理一次延期交付退款申请",
       requestLabel: "交办的工作",
-      request: "“同一个订单扣了两次款，请查清并退回重复款。”",
+      request: "“订单已超过约定交付时间，请核对进度，并处理取消和退款申请。”",
       pathAria: "退款处理步骤",
       rolesTitle: "AI、人和业务系统分别做什么",
       roles: [
         {
           label: "AI",
           title: "核对资料并执行获准操作",
-          body: "读取允许访问的订单与付款记录，整理处理建议，批准后执行约定的操作。"
+          body: "汇总订单条款、物流与付款记录，整理延期原因和退款建议，批准后执行约定的操作。"
         },
         {
           label: "负责人",
           title: "批准退款方案",
-          body: "检查依据、金额与退款对象，处理超出约定规则的情况。"
+          body: "结合交付承诺、退款条款与客户诉求，批准处理方案、退款金额与对象。"
         },
         {
           label: "业务系统",

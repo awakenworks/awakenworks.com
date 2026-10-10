@@ -107,7 +107,7 @@ export const content = {
       },
       workflow: {
         eyebrow: "Customer exceptions and refunds",
-        title: "From a duplicate charge to a confirmed refund.",
+        title: "From a delivery delay to a confirmed refund.",
         body: "Follow one customer request through investigation, approval, action and a result you can check."
       },
       advantages: {
@@ -118,7 +118,7 @@ export const content = {
           {
             key: "durable",
             value: "Check the facts first",
-            label: "Read order and payment records. Wait for missing information before proposing an action.",
+            label: "Check the promised delivery, shipment progress and payment records before proposing an action.",
             proof: "See the investigation",
             href: "/workforce#workforce-stage-1"
           },
@@ -628,16 +628,16 @@ export const content = {
         ctaSecondary: { label: 'Evaluate one real job', href: `/enterprise?product=workforce&scenario=${REFUND_SCENARIO_KEY}#apply` },
         loop: {
           eyebrow: "Customer exceptions and refunds",
-          title: "Handle a duplicate charge through refund confirmation and case closure.",
-          body: "A customer reports two charges for one order. AI checks the records and prepares a proposal; a responsible person approves it, and the systems confirm the result.",
+          title: "Resolve a refund request after a missed delivery commitment.",
+          body: "An order is overdue and the customer asks to cancel it. AI brings together the delivery commitment, shipment progress, payment and refund terms; a responsible person decides the resolution.",
           stages: [
             [
               "Check the records",
-              "Read permitted order and payment records and check the refund rules. If information is missing, wait for it before continuing."
+              "Check the promised delivery, shipment progress, payment records and refund terms. If information is missing, wait for it before continuing."
             ],
             [
               "Approve the proposal",
-              "A responsible person checks the evidence, exact amount and recipient. Execution waits until the proposal is approved."
+              "A responsible person reviews the delivery evidence, order terms and customer request, then approves the resolution, exact amount and recipient. Execution waits until the proposal is approved."
             ],
             [
               "Carry out the refund",
@@ -664,7 +664,7 @@ export const content = {
             {
               name: "Business Data & Actions (Objects)",
               role: "Connect records and allowed actions",
-              body: "Give AI the order, payment and policy information it is allowed to use, together with explicitly permitted operations.",
+              body: "Give AI the order, shipment, payment and policy information it is allowed to use, together with explicitly permitted operations.",
               proof: "Records · relationships · permissions · system results"
             },
             {
@@ -684,8 +684,8 @@ export const content = {
           items: [
             {
               label: "Customer exceptions",
-              title: "Investigate a duplicate charge and confirm its resolution",
-              body: "Check the evidence, request approval and verify the payment result before closing the support case."
+              title: "Resolve a refund request after a delivery delay",
+              body: "Check the delivery commitment, shipment and refund terms, obtain approval and verify the result before closing the support case."
             },
             {
               label: "Software delivery",
@@ -799,7 +799,7 @@ export const content = {
       },
       workflow: {
         eyebrow: "客户异常与退款闭环",
-        title: "从一笔重复扣款，到退款确认。",
+        title: "从一次交付延期，到退款确认。",
         body: "跟随一条客户投诉，看清资料核对、人工批准、操作执行和结果确认的全过程。"
       },
       advantages: {
@@ -810,7 +810,7 @@ export const content = {
           {
             key: "durable",
             value: "资料先核对",
-            label: "先查订单与付款记录，资料不齐就等待补充。",
+            label: "先核对交付承诺、物流进度与付款记录，再提出处理建议。",
             proof: "查看核对过程",
             href: "/workforce#workforce-stage-1"
           },
@@ -1320,16 +1320,16 @@ export const content = {
         ctaSecondary: { label: '验证一项真实工作', href: `/enterprise?product=workforce&scenario=${REFUND_SCENARIO_KEY}#apply` },
         loop: {
           eyebrow: "客户异常与退款闭环",
-          title: "处理一笔重复扣款，直到退款确认与工单关闭。",
-          body: "客户反馈同一订单扣了两次款。AI 核对记录并整理处理建议，负责人批准，业务系统返回可以检查的结果。",
+          title: "处理客户的延期交付退款申请，直到结果确认。",
+          body: "订单超过约定交付时间，客户要求取消。AI 汇总交付承诺、物流进度、付款与退款条款，负责人决定处理方案。",
           stages: [
             [
               "核对资料",
-              "读取允许访问的订单与付款记录，检查退款规则。资料不足时等待补充，齐备后继续。"
+              "核对交付承诺、物流进度、已付款记录与退款条款。资料不足时等待补充，齐备后继续。"
             ],
             [
               "批准方案",
-              "负责人核对依据、精确金额与退款对象。方案未获批准时，操作保持等待。"
+              "负责人结合履约记录、订单条款与客户诉求，批准处理方案、退款金额与对象。方案未获批准时，操作保持等待。"
             ],
             [
               "执行退款",
@@ -1356,7 +1356,7 @@ export const content = {
             {
               name: "业务数据与受控操作（Objects）",
               role: "连接资料和允许的操作",
-              body: "把 AI 可以使用的订单、付款与规则资料连起来，并明确允许它执行哪些操作。",
+              body: "把 AI 可以使用的订单、物流、付款与规则资料连起来，并明确允许它执行哪些操作。",
               proof: "记录 · 关系 · 权限 · 系统结果"
             },
             {
@@ -1376,8 +1376,8 @@ export const content = {
           items: [
             {
               label: "客户异常",
-              title: "调查重复扣款，并确认问题已解决",
-              body: "核对依据、请求批准并确认支付结果，再关闭服务工单。"
+              title: "处理交付延期引发的退款申请",
+              body: "核对交付承诺、物流与退款条款，取得批准并确认处理结果，再关闭服务工单。"
             },
             {
               label: "软件交付",

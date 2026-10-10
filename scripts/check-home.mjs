@@ -1114,6 +1114,8 @@ for (const rule of [
 // records and research status; no refund command or customer-result inference.
 // R3 contact -> existing form with bounded product/scenario metadata; unknown
 // context remains covered by the existing request rules and browser suite.
+// R4 fulfilment exception + human judgment -> delivery/shipments/terms remain
+// explicit; the retired billing-error narrative is rejected in both locales.
 for (const [prefix, boundary] of [['', 'research candidate'], ['/zh', '研究候选']]) {
   for (const route of ['/index.html', '/workforce/index.html']) {
     const path = resolve(root, `dist${prefix}${route}`);
@@ -1121,6 +1123,8 @@ for (const [prefix, boundary] of [['', 'research candidate'], ['/zh', '研究候
     requirePattern(path, new RegExp(boundary), 'refund example must remain research, not customer acceptance');
     requireOccurrenceCount(path, 'data-workforce-role', 3, 'the story must state AI, human and system responsibilities');
     requireOccurrenceCount(path, 'data-refund-result-record', 3, 'completion must explain all three required result records');
+    requirePattern(path, prefix ? /交付承诺[\s\S]*物流进度[\s\S]*退款条款/ : /promised delivery[\s\S]*shipment progress[\s\S]*refund terms/, 'refund example must explain the fulfilment and policy context');
+    rejectPattern(path, /重复扣款|扣了两次|duplicate charge|charged twice/i, 'retired billing-error example must not remain on business pages');
     rejectPattern(path, /data-workforce-console-preview|aria-disabled="true"/, 'illustrations must not retain the retired mock console or fake disabled actions');
   }
 }
