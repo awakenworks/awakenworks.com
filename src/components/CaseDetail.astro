@@ -75,7 +75,7 @@ const isDeepSeek = item.slug === 'deepseek-harness';
       <div id="case-availability">
         <p class="eyebrow text-accent-400">{copy.availability}</p>
         <h2 class="mt-4 text-3xl font-semibold text-fog-100">{copy.invest}</h2>
-        <p class="mt-5 rounded-xl border border-ink-700 bg-ink-900 px-4 py-3 text-sm leading-6 text-fog-500">{item.sourceStatus}</p>
+        <p data-case-source-status class="mt-5 rounded-xl border border-ink-700 bg-ink-900 px-4 py-3 text-sm leading-6 text-fog-500">{item.sourceStatus}</p>
         <dl data-case-source class="mt-5 rounded-xl border border-ink-700 bg-ink-900 p-4">
           <dt class="text-xs text-fog-500">{copy.sourceBaseline}</dt>
           <dd class="mt-2 break-all font-mono text-xs text-fog-300">{item.sourceBaseline}</dd>

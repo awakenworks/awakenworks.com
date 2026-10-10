@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { createHash } from "node:crypto";
+import { currentVersion } from "../src/i18n/docsVersions";
+import { content } from "../src/i18n/content";
 
 // Site integration decision table: language en/zh x desktop/narrow, across all
 // four route identities and the documentation shell. Legacy stored light wins
@@ -61,6 +63,29 @@ for (const lang of ["en", "zh"]) {
         }
         await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       }
+      // Source-baseline decision table: collection platform/harness -> Agents
+      // record; Flow and its Objects module -> Flow record. Each en/zh x
+      // 1280/390/320 combination must disclose the exact locked SHA and review
+      // date without overflow. No source refresh or live-code claim is inferred
+      // from rendering. These are projections of the existing registry, not
+      // independent expected revisions.
+      for (const [path, collection] of [
+        ["/docs/agents/get-started", "platform"],
+        ["/docs/agents/runtime/get-started", "harness"],
+        ["/docs/workforce/quickstart", "flow"],
+        ["/docs/objects/concepts/resource-model", "flow"],
+      ] as const) {
+        const version = currentVersion(collection)!;
+        await page.goto(`${base}${path}`);
+        const source = page.locator("[data-doc-source]");
+        await expect(source).toHaveCount(1);
+        await expect(source.locator("[data-doc-source-revision]")).toHaveText(version.sourceRevision);
+        await expect(source.locator("time")).toHaveAttribute("datetime", version.verifiedOn);
+        await expect(source).toContainText(lang === "zh" ? "文档源码基线" : "Documentation source baseline");
+        await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        if (collection === "platform") await page.screenshot({ path: `test-results/doc-source-${lang}-${width}.png` });
+      }
+      await page.goto(`${base}/docs`);
       // I1 en/zh x narrow/desktop: one Astro SVG projects the same Search nodes
       // as React; decoration is hidden while the native dialog trigger keeps its
       // translated name, focus entry and Escape restoration.
@@ -160,9 +185,28 @@ for (const lang of ["en", "zh"]) {
     const digest = createHash("sha256").update(archiveBytes).digest("hex");
     await expect(page.locator("[data-case-source-digest]")).toContainText(digest);
     await page.goto(`${base}/cases/design`);
+    // D1 frozen application + dated passed local receipt -> positive, bounded
+    // local evidence; D2 public archive absent -> existing access request;
+    // D3 production/semantic/customer acceptance absent -> pending boundary.
+    // A passing local journey must neither keep the superseded failure claim
+    // nor become a general release/customer claim.
+    const design = content[lang].cases.items.find((item) => item.slug === "design")!;
+    const source = page.locator("[data-case-source]");
+    await expect(source.locator("dd")).toHaveText(design.sourceBaseline);
+    const status = page.locator("[data-case-source-status]");
+    await expect(status).toContainText("411");
+    await expect(status).toContainText(lang === "zh" ? "生产登录与部署" : "production login and deployment");
+    await expect(status).not.toContainText(lang === "zh" ? "尚未通过发布验收" : "has not passed release acceptance");
+    await expect(page.locator('[data-awaken-event="case_source_download_selected"]')).toHaveCount(0);
     const sourceAction = page.locator('[data-awaken-event="case_source_access_selected"]');
     await sourceAction.click();
     await expect(page.locator('form input[name="reference_case"]')).toHaveValue("design");
+    // D4 install/build passed but published-runtime compatibility and full live
+    // acceptance failed -> retain the fixed source download with the known
+    // limitation, never promote source-check success into real-Agent success.
+    await page.goto(`${base}/cases/pilot`);
+    await expect(page.locator("[data-case-source-status]")).toContainText(lang === "zh" ? "运行接口兼容缺口" : "runtime compatibility gaps");
+    await expect(page.locator('[data-awaken-event="case_source_download_selected"]')).toHaveCount(1);
     await page.goto(`${base}/enterprise?reference_case=unknown`);
     await expect(page.locator('form input[name="reference_case"]')).toHaveValue("");
     const noJS = await browser.newContext({ javaScriptEnabled: false });

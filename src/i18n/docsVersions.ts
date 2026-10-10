@@ -13,7 +13,7 @@
 // automatically.
 
 import type { Lang } from './locales';
-import provenance from '../../config/source-provenance.json';
+import provenance from '../../config/source-provenance.json' with { type: 'json' };
 
 export type { Lang } from './locales';
 export type VersionStatus = 'dev' | 'stable' | 'archived';

@@ -222,6 +222,16 @@ const banner =
     </div>
     {title && <div class="border-b border-ink-800 bg-ink-950/60 px-6 py-3 text-sm text-fog-500"><a href={docsHome} class="hover:text-fog-100">Docs</a><span class="px-2">/</span><span>{productLabel}</span>{curVer && <span class="ml-2 rounded-full border border-ink-700 px-2 py-0.5 font-mono text-[0.6rem] text-fog-500">{curVer.label}</span>}{audience && <><span class="px-2">/</span><span>{docAudienceLabel(audience, lang)}</span></>}{section && <><span class="px-2">/</span><span>{groupLabel(section)}</span></>}<span class="sr-only">{title}</span></div>}
     {banner && <div class="border-b border-accent-600/30 bg-accent-500/10 px-6 py-2.5 text-sm text-fog-300"><span class="font-mono text-xs text-accent-400">{copy.note}</span><span class="px-2">·</span>{banner}</div>}
+    {curVer && <dl data-doc-source class="flex min-w-0 flex-wrap gap-x-6 gap-y-2 border-b border-ink-800 px-6 py-3 text-xs text-fog-500">
+      <div class="min-w-0">
+        <dt>{copy.sourceBaseline}</dt>
+        <dd class="mt-1 break-all font-mono text-fog-300" data-doc-source-revision>{curVer.sourceRevision}</dd>
+      </div>
+      <div>
+        <dt>{copy.reviewedOn}</dt>
+        <dd class="mt-1 font-mono text-fog-300"><time datetime={curVer.verifiedOn}>{curVer.verifiedOn}</time></dd>
+      </div>
+    </dl>}
     <slot />
   </main>
 

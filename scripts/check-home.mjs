@@ -1014,7 +1014,8 @@ for (const rule of [
 // E3: Workforce states the Run-versus-Issue terminal boundary in both locales.
 // E4: the Workforce preview mirrors the source UI's outcome path, command buckets,
 //     and formal-deliverable decision boundary instead of a generic product table.
-// E5: exactly three product cards name separate ownership and one composed path.
+// E5: two public products and the Objects capability retain their distinct
+//     domain ownership and one composed path.
 // Decision table:
 // | Rule | disclosure | source-shaped UI | three owners | contact owner | boundary | Outcome |
 // | P1   | present    | yes               | yes          | enterprise    | present  | accept  |
@@ -1038,6 +1039,14 @@ for (const rule of [
   requirePattern(rule.path, new RegExp(rule.label), 'each product preview must disclose whether it is a verified product capture or example content');
   rejectPattern(rule.path, /52\.1k|168 nodes|共 168 节点|acme \/|customer logo|客户徽标/i, 'product previews must not invent usage, fleet, customer, or adoption evidence');
 }
+// C6 Agents already renders verified Console captures; a default/model platform
+// branch would maintain a second presentation. P7 Agents -> captures only;
+// P8 Objects/Workforce -> retained illustrative preview. Existing rendered
+// checks above and browser image/modal checks cover the observable routes;
+// reject a dormant fallback so callers cannot restore the competing branch.
+rejectPattern(resolve(root, 'src/components/ProductPreview.astro'), /\bplatform\b/, 'model previews must not retain a second Agents console');
+const modelPreviewCopy = readFileSync(resolve(root, 'src/i18n/ui.ts'), 'utf8').split('export const productPreviewCopy = ')[1]?.split('export const docsIndexCopy = ')[0];
+if (!modelPreviewCopy || /\bplatform\s*:/.test(modelPreviewCopy)) failures.push('product model copy must not retain the retired Agents preview');
 
 // Cause/effect design for product discovery metadata and route identity:
 // C1 a search crawler has no visual context; C2 a reader lands directly on a

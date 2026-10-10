@@ -5,18 +5,12 @@ import { productPreviewCopy } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
-  product?: 'platform' | 'objects' | 'workforce';
+  product: 'objects' | 'workforce';
 }
 
-const { lang, product = 'platform' } = Astro.props;
-const presentation = {
-  platform: { mark: 'platform' as const, accent: 'text-iris-400', border: 'border-iris-600/45', wash: 'bg-iris-500/5' },
-  objects: { mark: 'objects' as const, accent: 'text-amber-400', border: 'border-amber-600/45', wash: 'bg-amber-500/5' },
-  workforce: { mark: 'flow' as const, accent: 'text-rust-400', border: 'border-rust-600/45', wash: 'bg-rust-500/5' },
-};
+const { lang, product } = Astro.props;
 const copy = productPreviewCopy[lang];
-const conventionalProduct = product === 'objects' ? 'objects' : 'platform';
-const view = { ...copy.views[conventionalProduct], ...presentation[conventionalProduct] };
+const view = { ...copy.views.objects, mark: 'objects' as const, accent: 'text-amber-400', border: 'border-amber-600/45', wash: 'bg-amber-500/5' };
 const workforce = copy.workforce;
 ---
 

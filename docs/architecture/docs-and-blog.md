@@ -21,15 +21,16 @@ flowchart TD
   FlowSource --> Workforce
 ```
 
-Product slugs are `agents`, `objects`, and `workforce`. Source collection
+Documentation route slugs are `agents`, `objects`, and `workforce`. Source collection
 slugs remain `platform`, `harness`, and `flow`: both Agents source collections map into
 Awaken Agents; object-owned concepts map into Objects; the remaining `awaken-flow` source material maps
 into Workforce. `src/lib/docsRoutes.ts` is the sole mapping owner.
 
-`src/i18n/docsVersions.ts` is the single owner of version labels, delivery
-mode, verified source revision/date, material cross-repository pins, and
-current/archived routing. Landing pages, the documentation hub, selectors, and
-status banners render that registry; they must not maintain parallel literals.
+`config/source-provenance.json` owns exact repository revisions and implementation
+evidence coordinates. `src/i18n/docsVersions.ts` projects those revisions and owns
+version labels, review dates, availability, and current/archived routing. Landing
+pages, the documentation hub, selectors, and status/source banners render that
+registry; they must not maintain parallel literals.
 The latest version uses the unversioned canonical URL. A release snapshot must
 copy content into a version directory and add a registry entry; do not relabel
 mutable development docs as a stable release.

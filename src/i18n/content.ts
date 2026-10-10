@@ -14,7 +14,7 @@ export const AWAKEN_GITHUB_URL = 'https://github.com/AwakenWorks/awaken';
 const caseSources = {
   'pilot': { sourceBaseline: '973dc96aa2041b20e1e377aa876178dfe0a1d8b1', sourceArchive: { href: '/cases/pilot/source-973dc96aa2041b20e1e377aa876178dfe0a1d8b1.zip', sha256: '17c8303bd6f45955be26ddeeb709b7778d101978d4a5250c9794a2ef48396a02' }, sourceAccessHref: '/enterprise?product=agents&reference_case=pilot#apply' },
   'deepseek-harness': { sourceBaseline: '3faa59acc1265695bfba15fc19d4a7786e81c641', sourceArchive: { href: '/cases/deepseek-harness/source-3faa59acc1265695bfba15fc19d4a7786e81c641.zip', sha256: '47ac3434ad229ba7a2abaf12808355edc5f162a5aa977aed2efa12d05f3665a5' }, sourceAccessHref: '/enterprise?product=agents&reference_case=deepseek-harness#apply', walkthroughSrc: '/cases/deepseek-harness/deterministic-demo.mp4' },
-  'design': { sourceBaseline: 'ec2934b1e849b02e15cd6841e82a1550405393f8', sourceArchive: null, sourceAccessHref: '/enterprise?product=agents&reference_case=design#apply' },
+  'design': { sourceBaseline: '1c63eb95ac29ebdd24ac271b23c136df8ebbb1ac', sourceArchive: null, sourceAccessHref: '/enterprise?product=agents&reference_case=design#apply' },
 } as const;
 
 // Canonical public entity definitions. Homepage, product metadata, and
@@ -264,7 +264,7 @@ export const content = {
           owned: 'Product copy, Mission interaction flow, acceptance criteria, and UI projections.',
           reused: 'Agent, Deployment, Session, Run, events, files, tools, policy, Worker, Sandbox, and recovery.',
           status: 'Source-archive reference build',
-          sourceStatus: 'A fixed committed source archive includes the shared build inputs. A clean source installation, local checks and build passed; real-Agent acceptance requires a configured Awaken endpoint and its own qualification.',
+          sourceStatus: 'A fixed committed source archive includes the shared build inputs and passed a clean source installation, local checks and build. This published snapshot still has runtime compatibility gaps and has not passed a full real-Agent journey. It is available as a source reference while that qualification remains pending.',
           proof: [
             { level: 'Tested', claim: 'Execute and Plan paths share one Session log.', owner: 'Pilot web and API test suites' },
             { level: 'Tested', claim: 'Approvals, budgets, Skills, MCP, subagents, artifacts, and schedules use Awaken-owned contracts.', owner: 'pnpm check' },
@@ -317,12 +317,12 @@ export const content = {
           audience: 'AI-native product teams that need a durable domain model, human review, safe publication, and business facts beyond chat.',
           owned: 'DesignProject, immutable DesignRevision, review targets, Preview safety, explicit acceptance, and the published Artifact.',
           reused: 'Agent, Environment, Session, Run, execution-stage Files, tools, events, Worker, Sandbox, and recovery.',
-          status: 'Local source-tested reference build',
-          sourceStatus: 'This first-party reference implementation is currently local. Its committed implementation passed source and controlled browser checks. Its fresh real generation-and-revision journey has not passed release acceptance, so a fixed public source package remains pending. External user outcomes are unverified.',
+          status: 'Locally qualified reference build',
+          sourceStatus: 'This first-party reference implementation is currently local. Its fixed application baseline passed 411 tests with no skips, including a real DeepSeek initial-and-child Revision journey, desktop and mobile browser interaction, acceptance and ZIP delivery on a frozen local Kubernetes deployment. A public source package remains unpublished; production login and deployment, and external user outcomes remain unqualified.',
           proof: [
             { level: 'Source-checked', claim: 'The current implementation preserves one immutable Revision and Artifact publication owner.', owner: 'Awaken Design architecture and ADRs' },
-            { level: 'Test-covered', claim: 'Publication, review, acceptance, and Artifact watcher paths have automated coverage; this page does not claim a fresh full-suite run.', owner: 'Awaken Design test suites' },
-            { level: 'Live and field pending', claim: 'Current runtime availability and external user or customer outcomes have not been published.', owner: 'Awaken Design release gates' },
+            { level: 'Test-covered', claim: 'The dated local qualification passed 411 tests with no skips, including publication, review, acceptance, storage and browser delivery.', owner: 'Awaken Design test suites' },
+            { level: 'Real local journey', claim: 'Two naturally ended DeepSeek Runs published an initial and child Revision; independent desktop/mobile browsers exercised the child, acceptance and ZIP export. Production deployment, a 100-case semantic benchmark and customer outcomes remain unqualified.', owner: 'Awaken Design 2026-10-10 qualification record' },
           ],
           try: ['Model the durable result as a domain object, not as chat history', 'Publish execution Files through one immutable Revision and Artifact path', 'Keep review, safe publication, and explicit acceptance in the product experience'],
           primary: { label: 'Build an Agent-backed product', href: '/docs/agents/how-to/build-an-agent-with-the-assistant' },
@@ -900,7 +900,7 @@ export const content = {
           owned: '产品文案、Mission 交互、验收标准与 UI 投影。',
           reused: 'Agent、Deployment、Session、Run、事件、文件、工具、策略、Worker、Sandbox 与恢复。',
           status: '提供固定源码包的参考实现',
-          sourceStatus: '固定版本源码包包含共享构建依赖，已通过独立源码目录安装、本地检查和构建。真实 Agent 验收仍需要配置 Awaken 服务并单独验证。',
+          sourceStatus: '固定版本源码包包含共享构建依赖，已通过独立源码目录安装、本地检查和构建。这个公开版本仍有运行接口兼容缺口，尚未通过完整真实 Agent 验收，目前作为源码参考提供。',
           proof: [
             { level: '测试通过', claim: 'Execute 与 Plan 共用一份 Session 日志。', owner: 'Pilot Web 与 API 测试套件' },
             { level: '测试通过', claim: '审批、预算、Skills、MCP、子 Agent、Artifact 与计划任务复用 Awaken 契约。', owner: 'pnpm check' },
@@ -953,12 +953,12 @@ export const content = {
           audience: '需要持久领域模型、人工评审、安全发布和聊天之外业务事实的 AI 原生产品团队。',
           owned: 'DesignProject、不可变 DesignRevision、评审目标、Preview 安全、明确验收和已发布 Artifact。',
           reused: 'Agent、Environment、Session、Run、执行期 File、工具、事件、Worker、Sandbox 与恢复。',
-          status: '本地源码与测试已验证的参考实现',
-          sourceStatus: '这个第一方参考实现仍在本地。当前已提交实现通过了源码与受控浏览器检查；新的真实生成与修改流程尚未通过发布验收，固定公开源码包仍待发布。外部用户效果尚未验证。',
+          status: '已通过本地验收的参考实现',
+          sourceStatus: '这个第一方参考实现仍在本地。固定应用基线通过了 411 项测试且无跳过，包括固定本地 Kubernetes 部署上的真实 DeepSeek 初始与子 Revision 生成、桌面和手机浏览器交互、验收及 ZIP 交付。公开源码包仍待发布；生产登录与部署，以及外部用户效果仍待验证。',
           proof: [
             { level: '源码已核对', claim: '当前实现保留唯一的不可变 Revision 与 Artifact 发布 owner。', owner: 'Awaken Design architecture 与 ADR' },
-            { level: '已有测试覆盖', claim: '发布、评审、验收与 Artifact watcher 路径已有自动化覆盖；本页不宣称本次重新跑完全套。', owner: 'Awaken Design 测试套件' },
-            { level: '真实运行与现场待验证', claim: '当前运行可用性，以及外部用户或客户结果尚未发布。', owner: 'Awaken Design 发布门' },
+            { level: '已有测试覆盖', claim: '2026-10-10 的本地验收通过 411 项测试且无跳过，覆盖发布、评审、验收、存储与浏览器交付。', owner: 'Awaken Design 测试套件' },
+            { level: '真实本地流程', claim: '两个自然结束的 DeepSeek Run 发布初始与子 Revision；独立桌面和手机浏览器验证了子版本交互、验收及 ZIP 导出。生产部署、100 案例语义基准与客户结果仍未通过验收。', owner: 'Awaken Design 2026-10-10 验收记录' },
           ],
           try: ['把持久结果建模成领域对象，不把聊天记录当产品模型', '让执行期 File 只经过一条不可变 Revision 与 Artifact 发布路径', '把评审、安全发布和明确选定放进产品体验'],
           primary: { label: '构建 Agent 驱动的产品', href: '/docs/agents/how-to/build-an-agent-with-the-assistant' },

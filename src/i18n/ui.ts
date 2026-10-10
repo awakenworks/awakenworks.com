@@ -131,6 +131,7 @@ export const ui = {
       scrollTable: 'Scroll horizontally to read all columns',
     },
     docsShell: {
+      sourceBaseline: 'Documentation source baseline', reviewedOn: 'Reviewed on',
       header: 'Documentation header', version: 'Version', search: 'Search', starAria: 'Star Awaken on GitHub',
       searchTitle: 'Search documentation', closeSearch: 'Close search', searchPrompt: 'Enter a title, task, or error message', searchPlaceholder: 'Enter a title, task, or error message…',
       sidebar: 'Documentation sidebar', productDocs: 'Product documentation', mobileStar: 'Star on GitHub',
@@ -281,6 +282,7 @@ export const ui = {
       scrollTable: '横向滚动以查看全部列',
     },
     docsShell: {
+      sourceBaseline: '文档源码基线', reviewedOn: '核对日期',
       header: '文档页首', version: '版本', search: '搜索', starAria: '在 GitHub Star Awaken',
       searchTitle: '搜索文档', closeSearch: '关闭搜索', searchPrompt: '输入标题、任务或错误信息', searchPlaceholder: '输入标题、任务或错误信息…',
       sidebar: '文档目录', productDocs: '产品文档', mobileStar: '在 GitHub Star',
@@ -336,7 +338,6 @@ export const productPreviewCopy = {
   en: {
     label: 'Product model preview · example content', columns: ['Record', 'Fact', 'State'],
     views: {
-      platform: { badge: 'Running', title: 'Session', subtitle: 'Configuration, ownership, and committed history for one long-running task.', nav: ['Agents', 'Sessions', 'Environments', 'Workers'], facts: [['Agent publication', 'Exact revision'], ['Environment', 'Frozen at Session create'], ['Work ownership', 'Lease + epoch']], rows: [['Complete Session', 'Persisted', 'Committed'], ['One Work item', 'Claimed by Worker', 'Claimed'], ['Runtime execution', 'Claim-fenced', 'Running'], ['Session history', 'Awaiting next commit', 'Open']], boundary: 'Control publishes immutable configuration; Coordinator owns Session and dispatch; Worker embeds Runtime and commits under lease and epoch fences.' },
       objects: { badge: 'Current revision', title: 'Business object', subtitle: 'Example: an order controlled by an external system and observed through a Connector.', nav: ['Objects', 'Object types', 'Relationships', 'Actions'], facts: [['ResourceType', 'Exact revision'], ['Identity authority', 'External system'], ['Object view', 'Schema-driven']], rows: [['Order · example', 'All declared business fields', 'Observed'], ['Customer relation', 'Resolved by external identity', 'Resolved'], ['approve Action', 'Pack-defined inputs and impact', 'Available'], ['Latest change', 'Result, source, and time retained', 'Recorded']], boundary: 'The Pack supplies typed data and presentation hints. One generic Objects UI renders every admitted field, relation, and Action; the external system still owns its business fact.' },
     },
     workforce: {
@@ -364,7 +365,6 @@ export const productPreviewCopy = {
   zh: {
     label: '产品模型预览 · 示例内容', columns: ['对象', '事实', '状态'],
     views: {
-      platform: { badge: '执行中', title: 'Session', subtitle: '一项长期任务的配置、归属与已提交历史。', nav: ['Agents', 'Sessions', 'Environments', 'Workers'], facts: [['Agent publication', '固定版本'], ['Environment', 'Session 创建时冻结'], ['Work ownership', 'lease + epoch']], rows: [['完整 Session', '已持久化', 'Committed'], ['唯一 Work item', 'Worker 已领取', 'Claimed'], ['Runtime 执行', '受 claim 约束', 'Running'], ['Session history', '等待下一次提交', 'Open']], boundary: 'Control 发布不可变配置；Coordinator 拥有 Session 与分派；Worker 嵌入 Runtime 并在 lease/epoch 约束下提交。' },
       objects: { badge: '当前 revision', title: '业务对象', subtitle: '示例：一个由外部系统控制、由 Connector 观察的订单。', nav: ['Objects', '对象类型', '关系', '动作'], facts: [['ResourceType', '固定 revision'], ['身份权威', '外部系统'], ['对象视图', '按 schema 生成']], rows: [['Order · 示例', '完整展示声明的业务字段', 'Observed'], ['Customer relation', '按外部身份解析', 'Resolved'], ['approve Action', 'Pack 声明输入与影响', 'Available'], ['最近变化', '保留结果、来源与时间', 'Recorded']], boundary: 'Pack 提供类型化数据与呈现提示；同一套通用 Objects 界面展示全部已准入字段、关系与 Action，外部系统仍拥有业务事实。' },
     },
     workforce: {
