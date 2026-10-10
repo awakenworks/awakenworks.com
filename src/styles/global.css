@@ -145,6 +145,10 @@ html[data-brand='workforce'] .eyebrow {
 .prose > :first-child {
   margin-top: 0;
 }
+.prose h2,
+.prose h3 {
+  overflow-wrap: anywhere;
+}
 .prose h2 {
   margin: 2em 0 0.6em;
   color: var(--color-fog-100);

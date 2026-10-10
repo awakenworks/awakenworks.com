@@ -55,6 +55,14 @@ jobs:
       - name: Verify browser journeys before publication
         run: pnpm exec playwright test
 
+      - name: Preserve browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-failure-${{ github.sha }}
+          path: test-results/
+          retention-days: 7
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

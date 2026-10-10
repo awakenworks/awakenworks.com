@@ -853,11 +853,45 @@ for (const lang of ['en', 'zh']) {
           await expect(mark).toHaveCSS('--mark-primary', brandMarkPalette('works', colorScheme === 'dark' ? 'on-dark' : 'on-light').primary);
           await expect(mark).toHaveCSS('width', '20px');
           await expect(mark).toHaveCSS('height', '20px');
-          // Documentation keeps its existing wrapped control row on phones.
-          if (route !== '/docs') expect(await page.getByRole('banner').evaluate(n => n.getBoundingClientRect().height)).toBeLessThanOrEqual(70);
+          // Font metrics can legitimately wrap the existing flex layout.
+          // M3 requires complete usable controls, not one workstation's height.
+          const banner = page.getByRole('banner');
+          const bannerBox = (await banner.boundingBox())!;
+          for (const control of await banner.locator('a:visible, select:visible, summary:visible, button:visible').all()) {
+            await expect(control).toBeInViewport();
+            const box = (await control.boundingBox())!;
+            expect(box.x).toBeGreaterThanOrEqual(0);
+            expect(box.x + box.width).toBeLessThanOrEqual(390);
+            expect(box.y + box.height).toBeLessThanOrEqual(bannerBox.y + bannerBox.height);
+          }
           expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
         }
       } finally { await context.close(); }
+    });
+  }
+}
+
+// F1 OS fallback-font metrics x en/zh -> header may wrap, all content remains
+// reachable; F2 a long technical heading followed by CJK punctuation -> glyphs
+// wrap within the article. DejaVu Sans reproduces the CI 399px/390px overflow;
+// the normal sans-serif branch ensures no regression. No page clipping hides it.
+for (const lang of ['en', 'zh']) {
+  for (const font of ['DejaVu Sans', 'sans-serif']) {
+    test(`${lang} fallback font ${font} keeps long documentation headings readable`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 900 });
+      await page.goto(`${lang === 'zh' ? '/zh' : ''}/docs/agents/runtime/reference/config/`);
+      await page.evaluate(font => document.documentElement.style.setProperty('--aw-font-body', font), font);
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator('body')).toHaveCSS('font-family', new RegExp(font));
+      await expect(page.locator('.mermaid svg')).toHaveCount(await page.locator('.mermaid').count());
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      const heading = page.locator('.prose h2').filter({ hasText: 'ExecutableAgentSnapshot' });
+      const right = await heading.evaluate(node => {
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        return range.getBoundingClientRect().right;
+      });
+      expect(right).toBeLessThanOrEqual(390);
     });
   }
 }
