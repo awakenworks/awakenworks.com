@@ -55,6 +55,8 @@ jobs:
           path: dist
 
   deploy:
+    env:
+      UMAMI_API_KEY: ${{ secrets.UMAMI_API_KEY }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -79,7 +81,12 @@ jobs:
           exit 1
 
       - name: Verify analytics data plane
+        if: ${{ env.UMAMI_API_KEY != '' }}
         env:
           AWAKENWORKS_EXPECTED_REVISION: ${{ github.sha }}
-          UMAMI_API_KEY: ${{ secrets.UMAMI_API_KEY }}
         run: node scripts/check-analytics-live.mjs
+
+      - name: Record unconfigured analytics readback
+        if: ${{ env.UMAMI_API_KEY == '' }}
+        run: |
+          echo "Website tracking uses the configured public SITE ID. Private API readback was not run because UMAMI_API_KEY is not configured." >> "$GITHUB_STEP_SUMMARY"

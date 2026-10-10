@@ -42,6 +42,11 @@ pnpm preview
 它不会修改域名或 Pages 设置。检查其他已知版本时可显式设置
 `AWAKENWORKS_EXPECTED_REVISION`。
 
+官网前端统计只需要 `src/config/analytics.mjs` 中的 Umami 脚本地址和公开网站 ID，
+不需要私有 API key。可选的 `UMAMI_API_KEY` 只用于部署后从后台读回统计数据：
+配置时执行严格回读检查，检查失败仍使发布验证失败；未配置时明确记录未执行回读，
+不阻止官网发布，也不将前端配置通过视为数据回读通过。
+
 ## Structure
 
 ```mermaid

@@ -1811,7 +1811,12 @@ const liveGatePath = resolve(root, 'scripts/check-live.mjs');
 const pagesWorkflowPath = resolve(root, '.github/workflows/pages.yml');
 requirePattern(analyticsGatePath, /User-Agent[\s\S]*event-data-pivot[\s\S]*Authorization: `Bearer \$\{apiKey\}`/, 'analytics gate must send with a user agent and query authenticated event data');
 requirePattern(analyticsGatePath, /UMAMI_API_KEY is required[\s\S]*AWAKENWORKS_EXPECTED_REVISION is required/, 'analytics gate must reject missing credentials or release identity');
-requirePattern(pagesWorkflowPath, /Verify deployed revision[\s\S]*Verify analytics data plane[\s\S]*secrets\.UMAMI_API_KEY/, 'Pages must verify revision before the analytics data plane with a private secret');
+// R1 public SITE ID only -> normal deployment plus explicit unconfigured API
+// readback; R2 private key configured -> strict checker runs and failure is not
+// ignored. Absence is a skipped capability, never fabricated data-plane PASS.
+requirePattern(pagesWorkflowPath, /UMAMI_API_KEY: \$\{\{ secrets\.UMAMI_API_KEY \}\}[\s\S]*Verify deployed revision[\s\S]*Verify analytics data plane[\s\S]*if: \$\{\{ env\.UMAMI_API_KEY != '' \}\}/, 'configured private analytics readback must follow revision verification');
+requirePattern(pagesWorkflowPath, /Record unconfigured analytics readback[\s\S]*if: \$\{\{ env\.UMAMI_API_KEY == '' \}\}[\s\S]*not run because UMAMI_API_KEY is not configured/, 'SITE ID-only deployment must disclose unexecuted API readback');
+rejectPattern(pagesWorkflowPath, /continue-on-error|check-analytics-live\.mjs\s*\|\|/, 'configured analytics verification failures must not be suppressed');
 rejectPattern(pagesWorkflowPath, /PUBLIC_UMAMI_API_KEY/, 'Umami API credentials must never enter the public build environment');
 requirePattern(liveGatePath, /'\/integrations\/'[\s\S]*'\/zh\/integrations\/'/, 'live release gate must verify both integration directory locales');
 
