@@ -153,6 +153,41 @@ their existing owners. Do not restore `data-umami-event` on elements: its SDK
 auto-handler can couple navigation to a pending send and would create a second
 click dispatcher. There is no local analytics queue or retry state.
 
+## Website navigation and request continuity
+
+`Base.astro` owns the one native popup-menu dismissal adapter used by the
+marketing header and documentation header. Browser `details` owns opening;
+Escape closes and restores trigger focus, while outside pointer or focus closes
+without redirecting the user's focus. In-page disclosure sections retain their
+native behavior. The same layout measures the actual sticky header for anchor
+spacing rather than introducing breakpoint-specific header-height copies.
+
+`localePath` owns context-free canonical paths. Interactive language links carry
+`data-locale-switch`; `localeNavigationHref` preserves the server-rendered
+locale/deployment path plus the current query and fragment. It never moves to
+another origin. The same projection serves marketing and documentation pages.
+
+`OpportunityForm.astro` remains the sole request, attribution admission and
+submission owner. Initial intake requires email, one job and contact consent;
+company, role, stage, blocker and other context are bounded optional fields in
+one native disclosure. Native POST and enhanced fetch retain the same endpoint.
+Only same-tab language navigation creates a one-use draft in tab session
+storage. The draft expires within ten minutes, accepts only named visible
+fields, never includes hidden submission metadata, and is removed before it is
+validated/restored. Malformed, oversized, expired or wrong-language drafts are
+ignored after removal. If storage is unavailable and the form is dirty,
+navigation is stopped with a focused explanation rather than losing input.
+Empty forms still navigate. Successful submission clears any retained draft;
+failed submission preserves the existing fields and attempt identity.
+The privacy page owns the user-facing explanation. Neither URL context nor
+Umami events receive contact or free-text draft values.
+
+The existing real Console captures lead on Home and Agents; architecture and
+compatibility details follow. `enterprise.deliveryModes` owns the customer-facing
+self-host/enterprise/Cloud explanation. Cloud remains a delivery mode, not a
+third product or another application form. Public reference evidence retains
+its source qualification and controlled/real-provider boundaries.
+
 ## Blog and brand
 
 Blog content is editorial and may use a product tone, but product names and

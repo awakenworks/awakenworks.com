@@ -18,7 +18,7 @@ export const ui = {
       openPath: 'Open path →',
       skip: 'Skip to main content',
     },
-    home: { titleClass: '', allCases: 'View every reference build and its current status' },
+    home: { titleClass: '', highlightClass: '', allCases: 'View every reference build and its current status' },
     blog: {
       eyebrow: 'Engineering notes',
       title: 'Start with a real problem. Show how we worked through it.',
@@ -54,7 +54,7 @@ export const ui = {
       workforceCloseBody: 'See the complete outcome loop first. Apply for a focused validation when the job needs real system connections, exceptions, and acceptance facts.',
       objectsCaption: 'Product model preview · example content, with type, provenance, and revision semantics from the current implementation',
       chooseOption: 'Choose one',
-      formSteps: ['Contact', 'Choose the request', 'Define the scope'],
+      formSteps: ['Your work', 'How can we reach you?', 'Add details (optional)'],
       frequencies: [
         ['multiple-daily', 'Several times a day'],
         ['daily', 'Daily'],
@@ -64,6 +64,7 @@ export const ui = {
         ['not-sure', 'Not sure yet'],
       ],
       roles: [
+        ['business-owner', 'Business or operations owner'],
         ['founder-executive', 'Founder or executive'],
         ['product-engineering', 'Product or engineering lead'],
         ['agent-ai-engineer', 'Agent or AI engineer'],
@@ -111,9 +112,9 @@ export const ui = {
       ],
       selectedScenario: 'Selected starting point:',
       selectedProduct: 'Selected product:',
-      optionalDetails: 'Optional systems, risks, and timing',
     },
     agentsLanding: {
+      deployment: 'Choose deployment or Cloud hosting', technicalDetail: 'Explore execution and application responsibilities', compatibilityDetail: 'Review Managed Agents compatibility and differences',
       quickstartEyebrow: 'First successful run',
       quickstartTitle: 'Run and inspect one Session.',
       quickstartSteps: [
@@ -169,7 +170,7 @@ export const ui = {
       openPath: '进入路径 →',
       skip: '跳到主要内容',
     },
-    home: { titleClass: 'home-display-title-zh', allCases: '查看全部参考实现与当前状态' },
+    home: { titleClass: 'home-display-title-zh', highlightClass: 'inline-block', allCases: '查看全部参考实现与当前状态' },
     blog: {
       eyebrow: '工程札记',
       title: '从真实问题开始，写下我们怎样解决它。',
@@ -205,7 +206,7 @@ export const ui = {
       workforceCloseBody: '先看完整结果闭环；当工作需要连接真实系统、处理例外并取得验收事实时，再申请一次聚焦验证。',
       objectsCaption: '产品模型预览 · 示例内容，类型、来源与 revision 语义来自当前实现',
       chooseOption: '请选择',
-      formSteps: ['联系信息', '选择需求', '确定范围'],
+      formSteps: ['你希望完成的工作', '如何联系你', '补充信息（选填）'],
       frequencies: [
         ['multiple-daily', '每天多次'],
         ['daily', '每天'],
@@ -215,6 +216,7 @@ export const ui = {
         ['not-sure', '暂不确定'],
       ],
       roles: [
+        ['business-owner', '业务或运营负责人'],
         ['founder-executive', '创始人或公司负责人'],
         ['product-engineering', '产品或研发负责人'],
         ['agent-ai-engineer', 'Agent 或 AI 工程师'],
@@ -262,9 +264,9 @@ export const ui = {
       ],
       selectedScenario: '已选择的起点：',
       selectedProduct: '已选择产品：',
-      optionalDetails: '选填：系统、风险与计划时间',
     },
     agentsLanding: {
+      deployment: '选择部署或 Cloud 托管方式', technicalDetail: '深入了解执行与应用职责', compatibilityDetail: '查看 Managed Agents 兼容范围与差异',
       quickstartEyebrow: '第一次成功运行',
       quickstartTitle: '运行并检查一个 Session。',
       quickstartSteps: [

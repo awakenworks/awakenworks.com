@@ -19,7 +19,6 @@ const enterpriseHref = localePath(lang, '/enterprise');
 const agentsDocsHref = localePath(lang, '/docs/agents/get-started');
 const casesHref = localePath(lang, '/cases');
 const productCards = publicProductEntries(lang);
-const featuredScenario = home.scenarios.items.find((item) => item.featured);
 const copy = ui[lang].home;
 ---
 
@@ -28,28 +27,17 @@ const copy = ui[lang].home;
 <main id="main-content" tabindex="-1">
   <section id="home-hero" class="home-hero relative overflow-hidden">
     <div class="grid-backdrop absolute inset-0"></div>
-    <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-24 lg:py-24">
+    <div class="relative mx-auto max-w-6xl px-6 py-14 sm:py-20">
       <div>
         <p class="eyebrow text-accent-400">{home.hero.eyebrow}</p>
         <h1 data-home-production-promise class={`home-display-title mt-6 font-semibold text-fog-100 ${copy.titleClass}`}>
           <span class="home-display-title-line">
-            {home.hero.title} <span data-home-title-highlight class="text-accent-400">{home.hero.titleHighlight}</span>
+            <span data-home-title-prefix class={copy.highlightClass}>{home.hero.title}</span> <span data-home-title-highlight class={`text-accent-400 ${copy.highlightClass}`}>{home.hero.titleHighlight}</span>
           </span>
         </h1>
-        <p data-home-company-definition class="mt-7 max-w-3xl text-base font-medium leading-7 text-fog-200 sm:text-lg sm:leading-8">
-          {home.hero.companyDefinition}
-        </p>
         <p data-home-entity-definition class="mt-3 max-w-3xl text-base leading-7 text-fog-400 sm:text-lg sm:leading-8">
           {home.hero.definition}
         </p>
-        <ul data-home-compatibility-proof class="mt-6 flex max-w-4xl flex-wrap gap-x-5 gap-y-2 border-y border-iris-500/20 py-3 font-mono text-xs tracking-wide text-fog-300">
-          {home.hero.compatibilityProof.map((fact, index) => (
-            <li data-home-compatibility-fact class="flex items-center gap-2">
-              <span aria-hidden="true" class={index === 0 ? 'text-iris-400' : 'text-fog-600'}>●</span>
-              <span class={index === 0 ? 'font-semibold text-iris-300' : ''}>{fact}</span>
-            </li>
-          ))}
-        </ul>
         <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
             href={enterpriseHref}
@@ -68,18 +56,27 @@ const copy = ui[lang].home;
             class="rounded-xl border border-ink-600 bg-ink-950/20 px-6 py-3 font-medium text-fog-100 backdrop-blur-sm transition hover:border-fog-500"
           >{home.hero.ctaSecondary}</a>
         </div>
-        <p data-home-maturity class="mt-5 font-mono text-xs leading-6 text-fog-500">
-          {t.products.agents.status}
+        <p data-home-maturity class="mt-5 text-sm leading-6 text-fog-400">
+          {productCards.map((product) => `${product.name}: ${product.status}`).join(' · ')}
         </p>
-        {featuredScenario && (
-          <p data-home-first-result class="mt-6 max-w-3xl border-l-2 border-accent-500/70 pl-4 text-sm leading-7 text-fog-300">
-            <span class="font-mono text-[0.68rem] tracking-wider text-accent-400 uppercase">{home.scenarios.labels.finish}</span>
-            <span class="mt-1 block">{featuredScenario.finish}</span>
-          </p>
-        )}
+
       </div>
     </div>
   </section>
+
+  <ProductShowcase
+    lang={lang}
+    product="platform"
+    compact
+    caption={ui[lang].agentsLanding.showcase}
+    eyebrow={home.workflow.eyebrow}
+    title={home.workflow.title}
+    body={home.workflow.body}
+    steps={home.workflow.steps}
+    facts={home.hero.compatibilityProof}
+    recovery={home.workflow.recovery}
+    concept={{ ...home.workflow.concept, href: localePath(lang, home.workflow.concept.href) }}
+  />
 
   <section id="home-value" class="scroll-mt-16 border-y border-ink-800 bg-ink-850">
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
@@ -119,8 +116,8 @@ const copy = ui[lang].home;
             <ProductMark product={product.key} class="h-7 w-7 text-accent-400" />
             <span class="min-w-0">
               <span class="text-base font-semibold text-fog-100">{product.name}</span>
-              <span class="mt-1 block font-mono text-[0.65rem] text-fog-600">{product.status}</span>
-              <span data-product-role class="mt-3 block text-xs text-fog-500">{product.role}</span>
+              <span class="mt-1 block text-sm text-fog-400">{product.status}</span>
+              <span data-product-role class="mt-3 block text-sm text-fog-400">{product.role}</span>
               <span class="mt-2 block text-sm leading-6 text-fog-400">{product.tagline}</span>
               <span class="mt-4 inline-flex text-sm text-accent-400 transition group-hover:translate-x-1"><FunctionalIcon icon={ArrowRight} /></span>
             </span>
@@ -147,13 +144,13 @@ const copy = ui[lang].home;
             ]}
           >
             <div class="flex flex-wrap items-center justify-between gap-3">
-              <p class="font-mono text-[0.68rem] tracking-wider text-fog-500 uppercase">{item.label}</p>
-              {item.featured && <span class="rounded-full border border-accent-700/60 px-2.5 py-1 font-mono text-[0.62rem] text-accent-300">{home.scenarios.featuredLabel}</span>}
+              <p class="font-mono text-sm tracking-wider text-fog-500 uppercase">{item.label}</p>
+              {item.featured && <span class="rounded-full border border-accent-700/60 px-2.5 py-1 font-mono text-sm text-accent-300">{home.scenarios.featuredLabel}</span>}
             </div>
             <h3 class="mt-4 text-xl font-semibold text-fog-100">{item.title}</h3>
             <p class="mt-4 flex-1 text-sm leading-7 text-fog-400">{item.body}</p>
             <div class="mt-6 border-t border-ink-700 pt-5">
-              <p class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{home.scenarios.labels.finish}</p>
+              <p class="font-mono text-sm tracking-wider text-fog-600 uppercase">{home.scenarios.labels.finish}</p>
               <p class="mt-2 text-sm leading-6 text-fog-300">{item.finish}</p>
               <a
                 href={item.href === '/enterprise' ? `${enterpriseHref}?product=${item.product}&scenario=${item.key}#apply` : localePath(lang, item.href)}
@@ -167,18 +164,7 @@ const copy = ui[lang].home;
     </div>
   </section>
 
-  <ProductShowcase
-    lang={lang}
-    product="platform"
-    compact
-    caption={ui[lang].agentsLanding.showcase}
-    eyebrow={home.workflow.eyebrow}
-    title={home.workflow.title}
-    body={home.workflow.body}
-    steps={home.workflow.steps}
-    recovery={home.workflow.recovery}
-    concept={{ ...home.workflow.concept, href: localePath(lang, home.workflow.concept.href) }}
-  />
+
 
   <section id="home-cases" class="scroll-mt-16 border-b border-ink-800 bg-ink-950">
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
@@ -192,12 +178,12 @@ const copy = ui[lang].home;
       <div class="mt-12 grid gap-6 lg:grid-cols-3">
         {t.cases.items.map((item) => (
           <article data-case-card={item.slug} class="flex flex-col rounded-xl border border-ink-700 bg-ink-850 p-7 transition hover:border-iris-600/70">
-            <p class="font-mono text-[0.68rem] uppercase tracking-wider text-iris-400">{item.kind}</p>
+            <p class="font-mono text-sm uppercase tracking-wider text-iris-400">{item.kind}</p>
             <h3 class="mt-4 text-2xl font-semibold text-fog-100">{item.name}</h3>
             <p class="mt-3 text-sm font-medium text-fog-300">{item.adoption}</p>
             <p class="mt-5 flex-1 text-sm leading-7 text-fog-400">{item.title}</p>
             <div class="mt-7 border-t border-ink-700 pt-5">
-              <p class="font-mono text-[0.68rem] uppercase tracking-wider text-fog-600">{item.status}</p>
+              <p class="font-mono text-sm uppercase tracking-wider text-fog-600">{item.status}</p>
               <a
                 href={localePath(lang, `/cases/${item.slug}`)}
                 data-awaken-event={`home-case-${item.slug}`}

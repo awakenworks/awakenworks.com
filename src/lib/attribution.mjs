@@ -54,10 +54,13 @@ export function evolveAttribution(previous, href, referrer = '') {
 }
 
 export function captureAttribution({
-  storage = globalThis.sessionStorage,
+  storage,
   href = globalThis.location?.href,
   referrer = globalThis.document?.referrer ?? '',
 } = {}) {
+  if (storage === undefined) {
+    try { storage = globalThis.sessionStorage; } catch (_error) { storage = null; }
+  }
   if (!storage || !href) return evolveAttribution({}, href ?? 'https://awakenworks.com/', referrer);
   let previous = {};
   try {

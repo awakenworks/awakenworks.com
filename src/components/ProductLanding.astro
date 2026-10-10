@@ -39,7 +39,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
   <!-- ── Hero ──────────────────────────────────────────────────── -->
   <section id="agents-hero" class="relative overflow-hidden">
     <div class="grid-backdrop absolute inset-0"></div>
-    <div class="relative mx-auto max-w-6xl px-6 pt-16 pb-14 sm:pt-32 sm:pb-20">
+    <div class="relative mx-auto max-w-6xl px-6 pt-12 pb-12 sm:pt-20 sm:pb-16">
       <div>
         <ProductMark
           product="platform"
@@ -48,10 +48,10 @@ const closerHref = p.closer.cta.href.startsWith('/')
         <div class="flex flex-wrap items-center gap-3">
           <p class={`eyebrow ${c.eyebrow}`}>{p.eyebrow}</p>
           <span
-            class={`rounded-full border px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider uppercase ${c.badge}`}
+            class={`rounded-full border px-2.5 py-0.5 font-mono text-sm tracking-wider uppercase ${c.badge}`}
             >{p.status.label}</span
           >
-          <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-fog-500 uppercase">
+          <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-sm tracking-wider text-fog-500 uppercase">
             {t.products.agents.license}
           </span>
         </div>
@@ -59,21 +59,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
           {p.title}
         </h1>
         <p class="mt-6 max-w-3xl text-lg text-fog-300 sm:text-xl">{p.subtitle}</p>
-        <a
-          href={compatibilityHref}
-          data-agent-compatibility-entry
-          data-awaken-event="awaken-view-compatibility"
-          data-awaken-event-location="agents-hero"
-          data-awaken-event-product="agents"
-          data-awaken-event-destination="compatibility"
-          class="mt-8 flex max-w-3xl items-center justify-between gap-5 rounded-xl border border-iris-500/30 bg-iris-500/5 px-5 py-4 transition hover:border-iris-400/60 hover:bg-iris-500/10"
-        >
-          <span>
-            <span class={`eyebrow block ${c.eyebrow}`}>{p.advantage.eyebrow}</span>
-            <span class="mt-2 block text-sm leading-6 text-fog-200">{copy.compatibility}</span>
-          </span>
-          <span aria-hidden="true" class="shrink-0 text-xl text-iris-400"><FunctionalIcon icon={ArrowRight} /></span>
-        </a>
+
         <div class="mt-7 flex flex-wrap items-center gap-4">
           <a
             href={ctaPrimaryHref}
@@ -96,10 +82,18 @@ const closerHref = p.closer.cta.href.startsWith('/')
             class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-iris-400"
           ><FunctionalIcon icon={Star} /> {copy.star}</a>
         </div>
+        <a href={compatibilityHref} data-agent-compatibility-entry data-awaken-event="awaken-view-compatibility" data-awaken-event-location="agents-hero" data-awaken-event-product="agents" data-awaken-event-destination="compatibility" class="mt-6 inline-flex text-sm text-accent-400 underline underline-offset-4">{copy.compatibility}</a>
         <p class="mt-5 max-w-3xl text-sm leading-6 text-fog-500">{p.audience}</p>
       </div>
     </div>
   </section>
+
+  <ProductShowcase
+    lang={lang}
+    product="platform"
+    caption={copy.showcase}
+    concept={{ label: copy.deployment, href: localePath(lang, '/enterprise#delivery-modes') }}
+  />
 
   <section id="agents-fit" class="border-y border-ink-800 bg-ink-900">
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
@@ -135,6 +129,8 @@ const closerHref = p.closer.cta.href.startsWith('/')
     </div>
   </section>
 
+  <details data-agent-technical-detail class="mx-auto max-w-6xl rounded-xl border border-ink-700 bg-ink-900 px-6 py-5">
+    <summary class="cursor-pointer text-base font-medium text-fog-200">{copy.technicalDetail}</summary>
   <section id="agents-boundary" class="border-y border-ink-800 bg-ink-950">
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
       <p class={`eyebrow ${c.eyebrow}`}>{p.boundary.eyebrow}</p>
@@ -175,6 +171,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
       </a>
     </div>
   </section>
+  </details>
 
   <section id="agents-outcomes" class="border-y border-ink-800 bg-ink-900">
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
@@ -212,6 +209,8 @@ const closerHref = p.closer.cta.href.startsWith('/')
     </div>
   </section>
 
+  <details data-agent-compatibility-detail class="mx-auto max-w-6xl rounded-xl border border-ink-700 bg-ink-900 px-6 py-5">
+    <summary class="cursor-pointer text-base font-medium text-fog-200">{copy.compatibilityDetail}</summary>
   <AdvantageSection
     id="managed-relation"
     eyebrow={p.advantage.eyebrow}
@@ -223,12 +222,9 @@ const closerHref = p.closer.cta.href.startsWith('/')
     items={p.advantage.items}
     tone={p.tone}
   />
+  </details>
 
-  <ProductShowcase
-    lang={lang}
-    product="platform"
-    caption={copy.showcase}
-  />
+
 
   <section id="agents-decisions" class="scroll-mt-16 border-t border-ink-800 bg-ink-950">
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">

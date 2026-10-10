@@ -31,10 +31,48 @@ const pathTone = {
       <h1 class="hero-title mt-6 max-w-5xl font-semibold text-fog-100">{page.hero.title}</h1>
       <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300 sm:text-xl">{page.hero.body}</p>
       <div class="mt-10 flex flex-wrap gap-4">
-        <a href="#enterprise-paths" data-awaken-event="private_deployment_cooperation_selected" data-awaken-event-location="enterprise-hero" data-awaken-event-product="unselected" data-awaken-event-destination="enterprise-paths" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{page.hero.primary}</a>
+        <a href="#apply" data-awaken-event="private_deployment_cooperation_selected" data-awaken-event-location="enterprise-hero" data-awaken-event-product="unselected" data-awaken-event-destination="enterprise-form" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{page.hero.primary}</a>
         <a href={productHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="enterprise-hero" data-awaken-event-product="agents" data-awaken-event-destination="agents" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{page.hero.secondary}</a>
       </div>
       <p data-enterprise-now class="mt-8 max-w-3xl border-l-2 border-accent-500/60 pl-4 text-sm leading-6 text-fog-500">{page.boundary}</p>
+    </div>
+  </section>
+
+  <section id="delivery-modes" class="border-b border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-14 sm:py-16">
+      <p class="eyebrow text-accent-400">{page.deliveryModes.eyebrow}</p>
+      <h2 class="mt-4 text-3xl font-semibold text-fog-100">{page.deliveryModes.title}</h2>
+      <p class="mt-4 max-w-3xl leading-7 text-fog-300">{page.deliveryModes.body}</p>
+      <div class="mt-8 grid gap-4 md:grid-cols-3">
+        {page.deliveryModes.items.map((mode) => <article data-delivery-mode={mode.key} class="flex flex-col rounded-xl border border-ink-700 bg-ink-850 p-6">
+          <h3 class="text-xl font-semibold text-fog-100">{mode.name}</h3>
+          <p class="mt-4 flex-1 text-sm leading-6 text-fog-300">{mode.body}</p>
+          <dl class="mt-5 space-y-3 text-sm">
+            <div><dt class="text-fog-400">{page.deliveryModes.operatorLabel}</dt><dd class="mt-1 text-fog-200">{mode.operator}</dd></div>
+            <div><dt class="text-fog-400">{page.deliveryModes.scopeLabel}</dt><dd class="mt-1 text-fog-200">{mode.status}</dd></div>
+          </dl>
+          <a href={localePath(lang, mode.href)} class="mt-6 font-medium text-accent-400 underline underline-offset-4">{mode.action}</a>
+        </article>)}
+      </div>
+    </div>
+  </section>
+
+  <section id="apply" class="scroll-mt-16 bg-ink-900">
+    <div class="mx-auto grid max-w-6xl gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16">
+      <div>
+        <p class="eyebrow text-accent-400">{page.form.eyebrow}</p>
+        <h2 class="mt-5 text-3xl font-semibold tracking-tight text-fog-100 sm:text-5xl">{page.form.title}</h2>
+        <p class="mt-6 text-lg leading-8 text-fog-300">{page.form.body}</p>
+        <div class="mt-8 rounded-2xl border border-ink-700 bg-ink-950/70 p-6">
+          <h3 class="font-semibold text-fog-100">{page.form.prepareTitle}</h3>
+          <ul class="mt-4 space-y-3 text-sm leading-6 text-fog-400">
+            {page.form.prepare.map((item) => <li class="flex gap-3"><span class="text-accent-400"><FunctionalIcon icon={Check} /></span><span>{item}</span></li>)}
+          </ul>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-ink-700 bg-ink-950 p-6 sm:p-8">
+        <OpportunityForm lang={lang} product="workforce" />
+      </div>
     </div>
   </section>
 
@@ -54,15 +92,15 @@ const pathTone = {
             <p class="mt-4 text-sm leading-7 text-fog-400">{item.body}</p>
             <dl class="mt-6 space-y-5 border-t border-ink-700 pt-5">
               <div data-enterprise-path-fact="bring">
-                <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{page.paths.bringLabel}</dt>
+                <dt class="font-mono text-sm tracking-wider text-fog-600 uppercase">{page.paths.bringLabel}</dt>
                 <dd class="mt-1.5 text-sm leading-6 text-fog-300">{item.bring}</dd>
               </div>
               <div data-enterprise-path-fact="decision">
-                <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{page.paths.decisionLabel}</dt>
+                <dt class="font-mono text-sm tracking-wider text-fog-600 uppercase">{page.paths.decisionLabel}</dt>
                 <dd class="mt-1.5 text-sm leading-6 text-fog-300">{item.decision}</dd>
               </div>
               <div data-enterprise-path-fact="boundary">
-                <dt class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{page.paths.boundaryLabel}</dt>
+                <dt class="font-mono text-sm tracking-wider text-fog-600 uppercase">{page.paths.boundaryLabel}</dt>
                 <dd class="mt-1.5 text-sm leading-6 text-fog-400">{item.boundary}</dd>
               </div>
             </dl>
@@ -133,24 +171,7 @@ const pathTone = {
     </div>
   </section>
 
-  <section id="apply" class="scroll-mt-16 bg-ink-900">
-    <div class="mx-auto grid max-w-6xl gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16">
-      <div>
-        <p class="eyebrow text-accent-400">{page.form.eyebrow}</p>
-        <h2 class="mt-5 text-3xl font-semibold tracking-tight text-fog-100 sm:text-5xl">{page.form.title}</h2>
-        <p class="mt-6 text-lg leading-8 text-fog-300">{page.form.body}</p>
-        <div class="mt-8 rounded-2xl border border-ink-700 bg-ink-950/70 p-6">
-          <h3 class="font-semibold text-fog-100">{page.form.prepareTitle}</h3>
-          <ul class="mt-4 space-y-3 text-sm leading-6 text-fog-400">
-            {page.form.prepare.map((item) => <li class="flex gap-3"><span class="text-accent-400"><FunctionalIcon icon={Check} /></span><span>{item}</span></li>)}
-          </ul>
-        </div>
-      </div>
-      <div class="rounded-2xl border border-ink-700 bg-ink-950 p-6 sm:p-8">
-        <OpportunityForm lang={lang} product="workforce" />
-      </div>
-    </div>
-  </section>
+
 </main>
 
 <SiteFooter lang={lang} />

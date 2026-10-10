@@ -87,7 +87,7 @@ const banner =
       <a href={docsHome} class="hidden font-mono text-xs text-fog-500 hover:text-fog-100 md:block">Docs</a>
     </div>
     <div class="flex min-w-0 items-center gap-2 text-sm sm:gap-3">
-      <details class="relative">
+      <details data-site-menu class="relative">
         <summary class="list-none rounded-full border border-ink-600 px-2 py-1 font-mono text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100 sm:px-3">
           <span class="sm:hidden">{product === 'agents' ? 'Agents' : product === 'objects' ? 'Objects' : product === 'workforce' ? 'Workforce' : 'Docs'}</span>
           <span class="hidden sm:inline">{productLabel}</span> <FunctionalIcon icon={ChevronDown} />
@@ -97,7 +97,7 @@ const banner =
         </div>
       </details>
       {curVer && (
-        <details class="relative hidden md:block">
+        <details data-site-menu class="relative hidden md:block">
           <summary class="list-none rounded-full border border-ink-600 px-3 py-1 font-mono text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100">{curVer.label} <FunctionalIcon icon={ChevronDown} /></summary>
           <div class="absolute right-0 mt-2 w-60 rounded-xl border border-ink-700 bg-ink-900 p-2 shadow-2xl">
             <p class="px-3 pt-1 pb-2 font-mono text-[0.62rem] uppercase tracking-wider text-fog-600">{copy.version}</p>
@@ -133,7 +133,7 @@ const banner =
         aria-label={copy.starAria}
       ><FunctionalIcon icon={Star} /> Star</a>
       <AppearanceSelect lang={lang} />
-      {alternateLang && otherHref && <a href={otherHref} hreflang={localeRegistry[alternateLang].hrefLang} lang={localeRegistry[alternateLang].htmlLang} class="rounded-full border border-ink-600 px-2 py-1 font-mono text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100 sm:px-3">
+      {alternateLang && otherHref && <a href={otherHref} data-locale-switch={alternateLang} hreflang={localeRegistry[alternateLang].hrefLang} lang={localeRegistry[alternateLang].htmlLang} class="rounded-full border border-ink-600 px-2 py-1 font-mono text-sm text-fog-300 hover:border-fog-500 hover:text-fog-100 sm:px-3">
         <span class="sm:hidden">{localeRegistry[alternateLang].shortName}</span>
         <span class="hidden sm:inline">{localeRegistry[alternateLang].nativeName}</span>
       </a>}

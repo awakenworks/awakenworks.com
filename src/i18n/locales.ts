@@ -59,3 +59,15 @@ export function unlocalizedPath(pathname: string): string {
 export function localizedStaticPaths() {
   return NON_DEFAULT_LANGS.map((lang) => ({ params: { lang }, props: { lang } }));
 }
+
+// Interactive language navigation keeps the same page, intent and fragment.
+// Canonical/hreflang URLs continue using localePath without request context.
+export function localeNavigationHref(destination: string, href: string): string {
+  const source = new URL(href);
+  const target = new URL(destination, source);
+  if (target.origin !== source.origin) throw new Error('Language navigation must stay on this website');
+  // The server-rendered destination already projects locale and deployment base.
+  target.search = source.search;
+  target.hash = source.hash;
+  return `${target.pathname}${target.search}${target.hash}`;
+}

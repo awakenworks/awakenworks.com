@@ -87,14 +87,52 @@ const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'loca
     <script>
       import { captureAttribution } from '../lib/attribution.mjs';
       import { trackEvent } from '../config/analytics.mjs';
+      import { isLang, localeNavigationHref } from '../i18n/locales';
 
       // One shared state transition owns first/last campaign attribution.
       // Forms project this session-scoped state; CRM owns qualification.
       captureAttribution();
 
+      const projectLocaleLink = (link: HTMLAnchorElement) => {
+        const lang = link.dataset.localeSwitch;
+        if (isLang(lang)) link.href = localeNavigationHref(link.href, location.href);
+      };
+      document.querySelectorAll<HTMLAnchorElement>('a[data-locale-switch]').forEach(projectLocaleLink);
+      const header = document.querySelector('header');
+      if (header) {
+        const measureHeader = () => document.documentElement.style.setProperty('--site-header-offset', `${header.getBoundingClientRect().height}px`);
+        measureHeader();
+        new ResizeObserver(measureHeader).observe(header);
+      }
+
+      // Native details owns opening. This one adapter supplies dismissal and
+      // focus restoration for both marketing and documentation popup menus.
+      const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-site-menu]'));
+      for (const menu of menus) menu.addEventListener('toggle', () => {
+        if (menu.open) for (const other of menus) if (other !== menu) other.open = false;
+      });
+      const dismissOutside = (event: Event) => {
+        for (const menu of menus) if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+      };
+      document.addEventListener('pointerdown', dismissOutside);
+      document.addEventListener('focusin', dismissOutside);
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        const open = menus.find((menu) => menu.open);
+        if (!open) return;
+        event.preventDefault();
+        open.open = false;
+        open.querySelector<HTMLElement>('summary')?.focus();
+      });
+
       // One layout owns click dispatch. Navigation and native controls never
       // wait for an analytics request; the existing Umami SDK owns sending.
       document.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target : null;
+        const localeLink = target?.closest<HTMLAnchorElement>('a[data-locale-switch]');
+        if (localeLink) projectLocaleLink(localeLink);
+        const menuLink = target?.closest('a');
+        if (menuLink) for (const menu of menus) if (menu.contains(menuLink)) menu.open = false;
         const element = event.target instanceof Element
           ? event.target.closest('[data-awaken-event]') : null;
         const name = element?.getAttribute('data-awaken-event');
@@ -153,7 +191,7 @@ const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'loca
     }
     {
       enableAnalytics && (
-        <script is:inline defer src={umamiSrc} data-website-id={umamiWebsiteId} />
+        <script is:inline async src={umamiSrc} data-website-id={umamiWebsiteId} />
       )
     }
   </head>

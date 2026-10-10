@@ -663,10 +663,8 @@ const rules = [
     speedPromise: 'Make AI part of',
     speedHighlight: 'enterprise production.',
     compatibilityProof: ['Managed Agents API baseline checked', 'Works with the official Anthropic SDK', 'The same Session continues after reconnect'],
-    primaryAudience: 'People set goals and rules',
-    firstResult: 'One agreed work scope with a baseline, deliverables, and a named acceptor',
-    companyDefinition: 'AwakenWorks makes AI a governed part of enterprise production.',
-    entityDefinition: 'Build and run AI with Agents. Use Workforce',
+    primaryAudience: 'people in control of important decisions',
+    entityDefinition: 'Build AI applications with Agents. Use Workforce',
     runtimeConcept: '/docs/agents/concepts/agent-runtime',
     workflow: ['Connect model', 'Publish Agent', 'Run Session', 'Review the result', 'Connect application'],
     values: ['Keep confirmed progress', 'Keep important decisions', 'Check the real result'],
@@ -684,10 +682,8 @@ const rules = [
     speedPromise: '让 AI 成为',
     speedHighlight: '受控的生产力。',
     compatibilityProof: ['已核对 Managed Agents API 基线', '可使用官方 Anthropic SDK', '重连后继续同一个 Session'],
-    primaryAudience: '人设定目标和规则',
-    firstResult: '一份明确的工作范围、原有基线、交付物和具名验收人',
-    companyDefinition: 'AwakenWorks 让 AI 成为受控的生产力。',
-    entityDefinition: '用 Agents 构建和运行 AI，用 Workforce',
+    primaryAudience: '重要决定由人掌握',
+    entityDefinition: '用 Agents 构建 AI 应用，用 Workforce',
     runtimeConcept: '/zh/docs/agents/concepts/agent-runtime',
     workflow: ['连接模型', '发布 Agent', '运行 Session', '查看结果', '接入应用'],
     values: ['保留已确认进度', '保留重要决定', '检查真实结果'],
@@ -697,31 +693,38 @@ const rules = [
 
 // Company-home cause/effect graph: C1 business owner; C2 developer; C3 proof
 // seeker; C4 en/zh; C5 module mistaken for independently available product.
-// E1 company value -> manual work -> two products -> scoped choice -> proof;
+// E1 company value -> actual product proof -> work -> two products -> choice;
 // E2 business intent reaches the existing enterprise form; E3 developer intent
 // reaches canonical Quickstart; E4 registry-owned availability stays explicit;
 // E5 reference evidence cannot become a customer outcome.
 // Decision rules: H1 C1 -> E1+E2+E4; H2 C2 -> E1+E3+E4; H3 C3 -> E5;
 // H4 every rule x C4 -> localized equivalent; H5 C5 -> reject third product.
+// UX decision table: U1 first-time reader -> concise promise then actual image;
+// U2 identity -> canonical JSON-LD/footer, no repeated hero slogan; U3 business
+// request -> three required controls, bounded optional detail in one disclosure;
+// U4 deployment -> three delivery modes, still exactly two public products.
+// Browser tests prove pixel bounds, semantic wrapping, native dismissal, draft
+// continuity, blocked storage, and transport outcomes; source checks preserve
+// the single renderer/catalog/endpoint and honest qualification boundaries.
 for (const rule of rules) {
   requireOrderedText(rule.path, [
     'id="home-hero"',
+    'id="platform-preview"',
     'id="home-value"',
     'id="home-products"',
     'id="home-adoption"',
-    'id="platform-preview"',
     'id="home-cases"',
     'id="home-cta"',
   ], 'home must move from the primary promise through product proof, reliability, reference evidence, portfolio maturity, and action');
   requirePattern(
     rule.path,
     new RegExp(`href="${rule.primaryHref}"[^>]*>${rule.primary}`),
-    'home primary action must reach the localized independent Agents path',
+    'home business action must reach the localized shared enterprise path',
   );
   requirePattern(
     rule.path,
     new RegExp(`href="${rule.secondaryHref}"[^>]*>${rule.secondary}`),
-    'home secondary action must reach localized enterprise-deployment services',
+    'home developer action must reach the localized quickstart',
   );
   requireOccurrenceCount(rule.path, '<h1', 1, 'home must have one primary heading');
   requireOccurrenceCount(rule.path, 'data-home-title-highlight', 1, 'home hero must highlight one part of its company promise');
@@ -731,13 +734,9 @@ for (const rule of rules) {
     'home hero must render the localized company-value promise and highlight',
   );
   requireSectionOccurrenceCount(rule.path, 'id="home-hero"', '</section>', '<a ', 2, 'home hero must expose exactly the two intent actions');
-  requireOccurrenceCount(rule.path, 'data-home-first-result', 1, 'home hero must expose one observable first result');
-  requireOccurrenceCount(rule.path, 'data-home-company-definition', 1, 'home hero must expose one canonical company definition');
-  requirePattern(rule.path, new RegExp(`data-home-company-definition[\\s\\S]*${rule.companyDefinition}`), 'home hero must make the company category directly quotable');
   requireOccurrenceCount(rule.path, 'data-home-entity-definition', 1, 'home hero must expose one canonical product definition');
   requirePattern(rule.path, new RegExp(`data-home-entity-definition[\\s\\S]*${rule.entityDefinition}`), 'home hero must make the Agents category directly quotable');
   requirePattern(rule.path, new RegExp(`data-home-runtime-concept href="${rule.runtimeConcept}"`), 'home workflow must link to the localized canonical Agent Runtime concept');
-  requirePattern(rule.path, new RegExp(`data-home-first-result[\\s\\S]*${rule.firstResult}`), 'home hero must state the recommended scenario result as supporting evidence');
   requirePattern(rule.path, new RegExp(rule.primaryAudience), 'home hero must name AI product teams as the primary audience');
   requirePattern(rule.path, new RegExp(`data-home-maturity[\\s\\S]*${rule.releaseStatus}`), 'home hero must separate product maturity from the value headline');
   requireOccurrenceCount(rule.path, 'data-home-compatibility-proof', 1, 'home hero must expose one compact compatibility proof owner');
@@ -808,7 +807,7 @@ for (const path of [resolve(root, 'dist/index.html'), resolve(root, 'dist/zh/ind
 }
 
 requirePattern(resolve(root, 'src/layouts/Base.astro'), /import \{ captureAttribution \} from '\.\.\/lib\/attribution\.mjs'[\s\S]*captureAttribution\(\)/, 'the shared layout must capture attribution through the canonical module');
-requireOrderedText(homeSourcePath, ['id="home-hero"', 'id="home-value"', 'id="home-products"', 'id="home-adoption"', '<ProductShowcase', 'id="home-cases"'], 'source must move from the company promise through product proof, buyer value, compact adoption choice, reference evidence, and late portfolio context');
+requireOrderedText(homeSourcePath, ['id="home-hero"', '<ProductShowcase', 'id="home-value"', 'id="home-products"', 'id="home-adoption"', 'id="home-cases"'], 'source must move from the company promise through product proof, buyer value, compact adoption choice, reference evidence, and late portfolio context');
 rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"|id="home-scenarios"|data-scenario-card/, 'source must use the one compact adoption renderer without restoring older parallel sections');
 requireOccurrenceCount(homeSourcePath, 'data-awaken-event-location="home-hero"', 2, 'home source must measure the existing two hero intents without adding another action');
 requireOccurrenceCount(homeSourcePath, 'data-awaken-event-location="home-closing"', 2, 'home source must measure the existing two closing intents without adding another action');
@@ -820,11 +819,10 @@ requireOccurrenceCount(homeSourcePath, 'data-awaken-event-location="home-closing
 requirePattern(homeSourcePath, /data-home-production-promise[\s\S]*home-display-title-line[\s\S]*data-home-title-highlight/, 'home must render one company promise with one highlighted phrase');
 requirePattern(homeSourcePath, /@media \(min-width: 1024px\)[\s\S]*\.home-display-title-line[\s\S]*white-space: normal/, 'home company promise must allow natural desktop wrapping');
 rejectPattern(homeSourcePath, /home\.hero\.title\.map/, 'home must not force editorial line breaks into the speed promise');
-requirePattern(homeSourcePath, /featuredScenario = home\.scenarios\.items\.find[\s\S]*data-home-first-result[\s\S]*featuredScenario\.finish/, 'home must reuse the recommended scenario finish as supporting first-result evidence');
 const contentSourcePath = resolve(root, 'src/i18n/content.ts');
 requirePattern(contentSourcePath, /title: 'Make AI part of',[\s\S]*titleHighlight: 'enterprise production\.'[\s\S]*title: '让 AI 成为',[\s\S]*titleHighlight: '受控的生产力。'/, 'both locales must lead with company value and one highlight');
 rejectPattern(contentSourcePath, /titleHighlight: '(?:much|far) faster|titleHighlight: '快得多/, 'home speed promise must not imply an unverified magnitude');
-requirePattern(contentSourcePath, /Build and run AI with Agents\. Use Workforce[\s\S]*用 Agents 构建和运行 AI，用 Workforce/, 'both locales must explain Agents and Workforce uses in one supporting-copy owner');
+requirePattern(contentSourcePath, /Build AI applications with Agents\. Use Workforce[\s\S]*用 Agents 构建 AI 应用，用 Workforce/, 'both locales must explain Agents and Workforce uses in one supporting-copy owner');
 requirePattern(contentSourcePath, /application owns its UX, domain model, workflow, and result acceptance|产品体验、领域模型、工作流与结果验收仍由应用掌握/, 'both locales must preserve the application ownership boundary');
 rejectPattern(contentSourcePath, /Ship Agent applications without rebuilding the platform underneath|交付 Agent 应用，不必重建下层平台|Ship your working Agent as an application customers can keep using|把能运行的 Agent，交付成客户可以持续使用的应用|Your Agent already works\. Now ship the application|Agent 已经能运行，现在把应用交付出去/, 'homepage copy must not retain the weaker infrastructure contrast, require an existing working Agent, or imply unverified continued customer use');
 rejectPattern(contentSourcePath, /without becoming an Agent infrastructure team|不必把团队变成 Agent 基础设施团队|The form is shared\. The promise is not\.|入口可以共用，承诺不能混用|Managed-compatible\. Awaken-enhanced\./, 'core pages must use literal product language instead of rhetorical contrast or slogans');
@@ -832,7 +830,7 @@ rejectPattern(contentSourcePath, /—/, 'site copy must use plain punctuation in
 requirePattern(contentSourcePath, /export const canonicalEntities[\s\S]*AwakenWorks makes AI a governed part of enterprise production\.[\s\S]*Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\.[\s\S]*Awaken Runtime is the Rust execution core inside Awaken Agents\./, 'one catalog must own the company, product, and runtime entity definitions');
 rejectPattern(contentSourcePath, /pages:\s*\{[\s\S]*awaken:/, 'the retired hidden Awaken page copy must not compete with canonical entity definitions');
 rejectPattern(contentSourcePath, /Turn an Agent prototype into a shippable, operable, reusable product|让 Agent 原型，变成可交付、可运营、可复用的产品|Make Agents shippable, operable, and reusable|让 Agent 可交付、可运营、可复用/, 'result headlines must not regress to lifecycle adjectives');
-requirePattern(contentSourcePath, /Workforce is a public product with capability access scoped by release status[\s\S]*Workforce 是正式对外产品，具体能力按发布状态/, 'both locales must separate Workforce product placement from available scope');
+requirePattern(contentSourcePath, /Workforce is a public product; its capabilities remain scoped early previews[\s\S]*Workforce 是正式对外产品，具体能力按范围提前预览/, 'both locales must separate Workforce product placement from available scope');
 requirePattern(contentSourcePath, /proofLabel: 'What this changes'[\s\S]*proofLabel: '这意味着'/, 'Agents comparison must connect each capability to its consequence in both locales');
 rejectPattern(contentSourcePath, /REFERENCE ACCOUNT|REPLACE WITH|本页故意|客户需要纠正|外发前确认|受控外发|【\s*】/, 'public content must not expose editor prompts, distribution reminders, or visible placeholders');
 rejectPattern(contentSourcePath, /Customer result|客户得到/, 'public comparison copy must not address the reader with an internal third-person sales label');
@@ -866,7 +864,7 @@ rejectPattern(homeSourcePath, /home-display-title-zh[\s\S]{0,120}white-space: no
 const productRules = [
   {
     path: resolve(root, 'dist/agents/index.html'),
-    title: 'Run production Agent applications on infrastructure you control.',
+    title: 'Build and run your AI Agent application.',
     agentsHref: '/docs/agents/get-started',
     compatibilityHref: '/docs/agents/compatibility',
     fit: ['Embed an Agent in your product', 'Keep work beyond one connection', 'Choose execution without forking the product', 'Control and grow the operating boundary'],
@@ -884,7 +882,7 @@ const productRules = [
   },
   {
     path: resolve(root, 'dist/zh/agents/index.html'),
-    title: '在自己掌控的基础设施上运行生产级 Agent 应用。',
+    title: '构建并运行你的 AI Agent 应用。',
     agentsHref: '/zh/docs/agents/get-started',
     compatibilityHref: '/zh/docs/agents/compatibility',
     fit: ['把 Agent 接入自己的产品', '让工作跨越单次连接', '改变执行方式而不分叉产品', '掌控并扩展运营边界'],
@@ -906,7 +904,7 @@ for (const rule of productRules) {
   requirePattern(rule.path, new RegExp(`<h1[^>]*>[\\s\\S]*${rule.title.replaceAll('.', '\\.')}[\\s\\S]*</h1>`), 'Awaken product page must own the production Agent application promise');
   requireOccurrenceCount(rule.path, 'data-agent-compatibility-entry', 1, 'Agents hero must expose one prominent compatibility entry');
   requirePattern(rule.path, new RegExp(`<a href="${rule.compatibilityHref}" data-agent-compatibility-entry`), 'Agents hero compatibility entry must reach the localized canonical matrix');
-  requireOrderedText(rule.path, ['id="agents-hero"', 'id="agents-fit"', 'id="agents-quickstart"', 'id="agents-boundary"', 'id="agents-outcomes"', 'id="agents-reliability"', 'id="managed-relation"', 'id="platform-preview"', 'id="agents-decisions"'], 'Agents must move from fit through first success, authority and recovery, outcomes, evidence, compatibility, and Docs-owned decisions');
+  requireOrderedText(rule.path, ['id="agents-hero"', 'id="platform-preview"', 'id="agents-fit"', 'id="agents-quickstart"', 'id="agents-boundary"', 'id="agents-outcomes"', 'id="agents-reliability"', 'id="managed-relation"', 'id="agents-decisions"'], 'Agents must show actual product evidence before fit, first success, optional architecture, and canonical Docs decisions');
   requireOccurrenceCount(rule.path, 'data-agent-fit', 4, 'Agents must expose exactly four product-fit conditions');
   requireOccurrenceCount(rule.path, 'data-agent-not-fit', 1, 'Agents must expose one explicit non-fit boundary');
   for (const fit of rule.fit) requirePattern(rule.path, new RegExp(fit), `Agents must name the ${fit} fit condition`);
@@ -973,7 +971,7 @@ for (const rule of [
     docsHref: '/docs/objects',
     task: 'Choose one important business object',
     maturity: 'Early preview',
-    previewHref: '/enterprise\\?product=workforce#enterprise-workforce',
+    previewHref: '/enterprise\\?product=workforce#apply',
     star: 'Star the Awaken open foundation',
   },
   {
@@ -982,7 +980,7 @@ for (const rule of [
     docsHref: '/zh/docs/objects',
     task: '选择一类关键业务对象',
     maturity: '提前预览',
-    previewHref: '/zh/enterprise\\?product=workforce#enterprise-workforce',
+    previewHref: '/zh/enterprise\\?product=workforce#apply',
     star: 'Star Awaken 开源基础',
   },
 ]) {
@@ -1101,18 +1099,18 @@ for (const path of [resolve(root, 'dist/agents/index.html'), resolve(root, 'dist
 for (const rule of [
   {
     path: resolve(root, 'dist/workforce/index.html'),
-    title: 'Let AI keep business work moving through acceptance.',
+    title: 'Let AI handle everyday work. Keep important decisions with people.',
     docsHref: '/docs/workforce',
-    cooperationHref: '/enterprise\\?product=workforce#enterprise-workforce',
+    cooperationHref: '/enterprise\\?product=workforce#apply',
     workspaceHref: '/workforce#workforce-preview',
     maturity: 'Early preview',
     boundary: 'It does not close an Issue whose declared completion conditions or external acceptance facts are still missing.',
   },
   {
     path: resolve(root, 'dist/zh/workforce/index.html'),
-    title: '让 AI 按流程持续完成可验收的业务工作。',
+    title: '让 AI 处理日常工作，把重要决定交给你。',
     docsHref: '/zh/docs/workforce',
-    cooperationHref: '/zh/enterprise\\?product=workforce#enterprise-workforce',
+    cooperationHref: '/zh/enterprise\\?product=workforce#apply',
     workspaceHref: '/zh/workforce#workforce-preview',
     maturity: '提前预览',
     boundary: '只要声明的完成条件或外部验收事实仍然缺失，Issue 就不会结束。',
@@ -1201,7 +1199,7 @@ requirePattern(resolve(root, '.env.example'), /PUBLIC_OPPORTUNITY_ENDPOINT=https
 for (const rule of enterpriseRules) {
   requireOccurrenceCount(rule.path, '<h1', 1, 'business page must have one primary heading');
   requirePattern(rule.path, new RegExp(rule.title.replaceAll('.', '\\.')), 'services page must lead with the two-product decision and honest maturity boundary');
-  requireOrderedText(rule.path, ['id="enterprise-hero"', 'id="enterprise-paths"', 'id="enterprise-agents-scope"', 'id="enterprise-process"', 'id="apply"'], 'services page must move from product choice through bounded Agents delivery and one shared process to one form');
+  requireOrderedText(rule.path, ['id="enterprise-hero"', 'id="delivery-modes"', 'id="apply"', 'id="enterprise-paths"', 'id="enterprise-agents-scope"', 'id="enterprise-process"'], 'services must explain delivery then offer the single short form before detailed product and implementation scope');
   requireOccurrenceCount(rule.path, 'data-enterprise-product-path=', 2, 'enterprise must present exactly the Agents and Workforce paths');
   requireOccurrenceCount(rule.path, 'data-enterprise-path-fact=', 6, 'each product path must expose bring, first decision, and current boundary once');
   for (const [id, bring, decision] of rule.pathFacts) {
@@ -1271,14 +1269,17 @@ for (const rule of enterpriseRules) {
   requirePattern(rule.path, /<option value="workforce" selected>/, 'no-context intake must default to a scoped Workforce job');
   requirePattern(rule.path, /<select name="frequency" class=/, 'frequency must remain optional for previews where cadence is not yet known');
   rejectPattern(rule.path, /<select name="frequency" required/, 'optional preview frequency must not block the shared form');
+  requireOccurrenceCount(rule.path, 'data-opportunity-details', 1, 'additional information must be one optional disclosure inside the same form');
+  requireOccurrenceCount(rule.path, 'data-delivery-mode=', 3, 'delivery must explain self-host, enterprise and Cloud without another product');
+  for (const optional of ['company', 'role', 'current_stage', 'current_loss']) rejectPattern(rule.path, new RegExp(`name="${optional}" required`), 'optional background must not block first contact');
   requireOccurrenceCount(rule.path, 'data-form-step=', 3, 'the opportunity form must group contact, request, and scope into three short steps');
-  requirePattern(rule.path, /<select name="role" required/, 'role must use a required bounded choice instead of open-ended text');
-  requirePattern(rule.path, /<select name="current_stage" required/, 'current stage must use a required bounded choice without duplicating product selection');
-  requirePattern(rule.path, /<input type="text" name="job" required/, 'the concrete customer job must remain one short required text field');
-  requirePattern(rule.path, /<select name="current_loss" required/, 'the main blocker must use a required bounded choice');
+  requirePattern(rule.path, /<select name="role" autocomplete=/, 'optional role must use a bounded choice instead of open-ended text');
+  requirePattern(rule.path, /<select name="current_stage" class=/, 'optional current stage must use a bounded choice without duplicating product selection');
+  requirePattern(rule.path, /<textarea name="job" required/, 'the concrete customer job must remain one required job description');
+  requirePattern(rule.path, /<select name="current_loss" class=/, 'optional blocker must use a bounded choice');
   requireOccurrenceCount(rule.path, 'type="checkbox" name="systems_and_risks"', 9, 'system and constraint context must allow multiple optional choices');
   requirePattern(rule.path, /<select name="target_timing" class=/, 'target timing must use an optional bounded choice');
-  requirePattern(rule.path, /<textarea name="additional_context" rows="2"/, 'unmatched context must retain one short optional text escape hatch');
+  requirePattern(rule.path, /<textarea name="additional_context" maxlength="2000" rows="3"/, 'unmatched context must retain one short optional text escape hatch');
   rejectPattern(rule.path, /<textarea name="current_loss"|<textarea name="systems_and_risks"|<input type="text" name="target_timing"|<input type="text" name="role"/, 'bounded form facts must not regress to long open-ended fields');
   requirePattern(rule.path, /data-submitting="(?:Submitting…|提交中…)"/, 'shared form must expose localized submitting state');
   requireOccurrenceCount(rule.path, '<section data-opportunity-success', 1, 'shared form must expose one progressive success panel');
@@ -1370,7 +1371,7 @@ for (const rule of [
 const docsShellPath = resolve(root, 'src/components/DocsShell.astro');
 requirePattern(docsShellPath, /flex min-w-0 items-center gap-2 text-sm sm:gap-3/, 'docs header must use compact spacing and permit shrinkage before the small breakpoint');
 requirePattern(docsShellPath, /product === 'agents' \? 'Agents'[\s\S]*class="hidden sm:inline">\{productLabel\}/, 'docs header must use a compact mobile product label');
-requirePattern(docsShellPath, /<details class="relative hidden md:block">/, 'docs header must leave the version selector out of the narrow mobile row');
+requirePattern(docsShellPath, /<details data-site-menu class="relative hidden md:block">/, 'docs header must leave the version selector out of the narrow mobile row');
 requirePattern(docsShellPath, /<AppearanceSelect lang=\{lang\}/, 'docs header must keep the appearance selection available with the shared compact control');
 requirePattern(docsShellPath, /<span class="sm:hidden">\{localeRegistry\[alternateLang\]\.shortName\}<\/span>/, 'docs header must use the registry-owned compact mobile language label');
 requirePattern(docsShellPath, /data-awaken-event-location="docs-mobile-nav"/, 'docs mobile product nav must retain the measurable GitHub Star action');
@@ -1655,7 +1656,7 @@ const runtimeIdentityRules = [
 ];
 
 for (const rule of runtimeIdentityRules) {
-  requireOrderedText(rule.landing, ['id="agents-hero"', 'id="agents-boundary"', 'id="agents-outcomes"', 'id="platform-preview"', 'id="agents-decisions"'], 'Agents must keep the embedded Runtime boundary before value and the Runtime Docs decision after product evidence');
+  requireOrderedText(rule.landing, ['id="agents-hero"', 'id="platform-preview"', 'id="agents-boundary"', 'id="agents-outcomes"', 'id="agents-decisions"'], 'Agents must keep the embedded Runtime boundary before value and the Runtime Docs decision after product evidence');
   requirePattern(rule.landing, rule.decision, 'Awaken must name the Runtime extension decision without recreating the guide');
   requirePattern(rule.landing, new RegExp(`href="${rule.docsHref}"`), 'Awaken must route Runtime maintainers to the stable technical documentation');
   requireOccurrenceCount(rule.landing, 'id="runtime"', 0, 'Agents landing must not recreate a Runtime explanation section');

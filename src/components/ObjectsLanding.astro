@@ -26,14 +26,14 @@ const copy = ui[lang].landing;
       <ProductMark product="objects" class="mb-5 h-10 w-10 text-amber-400" />
       <div class="flex flex-wrap items-center gap-3">
         <p class="eyebrow text-amber-400">{o.eyebrow}</p>
-        <span class="rounded-full border border-amber-600/50 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-amber-300 uppercase">{publicProductLabel('objects', lang)}</span>
-        <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-fog-500 uppercase">{t.products.workforce.license}</span>
+        <span class="rounded-full border border-amber-600/50 bg-amber-500/10 px-2.5 py-0.5 font-mono text-sm tracking-wider text-amber-300 uppercase">{publicProductLabel('objects', lang)}</span>
+        <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-sm tracking-wider text-fog-500 uppercase">{t.products.workforce.license}</span>
       </div>
       <h1 class="hero-title mt-6 max-w-3xl font-semibold text-fog-100">{o.title}</h1>
       <p class="mt-6 max-w-2xl text-lg text-fog-300 sm:text-xl">{o.subtitle}</p>
       <div class="mt-9 flex flex-wrap gap-4">
         <a href="#objects-start" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent hover:bg-accent-400">{copy.exploreObjects}</a>
-        <a href={`${localePath(lang, '/enterprise')}?product=workforce#enterprise-workforce`} data-awaken-event="enterprise_intent_selected" data-awaken-event-location="objects-hero" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-medium text-fog-100 hover:border-fog-500">{o.closer.cooperation}</a>
+        <a href={`${localePath(lang, '/enterprise')}?product=workforce#apply`} data-awaken-event="enterprise_intent_selected" data-awaken-event-location="objects-hero" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-medium text-fog-100 hover:border-fog-500">{o.closer.cooperation}</a>
       </div>
       <p class="mt-5 max-w-2xl text-sm leading-7 text-fog-500">{o.audience}</p>
     </div>
@@ -118,7 +118,7 @@ const copy = ui[lang].landing;
       <p class="mx-auto mt-4 max-w-xl text-lg text-fog-300">{o.closer.body}</p>
       <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
         <a href={localePath(lang, '/docs/objects')} class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{o.docs}</a>
-        <a href={`${localePath(lang, '/enterprise')}?product=workforce#enterprise-workforce`} data-awaken-event="enterprise_intent_selected" data-awaken-event-location="objects-closing" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.closer.cooperation}</a>
+        <a href={`${localePath(lang, '/enterprise')}?product=workforce#apply`} data-awaken-event="enterprise_intent_selected" data-awaken-event-location="objects-closing" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.closer.cooperation}</a>
         <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-awaken-event="github_star_selected" data-awaken-event-location="objects-close" data-awaken-event-product="workforce" data-awaken-event-destination="github" class="px-2 py-3 text-sm font-medium text-fog-300 hover:text-amber-400"><FunctionalIcon icon={Star} /> {o.star}</a>
       </div>
     </div>

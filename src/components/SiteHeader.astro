@@ -2,6 +2,8 @@
 import { AWAKEN_GITHUB_URL, content, publicProductEntries, localePath, type Lang } from '../i18n/content';
 import ProductMark from './ProductMark.astro';
 import AppearanceSelect from './AppearanceSelect.astro';
+import FunctionalIcon from './FunctionalIcon.astro';
+import { ChevronDown } from '@awaken/ui/icons/data';
 import { LANGS, localeRegistry } from '../i18n/locales';
 
 interface Props {
@@ -19,6 +21,9 @@ const docsHref = localePath(lang, '/docs');
 const enterpriseHref = localePath(lang, '/enterprise');
 const githubHref = AWAKEN_GITHUB_URL;
 const startHref = localePath(lang, '/docs/agents/get-started');
+const developerPage = path.startsWith('/agents');
+const primaryHref = developerPage ? startHref : path === '/enterprise' ? '#apply' : `${enterpriseHref}?product=workforce#apply`;
+const primaryLabel = developerPage ? t.nav.run : t.home.hero.ctaPrimary;
 
 const productLinks = publicProductEntries(lang).map((product) => ({
   path: product.path, label: product.name, status: product.status, href: localePath(lang, product.path),
@@ -56,11 +61,11 @@ const analyticsProduct = path.startsWith('/objects')
     </a>
     <div class="flex items-center gap-3 text-sm sm:gap-4">
       <div class="hidden items-center gap-4 md:flex">
-        <details name="site-nav-desktop" class="group relative">
+        <details data-site-menu name="site-nav-desktop" class="group relative">
           <summary class:list={['cursor-pointer list-none border-b border-transparent py-1 text-fog-300 transition hover:text-fog-100', productsActive && 'border-accent-400 text-fog-100']}>
-            {t.nav.products}
+            {t.nav.products} <FunctionalIcon icon={ChevronDown} />
           </summary>
-          <div class="absolute left-0 mt-3 grid min-w-72 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl">
+          <div class="absolute left-0 mt-3 grid min-w-72 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain">
             {productLinks.map((link) => (
               <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} class:list={['rounded-lg px-3 py-2.5 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>
                 <span class="block font-medium">{link.label}</span>
@@ -69,11 +74,11 @@ const analyticsProduct = path.startsWith('/objects')
             ))}
           </div>
         </details>
-        <details name="site-nav-desktop" class="group relative">
+        <details data-site-menu name="site-nav-desktop" class="group relative">
           <summary class:list={['cursor-pointer list-none border-b border-transparent py-1 text-fog-300 transition hover:text-fog-100', resourcesActive && 'border-accent-400 text-fog-100']}>
-            {t.nav.resources}
+            {t.nav.resources} <FunctionalIcon icon={ChevronDown} />
           </summary>
-          <div class="absolute left-0 mt-3 grid min-w-60 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl">
+          <div class="absolute left-0 mt-3 grid min-w-60 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain">
             {resourceLinks.map((link) => (
               <a
                 href={link.href}
@@ -89,27 +94,28 @@ const analyticsProduct = path.startsWith('/objects')
         </details>
       </div>
       <a href={githubHref} data-awaken-event="github_star_selected" data-awaken-event-location="header" data-awaken-event-product={analyticsProduct} data-awaken-event-destination="github" class="hidden text-fog-300 hover:text-fog-100 sm:block">{t.nav.github}</a>
-      <a href={startHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="header" data-awaken-event-product="agents" data-awaken-event-destination="quickstart" class="hidden rounded-full bg-accent-500 px-3.5 py-1.5 text-xs font-semibold text-onaccent transition hover:bg-accent-400 md:inline-flex">{t.nav.run}</a>
+      <a href={primaryHref} data-awaken-event={developerPage ? "developer_evaluation_selected" : "business_job_evaluation_selected"} data-awaken-event-location="header" data-awaken-event-product={developerPage ? "agents" : "workforce"} data-awaken-event-destination={developerPage ? "quickstart" : "enterprise"} class="hidden rounded-full bg-accent-500 px-3.5 py-2 text-sm font-semibold text-onaccent transition hover:bg-accent-400 md:inline-flex">{primaryLabel}</a>
       <AppearanceSelect lang={lang} />
       {alternateLocales.map((alternateLang) => (
         <a
           href={localePath(alternateLang, path)}
+          data-locale-switch={alternateLang}
           hreflang={localeRegistry[alternateLang].hrefLang}
           lang={localeRegistry[alternateLang].htmlLang}
           class="rounded-full border border-ink-600 px-3 py-1 font-mono text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100"
         >{localeRegistry[alternateLang].shortName}</a>
       ))}
-      <details class="relative md:hidden">
+      <details data-site-menu class="relative md:hidden">
         <summary class="cursor-pointer list-none rounded-full border border-ink-600 px-3 py-1 text-xs text-fog-300 hover:border-fog-500 hover:text-fog-100">
           {t.nav.menu}
         </summary>
-        <div class="absolute right-0 mt-3 grid min-w-56 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl">
+        <div class="absolute right-0 mt-3 grid min-w-56 gap-1 rounded-xl border border-ink-700 bg-ink-950 p-3 shadow-2xl max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain">
           <p class="px-3 pt-1 font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">{t.nav.products}</p>
           {productLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
           <p class="mt-2 border-t border-ink-700 px-3 pt-3 font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">{t.nav.resources}</p>
           {resourceLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} data-awaken-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined} data-awaken-event-location={link.path === '/enterprise' ? 'mobile-resources' : undefined} data-awaken-event-product={link.path === '/enterprise' ? analyticsProduct : undefined} data-awaken-event-destination={link.path === '/enterprise' ? 'enterprise' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
           <a href={githubHref} data-awaken-event="github_star_selected" data-awaken-event-location="mobile-menu" data-awaken-event-product={analyticsProduct} data-awaken-event-destination="github" class="rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100">{t.nav.github}</a>
-          <a href={startHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="mobile-menu" data-awaken-event-product="agents" data-awaken-event-destination="quickstart" class="mt-1 rounded-lg bg-accent-500 px-3 py-2 font-semibold text-onaccent">{t.nav.run}</a>
+          <a href={primaryHref} data-awaken-event={developerPage ? "developer_evaluation_selected" : "business_job_evaluation_selected"} data-awaken-event-location="mobile-menu" data-awaken-event-product={developerPage ? "agents" : "workforce"} data-awaken-event-destination={developerPage ? "quickstart" : "enterprise"} class="mt-1 rounded-lg bg-accent-500 px-3 py-2 font-semibold text-onaccent">{primaryLabel}</a>
         </div>
       </details>
     </div>

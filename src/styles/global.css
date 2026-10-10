@@ -59,6 +59,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+[id] {
+  scroll-margin-top: calc(var(--site-header-offset, 4rem) + 1rem);
+}
+
 .skip-link {
   position: fixed;
   top: 0.75rem;
@@ -80,7 +84,8 @@ body {
    identity); the Workforce brand uses sans, matching its design system. */
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }

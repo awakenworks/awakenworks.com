@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import { createHash } from "node:crypto";
 import { currentVersion } from "../src/i18n/docsVersions";
 import { content } from "../src/i18n/content";
+import { localeNavigationHref } from "../src/i18n/locales";
 
 // Site integration decision table: language en/zh x desktop/narrow, across all
 // four route identities and the documentation shell. Legacy stored light wins
@@ -35,12 +36,49 @@ for (const lang of ["en", "zh"]) {
       const surface = page.locator(".rounded-xl").first();
       await expect(surface).toHaveCSS("border-top-left-radius", "4px");
       await appearance.selectOption("dark");
+      // M1 en/zh x desktop/390/320: native disclosures must dismiss on Escape
+      // with trigger focus, outside pointer, or focus leaving the menu. M2 two
+      // desktop menus -> exactly one open. Dismissal never changes appearance.
+      const menuTrigger = page.locator('header [data-site-menu] > summary:visible').first();
+      const menu = menuTrigger.locator('..');
+      await menuTrigger.click();
+      await expect(menu).toHaveAttribute('open', '');
+      await page.keyboard.press('Escape');
+      await expect(menu).not.toHaveAttribute('open', '');
+      await expect(menuTrigger).toBeFocused();
+      await menuTrigger.click();
+      await page.mouse.click(width - 4, 896);
+      await expect(menu).not.toHaveAttribute('open', '');
+      await menuTrigger.click();
+      await page.keyboard.press('Shift+Tab');
+      await expect(menu).not.toHaveAttribute('open', '');
+      if (width >= 768) {
+        await menuTrigger.click();
+        await page.locator('header [data-site-menu] > summary:visible').nth(1).click();
+        await expect(page.locator('header [data-site-menu][open]')).toHaveCount(1);
+        await page.keyboard.press('Escape');
+      }
       for (const [path, brand] of [["/", "works"], ["/agents", "agents"], ["/objects", "objects"], ["/workforce", "workforce"], ["/docs", "works"]]) {
         await page.goto(`${base}${path}`);
         await expect(page.locator("html")).toHaveAttribute("data-brand", brand!);
         await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
         await expect(appearance).toHaveValue("dark");
         await expect(appearance).toBeVisible();
+        // V1 proof seeker x language/width -> the actual Console image arrives
+        // before long architecture content. The bound covers both marketing
+        // pages without treating a non-overflowing but 10-screen delay as good UX.
+        if (path === '/' || path === '/agents') {
+          const imageTop = await page.locator('#platform-preview img').first().evaluate((node) => node.getBoundingClientRect().top + scrollY);
+          expect(imageTop).toBeLessThan(width < 640 ? 1800 : 1400);
+        }
+        // V2 the Chinese promise keeps the meaningful phrase on one line;
+        // neither forced semantic wrapping nor zoom may create horizontal overflow.
+        if (path === '/' && lang === 'zh') {
+          for (const selector of ['[data-home-title-prefix]', '[data-home-title-highlight]']) expect(await page.locator(selector).evaluate((node) => {
+            const range = document.createRange(); range.selectNodeContents(node);
+            return range.getClientRects().length;
+          })).toBe(1);
+        }
         if (brand === "agents") {
           // Capture rules: each actual image x en/zh x wide/narrow -> full
           // intrinsic image, named native modal, bounded size and Escape focus
@@ -287,6 +325,9 @@ for (const behavior of ["pending", "rejected", "throw", "missing"]) {
     await submit.click();
     expect(requests).toBe(0);
     await form.locator('[name="email"]').fill("test@example.invalid");
+    // Optional detail stays in the same form; this rule exercises the expanded
+    // path, while the locale tests below prove the minimal request needs no scope fields.
+    await form.locator('[data-opportunity-details] > summary').click();
     await form.locator('[name="company"]').fill("Fixture only");
     await form.locator('[name="job"]').fill("Review one repeatable job");
     for (const name of ["role", "current_stage", "current_loss"]) {
@@ -314,3 +355,212 @@ for (const behavior of ["pending", "rejected", "throw", "missing"]) {
     expect(failures).toEqual([]);
   });
 }
+
+// Locale transfer graph: C1 en->zh/zh->en; C2 desktop/narrow; C3 intent query
+// and hash; C4 edited product plus contact/optional/multi-checkbox fields;
+// C5 tab storage available/unavailable; C6 live draft/expired/invalid schema.
+// Effects: E1 same logical page/context; E2 exact field and expansion restoration;
+// E3 one-use cleanup, fresh submission identity and target language; E4 no contact
+// or free text in URLs; E5 unavailable storage keeps a dirty form in place with
+// a focused explanation, but permits empty-form navigation; E6 invalid drafts
+// are consumed without applying unknown values or changing hidden metadata.
+// Rules L1 C1+C2+C3+C4+C5 -> E1-E4; L2 dirty+!C5 -> E5; L3 empty+!C5 -> E1;
+// L4 invalid C6 -> E6. Actual native links and the shared form own this journey.
+const localeDraftKey = 'awakenworks_opportunity_locale_draft';
+for (const lang of ['en', 'zh'] as const) {
+  for (const width of [1280, 390]) {
+    test(`${lang} ${width}px transfers one draft across language navigation`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.route('https://cloud.umami.is/script.js', (route) => route.fulfill({ status: 200, body: '' }));
+      const base = lang === 'zh' ? '/zh' : '';
+      const nextLang = lang === 'zh' ? 'en' : 'zh';
+      await page.goto(`${base}/enterprise?product=agents&reference_case=design&scenario=solution-delivery#apply`);
+      const form = page.locator('[data-opportunity-form]');
+      await expect(form).toHaveAttribute('data-initial-product', 'agents');
+      await expect(form.locator('[data-opportunity-details]')).not.toHaveAttribute('open', '');
+      // Minimal intake remains three required controls and four visible fields.
+      await expect(form.locator('[required]')).toHaveCount(3);
+      await expect(form.locator('[data-opportunity-fields] input:visible, [data-opportunity-fields] textarea:visible, [data-opportunity-fields] select:visible')).toHaveCount(4);
+      await form.locator('[name=email]').fill('locale@example.invalid');
+      await form.locator('[name=job]').fill('Review support tickets <literal text>');
+      await form.locator('[name=product]').selectOption('workforce');
+      await form.locator('[name=contact_consent]').check();
+      await form.locator('[data-opportunity-details] > summary').click();
+      await form.locator('[name=company]').fill('Fixture company');
+      await form.locator('[name=role]').selectOption('business-owner');
+      await form.locator('[name=systems_and_risks][value=models]').check();
+      await form.locator('[name=systems_and_risks][value=business-systems]').check();
+      await form.locator('[name=additional_context]').fill('Keep this optional detail');
+      const originalId = await form.locator('[name=submission_id]').inputValue();
+      await page.locator(`a[data-locale-switch=${nextLang}]`).click();
+      const url = new URL(page.url());
+      expect(url.pathname).toBe(nextLang === 'zh' ? '/zh/enterprise' : '/enterprise');
+      expect(url.searchParams.get('product')).toBe('agents');
+      expect(url.searchParams.get('reference_case')).toBe('design');
+      expect(url.searchParams.get('scenario')).toBe('solution-delivery');
+      expect(url.hash).toBe('#apply');
+      expect(url.href).not.toContain('locale%40');
+      expect(url.href).not.toContain('literal');
+      await expect(form.locator('[name=email]')).toHaveValue('locale@example.invalid');
+      await expect(form.locator('[name=job]')).toHaveValue('Review support tickets <literal text>');
+      await expect(form.locator('[name=product]')).toHaveValue('workforce');
+      await expect(form.locator('[name=company]')).toHaveValue('Fixture company');
+      await expect(form.locator('[name=role]')).toHaveValue('business-owner');
+      await expect(form.locator('[name=systems_and_risks][value=models]')).toBeChecked();
+      await expect(form.locator('[name=systems_and_risks][value=business-systems]')).toBeChecked();
+      await expect(form.locator('[name=additional_context]')).toHaveValue('Keep this optional detail');
+      await expect(form.locator('[name=contact_consent]')).toBeChecked();
+      await expect(form.locator('[name=lang]')).toHaveValue(nextLang);
+      await expect(form.locator('[name=reference_case]')).toHaveValue('design');
+      await expect(form.locator('[data-opportunity-details]')).toHaveAttribute('open', '');
+      expect(await form.locator('[name=submission_id]').inputValue()).not.toBe(originalId);
+      expect(await page.evaluate((key) => sessionStorage.getItem(key), localeDraftKey)).toBeNull();
+      await expect(form.locator('.opportunity-message')).toBeVisible();
+    });
+  }
+}
+for (const dirty of [false, true]) {
+  test(`language navigation with blocked storage and ${dirty ? 'dirty' : 'empty'} form`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    await page.addInitScript(() => Object.defineProperty(window, 'sessionStorage', { get() { throw new DOMException('Storage blocked', 'SecurityError'); } }));
+    await page.goto('/zh/enterprise?product=agents&reference_case=pilot#apply');
+    const form = page.locator('[data-opportunity-form]');
+    await expect(form).toHaveAttribute('data-initial-product', 'agents');
+    if (dirty) await form.locator('[name=email]').fill('retained@example.invalid');
+    await page.locator('a[data-locale-switch=en]').click();
+    if (dirty) {
+      expect(new URL(page.url()).pathname).toBe('/zh/enterprise');
+      await expect(form.locator('[name=email]')).toHaveValue('retained@example.invalid');
+      await expect(form.locator('.opportunity-message')).toBeVisible();
+      await expect(form.locator('.opportunity-message')).toBeFocused();
+    } else {
+      expect(new URL(page.url()).pathname).toBe('/enterprise');
+      await expect(form.locator('[name=product]')).toHaveValue('agents');
+      await expect(form.locator('[name=reference_case]')).toHaveValue('pilot');
+    }
+    expect(errors).toEqual([]);
+  });
+}
+for (const condition of ['expired', 'wrong-language', 'unknown-schema', 'corrupt', 'oversized']) {
+  test(`language draft ${condition} cannot overwrite the form`, async ({ page }) => {
+    await page.route('https://cloud.umami.is/script.js', (route) => route.fulfill({ status: 200, body: '' }));
+    await page.addInitScript(({ key, condition }) => {
+      const draft = { schema: condition === 'unknown-schema' ? 99 : 1, lang: condition === 'wrong-language' ? 'en' : 'zh', expiresAt: Date.now() + (condition === 'expired' ? -60_000 : 300_000), fields: { email: ['injected@example.invalid'], product: ['cloud'], lang: ['en'], submission_id: ['forged'] } };
+      sessionStorage.setItem(key, condition === 'corrupt' ? '{invalid' : condition === 'oversized' ? 'x'.repeat(20_000) : JSON.stringify(draft));
+    }, { key: localeDraftKey, condition });
+    await page.goto('/zh/enterprise?product=agents');
+    const form = page.locator('[data-opportunity-form]');
+    await expect(form).toHaveAttribute('data-initial-product', 'agents');
+    await expect(form.locator('[name=email]')).toHaveValue('');
+    await expect(form.locator('[name=product]')).toHaveValue('agents');
+    await expect(form.locator('[name=lang]')).toHaveValue('zh');
+    await expect(form.locator('[name=submission_id]')).not.toHaveValue('forged');
+    expect(await page.evaluate((key) => sessionStorage.getItem(key), localeDraftKey)).toBeNull();
+  });
+}
+
+// A1 selected Workforce -> preview CTA truthfully labels a static illustration;
+// A2 cooperation intent -> same selected product directly at the only request;
+// A3 delivery question -> existing enterprise page explains operator and access
+// for three delivery modes without creating a third product or application form.
+for (const lang of ['en', 'zh']) {
+  test(`${lang} explains preview and deployment before the single request`, async ({ page }) => {
+    const base = lang === 'zh' ? '/zh' : '';
+    await page.goto(`${base}/workforce`);
+    const preview = page.locator('#workforce-hero a').first();
+    await expect(preview).toHaveText(lang === 'zh' ? '查看工作流程预览' : 'See the workflow preview');
+    await preview.click();
+    await expect(page).toHaveURL(/#workforce-preview$/);
+    await page.locator('#workforce-hero a').nth(1).click();
+    await expect(page).toHaveURL(new RegExp(`${base}/enterprise\\?product=workforce#apply$`));
+    await expect(page.locator('form [name=product]')).toHaveValue('workforce');
+    await expect(page.locator('[data-opportunity-form]')).toHaveCount(1);
+    await expect(page.locator('[data-delivery-mode]')).toHaveCount(3);
+    await expect(page.locator('[data-delivery-mode=cloud]')).toContainText(lang === 'zh' ? '托管预览' : 'Hosted preview');
+    expect(await page.locator('form select[name=product] option').evaluateAll((nodes) => nodes.map((node) => (node as HTMLOptionElement).value))).toEqual(['agents', 'workforce']);
+    const headerBottom = await page.locator('header').evaluate((node) => node.getBoundingClientRect().bottom);
+    const formTop = await page.locator('#apply').evaluate((node) => node.getBoundingClientRect().top);
+    expect(formTop).toBeGreaterThanOrEqual(headerBottom);
+  });
+}
+
+// N1 JavaScript absent + native keyboard consent/submit + only email/job entered -> a native POST reaches
+// the same endpoint with the selected product and localized schema. N2 extras
+// untouched -> no hidden required controls block intake. Transport is intercepted
+// so the test never sends a real inquiry to another person.
+test('native request needs only the minimum information without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    let submitted: URLSearchParams | undefined;
+    await page.route('https://formspree.io/f/mrewzorl', async (route) => {
+      submitted = new URLSearchParams(route.request().postData() ?? '');
+      await route.fulfill({ status: 200, contentType: 'text/html', body: '<main><h1>Fixture request received</h1></main>' });
+    });
+    await page.goto('/zh/enterprise');
+    await page.locator('[name=product]').selectOption('agents');
+    await page.locator('[name=job]').fill('Prepare a daily support summary');
+    await page.locator('[name=email]').fill('minimal@example.invalid');
+    await page.locator('[name=contact_consent]').focus();
+    await page.keyboard.press('Space');
+    await expect(page.locator('[name=contact_consent]')).toBeChecked();
+    await page.locator('button[type=submit]').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('heading', { name: 'Fixture request received' })).toBeVisible();
+    expect(submitted?.get('product')).toBe('agents');
+    expect(submitted?.get('lang')).toBe('zh');
+    expect(submitted?.get('job')).toBe('Prepare a daily support summary');
+    expect(submitted?.get('email')).toBe('minimal@example.invalid');
+    expect(submitted?.get('contact_consent')).toBe('yes');
+  } finally { await context.close(); }
+});
+
+// M3 a short viewport + full resource menu -> popup remains within the viewport
+// with its own scrolling; Escape restores the trigger. No body lock or second
+// mobile navigation state is introduced.
+test('short mobile viewport contains and dismisses the full navigation', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 500 });
+  await page.goto('/zh/');
+  const trigger = page.locator('header [data-site-menu] > summary:visible');
+  await trigger.click();
+  const popup = trigger.locator('..').locator('div').first();
+  const box = await popup.boundingBox();
+  expect(box!.y + box!.height).toBeLessThanOrEqual(500);
+  await expect(popup).toHaveCSS('overflow-y', 'auto');
+  await page.keyboard.press('Escape');
+  await expect(trigger.locator('..')).not.toHaveAttribute('open', '');
+  await expect(trigger).toBeFocused();
+});
+
+// L5 server-rendered locale target under a deployment base + intent/hash ->
+// exact prefix and request context survive; source query cannot change origin.
+test('language context preserves the deployment base and canonical destination', () => {
+  expect(localeNavigationHref('/preview/enterprise', 'https://example.test/preview/zh/enterprise?product=agents&reference_case=design#apply'))
+    .toBe('/preview/enterprise?product=agents&reference_case=design#apply');
+  expect(() => localeNavigationHref('https://elsewhere.test/enterprise', 'https://example.test/zh/enterprise'))
+    .toThrow('Language navigation must stay on this website');
+});
+
+// A4 collector script download never finishes -> DOMContentLoaded and first-party
+// form/menu initialization remain available. The SDK still owns pageviews; this
+// is independence from an optional network resource, not disabled measurement.
+test('a stalled analytics script cannot delay website interaction readiness', async ({ page }) => {
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => { release = resolve; });
+  await page.route('https://cloud.umami.is/script.js', async (route) => {
+    await held;
+    await route.fulfill({ status: 200, contentType: 'application/javascript', body: '' });
+  });
+  try {
+    await page.goto('/zh/enterprise?product=agents#apply', { waitUntil: 'domcontentloaded' });
+    const form = page.locator('[data-opportunity-form]');
+    await expect(form).toHaveAttribute('data-initial-product', 'agents');
+    await form.locator('[name=email]').fill('ready@example.invalid');
+    const trigger = page.locator('header [data-site-menu] > summary:visible').first();
+    await trigger.click();
+    await page.keyboard.press('Escape');
+    await expect(trigger.locator('..')).not.toHaveAttribute('open', '');
+    await expect(form.locator('[name=email]')).toHaveValue('ready@example.invalid');
+  } finally { release(); }
+});

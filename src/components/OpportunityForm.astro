@@ -45,6 +45,8 @@ const scenarioLabels = Object.fromEntries(
   data-success={variant.success}
   data-error={w.error}
   data-submitting={variant.submitting}
+  data-draft-blocked={w.draftBlocked}
+  data-draft-restored={w.draftRestored}
   data-scenario-labels={JSON.stringify(scenarioLabels)}
   data-case-labels={JSON.stringify(caseLabels)}
 >
@@ -78,90 +80,90 @@ const scenarioLabels = Object.fromEntries(
     <p data-scenario-context class="rounded-lg border border-accent-700/50 bg-accent-500/5 px-4 py-3 text-sm text-accent-300" hidden>
       {selectedScenarioPrefix} <strong data-scenario-context-label></strong>
     </p>
-    <fieldset data-form-step="contact" class="grid gap-4 rounded-xl border border-ink-700 bg-ink-900/60 p-4 sm:p-5">
-      <legend class="px-2 text-sm font-semibold text-fog-200">1. {formSteps[0]}</legend>
-      <div class="grid gap-4 sm:grid-cols-2">
-        <label class="grid gap-2 text-sm text-fog-400">
-          Email
-          <input type="email" name="email" required autocomplete="email" placeholder={w.placeholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-600 focus:border-accent-500" />
-        </label>
-        <label class="grid gap-2 text-sm text-fog-400">
-          {w.fields.company}
-          <input type="text" name="company" required autocomplete="organization" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500" />
-        </label>
-      </div>
-      <label class="grid gap-2 text-sm text-fog-400">
-        {w.fields.role}
-        <select name="role" required autocomplete="organization-title" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
-          <option value="" selected disabled>{chooseOption}</option>
-          {roleOptions.map(([value, label]) => <option value={value}>{label}</option>)}
-        </select>
-      </label>
-    </fieldset>
-
-    <fieldset data-form-step="request" class="grid gap-4 rounded-xl border border-ink-700 bg-ink-900/60 p-4 sm:p-5">
-      <legend class="px-2 text-sm font-semibold text-fog-200">2. {formSteps[1]}</legend>
-      <label class="grid gap-2 text-sm text-fog-400">
+    <fieldset data-form-step="request" class="grid gap-4">
+      <legend class="mb-4 text-base font-semibold text-fog-100">{formSteps[0]}</legend>
+      <label class="grid gap-2 text-sm text-fog-300">
         {selectedProductPrefix}
         <select name="product" class="w-full rounded-lg border border-accent-700/50 bg-accent-500/5 px-4 py-3 font-medium text-accent-300 focus:border-accent-500">
           {productOptions.map(([value, label]) => <option value={value} selected={value === product}>{label}</option>)}
         </select>
       </label>
-      <label class="grid gap-2 text-sm text-fog-400">
-        {w.fields.stage}
-        <select name="current_stage" required class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
-          <option value="" selected disabled>{chooseOption}</option>
-          {stageOptions.map(([value, label]) => <option value={value}>{label}</option>)}
-        </select>
-      </label>
-      <label class="grid gap-2 text-sm text-fog-400">
+      <label class="grid gap-2 text-sm text-fog-300">
         {w.fields.scenario}
-        <input type="text" name="job" required placeholder={w.jobPlaceholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-600 focus:border-accent-500" />
+        <textarea name="job" required maxlength="1200" rows="3" placeholder={w.jobPlaceholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-500 focus:border-accent-500"></textarea>
       </label>
     </fieldset>
-
-    <fieldset data-form-step="scope" class="grid gap-4 rounded-xl border border-ink-700 bg-ink-900/60 p-4 sm:p-5">
-      <legend class="px-2 text-sm font-semibold text-fog-200">3. {formSteps[2]}</legend>
-      <label class="grid gap-2 text-sm text-fog-400">
-        {w.fields.loss}
-        <select name="current_loss" required class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
-          <option value="" selected disabled>{chooseOption}</option>
-          {blockerOptions.map(([value, label]) => <option value={value}>{label}</option>)}
-        </select>
+    <fieldset data-form-step="contact" class="grid gap-4">
+      <legend class="mb-4 text-base font-semibold text-fog-100">{formSteps[1]}</legend>
+      <label class="grid gap-2 text-sm text-fog-300">
+        {w.fields.email}
+        <input type="email" name="email" required maxlength="320" autocomplete="email" placeholder={w.placeholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-500 focus:border-accent-500" />
       </label>
-      <fieldset class="grid gap-3">
-        <legend class="text-sm text-fog-400">{w.fields.systems}</legend>
-        <div class="grid gap-2 sm:grid-cols-2">
-          {systemOptions.map(([value, label]) => (
-            <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-ink-700 bg-ink-850 px-3 py-2.5 text-sm leading-5 text-fog-300 transition hover:border-ink-600">
-              <input type="checkbox" name="systems_and_risks" value={value} class="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent-500)]" />
-              <span>{label}</span>
-            </label>
-          ))}
+    </fieldset>
+    <details data-opportunity-details class="rounded-xl border border-ink-700 bg-ink-900">
+      <summary class="cursor-pointer px-4 py-4 text-sm font-medium text-fog-200">{formSteps[2]}</summary>
+      <fieldset data-form-step="scope" class="grid gap-4 border-t border-ink-700 p-4 sm:p-5">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="grid gap-2 text-sm text-fog-300">
+            {w.fields.company}
+            <input type="text" name="company" maxlength="160" autocomplete="organization" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500" />
+          </label>
+          <label class="grid gap-2 text-sm text-fog-300">
+            {w.fields.role}
+            <select name="role" autocomplete="organization-title" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
+              <option value="" selected>{chooseOption}</option>
+              {roleOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+            </select>
+          </label>
         </div>
+        <label class="grid gap-2 text-sm text-fog-300">
+          {w.fields.stage}
+          <select name="current_stage" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
+            <option value="" selected>{chooseOption}</option>
+            {stageOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+          </select>
+        </label>
+        <label class="grid gap-2 text-sm text-fog-300">
+          {w.fields.loss}
+          <select name="current_loss" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
+            <option value="" selected>{chooseOption}</option>
+            {blockerOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+          </select>
+        </label>
+        <fieldset class="grid gap-3">
+          <legend class="text-sm text-fog-300">{w.fields.systems}</legend>
+          <div class="grid gap-2 sm:grid-cols-2">
+            {systemOptions.map(([value, label]) => (
+              <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-ink-700 bg-ink-850 px-3 py-2.5 text-sm leading-5 text-fog-300 transition hover:border-ink-600">
+                <input type="checkbox" name="systems_and_risks" value={value} class="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-accent-500)]" />
+                <span>{label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="grid gap-2 text-sm text-fog-300">
+            {w.fields.frequency}
+            <select name="frequency" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
+              <option value="" selected>{chooseOption}</option>
+              {frequencyOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+            </select>
+          </label>
+          <label class="grid gap-2 text-sm text-fog-300">
+            {w.fields.timing}
+            <select name="target_timing" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
+              <option value="" selected>{chooseOption}</option>
+              {timingOptions.map(([value, label]) => <option value={value}>{label}</option>)}
+            </select>
+          </label>
+        </div>
+        <label class="grid gap-2 text-sm text-fog-300">
+          {w.fields.additional}
+          <textarea name="additional_context" maxlength="2000" rows="3" placeholder={w.additionalPlaceholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-500 focus:border-accent-500"></textarea>
+        </label>
       </fieldset>
-      <div class="grid gap-4 sm:grid-cols-2">
-        <label class="grid gap-2 text-sm text-fog-400">
-          {w.fields.frequency}
-          <select name="frequency" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
-            <option value="" selected>{chooseOption}</option>
-            {frequencyOptions.map(([value, label]) => <option value={value}>{label}</option>)}
-          </select>
-        </label>
-        <label class="grid gap-2 text-sm text-fog-400">
-          {w.fields.timing}
-          <select name="target_timing" class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 focus:border-accent-500">
-            <option value="" selected>{chooseOption}</option>
-            {timingOptions.map(([value, label]) => <option value={value}>{label}</option>)}
-          </select>
-        </label>
-      </div>
-      <label class="grid gap-2 text-sm text-fog-400">
-        {w.fields.additional}
-        <textarea name="additional_context" rows="2" placeholder={w.additionalPlaceholder} class="w-full rounded-lg border border-ink-600 bg-ink-850 px-4 py-3 text-fog-100 placeholder:text-fog-600 focus:border-accent-500"></textarea>
-      </label>
-    </fieldset>
-    <label class="flex items-start gap-3 text-xs leading-5 text-fog-500">
+    </details>
+    <label class="flex items-start gap-3 text-sm leading-6 text-fog-400">
       <input type="checkbox" name="contact_consent" value="yes" required class="mt-1 h-4 w-4 shrink-0 accent-[var(--color-accent-500)]" />
       <span>{w.privacyPrefix} <a href={privacyHref} class="text-accent-400 underline underline-offset-2">{w.privacyLabel}</a>.</span>
     </label>
@@ -183,7 +185,7 @@ const scenarioLabels = Object.fromEntries(
       ))}
     </ol>
   </section>
-  <p class={`opportunity-message mt-3 text-sm ${align === 'center' ? 'text-center' : ''}`} role="status" aria-live="polite" hidden></p>
+  <p class={`opportunity-message mt-3 text-sm ${align === 'center' ? 'text-center' : ''}`} role="status" aria-live="polite" tabindex="-1" hidden></p>
 </form>
 
 <script>
@@ -256,7 +258,67 @@ const scenarioLabels = Object.fromEntries(
       }
     }
 
-    document.querySelectorAll('[data-opportunity-form]').forEach(hydrateAttribution);
+    // This form owns one short-lived, one-use transfer across a language reload.
+    // It is never URL data or analytics data; no draft is kept after restoration.
+    const localeDraftKey = 'awakenworks_opportunity_locale_draft';
+    const draftFields = ['email', 'company', 'role', 'product', 'current_stage', 'job', 'current_loss', 'systems_and_risks', 'frequency', 'target_timing', 'additional_context', 'contact_consent'];
+    function readDraft(form, lang) {
+      const fields = Object.fromEntries(draftFields.map((name) => [name,
+        Array.from(form.querySelectorAll('[name="' + name + '"]')).filter((field) => field.type !== 'checkbox' || field.checked).map((field) => field.value),
+      ]));
+      return { schema: 1, lang, expiresAt: Date.now() + 10 * 60 * 1000, fields, detailsOpen: Boolean(form.querySelector('[data-opportunity-details]')?.open) };
+    }
+    function restoreDraft(form) {
+      let draft;
+      let raw;
+      try {
+        raw = sessionStorage.getItem(localeDraftKey);
+        sessionStorage.removeItem(localeDraftKey);
+      } catch (_error) { return; }
+      if (!raw || raw.length > 16_384) return;
+      try { draft = JSON.parse(raw); } catch (_error) { return; }
+      if (draft?.schema !== 1 || draft.lang !== form.elements.namedItem('lang').value || !Number.isFinite(draft.expiresAt) || draft.expiresAt < Date.now() || draft.expiresAt > Date.now() + 10 * 60 * 1000 || !draft.fields || typeof draft.fields !== 'object' || Array.isArray(draft.fields)) return;
+      for (const name of draftFields) {
+        const values = draft.fields[name];
+        if (!Array.isArray(values) || values.some((value) => typeof value !== 'string' || value.length > 2048)) continue;
+        for (const field of form.querySelectorAll('[name="' + name + '"]')) {
+          if (field.type === 'checkbox') field.checked = values.includes(field.value);
+          else if (field instanceof HTMLSelectElement) {
+            if (Array.from(field.options).some((option) => option.value === values[0])) field.value = values[0];
+          } else if (values[0] !== undefined) field.value = values[0].slice(0, field.maxLength > 0 ? field.maxLength : 2048);
+        }
+      }
+      if (draft.detailsOpen === true) form.querySelector('[data-opportunity-details]').open = true;
+      const message = form.querySelector('.opportunity-message');
+      message.textContent = form.dataset.draftRestored;
+      message.hidden = false;
+    }
+    document.querySelectorAll('[data-opportunity-form]').forEach((form) => {
+      hydrateAttribution(form);
+      form.dataset.initialProduct = form.elements.namedItem('product').value;
+      restoreDraft(form);
+    });
+    document.addEventListener('click', (event) => {
+      const link = event.target instanceof Element ? event.target.closest('a[data-locale-switch]') : null;
+      if (!link || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || link.target === '_blank') return;
+      const form = document.querySelector('[data-opportunity-form]');
+      if (!form || form.querySelector('[data-opportunity-fields]').hidden) return;
+      const draft = readDraft(form, link.dataset.localeSwitch);
+      const hasDraft = Object.entries(draft.fields).some(([name, values]) => name === 'product' ? values[0] !== form.dataset.initialProduct : values.some(Boolean));
+      if (!hasDraft) return;
+      try {
+        const value = JSON.stringify(draft);
+        sessionStorage.setItem(localeDraftKey, value);
+        if (sessionStorage.getItem(localeDraftKey) !== value) throw new Error('Draft storage unavailable');
+      } catch (_error) {
+        event.preventDefault();
+        const message = form.querySelector('.opportunity-message');
+        message.textContent = form.dataset.draftBlocked;
+        message.hidden = false;
+        message.focus();
+      }
+    });
+
 
     document.addEventListener('focusin', function (event) {
       var form = event.target.closest('[data-opportunity-form]');
@@ -287,6 +349,7 @@ const scenarioLabels = Object.fromEntries(
           failureReason = 'non_2xx';
           throw new Error();
         }
+        try { sessionStorage.removeItem(localeDraftKey); } catch (_error) {}
         trackOpportunity('opportunity_form_submitted', form);
         var fields = form.querySelector('[data-opportunity-fields]');
         var success = form.querySelector('[data-opportunity-success]');
