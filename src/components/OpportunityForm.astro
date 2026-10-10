@@ -188,22 +188,21 @@ const scenarioLabels = Object.fromEntries(
 
 <script>
   import { attributionFormValues, captureAttribution } from '../lib/attribution.mjs';
+  import { trackEvent } from '../config/analytics.mjs';
 
   if (!window.__opportunityFormInit) {
     window.__opportunityFormInit = true;
 
     function trackOpportunity(name, form, details = {}) {
-      if (window.umami && typeof window.umami.track === 'function') {
-        window.umami.track(name, {
-          intent: form.dataset.intent,
-          source: form.dataset.source,
-          scenario: form.elements.namedItem('scenario_context')?.value || undefined,
-          product: form.elements.namedItem('product')?.value || undefined,
-          reference_case: form.elements.namedItem('reference_case')?.value || undefined,
-          location: 'enterprise-apply',
-          ...details,
-        });
-      }
+      trackEvent(name, {
+        intent: form.dataset.intent,
+        source: form.dataset.source,
+        scenario: form.elements.namedItem('scenario_context')?.value || undefined,
+        product: form.elements.namedItem('product')?.value || undefined,
+        reference_case: form.elements.namedItem('reference_case')?.value || undefined,
+        location: 'enterprise-apply',
+        ...details,
+      });
     }
 
     function hydrateAttribution(form) {

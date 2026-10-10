@@ -47,9 +47,6 @@ export const content = {
       awaken: 'Awaken internals',
       products: 'Products',
       resources: 'Resources',
-      managed: 'Agents',
-      objects: 'Objects',
-      workforce: 'Workforce',
       enterprise: 'Enterprise deployment',
       cases: 'Reference builds',
       integrations: 'Integrations',
@@ -338,7 +335,7 @@ export const content = {
     products: {
       eyebrow: 'Two products, explicit availability',
       title: 'Build AI with Agents. Complete business work with Workforce.',
-      managed: {
+      agents: {
         tone: 'iris',
         layer: 'Managed Agents-compatible platform',
         status: publicVersionLabel('platform', 'en'),
@@ -354,23 +351,6 @@ export const content = {
         ],
         cta: 'Explore Agents',
         href: '/agents',
-      },
-      objects: {
-        tone: 'amber',
-        layer: 'Workforce capability · Objects',
-        status: publicProductLabel('objects', 'en'),
-        license: 'Early access by request',
-        audience: 'For data, business systems, and internal application teams',
-        name: 'Business Data & Actions (Objects)',
-        role: 'Business context',
-        tagline: 'Give people, applications, and Agents the same business facts and actions.',
-        points: [
-          'Let each Pack declare ResourceType data, relationships, Actions, and restrained presentation hints.',
-          'Render every admitted field and nested value through one generic, schema-driven Objects experience.',
-          'Admit every proposed change through deterministic validation, authorization, revision checks, and a structured receipt.',
-        ],
-        cta: 'Explore Objects',
-        href: '/objects',
       },
       workforce: {
         tone: 'rust',
@@ -428,7 +408,7 @@ export const content = {
     },
 
     landing: {
-      managed: {
+      agents: {
         tone: 'iris',
         eyebrow: 'Awaken Agents · Agent application infrastructure',
         status: { label: publicVersionLabel('platform', 'en'), tone: 'iris' },
@@ -703,9 +683,6 @@ export const content = {
       awaken: 'Awaken 内部机制',
       products: '产品',
       resources: '资源',
-      managed: 'Agents',
-      objects: 'Objects',
-      workforce: 'Workforce',
       enterprise: '企业部署',
       cases: '参考实现',
       integrations: '集成',
@@ -994,7 +971,7 @@ export const content = {
     products: {
       eyebrow: '两款产品，分别说明可用范围',
       title: '用 Agents 构建 AI，用 Workforce 持续完成业务工作。',
-      managed: {
+      agents: {
         tone: 'iris',
         layer: 'Managed Agents 兼容平台',
         status: publicVersionLabel('platform', 'zh'),
@@ -1010,23 +987,6 @@ export const content = {
         ],
         cta: '了解 Agents',
         href: '/agents',
-      },
-      objects: {
-        tone: 'amber',
-        layer: 'Workforce 能力 · Objects',
-        status: publicProductLabel('objects', 'zh'),
-        license: '可申请提前体验',
-        audience: '面向数据、业务系统与内部应用团队',
-        name: '业务数据与受控操作（Objects）',
-        role: '业务上下文',
-        tagline: '让人、应用与 Agent 使用同一份业务事实与动作。',
-        points: [
-          '让 Pack 声明 ResourceType 数据、关系、Action 与受限呈现提示。',
-          '通过一套通用、schema 驱动的 Objects 体验完整展示所有已准入字段与嵌套值。',
-          '每项候选变更都经过确定性校验、授权、revision 检查并返回结构化回执。',
-        ],
-        cta: '了解 Objects',
-        href: '/objects',
       },
       workforce: {
         tone: 'rust',
@@ -1084,7 +1044,7 @@ export const content = {
     },
 
     landing: {
-      managed: {
+      agents: {
         tone: 'iris',
         eyebrow: 'Awaken Agents · Agent 应用基础设施',
         status: { label: publicVersionLabel('platform', 'zh'), tone: 'iris' },
@@ -1358,6 +1318,6 @@ export function publicProductEntries(lang: Lang) {
   return Object.entries(publicProducts).map(([key, metadata]) => ({
     key: key as keyof typeof publicProducts,
     ...metadata,
-    ...content[lang].products[metadata.copyKey],
+    ...content[lang].products[key as keyof typeof publicProducts],
   }));
 }

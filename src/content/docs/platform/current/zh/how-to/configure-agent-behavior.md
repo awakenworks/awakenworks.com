@@ -43,7 +43,7 @@ evidence:
 
 在 Console 中创建或打开 Agent。只修改下一个 Session 所需的行为，然后保存草稿。
 
-![Awaken Console 的 Agent 编辑器：在校验与发布前配置 Agent 行为。](/awaken/assets/admin-console/02-agent-editor.png)
+![Awaken Console 的 Agent 编辑器：在校验与发布前配置 Agent 行为。](/awaken/assets/console-current/agent-editor.png)
 
 在线配置只能选择或收窄系统已经提供的能力。它不能新增 Rust Tool、provider adapter、
 Plugin 或 Sandbox backend，也不能授予当前 Workspace 原本没有的权限。

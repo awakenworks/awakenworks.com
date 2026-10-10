@@ -114,7 +114,7 @@ change isolation or ownership.
 
 ## Check one operating record
 
-![Awaken Console showing Runs, Providers, MCP, and audit state together](/awaken/assets/admin-console/01-dashboard.png)
+![Awaken Console showing Runs, Providers, MCP, and audit state together](/awaken/assets/console-current/overview.png)
 
 Use the Console to answer practical questions: which Run is current, which
 Provider and MCP connection it used, whether it is waiting for approval, and

@@ -62,6 +62,11 @@ flowchart LR
 Git 工作树。`config/source-provenance.json` 锁定已核对源码的精确 revision 和文档引用的
 实现证据。产品仓库中的类型、测试和可执行合约仍是技术行为的最终权威。
 
+平台与 Runtime 文档集合共用一个 Agents 版本记录，源码 revision 只从
+`config/source-provenance.json` 读取。社交分享图由 `src/pages/og.svg.ts` 使用同一产品
+目录和共享品牌几何生成；更新产品文案后运行 `pnpm social:generate`，提交生成的
+`public/og.png`，再完成正常构建与检查。
+
 只有在升级文档源码基线时，维护者才需要显式提供两个源码仓路径并刷新锁文件：
 
 ```sh

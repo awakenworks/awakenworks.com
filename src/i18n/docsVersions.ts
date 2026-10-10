@@ -13,6 +13,7 @@
 // automatically.
 
 import type { Lang } from './locales';
+import provenance from '../../config/source-provenance.json';
 
 export type { Lang } from './locales';
 export type VersionStatus = 'dev' | 'stable' | 'archived';
@@ -20,8 +21,8 @@ export type DocsProduct = 'flow' | 'harness' | 'platform';
 // One public product catalog feeds navigation, cards, docs and request choices.
 // Objects retains its technical routes and domain ownership inside Workforce.
 export const publicProducts = {
-  agents: { copyKey: 'managed', path: '/agents', docsPath: '/docs/agents', tone: 'iris', status: 'open-source-release-coming-soon' },
-  workforce: { copyKey: 'workforce', path: '/workforce', docsPath: '/docs/workforce', tone: 'rust', status: 'early-preview' },
+  agents: { path: '/agents', docsPath: '/docs/agents', tone: 'iris', status: 'open-source-release-coming-soon' },
+  workforce: { path: '/workforce', docsPath: '/docs/workforce', tone: 'rust', status: 'early-preview' },
 } as const;
 export type PublicProduct = keyof typeof publicProducts;
 export type PublicCapability = 'objects';
@@ -42,29 +43,25 @@ export interface DocsVersion {
   verifiedOn: string;
 }
 
+// Both Agent documentation collections share one release record. The committed
+// provenance lock owns source identity; route collections do not repin it.
+const agentsVersions: DocsVersion[] = [{
+    id: 'current',
+    label: 'v1.0.0-dev',
+    status: 'dev',
+    latest: true,
+    sourceRevision: provenance.repositories.awaken.revision,
+    verifiedOn: '2026-08-31',
+}];
 export const docsVersions: Record<DocsProduct, DocsVersion[]> = {
+  harness: agentsVersions,
+  platform: agentsVersions,
   flow: [{
     id: 'current',
     label: 'v0.1.0',
     status: 'dev',
     latest: true,
-    sourceRevision: 'b75e0ff924b17231d712860ead910970f4c098de',
-    verifiedOn: '2026-08-31',
-  }],
-  harness: [{
-    id: 'current',
-    label: 'v1.0.0-dev',
-    status: 'dev',
-    latest: true,
-    sourceRevision: '50d5035c68456c9106626f748cf4c169c2057beb',
-    verifiedOn: '2026-08-31',
-  }],
-  platform: [{
-    id: 'current',
-    label: 'v1.0.0-dev',
-    status: 'dev',
-    latest: true,
-    sourceRevision: '50d5035c68456c9106626f748cf4c169c2057beb',
+    sourceRevision: provenance.repositories.flow.revision,
     verifiedOn: '2026-08-31',
   }],
 };

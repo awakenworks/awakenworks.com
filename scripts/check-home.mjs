@@ -1739,7 +1739,7 @@ for (const path of [
   resolve(root, 'src/i18n/content.ts'),
   resolve(root, 'src/components/Principles.astro'),
   resolve(root, 'src/components/BlogIndex.astro'),
-  resolve(root, 'src/components/AwakenFlowLanding.astro'),
+  resolve(root, 'src/components/WorkforceLanding.astro'),
 ]) {
   rejectPattern(path, /—/, 'primary public copy must use direct punctuation instead of em-dash cadence');
 }

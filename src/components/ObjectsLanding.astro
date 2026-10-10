@@ -7,6 +7,7 @@ import SiteFooter from './SiteFooter.astro';
 import ProductMark from './ProductMark.astro';
 import ProductShowcase from './ProductShowcase.astro';
 import { ui } from '../i18n/ui';
+import { publicProductLabel } from '../i18n/docsVersions';
 
 interface Props { lang: Lang }
 
@@ -25,8 +26,8 @@ const copy = ui[lang].landing;
       <ProductMark product="objects" class="mb-5 h-10 w-10 text-amber-400" />
       <div class="flex flex-wrap items-center gap-3">
         <p class="eyebrow text-amber-400">{o.eyebrow}</p>
-        <span class="rounded-full border border-amber-600/50 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-amber-300 uppercase">{t.products.objects.status}</span>
-        <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-fog-500 uppercase">{t.products.objects.license}</span>
+        <span class="rounded-full border border-amber-600/50 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-amber-300 uppercase">{publicProductLabel('objects', lang)}</span>
+        <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-fog-500 uppercase">{t.products.workforce.license}</span>
       </div>
       <h1 class="hero-title mt-6 max-w-3xl font-semibold text-fog-100">{o.title}</h1>
       <p class="mt-6 max-w-2xl text-lg text-fog-300 sm:text-xl">{o.subtitle}</p>

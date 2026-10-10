@@ -53,11 +53,10 @@ function verifyCoordinates(repo, ref, coordinates) {
   }
 }
 
-const versions = readFileSync(resolve(root, 'src/i18n/docsVersions.ts'), 'utf8');
-const pinned = (product) => new RegExp(`${product}: \\[\\{[\\s\\S]*?sourceRevision: '([0-9a-f]{40})'`).exec(versions)?.[1];
-const awakenRevision = pinned('platform');
-const flowRevision = pinned('flow');
-if (!awakenRevision || !flowRevision) throw new Error('docsVersions.ts must pin platform and flow to exact revisions');
+const pins = JSON.parse(readFileSync(resolve(root, 'config/source-provenance.json'), 'utf8'));
+const awakenRevision = pins.repositories?.awaken?.revision;
+const flowRevision = pins.repositories?.flow?.revision;
+if (![awakenRevision, flowRevision].every((value) => /^[0-9a-f]{40}$/.test(value ?? ''))) throw new Error('source-provenance.json must pin Awaken and Flow to exact revisions');
 
 const actualAwaken = revision(awaken, awakenRevision);
 const actualFlow = revision(flow, flowRevision);

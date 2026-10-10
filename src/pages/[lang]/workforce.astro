@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import AwakenFlowLanding from '../../components/AwakenFlowLanding.astro';
+import WorkforceLanding from '../../components/WorkforceLanding.astro';
 import { content } from '../../i18n/content';
 import { localizedStaticPaths, localePath, type Lang } from '../../i18n/locales';
 import { softwareAppLd } from '../../lib/jsonld';
@@ -11,5 +11,5 @@ const o = content[lang].landing.workforce;
 ---
 
 <Base title={`Awaken Workforce — ${o.title}`} description={o.subtitle} jsonLd={softwareAppLd({ product: 'workforce', description: o.subtitle, url: new URL(localePath(lang, '/workforce'), Astro.site).href })}>
-  <AwakenFlowLanding lang={lang} />
+  <WorkforceLanding lang={lang} />
 </Base>

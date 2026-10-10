@@ -15,7 +15,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = content[lang];
-const p = t.landing.managed;
+const p = t.landing.agents;
 const path = '/agents';
 
 // Literal classes keep the product tone visible to Tailwind's scanner.
@@ -52,7 +52,7 @@ const closerHref = p.closer.cta.href.startsWith('/')
             >{p.status.label}</span
           >
           <span class="rounded-full border border-ink-600 px-2.5 py-0.5 font-mono text-[0.65rem] tracking-wider text-fog-500 uppercase">
-            {t.products.managed.license}
+            {t.products.agents.license}
           </span>
         </div>
         <h1 class="hero-title mt-6 max-w-5xl font-semibold text-fog-100">

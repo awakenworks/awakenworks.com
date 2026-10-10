@@ -86,6 +86,7 @@ const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'loca
     <script is:inline set:html={appearanceBootstrap({ legacyStorageKeys: ['theme'] })} />
     <script>
       import { captureAttribution } from '../lib/attribution.mjs';
+      import { trackEvent } from '../config/analytics.mjs';
 
       // One shared state transition owns first/last campaign attribution.
       // Forms project this session-scoped state; CRM owns qualification.
@@ -97,14 +98,12 @@ const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'loca
         const element = event.target instanceof Element
           ? event.target.closest('[data-awaken-event]') : null;
         const name = element?.getAttribute('data-awaken-event');
-        if (!element || !name || !window.umami?.track) return;
+        if (!element || !name) return;
         const prefix = 'data-awaken-event-';
         const data = Object.fromEntries(Array.from(element.attributes)
           .filter((attribute) => attribute.name.startsWith(prefix))
           .map((attribute) => [attribute.name.slice(prefix.length), attribute.value]));
-        try {
-          void Promise.resolve(window.umami.track(name, data)).catch(() => {});
-        } catch { /* Analytics failure leaves the native action intact. */ }
+        trackEvent(name, data);
       });
     </script>
     <link rel="icon" type="image/svg+xml" href={withSiteBase('/favicon.svg')} />

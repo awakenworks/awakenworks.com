@@ -9,7 +9,7 @@ import { createHash } from "node:crypto";
 // chrome must wrap into available rows; search retains its name with hidden text.
 // Runtime failure combinations live in @awaken/ui tests.
 for (const lang of ["en", "zh"]) {
-  for (const width of [1280, 390]) {
+  for (const width of [1280, 390, 320]) {
     test(`${lang} ${width}px preserves one appearance across product and docs routes`, async ({ page }) => {
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
@@ -120,6 +120,13 @@ for (const lang of ["en", "zh"]) {
     await expect(page.locator(`footer a[href="${base}/objects"]`)).toHaveCount(0);
     const graph = await page.locator('script[type="application/ld+json"]').evaluate((node) => JSON.parse(node.textContent ?? "{}")["@graph"]);
     expect(graph.filter((entity: { "@type": string }) => entity["@type"] === "SoftwareApplication").map((entity: { name: string }) => entity.name).sort()).toEqual(["Awaken Agents", "Awaken Workforce"]);
+    // P8 social sharing consumes the same two-product identity; old Harness,
+    // Platform and Flow product branding cannot survive in the SVG source.
+    const social = await (await page.request.get("/og.svg")).text();
+    expect(social.match(/data-product="/g)).toHaveLength(2);
+    expect(social).toContain("Awaken Agents");
+    expect(social).toContain("Awaken Workforce");
+    expect(social).not.toMatch(/Awaken (?:Harness|Platform|Flow)/);
     for (const [requested, expected, capability] of [["agents", "agents", ""], ["workforce", "workforce", ""], ["objects", "workforce", "objects"], ["unknown", "workforce", ""]]) {
       await page.goto(`${base}/enterprise?product=${requested}&scenario=enterprise-private-agent`);
       const form = page.locator("form[data-opportunity-form]");
@@ -202,6 +209,64 @@ for (const behavior of ["pending", "rejected", "throw", "missing"]) {
     const recorded = await page.evaluate(() => JSON.parse(sessionStorage.getItem("telemetry-call") ?? "[]"));
     expect(recorded.length).toBe(behavior === "missing" ? 0 : 1);
     if (recorded.length) expect(recorded[0]).toEqual({ name: "case_source_access_selected", data: { location: "case-availability", product: "agents", destination: "enterprise" } });
+    expect(failures).toEqual([]);
+  });
+
+  // Form decision table F1 incomplete inputs -> zero requests; F2 valid inputs
+  // + pending POST + repeat submit -> one request; F3 HTTP failure -> retained
+  // inputs/id and retry; F4 retry success -> one success surface with focus.
+  // Analytics missing/throw/reject/pending cannot change F1-F4. POSTs are
+  // intercepted at the existing endpoint: no external contact is generated.
+  test(`form failure and retry retain their outcome with ${behavior} analytics`, async ({ page }) => {
+    const failures: string[] = [];
+    page.on("pageerror", (error) => failures.push(error.message));
+    await page.route("https://cloud.umami.is/script.js", (route) => route.fulfill({ status: 200, contentType: "application/javascript", body: "" }));
+    await page.addInitScript((mode) => {
+      if (mode === "missing") return;
+      (window as unknown as { umami: unknown }).umami = { track() {
+        if (mode === "throw") throw new Error("collector unavailable");
+        if (mode === "rejected") return Promise.reject(new Error("collector unavailable"));
+        return new Promise(() => {});
+      } };
+    }, behavior);
+    let requests = 0;
+    let release!: () => void;
+    const held = new Promise<void>((resolve) => { release = resolve; });
+    await page.route("https://formspree.io/f/mrewzorl", async (route) => {
+      requests++;
+      if (requests === 1) await held;
+      await route.fulfill({ status: requests === 1 ? 503 : 200, contentType: "application/json", body: "{}" });
+    });
+    await page.goto("/zh/enterprise?product=agents&reference_case=pilot");
+    const form = page.locator("form[data-opportunity-form]");
+    const submit = form.locator('button[type="submit"]');
+    await submit.click();
+    expect(requests).toBe(0);
+    await form.locator('[name="email"]').fill("test@example.invalid");
+    await form.locator('[name="company"]').fill("Fixture only");
+    await form.locator('[name="job"]').fill("Review one repeatable job");
+    for (const name of ["role", "current_stage", "current_loss"]) {
+      const select = form.locator(`select[name="${name}"]`);
+      const value = await select.locator("option:not([disabled])").first().getAttribute("value");
+      await select.selectOption(value!);
+    }
+    await form.locator('[name="contact_consent"]').check();
+    const id = await form.locator('[name="submission_id"]').inputValue();
+    await submit.click();
+    await expect(form).toHaveAttribute("aria-busy", "true");
+    await form.evaluate((node) => (node as HTMLFormElement).requestSubmit());
+    await expect.poll(() => requests).toBe(1);
+    release();
+    await expect(form.locator(".opportunity-message")).toBeVisible();
+    await expect(form.locator('[name="submission_id"]')).toHaveValue(id);
+    await expect(form.locator('[name="job"]')).toHaveValue("Review one repeatable job");
+    await expect(submit).toBeEnabled();
+    await submit.click();
+    const success = form.locator("[data-opportunity-success]");
+    await expect(success).toBeVisible();
+    await expect(success).toBeFocused();
+    expect(requests).toBe(2);
+    await expect(form.locator("[data-opportunity-fields]")).toBeHidden();
     expect(failures).toEqual([]);
   });
 }

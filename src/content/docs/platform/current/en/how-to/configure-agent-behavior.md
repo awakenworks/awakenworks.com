@@ -50,7 +50,7 @@ before publishing if the model readiness check does not yet succeed.
 Create or open an Agent in the Console. Change only the behavior needed for the
 next Session, then save the draft.
 
-![Awaken Console Agent editor, used to configure an Agent before validation and publication.](/awaken/assets/admin-console/02-agent-editor.png)
+![Awaken Console Agent editor, used to configure an Agent before validation and publication.](/awaken/assets/console-current/agent-editor.png)
 
 Online configuration can select or narrow capabilities the system already
 provides. It cannot add a Rust Tool, provider adapter, Plugin, or Sandbox backend,

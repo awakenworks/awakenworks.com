@@ -2466,8 +2466,10 @@ for (const locale of ['en', 'zh']) {
 const siteContentPath = join(root, 'src/i18n/content.ts');
 requireText(siteContentPath, [
   [/Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\./, 'English public copy must own the canonical Agents category'],
-  [/en:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: '(?:Business Data & Actions \(Objects\)|业务数据与受控操作（Objects）)'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'English home must expose both products and the internal business-data capability'],
-  [/zh:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: '(?:Business Data & Actions \(Objects\)|业务数据与受控操作（Objects）)'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'Chinese home must expose both products and the internal business-data capability'],
+  // P1 each locale defines two public product presentations; P2 Objects has
+  // domain copy under landing, rather than a redundant third product card.
+  [/en:\s*{[\s\S]*products:\s*{[\s\S]*agents:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'[\s\S]*landing:[\s\S]*objects:/, 'English must keep two products and a capability landing'],
+  [/zh:\s*{[\s\S]*products:\s*{[\s\S]*agents:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'[\s\S]*landing:[\s\S]*objects:/, 'Chinese must keep two products and a capability landing'],
   [/creating an Agent, adopting a supported Agent, or connecting behavior you already own/, 'English Awaken copy must preserve all Agent entry modes'],
   [/创建 Agent、采用受支持的 Agent，或接入已有行为/, 'Chinese Awaken copy must preserve all Agent entry modes'],
   [/en:\s*{[\s\S]*slug: 'pilot'[\s\S]*adoption: 'Create a thin Agent application'[\s\S]*slug: 'deepseek-harness'[\s\S]*adoption: 'Build an advanced Agent workbench'[\s\S]*slug: 'design'[\s\S]*adoption: 'Build a domain-rich AI product'/, 'English cases must cover thin app, workbench, and domain-rich product shapes'],
@@ -3301,29 +3303,22 @@ if (competitorReportPath) {
 
 const versionRegistryPath = join(root, 'src/i18n/docsVersions.ts');
 const versionRegistry = readFileSync(versionRegistryPath, 'utf8');
-function registryRevision(product) {
-  const match = new RegExp(`${product}: \\[\\{[\\s\\S]*?sourceRevision: '([0-9a-f]{40})'`).exec(versionRegistry);
-  if (!match) failures.push(`src/i18n/docsVersions.ts: missing exact 40-character sourceRevision for ${product}`);
-  return match?.[1];
+// Registry cause/effect table: V1 exact committed pins + one shared Agent
+// release record -> both route collections project the same source; V2 a
+// copied pin or independent collection record -> reject before publication.
+// The lock is the sole source-identity owner; no comparison between duplicated
+// copies can substitute for consuming that owner.
+for (const pattern of [
+  /import provenance from '\.\.\/\.\.\/config\/source-provenance\.json'/,
+  /sourceRevision: provenance\.repositories\.awaken\.revision/,
+  /sourceRevision: provenance\.repositories\.flow\.revision/,
+  /harness: agentsVersions/, /platform: agentsVersions/,
+]) {
+  if (!pattern.test(versionRegistry)) failures.push('docsVersions.ts must project the single provenance lock and shared Agent release record');
 }
-
-// Version evidence is a committed input, not ambient workspace state. This
-// makes the same candidate produce the same result in CI, a source archive, or
-// a developer checkout with unrelated sibling repositories.
-for (const [product, repository] of [['flow', provenance.repositories?.flow], ['platform', provenance.repositories?.awaken]]) {
-  const documented = registryRevision(product);
-  if (!repository) failures.push(`config/source-provenance.json: missing ${product} source evidence`);
-  else if (documented && documented !== repository.revision) {
-    failures.push(`src/i18n/docsVersions.ts: ${product} sourceRevision ${documented} does not match committed provenance ${repository.revision}`);
-  }
-}
+if (/sourceRevision: '[0-9a-f]{40}'/.test(versionRegistry)) failures.push('docsVersions.ts duplicates a source pin outside the provenance lock');
 if (!provenance.repositories?.awaken?.evidenceCoordinates?.length) {
   failures.push('config/source-provenance.json: Awaken evidence coordinates are empty');
-}
-const harnessRevision = registryRevision('harness');
-const platformRevision = registryRevision('platform');
-if (harnessRevision && platformRevision && harnessRevision !== platformRevision) {
-  failures.push('src/i18n/docsVersions.ts: Harness and Platform must pin the same Awaken release authority');
 }
 if (!existsSync(distRoot)) failures.push('dist: missing; run the Astro build before this check');
 else {

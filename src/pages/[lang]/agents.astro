@@ -8,7 +8,7 @@ import { softwareAppLd } from '../../lib/jsonld';
 export const getStaticPaths = localizedStaticPaths;
 const { lang } = Astro.props as { lang: Lang };
 const t = content[lang];
-const p = t.landing.managed;
+const p = t.landing.agents;
 ---
 
 <Base

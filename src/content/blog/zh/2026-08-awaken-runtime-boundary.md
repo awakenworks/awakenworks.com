@@ -101,7 +101,7 @@ flowchart LR
 
 ## 在一份运营记录里检查结果
 
-![Awaken Console 同时展示 Run、Provider、MCP 与审计状态](/awaken/assets/admin-console/01-dashboard.png)
+![Awaken Console 同时展示 Run、Provider、MCP 与审计状态](/awaken/assets/console-current/overview.png)
 
 用 Console 回答实际问题：当前是哪一个 Run、用了哪个 Provider 与 MCP 连接、是否正在等待
 审批，以及失败前已经提交了什么。Console 投影同一份执行记录，不要求运营者再对齐另一套
