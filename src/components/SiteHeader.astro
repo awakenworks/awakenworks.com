@@ -23,7 +23,7 @@ const githubHref = AWAKEN_GITHUB_URL;
 const startHref = localePath(lang, '/docs/agents/get-started');
 const developerPage = path.startsWith('/agents');
 const primaryHref = developerPage ? startHref : path === '/enterprise' ? '#apply' : `${enterpriseHref}?product=workforce#apply`;
-const primaryLabel = developerPage ? t.nav.run : t.home.hero.ctaPrimary;
+const primaryLabel = developerPage ? t.nav.run : t.home.cta.primary;
 
 const productLinks = publicProductEntries(lang).map((product) => ({
   path: product.path, label: product.name, status: product.status, href: localePath(lang, product.path),

@@ -53,27 +53,10 @@ const copy = ui[lang].landing;
     lang={lang}
     product="workforce"
     caption={copy.workforceCaption}
+    eyebrow={o.loop.eyebrow}
+    title={o.loop.title}
+    body={o.loop.body}
   />
-
-  <section id="workforce-how-it-works" class="border-t border-ink-800 bg-ink-900">
-    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
-      <p class="eyebrow text-rust-400">{o.loop.eyebrow}</p>
-      <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.loop.title}</h2>
-      <p class="mt-6 max-w-3xl text-lg leading-8 text-fog-300">{o.loop.body}</p>
-      <div class="mt-10 grid gap-3 md:grid-cols-4">
-        {o.loop.stages.map(([title, body], index) => (
-          <details data-workforce-stage class="rounded-2xl border border-ink-700 bg-ink-850 p-5 first:border-rust-600/50" open={index === 0}>
-            <summary class="cursor-pointer list-none">
-              <span class="font-mono text-xs text-rust-400">{String(index + 1).padStart(2, '0')}</span>
-              <h3 class="mt-3 font-semibold text-fog-100">{title}</h3>
-            </summary>
-            <p class="mt-3 text-sm leading-6 text-fog-500">{body}</p>
-          </details>
-        ))}
-      </div>
-      <p class="mt-8 rounded-2xl border border-rust-600/40 bg-rust-500/5 px-6 py-5 text-sm leading-7 text-fog-300">{o.loop.rule}</p>
-    </div>
-  </section>
 
   <section id="workforce-capabilities" class="border-t border-ink-800 bg-ink-950">
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">

@@ -14,9 +14,6 @@ interface Props {
   eyebrow?: string;
   title?: string;
   body?: string;
-  steps?: readonly string[];
-  facts?: readonly string[];
-  recovery?: string;
   concept?: { label: string; href: string };
 }
 
@@ -28,9 +25,6 @@ const {
   eyebrow,
   title,
   body,
-  steps = [],
-  facts = [],
-  recovery,
   concept,
 } = Astro.props;
 const consoleTour = agentsConsoleTour[lang];
@@ -119,29 +113,13 @@ const consoleDetails = consoleTour.details.map((item) => ({
         <ProductPreview lang={lang} product={product} />
       </div>
     )}
-    <div class="mt-6">
-          {steps.length > 0 && (
-            <ol data-home-workflow class="mt-7 grid overflow-hidden rounded-xl border border-ink-700 bg-ink-900 sm:grid-cols-5">
-              {steps.map((step, index) => (
-                <li data-home-workflow-step class="border-b border-ink-700 px-4 py-4 last:border-b-0 sm:border-r sm:border-b-0 sm:last:border-r-0">
-                  <span class="font-mono text-[0.65rem] text-accent-400">{String(index + 1).padStart(2, '0')}</span>
-                  <span class="mt-1 block text-sm font-medium text-fog-200">{step}</span>
-                </li>
-              ))}
-            </ol>
-          )}
-          {recovery && <p class="mt-4 border-l-2 border-accent-500/70 pl-4 text-sm leading-6 text-fog-400">{recovery}</p>}
-          {concept && (
+    {concept && <div class="mt-6">
             <a
-              data-home-runtime-concept
+              data-product-guide
               href={withSiteBase(concept.href)}
               class="mt-5 inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
             >{concept.label} <FunctionalIcon icon={ArrowRight} /></a>
-          )}
-      {facts.length > 0 && <ul data-home-compatibility-proof class="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-y border-ink-700 py-3 text-sm text-fog-300">
-        {facts.map((fact) => <li data-home-compatibility-fact>{fact}</li>)}
-      </ul>}
-    </div>
+    </div>}
 
   </div>
 </section>

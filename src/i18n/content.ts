@@ -8,6 +8,8 @@ import { localePath, type Lang } from './locales';
 // the site stays consistent with the products it describes.
 
 export const AWAKEN_GITHUB_URL = 'https://github.com/AwakenWorks/awaken';
+// Website illustration identity; it uses the existing request-context contract.
+export const REFUND_SCENARIO_KEY = 'customer-exception-refund';
 
 // Non-localized release facts have one owner; both language projections reuse
 // the same application revision, archive bytes and source-access route.
@@ -99,28 +101,42 @@ export const content = {
         eyebrow: 'AwakenWorks · Agents + Workforce',
         title: 'Make AI part of',
         titleHighlight: 'enterprise production.',
-        definition: 'Build AI applications with Agents. Use Workforce to connect business systems and keep recurring work moving, with people in control of important decisions.',
-        compatibilityProof: ['Managed Agents API baseline checked', 'Works with the official Anthropic SDK', 'The same Session continues after reconnect'],
-        ctaPrimary: 'Evaluate one business job',
+        definition: "Hand repetitive lookups, actions and follow-ups to AI. Workforce connects business systems and keeps work moving; Agents runs the AI. People keep important decisions and can check the result.",
+        ctaPrimary: "See how the work gets done",
         ctaSecondary: 'Developer quickstart',
       },
       workflow: {
-        eyebrow: 'Product workflow',
-        title: 'Start with one Agent.',
-        body: 'See the actual Agents Console, then start with one model, one Agent and one task.',
-        steps: ['Connect model', 'Publish Agent', 'Run Session', 'Review the result', 'Connect application'],
-        recovery: 'Permission decisions and recovery remain attached to the same durable Session.',
-        concept: { label: 'What is an AI Agent Runtime?', href: '/docs/agents/concepts/agent-runtime' },
+        eyebrow: "Customer exceptions and refunds",
+        title: "From a duplicate charge to a confirmed refund.",
+        body: "Follow one customer request through investigation, approval, action and a result you can check."
       },
       advantages: {
-        eyebrow: 'The work to hand over',
-        title: 'Reduce the manual work between a request and an accepted result.',
-        body: 'Teams spend time finding information, chasing the next step, recovering interruptions, and checking results. Agree on one recurring job, then measure quality, remaining human effort, and the full operating cost.',
+        eyebrow: "Less manual follow-up",
+        title: "Know what AI handles, what needs you and when the work is done.",
+        body: "Use one recurring job to agree on permitted records, actions and completion checks. Then compare result quality, remaining human effort and the full cost.",
         items: [
-          { key: 'durable', value: 'Keep confirmed progress', label: 'Resume from confirmed work after an interruption. Query an uncertain external result before deciding whether another attempt is safe.', proof: 'Durable execution', href: '/docs/agents/concepts/production-reliability' },
-          { key: 'controlled', value: 'Keep important decisions', label: 'Agree on data access, allowed operations, spending limits, and approvals before handing over the work.', proof: 'Deployment control', href: '/docs/agents/how-to/self-host' },
-          { key: 'reusable', value: 'Check the real result', label: 'Confirm completion from the system that owns the result, then compare quality, remaining human effort, and full cost.', proof: 'Application reuse', href: '/docs/agents/concepts/architecture' },
-        ],
+          {
+            key: "durable",
+            value: "Check the facts first",
+            label: "Read order and payment records. Wait for missing information before proposing an action.",
+            proof: "See the investigation",
+            href: "/workforce#workforce-stage-1"
+          },
+          {
+            key: "controlled",
+            value: "Approve important actions",
+            label: "A responsible person checks the refund amount and recipient before execution.",
+            proof: "See the approval",
+            href: "/workforce#workforce-stage-2"
+          },
+          {
+            key: "reusable",
+            value: "Check the result",
+            label: "Confirm the refund, record the notification and close the support case.",
+            proof: "See the result",
+            href: "/workforce#workforce-example-result"
+          }
+        ]
       },
       scenarios: {
         eyebrow: 'Choose your next step',
@@ -609,80 +625,109 @@ export const content = {
           href: '/workforce#workforce-preview',
         },
         ctaDocs: { label: 'Read the Workforce docs', href: '/docs/workforce' },
-        ctaSecondary: { label: 'Evaluate one real job', href: '/enterprise?product=workforce#apply' },
+        ctaSecondary: { label: 'Evaluate one real job', href: `/enterprise?product=workforce&scenario=${REFUND_SCENARIO_KEY}#apply` },
         loop: {
-          eyebrow: 'One visible delivery path',
-          title: 'From commissioned outcome to a decision backed by deliverables.',
-          body: 'The product follows the same four stages shown in Workspace Home. Issues and WorkUnits preserve accountability underneath; Workspace Work collects decisions and exceptions; Outcome Review keeps delivery evidence separate from technical run output.',
+          eyebrow: "Customer exceptions and refunds",
+          title: "Handle a duplicate charge through refund confirmation and case closure.",
+          body: "A customer reports two charges for one order. AI checks the records and prepares a proposal; a responsible person approves it, and the systems confirm the result.",
           stages: [
-            ['Commission', 'Define the result, owner, acceptance boundary, and exact Workflow binding.'],
-            ['Decompose', 'Turn the result into an accountable Issue graph with visible dependencies.'],
-            ['Execute', 'Agents, people, and automations complete WorkUnits and return typed evidence.'],
-            ['Accept', 'Review the declared deliverables and record the business decision on the root Outcome.'],
+            [
+              "Check the records",
+              "Read permitted order and payment records and check the refund rules. If information is missing, wait for it before continuing."
+            ],
+            [
+              "Approve the proposal",
+              "A responsible person checks the evidence, exact amount and recipient. Execution waits until the proposal is approved."
+            ],
+            [
+              "Carry out the refund",
+              "Carry out the approved action. If a request times out, query the payment state before deciding whether a retry is safe."
+            ],
+            [
+              "Confirm and close",
+              "Confirm the refund with the payment system, record the customer notification and update the support case before closing it."
+            ]
           ],
-          rule: 'A completed Agent Run settles one execution attempt. It does not close an Issue whose declared completion conditions or external acceptance facts are still missing.',
+          rule: "A finished AI task is not enough: work remains open while a required system result, notification or acceptance condition is missing."
         },
         products: {
-          eyebrow: 'Capabilities and execution',
-          title: 'Connect business data. Start and coordinate work. Execute with Agents.',
-          body: 'Workforce composes two capability groups and uses the same Agents execution platform. Each existing domain keeps its records and consistency boundary.',
+          eyebrow: "What supports the work",
+          title: "Connect records, keep the process moving and run the AI.",
+          body: "Workforce connects business information and permitted actions, coordinates the next step, and uses Agents for AI execution.",
           items: [
-            { name: 'Automation & Workflow', role: 'Workforce capability · commission and accept', body: 'Owns Outcome, Issue, Workflow, responsibility, Attention, formal deliverables, and the final business decision.', proof: 'Outcome · Issue · Workflow · Attention · Acceptance' },
-            { name: 'Business Data & Actions (Objects)', role: 'Workforce capability · ground and verify', body: 'Owns the typed objects, relationships, allowed actions, external observations, provenance, and exact business revisions used by the work.', proof: 'ResourceType · Resource · Relation · Action · Observation' },
-            { name: 'Awaken Agents', role: 'Execute and recover', body: 'Owns Agent publication, Session, Run, tools, Worker, Sandbox, committed execution history, and technical recovery.', proof: 'Agent · Session · Run · Worker · Sandbox' },
+            {
+              name: "Automation & Workflow",
+              role: "Keep work moving",
+              body: "Start work when a request arrives or a schedule is due. Retain progress while information or approval is missing, then continue.",
+              proof: "Trigger · wait · continue · review"
+            },
+            {
+              name: "Business Data & Actions (Objects)",
+              role: "Connect records and allowed actions",
+              body: "Give AI the order, payment and policy information it is allowed to use, together with explicitly permitted operations.",
+              proof: "Records · relationships · permissions · system results"
+            },
+            {
+              name: "Awaken Agents",
+              role: "Run the AI",
+              body: "Run the Agent that investigates and acts. Keep its task history, tool permissions and technical recovery attached to the execution.",
+              proof: "Models · tools · task history · recovery"
+            }
           ],
-          path: 'Workforce commissions → Objects grounds context and actions → Agents executes → evidence returns → Workforce accepts',
-          rule: 'Runs and Agent Center are Agents capabilities projected into the composed console. The Objects surface projects Objects capabilities. Their presence does not transfer ownership to Workforce.',
+          path: "Connect records → AI and people follow the process → systems confirm results → review the delivery",
+          rule: "Existing systems keep their formal order and payment records. Workforce uses those records and coordinates the work; each connection and action must be configured within the agreed scope."
         },
         scenarios: {
-          eyebrow: 'Jobs that fit',
-          title: 'Use Workforce for work that crosses systems or needs human decisions.',
-          body: 'These are example shapes, not prebuilt industry solutions. Each one requires the Pack, Connector, or verifier that owns its business facts.',
+          eyebrow: "Choose a bounded first job",
+          title: "Start with one request and a result the team can check.",
+          body: "Refund handling is the example above. Other jobs can use the same approach; system access and capabilities are confirmed for each scope.",
           items: [
-            { label: 'Customer operations', title: 'Resolve a case across support, billing, and approval', body: 'The Issue stays open while Agents gather context and prepare actions; the customer or business system supplies the accepted resolution.' },
-            { label: 'Software delivery', title: 'Implement, review, and confirm one bounded change', body: 'A repository and CI can return the exact revision and check result required before the work is accepted.' },
-            { label: 'Operational exception', title: 'Recover a recurring process that stopped between systems', body: 'Routine retries continue under policy; missing authority or an unresolved decision reaches a named person as Attention.' },
-          ],
+            {
+              label: "Customer exceptions",
+              title: "Investigate a duplicate charge and confirm its resolution",
+              body: "Check the evidence, request approval and verify the payment result before closing the support case."
+            },
+            {
+              label: "Software delivery",
+              title: "Implement and review one bounded change",
+              body: "Produce a change and its checks, then let the responsible person accept the result."
+            },
+            {
+              label: "Operational exceptions",
+              title: "Continue a process waiting on another system",
+              body: "Make the missing information, permission or decision visible to the responsible person, then resume when it is available."
+            }
+          ]
         },
         advantage: {
-          eyebrow: 'What Workforce owns beyond Agent execution',
-          title: 'Keep work state between Agent Runs.',
-          body:
-            'An Agent can plan and act. Workforce keeps the surrounding job intact: who owns it, which revision applies, what the next step needs, why progress stopped, and which result the owning system accepted.',
-          commonLabel: 'Without a work layer',
-          awakenLabel: 'With Workforce',
-          proofLabel: 'Recorded as',
+          eyebrow: "Less manual coordination",
+          title: "See the next step and the evidence that completes it.",
+          body: "Agree on the work, its owner and completion conditions before execution. Progress, approvals and returned results remain available for review.",
+          commonLabel: "Manual follow-up",
+          awakenLabel: "With Workforce",
+          proofLabel: "What you can check",
           items: [
             {
-              title: 'Know what is still open',
-              common: 'A run or chat ends, and the team reconstructs the remaining work from messages and logs.',
-              awaken: 'One Issue keeps the owner, process state, attempts, outputs, approvals, Attention, and completion facts together.',
-              proof: 'Issue · WorkflowRevision · WorkUnit · Assignment',
+              title: "Know what still needs attention",
+              common: "People piece together messages and system records to learn what remains open.",
+              awaken: "Keep the responsible person, current progress and missing information together.",
+              proof: "Who is responsible and what is missing"
             },
             {
-              title: 'State what done means',
-              common: 'Prompts and node code reinterpret readiness, outputs, policy, and completion on every path.',
-              awaken: 'Named hand-offs, guards, approvals, and typed Resources make declared checks executable. A Connector or verifier supplies external truth.',
-              proof: 'ResourceType · Ruling · Requirement · Transition',
+              title: "Keep important decisions with people",
+              common: "Approval requests and supporting information are passed between chats and tickets.",
+              awaken: "Present the proposal and its evidence to the responsible person; wait for the decision before the action.",
+              proof: "The approved action and its decision record"
             },
             {
-              title: 'Send exceptions to the right person',
-              common: 'People watch routine progress and search transcripts to learn why work stopped.',
-              awaken: 'Routine cases advance automatically. Approval and Attention return ambiguity, policy exceptions, and consequential actions with a recorded reason.',
-              proof: 'Ruling · Approval · AttentionSignal · scheduling projection',
-            },
-          ],
+              title: "Confirm the actual result",
+              common: "Someone checks the payment result, sends the notification and closes the case.",
+              awaken: "Collect the system results required by the workflow and retain the completion record for review.",
+              proof: "Refund confirmation, notification and case closure"
+            }
+          ]
         },
-        solution: {
-          eyebrow: 'Work record',
-          title: 'Store the job, workflow, and related systems in one record.',
-          caps: [
-            { title: 'Issue and WorkUnits', desc: 'Keep the owner, intent, current state, attempts, events, and next action together.' },
-            { title: 'Pinned Workflow', desc: 'Use one immutable process revision for states, hand-offs, transitions, joins, and limits.' },
-            { title: 'Resources and decisions', desc: 'Connect actions to named objects, scoped authority, readiness checks, approvals, and custody.' },
-            { title: 'Domain Packs', desc: 'Signed immutable releases of exact ResourceType, Workflow, Automation, and Agent definitions.' },
-          ],
-        },
+
       },
     },
   },
@@ -748,28 +793,42 @@ export const content = {
         eyebrow: 'AwakenWorks · Agents + Workforce',
         title: '让 AI 成为',
         titleHighlight: '受控的生产力。',
-        definition: '用 Agents 构建 AI 应用，用 Workforce 连接业务系统、推进日常工作。重要决定由人掌握，完成结果可以检查。',
-        compatibilityProof: ['已核对 Managed Agents API 基线', '可使用官方 Anthropic SDK', '重连后继续同一个 Session'],
-        ctaPrimary: '评估一项业务工作',
+        definition: "把重复的查询、处理和催办工作交给 AI。Workforce 连接业务系统并按流程推进，Agents 提供执行。重要决定由人掌握，完成结果可以检查。",
+        ctaPrimary: "看看工作如何完成",
         ctaSecondary: '开发者开始使用',
       },
       workflow: {
-        eyebrow: '产品流程',
-        title: '从一个 Agent 开始',
-        body: '看看 Agents 的实际界面，再从一个模型、一个 Agent 和一项任务开始。',
-        steps: ['连接模型', '发布 Agent', '运行 Session', '查看结果', '接入应用'],
-        recovery: '权限决定和恢复记录在同一个持久 Session 中。',
-        concept: { label: '什么是 AI Agent Runtime？', href: '/docs/agents/concepts/agent-runtime' },
+        eyebrow: "客户异常与退款闭环",
+        title: "从一笔重复扣款，到退款确认。",
+        body: "跟随一条客户投诉，看清资料核对、人工批准、操作执行和结果确认的全过程。"
       },
       advantages: {
-        eyebrow: '希望交给 AI 的工作',
-        title: '减少从提出要求到验收结果之间的人工投入。',
-        body: '查找资料、催办下一步、中断后补救和核对结果，都在消耗团队时间。先约定一项重复工作，再记录结果质量、剩余人工和软件、模型、机器与支持的完整成本。',
+        eyebrow: "减少人工查询与催办",
+        title: "看清 AI 做什么，哪里需要你，怎样才算完成。",
+        body: "从一项重复工作开始，约定允许访问的资料、可以执行的操作与完成条件，再比较结果质量、剩余人工和完整成本。",
         items: [
-          { key: 'durable', value: '保留已确认进度', label: '中断后从已确认进度继续。外部结果未知时先查询，再决定是否可以安全重试。', proof: '持久执行', href: '/docs/agents/concepts/production-reliability' },
-          { key: 'controlled', value: '保留重要决定', label: '交办前约定资料访问、允许操作、费用限制和人工批准。', proof: '部署控制权', href: '/docs/agents/how-to/self-host' },
-          { key: 'reusable', value: '检查真实结果', label: '由拥有结果的系统确认完成，再比较质量、剩余人工和完整成本。', proof: '应用复用', href: '/docs/agents/concepts/architecture' },
-        ],
+          {
+            key: "durable",
+            value: "资料先核对",
+            label: "先查订单与付款记录，资料不齐就等待补充。",
+            proof: "查看核对过程",
+            href: "/workforce#workforce-stage-1"
+          },
+          {
+            key: "controlled",
+            value: "重要操作先批准",
+            label: "负责人检查退款依据、金额与对象，批准后再执行。",
+            proof: "查看批准过程",
+            href: "/workforce#workforce-stage-2"
+          },
+          {
+            key: "reusable",
+            value: "处理结果可检查",
+            label: "确认退款、记录通知结果，再关闭服务工单。",
+            proof: "查看处理结果",
+            href: "/workforce#workforce-example-result"
+          }
+        ]
       },
       scenarios: {
         eyebrow: '选择下一步',
@@ -1258,80 +1317,109 @@ export const content = {
           href: '/workforce#workforce-preview',
         },
         ctaDocs: { label: '阅读 Workforce 文档', href: '/docs/workforce' },
-        ctaSecondary: { label: '验证一项真实工作', href: '/enterprise?product=workforce#apply' },
+        ctaSecondary: { label: '验证一项真实工作', href: `/enterprise?product=workforce&scenario=${REFUND_SCENARIO_KEY}#apply` },
         loop: {
-          eyebrow: '一条看得见的交付路径',
-          title: '从委托 Outcome，到基于交付物作出验收决定。',
-          body: '产品遵循 Workspace Home 展示的四个阶段。Issue 与 WorkUnit 在底层保存责任；Workspace Work 汇总人工决定和例外；Outcome Review 把正式交付证据与技术 Run 输出分开。',
+          eyebrow: "客户异常与退款闭环",
+          title: "处理一笔重复扣款，直到退款确认与工单关闭。",
+          body: "客户反馈同一订单扣了两次款。AI 核对记录并整理处理建议，负责人批准，业务系统返回可以检查的结果。",
           stages: [
-            ['委托', '定义结果、负责人、验收边界与精确 Workflow binding。'],
-            ['分解', '形成可问责的 Issue 图，并让依赖关系保持可见。'],
-            ['执行', 'Agent、人和自动化完成 WorkUnit，并返回类型化证据。'],
-            ['验收', '检查声明的交付物，并在根 Outcome 上记录业务决定。'],
+            [
+              "核对资料",
+              "读取允许访问的订单与付款记录，检查退款规则。资料不足时等待补充，齐备后继续。"
+            ],
+            [
+              "批准方案",
+              "负责人核对依据、精确金额与退款对象。方案未获批准时，操作保持等待。"
+            ],
+            [
+              "执行退款",
+              "执行已经批准的操作。请求超时时先查询支付状态，再判断是否可以安全重试。"
+            ],
+            [
+              "确认并关闭",
+              "由支付系统确认退款，记录客户通知并更新服务工单，结果齐备后再关闭。"
+            ]
           ],
-          rule: 'Agent Run 完成只代表一次执行已经结算；只要声明的完成条件或外部验收事实仍然缺失，Issue 就不会结束。',
+          rule: "AI 的一次任务结束还不够：所需的系统结果、通知或验收条件缺失时，工作仍保持未完成。"
         },
         products: {
-          eyebrow: '业务能力与执行平台',
-          title: '连接业务资料，自动启动和推进工作，使用 Agents 执行。',
-          body: 'Workforce 组合两组业务能力，并复用同一 Agents 执行平台。各现有领域保留自己的记录和一致性边界。',
+          eyebrow: "工作背后的能力",
+          title: "连接业务资料，推进流程，让 AI 执行。",
+          body: "Workforce 连接资料与允许的操作，安排下一步，并使用 Agents 执行 AI 任务。",
           items: [
-            { name: '自动触发与流程推进', role: 'Workforce 能力 · 委托与验收', body: '拥有 Outcome、Issue、Workflow、责任、Attention、正式交付物与最终业务决定。', proof: 'Outcome · Issue · Workflow · Attention · Acceptance' },
-            { name: '业务数据与受控操作（Objects）', role: 'Workforce 能力 · 提供事实并核验', body: '拥有工作所用的类型化对象、关系、允许动作、外部 observation、provenance 与精确业务 revision。', proof: 'ResourceType · Resource · Relation · Action · Observation' },
-            { name: 'Awaken Agents', role: '执行与恢复', body: '拥有 Agent publication、Session、Run、工具、Worker、Sandbox、已提交执行历史与技术恢复。', proof: 'Agent · Session · Run · Worker · Sandbox' },
+            {
+              name: "自动触发与流程推进",
+              role: "让工作持续推进",
+              body: "收到请求或到达约定时间时启动工作。缺资料或需要批准时保留进度，条件满足后继续。",
+              proof: "触发 · 等待 · 继续 · 检查"
+            },
+            {
+              name: "业务数据与受控操作（Objects）",
+              role: "连接资料和允许的操作",
+              body: "把 AI 可以使用的订单、付款与规则资料连起来，并明确允许它执行哪些操作。",
+              proof: "记录 · 关系 · 权限 · 系统结果"
+            },
+            {
+              name: "Awaken Agents",
+              role: "运行 AI 任务",
+              body: "运行负责调查和操作的 Agent，保存任务记录，管理工具权限并处理执行中断。",
+              proof: "模型 · 工具 · 任务记录 · 恢复"
+            }
           ],
-          path: 'Workforce 委托 → Objects 提供上下文和动作 → Agents 执行 → 证据返回 → Workforce 验收',
-          rule: 'Runs 与 Agent Center 是投影到组合 Console 中的 Agents 能力；Objects 界面投影 Objects 能力。它们出现在组合 Console 中，不代表权威转移给 Workforce。',
+          path: "资料就绪 → AI 和人按流程处理 → 系统返回结果 → 检查交付物",
+          rule: "订单、付款等正式记录仍由原业务系统保管。Workforce 使用这些资料并组织工作；每项系统连接与操作都需要按约定范围配置。"
         },
         scenarios: {
-          eyebrow: '适合的工作',
-          title: 'Workforce 适合跨系统或需要人工决定的工作。',
-          body: '以下是工作形态示例，不是内置行业方案。每种工作仍需要拥有业务事实的 Pack、Connector 或 verifier。',
+          eyebrow: "选择第一项工作",
+          title: "从一个请求和团队可以检查的结果开始。",
+          body: "上方以退款处理为例。其他工作可以沿用同样的方法，系统访问与可用能力按每次范围确认。",
           items: [
-            { label: '客户运营', title: '跨客服、账务与审批解决一个问题', body: 'Agent 可以收集上下文并准备动作；在客户或业务系统返回可接受结果前，Issue 继续保持开放。' },
-            { label: '软件交付', title: '实现、复核并确认一项有边界的变更', body: '代码仓和 CI 可以返回精确 revision 与检查结果，作为这项工作被接受的条件。' },
-            { label: '运营例外', title: '恢复一项停在系统之间的重复流程', body: '常规重试按照 policy 继续；缺少权限或尚未解决的决定以 Attention 交给具名负责人。' },
-          ],
+            {
+              label: "客户异常",
+              title: "调查重复扣款，并确认问题已解决",
+              body: "核对依据、请求批准并确认支付结果，再关闭服务工单。"
+            },
+            {
+              label: "软件交付",
+              title: "实现并复核一项范围明确的变更",
+              body: "交付变更和检查结果，再由负责人确认是否接受。"
+            },
+            {
+              label: "运营例外",
+              title: "继续一项正在等待外部系统的流程",
+              body: "把缺少的资料、权限或决定交给负责人，条件满足后继续。"
+            }
+          ]
         },
         advantage: {
-          eyebrow: 'Agent 执行之外，Workforce 拥有什么',
-          title: '在两次 Agent Run 之间保存工作状态。',
-          body:
-            'Agent 可以规划和行动。Workforce 保存外围那项工作：谁负责、使用哪个 revision、下一步需要什么、为何停止，以及权威系统最终接受了什么。',
-          commonLabel: '没有工作层',
-          awakenLabel: '使用 Workforce',
-          proofLabel: '记录为',
+          eyebrow: "减少人工交接与催办",
+          title: "看清下一步，保留完成工作的依据。",
+          body: "执行前约定工作、负责人和完成条件。过程中保留进度、批准和返回结果，方便团队检查。",
+          commonLabel: "人工跟进",
+          awakenLabel: "使用 Workforce",
+          proofLabel: "你可以检查",
           items: [
             {
-              title: '知道还有什么没有完成',
-              common: 'Run 或对话结束后，团队从消息与日志中重新拼装剩余工作。',
-              awaken: '一项 Issue 把负责人、process state、attempt、output、approval、Attention 与完成事实放在一起。',
-              proof: 'Issue · WorkflowRevision · WorkUnit · Assignment',
+              title: "知道还有什么需要处理",
+              common: "人从消息和系统记录中重新整理剩余工作。",
+              awaken: "把负责人、当前进度和缺少的资料放在一起。",
+              proof: "谁负责、还缺什么"
             },
             {
-              title: '把完成条件说清楚',
-              common: 'Prompt 与 node code 在每条路径上重新解释 readiness、output、policy 和完成。',
-              awaken: '具名交接、guard、approval 与 typed Resource 执行已经声明的检查；外部真实性由 Connector 或 verifier 提供。',
-              proof: 'ResourceType · Ruling · Requirement · Transition',
+              title: "重要决定由人掌握",
+              common: "批准请求和相关依据在聊天与工单之间传递。",
+              awaken: "把方案和依据交给负责人，等决定明确后再执行操作。",
+              proof: "获准的操作与批准记录"
             },
             {
-              title: '把例外交给合适的人',
-              common: '人持续查看常规进展，还要翻 transcript 才知道工作为何停止。',
-              awaken: '常规情况自动推进；approval 与 Attention 把歧义、policy exception 和重大行动连同原因交给人。',
-              proof: 'Ruling · Approval · AttentionSignal · scheduling projection',
-            },
-          ],
+              title: "确认实际处理结果",
+              common: "人查询退款状态、通知客户，再关闭工单。",
+              awaken: "收集流程要求的系统结果，保存完成记录供团队检查。",
+              proof: "退款确认、客户通知与工单关闭"
+            }
+          ]
         },
-        solution: {
-          eyebrow: '工作记录',
-          title: '用一份记录保存工作、Workflow 和相关系统。',
-          caps: [
-            { title: 'Issue 与 WorkUnit', desc: '把负责人、意图、当前状态、attempt、event 与下一步放在一起。' },
-            { title: '固定的 Workflow', desc: '使用一份不可变 process revision 表达 state、交接、transition、join 与限制。' },
-            { title: 'Resource 与决定', desc: '把动作连接到具名对象、scoped authority、readiness check、approval 与 custody。' },
-            { title: 'Domain Pack', desc: 'ResourceType、Workflow、Automation 与 Agent 精确定义的签名不可变 release。' },
-          ],
-        },
+
       },
     },
   },

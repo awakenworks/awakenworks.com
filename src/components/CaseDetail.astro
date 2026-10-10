@@ -74,13 +74,6 @@ const isDeepSeek = item.slug === 'deepseek-harness';
 
   <section id="case-try" class="bg-ink-950">
     <div class="mx-auto grid max-w-6xl gap-14 px-6 py-20 lg:grid-cols-2">
-      <div>
-        <p class="eyebrow text-iris-400">{copy.tryPath}</p>
-        <h2 class="mt-4 text-3xl font-semibold text-fog-100">{copy.smallest}</h2>
-        <ol class="mt-8 space-y-4">
-          {item.try.map((action, index) => <li class="grid grid-cols-[2rem_1fr] gap-3 leading-7 text-fog-400"><span class="font-mono text-xs text-iris-400">0{index + 1}</span>{action}</li>)}
-        </ol>
-      </div>
       <div id="case-availability">
         <p class="eyebrow text-accent-400">{copy.availability}</p>
         <h2 class="mt-4 text-3xl font-semibold text-fog-100">{copy.invest}</h2>
@@ -110,6 +103,14 @@ const isDeepSeek = item.slug === 'deepseek-harness';
           ))}
         </ul>
       </div>
+      <div id="case-build-path">
+        <p class="eyebrow text-iris-400">{copy.tryPath}</p>
+        <h2 class="mt-4 text-3xl font-semibold text-fog-100">{copy.smallest}</h2>
+        <ol class="mt-8 space-y-4">
+          {item.try.map((action, index) => <li class="grid grid-cols-[2rem_1fr] gap-3 leading-7 text-fog-400"><span class="font-mono text-xs text-iris-400">0{index + 1}</span>{action}</li>)}
+        </ol>
+      </div>
+
     </div>
   </section>
 

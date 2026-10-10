@@ -20,6 +20,7 @@ const agentsDocsHref = localePath(lang, '/docs/agents/get-started');
 const casesHref = localePath(lang, '/cases');
 const productCards = publicProductEntries(lang);
 const copy = ui[lang].home;
+const businessHref = localePath(lang, t.landing.workforce.ctaSecondary.href);
 ---
 
 <SiteHeader lang={lang} path="/" />
@@ -40,11 +41,11 @@ const copy = ui[lang].home;
         </p>
         <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
-            href={enterpriseHref}
-            data-awaken-event="business_job_evaluation_selected"
+            href="#workforce-preview"
+            data-awaken-event="workforce_workspace_selected"
             data-awaken-event-location="home-hero"
             data-awaken-event-product="workforce"
-            data-awaken-event-destination="enterprise"
+            data-awaken-event-destination="workspace-preview"
             class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400"
           >{home.hero.ctaPrimary}</a>
           <a
@@ -66,16 +67,12 @@ const copy = ui[lang].home;
 
   <ProductShowcase
     lang={lang}
-    product="platform"
+    product="workforce"
     compact
-    caption={ui[lang].agentsLanding.showcase}
+    caption={ui[lang].landing.workforceCaption}
     eyebrow={home.workflow.eyebrow}
     title={home.workflow.title}
     body={home.workflow.body}
-    steps={home.workflow.steps}
-    facts={home.hero.compatibilityProof}
-    recovery={home.workflow.recovery}
-    concept={{ ...home.workflow.concept, href: localePath(lang, home.workflow.concept.href) }}
   />
 
   <section id="home-value" class="scroll-mt-16 border-y border-ink-800 bg-ink-850">
@@ -206,7 +203,7 @@ const copy = ui[lang].home;
       <h2 class="home-section-title mx-auto mt-5 max-w-4xl text-fog-100">{home.cta.title}</h2>
       <p class="mx-auto mt-7 max-w-2xl text-lg leading-8 text-fog-300">{home.cta.body}</p>
       <div class="mt-10 flex flex-wrap justify-center gap-4">
-        <a href={enterpriseHref} data-awaken-event="business_job_evaluation_selected" data-awaken-event-location="home-closing" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{home.cta.primary}</a>
+        <a href={businessHref} data-awaken-event="business_job_evaluation_selected" data-awaken-event-location="home-closing" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{home.cta.primary}</a>
         <a href={agentsDocsHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="home-closing" data-awaken-event-product="agents" data-awaken-event-destination="quickstart" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{home.cta.secondary}</a>
       </div>
     </div>

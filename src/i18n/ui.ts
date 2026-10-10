@@ -31,13 +31,13 @@ export const ui = {
       sourceBaseline: 'Committed application baseline', sourceAccess: 'Request source access', sourceDownload: 'Download the fixed source', sourceDigest: 'Source archive SHA-256', sourceScope: 'Each application has its own code and qualification. The Agents documentation revision is a separate baseline.',
       all: 'All reference builds', bestFor: 'Best for: ', deepSeek: 'This is an independent reference reimplementation. It does not imply a DeepSeek partnership, sponsorship, or endorsement.',
       situation: 'The situation', firstResult: 'First useful result', productShape: 'Product shape', applicationKeeps: 'Your application keeps', awakenProvides: 'Awaken provides',
-      tryPath: 'Try this path', smallest: 'Build the smallest useful version first.', availability: 'What is available today', invest: 'Check the status before you invest more.', checkAt: 'Where to check: ',
+      tryPath: 'Use this reference', smallest: 'Start with one clear build and validation path.', availability: 'What is available today', invest: 'Check the status before you invest more.', checkAt: 'Where to check: ',
       situationPrefix: 'The situation: ', startPrefix: 'Start with: ', bestPrefix: 'Best for: ',
       sourceEvidence: {
-        eyebrow: 'Public source anchor',
-        title: 'Start from the exact source revision behind these product claims.',
-        body: 'The current Agents documentation and product screens are checked against one frozen public revision. Reference applications still state their own, usually narrower, evidence boundary below.',
-        revisionLabel: 'Source revision', verifiedLabel: 'Claims checked on', sourceAction: 'Inspect the pinned source', quickstart: 'Run the matching quickstart',
+        eyebrow: 'Documentation source baseline',
+        title: 'Check the documentation and application baselines.',
+        body: 'This revision identifies the Agents documentation baseline. Product captures and reference applications each disclose their own source and validation scope.',
+        revisionLabel: 'Agents documentation revision', verifiedLabel: 'Documentation checked on', sourceAction: 'Inspect the pinned source', quickstart: 'Run the matching quickstart',
         standardsTitle: 'How to read the evidence',
         standards: [
           { level: 'Source or test checked', body: 'A named source coordinate or automated check supports the claim. This does not prove a current live deployment.' },
@@ -49,7 +49,7 @@ export const ui = {
     landing: {
       exploreObjects: 'Explore the product model',
       workforceStar: 'Star the Awaken open foundation',
-      workforceCaption: 'Current product workspace · controlled example content, not customer activity',
+      workforceCaption: 'Workflow illustration · fictional records',
       workforceCloseTitle: 'Evaluate Workforce with one recurring job and its acceptance result.',
       workforceCloseBody: 'See the complete outcome loop first. Apply for a focused validation when the job needs real system connections, exceptions, and acceptance facts.',
       objectsCaption: 'Product model preview · example content, with type, provenance, and revision semantics from the current implementation',
@@ -123,7 +123,7 @@ export const ui = {
         ['3', 'Verify', 'See agent.message and session.status_idle, then reopen the committed events after restart.'],
       ],
       star: 'View and star on GitHub', compatibility: 'Migrating an existing app? Check the compatibility surface and known differences',
-      showcase: 'Current Awaken Console · release-aligned build',
+      showcase: 'Awaken Console · captured locally',
     },
     docsPage: {
       title: (title: string, product: string) => `${title} | ${product} documentation | AwakenWorks`,
@@ -183,13 +183,13 @@ export const ui = {
       disclaimer: '这些页面记录我们自己的构建过程，不是客户案例，也不代表客户采用或背书。',
       all: '全部参考实现', bestFor: '适合：', deepSeek: '这是独立参考实现，不代表 DeepSeek 的合作、赞助或背书。',
       situation: '你可能正遇到', firstResult: '第一个可用结果', productShape: '产品形态', applicationKeeps: '应用保留', awakenProvides: 'Awaken 提供',
-      tryPath: '试一试这条路径', smallest: '先完成最小可用版本。', availability: '当前可以使用什么', invest: '先看状态，再决定投入多少。', checkAt: '检查位置：',
+      tryPath: '如何使用这份参考', smallest: '从一条明确的构建与验证路径开始。', availability: '当前可以使用什么', invest: '先看状态，再决定投入多少。', checkAt: '检查位置：',
       situationPrefix: '你可能正遇到：', startPrefix: '先得到：', bestPrefix: '适合谁：',
       sourceEvidence: {
-        eyebrow: '公开源码锚点',
-        title: '从支撑当前产品主张的精确源码 revision 开始。',
-        body: '当前 Agents 文档和产品界面均依据一个冻结的公开 revision 核对；下方每个参考应用仍会说明自己通常更窄的证据边界。',
-        revisionLabel: '源码 revision', verifiedLabel: '主张核对日期', sourceAction: '检查固定源码', quickstart: '运行对应快速开始',
+        eyebrow: '技术文档源码基线',
+        title: '检查文档与参考应用的验证基线。',
+        body: '这里的 revision 对应 Agents 技术文档基线。产品截图与各参考应用分别标注自己的源码、验证环境与范围。',
+        revisionLabel: 'Agents 文档源码 revision', verifiedLabel: '文档核对日期', sourceAction: '检查固定源码', quickstart: '运行对应快速开始',
         standardsTitle: '怎样理解证据等级',
         standards: [
           { level: '源码或测试已核对', body: '具名源码位置或自动化检查支持该项主张，但这不证明当前存在真实线上部署。' },
@@ -201,7 +201,7 @@ export const ui = {
     landing: {
       exploreObjects: '查看产品模型',
       workforceStar: 'Star Awaken 开源基础',
-      workforceCaption: '当前产品工作空间 · 受控示例内容，不代表客户活动',
+      workforceCaption: '工作流程示意 · 虚构记录',
       workforceCloseTitle: '用一项重复工作及其验收结果评估 Workforce。',
       workforceCloseBody: '先看完整结果闭环；当工作需要连接真实系统、处理例外并取得验收事实时，再申请一次聚焦验证。',
       objectsCaption: '产品模型预览 · 示例内容，类型、来源与 revision 语义来自当前实现',
@@ -275,7 +275,7 @@ export const ui = {
         ['3', '验证', '看到 agent.message 与 session.status_idle；重启后仍能重新打开已提交事件。'],
       ],
       star: '在 GitHub 查看并 Star', compatibility: '迁移已有应用？先查看兼容范围与已知差异',
-      showcase: '当前 Awaken Console · 与发布版本对齐',
+      showcase: 'Awaken Console · 本地界面实测',
     },
     docsPage: {
       title: (title: string, product: string) => `${title}｜${product} 文档｜AwakenWorks`,
@@ -343,25 +343,50 @@ export const productPreviewCopy = {
       objects: { badge: 'Current revision', title: 'Business object', subtitle: 'Example: an order controlled by an external system and observed through a Connector.', nav: ['Objects', 'Object types', 'Relationships', 'Actions'], facts: [['ResourceType', 'Exact revision'], ['Identity authority', 'External system'], ['Object view', 'Schema-driven']], rows: [['Order · example', 'All declared business fields', 'Observed'], ['Customer relation', 'Resolved by external identity', 'Resolved'], ['approve Action', 'Pack-defined inputs and impact', 'Available'], ['Latest change', 'Result, source, and time retained', 'Recorded']], boundary: 'The Pack supplies typed data and presentation hints. One generic Objects UI renders every admitted field, relation, and Action; the external system still owns its business fact.' },
     },
     workforce: {
-      brand: 'Awaken Workforce', workspace: 'Customer operations', status: 'Active', action: 'Commission outcome',
-      pathAria: 'Outcome delivery path', acceptanceUnavailable: 'Acceptance unavailable',
-      navigation: [
-        ['Workspace', ['Home', 'Chats', 'Work · 2', 'Objects', 'Library']],
-        ['Project delivery', ['Overview', 'Outcomes', 'Canvases', 'Issues']],
-        ['Advanced', ['Planning', 'Workflows', 'Automations', 'Build']],
-        ['Operations', ['Runs', 'Agent Center']],
+      brand: "Awaken Workforce",
+      status: "Workflow illustration",
+      caseTitle: "Resolve a duplicate charge",
+      requestLabel: "The work to hand over",
+      request: "“This order was charged twice. Check what happened and refund the duplicate.”",
+      pathAria: "Refund handling steps",
+      rolesTitle: "Who does what",
+      roles: [
+        {
+          label: "AI",
+          title: "Investigate and carry out approved work",
+          body: "Read permitted order and payment records, prepare a proposal, then carry out the approved action."
+        },
+        {
+          label: "Responsible person",
+          title: "Approve the refund",
+          body: "Check the evidence, amount and recipient. Handle cases that fall outside the agreed rules."
+        },
+        {
+          label: "Business systems",
+          title: "Confirm what actually happened",
+          body: "The payment system confirms the refund; the support system records the notification and case closure."
+        }
       ],
-      path: [['01', 'Commission'], ['02', 'Decompose'], ['03', 'Execute'], ['04', 'Accept']],
-      commandEyebrow: 'Workspace work', commandTitle: 'The next decision that needs you', commandBody: 'Continue accountable work without searching across Projects or Agent logs.',
-      buckets: [
-        { label: 'Needs you', count: '1', title: 'Resolve billing dispute', detail: 'Approval required · 3/4 tasks', delivery: 'Formal delivery 2/3', tone: 'warning' },
-        { label: 'In progress', count: '1', title: 'Onboard enterprise customer', detail: 'Agent WorkUnit running · 2/5 tasks', delivery: 'Formal delivery 1/3', tone: 'active' },
-        { label: 'Blocked', count: '1', title: 'Restore supplier account', detail: 'Waiting for ERP confirmation · 1/3 tasks', delivery: 'Formal delivery 0/2', tone: 'blocked' },
+      reviewEyebrow: "Illustrative result",
+      reviewTitle: "The result you can check",
+      reviewSummary: "All three records present",
+      deliverables: [
+        [
+          "Refund receipt",
+          "Refund confirmed"
+        ],
+        [
+          "Customer notification",
+          "Notification recorded"
+        ],
+        [
+          "Support case",
+          "Case closed"
+        ]
       ],
-      reviewEyebrow: 'Acceptance boundary', reviewTitle: 'Formal deliverables', reviewSummary: '2/3 fulfilled',
-      deliverables: [['Account correction', 'Accepted'], ['Refund receipt', 'Accepted'], ['Ledger confirmation', 'Awaiting']],
-      decision: 'Formal delivery is incomplete', decisionBody: 'Acceptance remains unavailable until every declared deliverable is present.',
-      boundary: 'Aligned with the current Home, Chats, Work, Objects, Library, Project delivery, Advanced, and Operations information architecture. Chats projects Awaken conversation state; Objects owns business data and Actions. Example records are illustrative and are not customer results.',
+      decision: "The customer issue is resolved",
+      decisionBody: "Close the case after the refund and notification are confirmed. An AI response alone does not complete the work.",
+      boundary: "Workflow illustration using fictional records. Customer exception and refund handling is a research candidate. Product access, system connections and delivery scope must be agreed."
     },
   },
   zh: {
@@ -370,25 +395,50 @@ export const productPreviewCopy = {
       objects: { badge: '当前 revision', title: '业务对象', subtitle: '示例：一个由外部系统控制、由 Connector 观察的订单。', nav: ['Objects', '对象类型', '关系', '动作'], facts: [['ResourceType', '固定 revision'], ['身份权威', '外部系统'], ['对象视图', '按 schema 生成']], rows: [['Order · 示例', '完整展示声明的业务字段', 'Observed'], ['Customer relation', '按外部身份解析', 'Resolved'], ['approve Action', 'Pack 声明输入与影响', 'Available'], ['最近变化', '保留结果、来源与时间', 'Recorded']], boundary: 'Pack 提供类型化数据与呈现提示；同一套通用 Objects 界面展示全部已准入字段、关系与 Action，外部系统仍拥有业务事实。' },
     },
     workforce: {
-      brand: 'Awaken Workforce', workspace: '客户运营', status: '运行中', action: '委托 Outcome',
-      pathAria: 'Outcome 交付路径', acceptanceUnavailable: '验收不可用',
-      navigation: [
-        ['Workspace', ['首页', 'Chats', 'Work · 2', 'Objects', 'Library']],
-        ['Project 交付', ['概览', 'Outcomes', 'Canvases', 'Issues']],
-        ['高级', ['规划', 'Workflows', 'Automations', 'Build']],
-        ['Operations', ['Runs', 'Agent Center']],
+      brand: "Awaken Workforce",
+      status: "流程示例",
+      caseTitle: "处理一笔重复扣款",
+      requestLabel: "交办的工作",
+      request: "“同一个订单扣了两次款，请查清并退回重复款。”",
+      pathAria: "退款处理步骤",
+      rolesTitle: "AI、人和业务系统分别做什么",
+      roles: [
+        {
+          label: "AI",
+          title: "核对资料并执行获准操作",
+          body: "读取允许访问的订单与付款记录，整理处理建议，批准后执行约定的操作。"
+        },
+        {
+          label: "负责人",
+          title: "批准退款方案",
+          body: "检查依据、金额与退款对象，处理超出约定规则的情况。"
+        },
+        {
+          label: "业务系统",
+          title: "确认实际发生的结果",
+          body: "支付系统确认退款；客服系统记录通知结果和工单关闭。"
+        }
       ],
-      path: [['01', '委托'], ['02', '分解'], ['03', '执行'], ['04', '验收']],
-      commandEyebrow: 'Workspace 工作', commandTitle: '当前最需要你决定的事项', commandBody: '无需跨 Project 或 Agent 日志寻找，即可继续可问责工作。',
-      buckets: [
-        { label: '需要你处理', count: '1', title: '解决账务争议', detail: '需要审批 · 3/4 项工作', delivery: '正式交付 2/3', tone: 'warning' },
-        { label: '进行中', count: '1', title: '开通企业客户', detail: 'Agent WorkUnit 执行中 · 2/5 项工作', delivery: '正式交付 1/3', tone: 'active' },
-        { label: '已阻塞', count: '1', title: '恢复供应商账户', detail: '等待 ERP 确认 · 1/3 项工作', delivery: '正式交付 0/2', tone: 'blocked' },
+      reviewEyebrow: "示例结果",
+      reviewTitle: "你可以检查的处理结果",
+      reviewSummary: "三项记录齐备",
+      deliverables: [
+        [
+          "退款回执",
+          "退款已确认"
+        ],
+        [
+          "客户通知",
+          "通知已记录"
+        ],
+        [
+          "服务工单",
+          "工单已关闭"
+        ]
       ],
-      reviewEyebrow: '验收边界', reviewTitle: '正式交付物', reviewSummary: '已满足 2/3',
-      deliverables: [['账户更正', '已接受'], ['退款回执', '已接受'], ['总账确认', '等待中']],
-      decision: '正式交付尚未齐备', decisionBody: '在每项声明的交付物都存在前，系统不会开放验收。',
-      boundary: '与当前 Home、Chats、Work、Objects、Library、Project 交付、高级配置及 Operations 信息架构对齐。Chats 投影 Awaken 会话状态，Objects 拥有业务数据与 Action；示例记录仅用于说明，不代表客户业绩。',
+      decision: "这项客户异常已处理完成",
+      decisionBody: "确认退款和通知结果后，再关闭工单。只生成一段 AI 回复，还不能算完成工作。",
+      boundary: "流程示意，使用虚构记录。客户异常与退款目前是研究候选；实际产品访问、系统接入与交付范围需确认。"
     },
   },
 } as const satisfies Record<Lang, object>;

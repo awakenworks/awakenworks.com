@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { createHash } from "node:crypto";
 import { currentVersion } from "../src/i18n/docsVersions";
-import { content } from "../src/i18n/content";
+import { content, REFUND_SCENARIO_KEY } from "../src/i18n/content";
 import { localeNavigationHref } from "../src/i18n/locales";
 
 // Site integration decision table: language en/zh x desktop/narrow, across all
@@ -64,12 +64,17 @@ for (const lang of ["en", "zh"]) {
         await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
         await expect(appearance).toHaveValue("dark");
         await expect(appearance).toBeVisible();
-        // V1 proof seeker x language/width -> the actual Console image arrives
-        // before long architecture content. The bound covers both marketing
-        // pages without treating a non-overflowing but 10-screen delay as good UX.
-        if (path === '/' || path === '/agents') {
+        // V1 developer x language/width -> actual Console capture arrives early.
+        // V1b business reader -> the explicitly labelled refund illustration
+        // arrives early instead of an unrelated developer setup gallery.
+        if (path === '/agents') {
           const imageTop = await page.locator('#platform-preview img').first().evaluate((node) => node.getBoundingClientRect().top + scrollY);
           expect(imageTop).toBeLessThan(width < 640 ? 1800 : 1400);
+        }
+        if (path === '/') {
+          const storyTop = await page.locator('[data-workforce-refund-example]').evaluate((node) => node.getBoundingClientRect().top + scrollY);
+          expect(storyTop).toBeLessThan(width < 640 ? 1800 : 1400);
+          await expect(page.locator('[data-workforce-refund-example]')).toHaveAttribute('data-preview-kind', 'illustration');
         }
         // V2 the Chinese promise keeps the meaningful phrase on one line;
         // neither forced semantic wrapping nor zoom may create horizontal overflow.
@@ -176,7 +181,7 @@ for (const lang of ["en", "zh"]) {
     await page.goto(`${base}/`);
     const actions = page.locator("#home-hero a");
     await expect(actions).toHaveCount(2);
-    await expect(actions.nth(0)).toHaveAttribute("href", `${base}/enterprise`);
+    await expect(actions.nth(0)).toHaveAttribute("href", '#workforce-preview');
     await expect(actions.nth(1)).toHaveAttribute("href", `${base}/docs/agents/get-started`);
     await expect(page.locator("#home-products [data-product-role]")).toHaveCount(2);
     await expect(page.locator(`header a[href="${base}/objects"]`)).toHaveCount(0);
@@ -473,8 +478,9 @@ for (const lang of ['en', 'zh']) {
     await preview.click();
     await expect(page).toHaveURL(/#workforce-preview$/);
     await page.locator('#workforce-hero a').nth(1).click();
-    await expect(page).toHaveURL(new RegExp(`${base}/enterprise\\?product=workforce#apply$`));
+    await expect(page).toHaveURL(new RegExp(`${base}/enterprise\\?product=workforce&scenario=${REFUND_SCENARIO_KEY}#apply$`));
     await expect(page.locator('form [name=product]')).toHaveValue('workforce');
+    await expect(page.locator('form [name=scenario_context]')).toHaveValue(REFUND_SCENARIO_KEY);
     await expect(page.locator('[data-opportunity-form]')).toHaveCount(1);
     await expect(page.locator('[data-delivery-mode]')).toHaveCount(3);
     await expect(page.locator('[data-delivery-mode=cloud]')).toContainText(lang === 'zh' ? '托管预览' : 'Hosted preview');
@@ -483,6 +489,83 @@ for (const lang of ['en', 'zh']) {
     const formTop = await page.locator('#apply').evaluate((node) => node.getBoundingClientRect().top);
     expect(formTop).toBeGreaterThanOrEqual(headerBottom);
   });
+}
+
+// Refund story cause/effect rules:
+// R1 entry Home/Workforce x en/zh x JS enabled/disabled -> one fictional case,
+// four stages, explicit AI/person/system roles and three completion records.
+// R2 approval or timeout question -> native disclosure reveals the wait/check
+// rule with keyboard input; it never performs a refund or creates work.
+// R3 business contact + JS -> same single form retains the selected scenario
+// and product across locale navigation. R4 !JS -> story remains fully readable
+// and the native request still has the existing Workforce default.
+// R5 Home hero previews the story while the header requests contact -> each
+// label names its own native destination, independent of JS or viewport.
+// These are website comprehension cues and navigation contracts, not proof
+// of a deployed refund solution or observed user comprehension.
+for (const lang of ['en', 'zh']) {
+  for (const javaScriptEnabled of [true, false]) {
+    test(`${lang} refund story with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
+      const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 390, height: 900 } });
+      try {
+        await context.route('https://cloud.umami.is/**', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+        await context.route('https://formspree.io/**', (route) => route.abort());
+        const page = await context.newPage();
+        const businessWrites: string[] = [];
+        page.on('request', (request) => {
+          if (request.method() !== 'GET') businessWrites.push(request.url());
+        });
+        const base = lang === 'zh' ? '/zh' : '';
+        for (const path of ['/', '/workforce']) {
+          await page.goto(`${base}${path}`, { waitUntil: 'domcontentloaded' });
+          for (const contact of await page.locator('header a[data-awaken-event=business_job_evaluation_selected]').all()) {
+            await expect(contact).toHaveText(lang === 'zh' ? '评估一项业务工作' : 'Evaluate one business job');
+            await expect(contact).toHaveAttribute('href', `${base}/enterprise?product=workforce#apply`);
+            await expect(contact).toHaveAttribute('data-awaken-event-destination', 'enterprise');
+          }
+          const story = page.locator('[data-workforce-refund-example]');
+          await expect(story).toHaveCount(1);
+          await expect(story).toHaveAttribute('data-preview-kind', 'illustration');
+          await expect(story).toContainText(lang === 'zh' ? '同一个订单扣了两次款' : 'This order was charged twice');
+          await expect(story.locator('[data-refund-example-boundary]')).toContainText(lang === 'zh' ? '研究候选' : 'research candidate');
+          await expect(story.locator('[data-workforce-stage]')).toHaveCount(4);
+          const approval = story.locator('[data-workforce-stage]').nth(1);
+          await approval.locator('summary').focus();
+          await page.keyboard.press('Enter');
+          await expect(approval).toHaveAttribute('open', '');
+          await expect(approval.locator('p')).toBeVisible();
+          await expect(approval).toContainText(lang === 'zh' ? '方案未获批准时，操作保持等待' : 'Execution waits until the proposal is approved');
+          const execution = story.locator('[data-workforce-stage]').nth(2);
+          await execution.locator('summary').focus();
+          await page.keyboard.press('Enter');
+          await expect(execution.locator('p')).toBeVisible();
+          await expect(execution).toContainText(lang === 'zh' ? '请求超时时先查询支付状态' : 'If a request times out, query the payment state');
+          await expect(story.locator('[data-workforce-role]')).toHaveCount(3);
+          await expect(story.locator('[data-workforce-role]').nth(1)).toContainText(lang === 'zh' ? '负责人' : 'Responsible person');
+          await expect(story.locator('[data-refund-result-record]')).toHaveCount(3);
+          await expect(story.locator('[data-refund-result-record]').nth(0)).toContainText(lang === 'zh' ? '退款已确认' : 'Refund confirmed');
+          await expect(story.locator('[data-refund-result-record]').nth(1)).toContainText(lang === 'zh' ? '通知已记录' : 'Notification recorded');
+          await expect(story.locator('[data-refund-result-record]').nth(2)).toContainText(lang === 'zh' ? '工单已关闭' : 'Case closed');
+          await expect(story.locator('button, input, form, [aria-disabled]')).toHaveCount(0);
+          expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        }
+        expect(businessWrites).toEqual([]);
+        if (javaScriptEnabled) {
+          await page.goto(`${base}/`);
+          await page.locator('#home-cta [data-awaken-event=business_job_evaluation_selected]').click();
+          const form = page.locator('[data-opportunity-form]');
+          await expect(form).toHaveAttribute('data-initial-product', 'workforce');
+          await expect(form.locator('[name=scenario_context]')).toHaveValue(REFUND_SCENARIO_KEY);
+          await expect(form.locator('[data-scenario-context]')).toBeVisible();
+          await form.locator('[name=email]').fill('refund-review@example.invalid');
+          await page.locator(`a[data-locale-switch=${lang === 'zh' ? 'en' : 'zh'}]`).click();
+          await expect(form).toHaveAttribute('data-initial-product', 'workforce');
+          await expect(form.locator('[name=scenario_context]')).toHaveValue(REFUND_SCENARIO_KEY);
+          await expect(form.locator('[name=email]')).toHaveValue('refund-review@example.invalid');
+        }
+      } finally { await context.close(); }
+    });
+  }
 }
 
 // N1 JavaScript absent + native keyboard consent/submit + only email/job entered -> a native POST reaches

@@ -32,6 +32,35 @@ const sourceHref = `${AWAKEN_GITHUB_URL}/tree/${agentsVersion.sourceRevision}`;
     </div>
   </section>
 
+
+
+  <section id="reference-builds" class="bg-ink-950">
+    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
+      <div class="grid gap-7">
+        {t.cases.items.map((item, index) => (
+          <article data-case-index={item.slug} class="grid gap-8 rounded-xl border border-ink-700 bg-ink-850 p-7 sm:p-10 lg:grid-cols-[0.72fr_1.28fr]">
+            <div>
+              <p class="font-mono text-xs text-iris-400">0{index + 1} · {item.kind}</p>
+              <h2 class="mt-4 text-3xl font-semibold text-fog-100">{item.name}</h2>
+              <p class="mt-3 text-sm font-medium text-fog-300">{item.adoption}</p>
+              <p class="mt-6 rounded-full border border-ink-600 px-3 py-1.5 font-mono text-sm leading-5 text-fog-500">{item.status}</p>
+            </div>
+            <div>
+              <h3 class="text-2xl font-semibold text-fog-100">{item.title}</h3>
+              <p class="mt-5 leading-8 text-fog-300"><strong class="text-fog-100">{copy.situationPrefix}</strong>{item.problem}</p>
+              <p class="mt-4 leading-8 text-fog-400"><strong class="text-iris-300">{copy.startPrefix}</strong>{item.firstWin}</p>
+              <p class="mt-5 text-sm leading-7 text-fog-500"><strong class="text-fog-300">{copy.bestPrefix}</strong>{item.audience}</p>
+              <a
+                href={localePath(lang, `/cases/${item.slug}`)}
+                data-awaken-event={`cases-open-${item.slug}`}
+                class="mt-7 inline-flex rounded-xl bg-iris-500 px-5 py-3 font-medium text-white transition hover:bg-iris-400"
+              >{item.cta} <FunctionalIcon icon={ArrowRight} /></a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
   <section id="reference-source" class="border-b border-ink-800 bg-ink-900">
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
       <p class="eyebrow text-accent-400">{copy.sourceEvidence.eyebrow}</p>
@@ -58,34 +87,6 @@ const sourceHref = `${AWAKEN_GITHUB_URL}/tree/${agentsVersion.sourceRevision}`;
           <article data-evidence-standard class="rounded-xl border border-ink-700 bg-ink-850 p-5">
             <p class="font-mono text-xs text-accent-300">{standard.level}</p>
             <p class="mt-3 text-sm leading-6 text-fog-400">{standard.body}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section id="reference-builds" class="bg-ink-950">
-    <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
-      <div class="grid gap-7">
-        {t.cases.items.map((item, index) => (
-          <article data-case-index={item.slug} class="grid gap-8 rounded-xl border border-ink-700 bg-ink-850 p-7 sm:p-10 lg:grid-cols-[0.72fr_1.28fr]">
-            <div>
-              <p class="font-mono text-xs text-iris-400">0{index + 1} · {item.kind}</p>
-              <h2 class="mt-4 text-3xl font-semibold text-fog-100">{item.name}</h2>
-              <p class="mt-3 text-sm font-medium text-fog-300">{item.adoption}</p>
-              <p class="mt-6 rounded-full border border-ink-600 px-3 py-1.5 font-mono text-sm leading-5 text-fog-500">{item.status}</p>
-            </div>
-            <div>
-              <h3 class="text-2xl font-semibold text-fog-100">{item.title}</h3>
-              <p class="mt-5 leading-8 text-fog-300"><strong class="text-fog-100">{copy.situationPrefix}</strong>{item.problem}</p>
-              <p class="mt-4 leading-8 text-fog-400"><strong class="text-iris-300">{copy.startPrefix}</strong>{item.firstWin}</p>
-              <p class="mt-5 text-sm leading-7 text-fog-500"><strong class="text-fog-300">{copy.bestPrefix}</strong>{item.audience}</p>
-              <a
-                href={localePath(lang, `/cases/${item.slug}`)}
-                data-awaken-event={`cases-open-${item.slug}`}
-                class="mt-7 inline-flex rounded-xl bg-iris-500 px-5 py-3 font-medium text-white transition hover:bg-iris-400"
-              >{item.cta} <FunctionalIcon icon={ArrowRight} /></a>
-            </div>
           </article>
         ))}
       </div>

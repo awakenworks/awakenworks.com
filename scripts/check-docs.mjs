@@ -2548,14 +2548,15 @@ for (const [path, patterns] of [
   [join(distRoot, 'zh/docs/llms.txt'), [/什么是 AI Agent Runtime/, /Agent Framework、Agent Runtime 与 Agent 应用基础设施的区别/]],
 ]) requireText(path, patterns.map((pattern) => [pattern, 'generated discovery output must include both canonical GEO concepts']));
 
+// Routing decision: business Home uses the developer Quickstart already checked
+// by check-home; technical Agents/Docs entries directly expose the Runtime
+// concept. A business illustration must not require a second technical intro.
 for (const [path, href] of [
-  [join(distRoot, 'index.html'), '/docs/agents/concepts/agent-runtime'],
-  [join(distRoot, 'zh/index.html'), '/zh/docs/agents/concepts/agent-runtime'],
   [join(distRoot, 'agents/index.html'), '/docs/agents/concepts/agent-runtime'],
   [join(distRoot, 'zh/agents/index.html'), '/zh/docs/agents/concepts/agent-runtime'],
   [join(distRoot, 'docs/index.html'), '/docs/agents/concepts/agent-runtime'],
   [join(distRoot, 'zh/docs/index.html'), '/zh/docs/agents/concepts/agent-runtime'],
-]) requireText(path, [[new RegExp(`href="${href}"`), 'home, product, and Docs hub must link to the canonical Runtime concept']]);
+]) requireText(path, [[new RegExp(`href="${href}"`), 'technical product and Docs hub must link to the canonical Runtime concept']]);
 
 const docsIndexPath = join(root, 'src/components/DocsIndex.astro');
 const uiCatalogPath = join(root, 'src/i18n/ui.ts');
