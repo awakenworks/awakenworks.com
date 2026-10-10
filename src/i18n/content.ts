@@ -13,8 +13,8 @@ export const AWAKEN_GITHUB_URL = 'https://github.com/AwakenWorks/awaken';
 // the same application revision, archive bytes and source-access route.
 const caseSources = {
   'pilot': { sourceBaseline: '973dc96aa2041b20e1e377aa876178dfe0a1d8b1', sourceArchive: { href: '/cases/pilot/source-973dc96aa2041b20e1e377aa876178dfe0a1d8b1.zip', sha256: '17c8303bd6f45955be26ddeeb709b7778d101978d4a5250c9794a2ef48396a02' }, sourceAccessHref: '/enterprise?product=agents&reference_case=pilot#apply' },
-  'deepseek-harness': { sourceBaseline: 'f3968dd0f787c9a7cb81684d004e5c145bc44565', sourceArchive: { href: '/cases/deepseek-harness/source-f3968dd0f787c9a7cb81684d004e5c145bc44565.zip', sha256: '493d064e7778cc655db1eb88869856211c6d797b2375768316aad64bd4e30208' }, sourceAccessHref: '/enterprise?product=agents&reference_case=deepseek-harness#apply', walkthroughSrc: '/cases/deepseek-harness/deterministic-demo.mp4' },
-  'design': { sourceBaseline: '07fe7f2da97ca19f6a32d257b2801cc303a4806f', sourceArchive: null, sourceAccessHref: '/enterprise?product=agents&reference_case=design#apply' },
+  'deepseek-harness': { sourceBaseline: '3faa59acc1265695bfba15fc19d4a7786e81c641', sourceArchive: { href: '/cases/deepseek-harness/source-3faa59acc1265695bfba15fc19d4a7786e81c641.zip', sha256: '47ac3434ad229ba7a2abaf12808355edc5f162a5aa977aed2efa12d05f3665a5' }, sourceAccessHref: '/enterprise?product=agents&reference_case=deepseek-harness#apply', walkthroughSrc: '/cases/deepseek-harness/deterministic-demo.mp4' },
+  'design': { sourceBaseline: 'ec2934b1e849b02e15cd6841e82a1550405393f8', sourceArchive: null, sourceAccessHref: '/enterprise?product=agents&reference_case=design#apply' },
 } as const;
 
 // Canonical public entity definitions. Homepage, product metadata, and
@@ -290,12 +290,12 @@ export const content = {
           audience: 'Teams building Agent IDEs, coding workbenches, or other interaction-rich Agent products.',
           owned: 'Preset UX, browser preferences, product projections, and a stateless workbench Session API and Interaction MCP.',
           reused: 'Managed Sessions, events, model routing, credentials, tools, permissions, compaction, resources, subagents, Worker, and Sandbox.',
-          status: 'Reproducible deterministic reference demo',
-          sourceStatus: 'The fixed source archive runs the deterministic demo without another checkout. Clean installation, tests, build and fixture-backed browser checks passed. A fresh real DeepSeek result remains pending.',
+          status: 'Reference build with fixture and live browser evidence',
+          sourceStatus: 'The fixed source includes its shared dependencies. Local checks, desktop and narrow-screen browser workflows, and a fresh real DeepSeek journey on local Kubernetes passed. The video shows the deterministic demo; platform release qualification and customer outcomes are separate.',
           proof: [
             { level: 'Fixture-tested', claim: 'The deterministic Managed API demo exercises the browser, workbench Session API, official SDK, and committed-event projection.', owner: 'e2e/harness.spec.ts' },
             { level: 'Audited contract', claim: 'Native, Equivalent, Presentation, and Unavailable capabilities have explicit boundaries.', owner: 'docs/ui-parity.md' },
-            { level: 'Live gate pending', claim: 'A real DeepSeek path exists but needs a fresh credentialed result before publication.', owner: 'e2e/live/harness-live.spec.ts' },
+            { level: 'Live browser gate passed', claim: 'A fresh local Kubernetes run exercised all four Presets, genuine Skill delivery, permissions, tools, Plan, Creator, questions, delegation and reconnect.', owner: 'e2e/live/harness-live.spec.ts' },
           ],
           try: ['Run the deterministic demo before adding provider credentials', 'Trace one Preset-driven Session from the browser through the product API to committed Events', 'Replace the fixture with your published Agent without adding browser-owned execution state'],
           primary: { label: 'Connect a published Agent', href: '/docs/agents/how-to/connect-a-published-agent' },
@@ -318,7 +318,7 @@ export const content = {
           owned: 'DesignProject, immutable DesignRevision, review targets, Preview safety, explicit acceptance, and the published Artifact.',
           reused: 'Agent, Environment, Session, Run, execution-stage Files, tools, events, Worker, Sandbox, and recovery.',
           status: 'Local source-tested reference build',
-          sourceStatus: 'This first-party reference implementation is currently local; a pinned public revision, a fresh live demonstration, and observed external user outcomes are missing.',
+          sourceStatus: 'This first-party reference implementation is currently local. Its committed implementation passed source and controlled browser checks. Its fresh real generation-and-revision journey has not passed release acceptance, so a fixed public source package remains pending. External user outcomes are unverified.',
           proof: [
             { level: 'Source-checked', claim: 'The current implementation preserves one immutable Revision and Artifact publication owner.', owner: 'Awaken Design architecture and ADRs' },
             { level: 'Test-covered', claim: 'Publication, review, acceptance, and Artifact watcher paths have automated coverage; this page does not claim a fresh full-suite run.', owner: 'Awaken Design test suites' },
@@ -926,12 +926,12 @@ export const content = {
           audience: '正在开发 Agent IDE、编码工作台或其他强交互 Agent 产品的团队。',
           owned: 'Preset UX、浏览器偏好、产品投影，以及无状态 Workbench Session API 与 Interaction MCP。',
           reused: 'Managed Session、事件、模型路由、凭据、工具、权限、压缩、资源、子 Agent、Worker 与 Sandbox。',
-          status: '可复现的确定性参考演示',
-          sourceStatus: '固定版本源码包可以独立运行确定性演示，已通过独立安装、测试、构建及夹具浏览器验证。新的真实 DeepSeek 结果仍待验证。',
+          status: '具有确定性演示与真实浏览器证据的参考实现',
+          sourceStatus: '固定源码包含共享依赖，已通过本地检查、桌面与窄屏浏览器流程，以及本地 Kubernetes 上一次新的真实 DeepSeek 验收。视频展示确定性演示；平台发布资格与客户结果另行验收。',
           proof: [
             { level: 'Fixture 测试通过', claim: '确定性 Managed API Demo 贯穿浏览器、Workbench Session API、官方 SDK 与已提交事件投影。', owner: 'e2e/harness.spec.ts' },
             { level: '契约已审计', claim: 'Native、Equivalent、Presentation 与 Unavailable 能力都有明确边界。', owner: 'docs/ui-parity.md' },
-            { level: '真实模型待发布', claim: '真实 DeepSeek 路径已经存在，但发布前仍需一次带凭据的新结果。', owner: 'e2e/live/harness-live.spec.ts' },
+            { level: '真实浏览器验收通过', claim: '本地 Kubernetes 的新运行覆盖四种 Preset、实际 Skill 交付、权限、工具、Plan、Creator、提问、委派与重连。', owner: 'e2e/live/harness-live.spec.ts' },
           ],
           try: ['先运行确定性 Demo，再添加模型供应商凭据', '沿浏览器、产品 API 与已提交事件追踪一条 Preset Session', '用自己的已发布 Agent 替换 fixture，不在浏览器增加执行状态'],
           primary: { label: '接入已发布 Agent', href: '/docs/agents/how-to/connect-a-published-agent' },
@@ -954,7 +954,7 @@ export const content = {
           owned: 'DesignProject、不可变 DesignRevision、评审目标、Preview 安全、明确验收和已发布 Artifact。',
           reused: 'Agent、Environment、Session、Run、执行期 File、工具、事件、Worker、Sandbox 与恢复。',
           status: '本地源码与测试已验证的参考实现',
-          sourceStatus: '这个第一方参考实现仍在本地，尚缺固定公开版本、一次新的真实运行演示，以及外部用户或客户结果。',
+          sourceStatus: '这个第一方参考实现仍在本地。当前已提交实现通过了源码与受控浏览器检查；新的真实生成与修改流程尚未通过发布验收，固定公开源码包仍待发布。外部用户效果尚未验证。',
           proof: [
             { level: '源码已核对', claim: '当前实现保留唯一的不可变 Revision 与 Artifact 发布 owner。', owner: 'Awaken Design architecture 与 ADR' },
             { level: '已有测试覆盖', claim: '发布、评审、验收与 Artifact watcher 路径已有自动化覆盖；本页不宣称本次重新跑完全套。', owner: 'Awaken Design 测试套件' },
