@@ -62,10 +62,10 @@ const closerHref = p.closer.cta.href.startsWith('/')
         <a
           href={compatibilityHref}
           data-agent-compatibility-entry
-          data-umami-event="awaken-view-compatibility"
-          data-umami-event-location="agents-hero"
-          data-umami-event-product="agents"
-          data-umami-event-destination="compatibility"
+          data-awaken-event="awaken-view-compatibility"
+          data-awaken-event-location="agents-hero"
+          data-awaken-event-product="agents"
+          data-awaken-event-destination="compatibility"
           class="mt-8 flex max-w-3xl items-center justify-between gap-5 rounded-xl border border-iris-500/30 bg-iris-500/5 px-5 py-4 transition hover:border-iris-400/60 hover:bg-iris-500/10"
         >
           <span>
@@ -77,10 +77,10 @@ const closerHref = p.closer.cta.href.startsWith('/')
         <div class="mt-7 flex flex-wrap items-center gap-4">
           <a
             href={ctaPrimaryHref}
-            data-umami-event="developer_evaluation_selected"
-            data-umami-event-location="agents-hero"
-            data-umami-event-product="agents"
-            data-umami-event-destination="quickstart"
+            data-awaken-event="developer_evaluation_selected"
+            data-awaken-event-location="agents-hero"
+            data-awaken-event-product="agents"
+            data-awaken-event-destination="quickstart"
             class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400"
           >
             {p.ctaPrimary.label}
@@ -89,10 +89,10 @@ const closerHref = p.closer.cta.href.startsWith('/')
             href={AWAKEN_GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
-            data-umami-event="github_star_selected"
-            data-umami-event-location="platform-hero"
-            data-umami-event-product="agents"
-            data-umami-event-destination="github"
+            data-awaken-event="github_star_selected"
+            data-awaken-event-location="platform-hero"
+            data-awaken-event-product="agents"
+            data-awaken-event-destination="github"
             class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-iris-400"
           ><FunctionalIcon icon={Star} /> {copy.star}</a>
         </div>
@@ -261,19 +261,19 @@ const closerHref = p.closer.cta.href.startsWith('/')
         <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
           <a
             href={ctaPrimaryHref}
-            data-umami-event="developer_evaluation_selected"
-            data-umami-event-location="agents-closing"
-            data-umami-event-product="agents"
-            data-umami-event-destination="quickstart"
+            data-awaken-event="developer_evaluation_selected"
+            data-awaken-event-location="agents-closing"
+            data-awaken-event-product="agents"
+            data-awaken-event-destination="quickstart"
             class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400"
             >{p.ctaPrimary.label}</a
           >
           <a
             href={closerHref}
-            data-umami-event="enterprise_intent_selected"
-            data-umami-event-location="agents-closing"
-            data-umami-event-product="agents"
-            data-umami-event-destination="enterprise"
+            data-awaken-event="enterprise_intent_selected"
+            data-awaken-event-location="agents-closing"
+            data-awaken-event-product="agents"
+            data-awaken-event-destination="enterprise"
             class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500"
             >{p.closer.cta.label}</a
           >

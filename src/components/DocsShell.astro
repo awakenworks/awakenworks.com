@@ -3,6 +3,7 @@ import FunctionalIcon from "./FunctionalIcon.astro";
 import { ChevronDown, Search, Star } from "@awaken/ui/icons/data";
 import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
 import {
+  publicProducts,
   versionsFor,
   currentVersion,
   statusLabel,
@@ -45,19 +46,10 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
 const alternateLang = LANGS.find((candidate) => candidate !== lang);
 const otherHref = alternateLang ? localePath(alternateLang, otherPath || unlocalizedPath(current) || '/docs') : undefined;
 
-const allProducts = [
-  { key: 'agents', label: docsProductName('agents'), href: '/docs/agents', tone: 'text-iris-400' },
-  { key: 'objects', label: docsProductName('objects'), href: '/docs/objects', tone: 'text-amber-400' },
-  { key: 'workforce', label: docsProductName('workforce'), href: '/docs/workforce', tone: 'text-rust-400' },
-] as const;
-const products = allProducts;
-
-const docsHubItems = [
-  { product: 'agents', label: 'Awaken Agents', href: '/docs/agents' },
-  { product: 'objects', label: 'Awaken Objects', href: '/docs/objects' },
-  { product: 'workforce', label: 'Awaken Workforce', href: '/docs/workforce' },
-];
-const docsHubNav = [{ group: 'Products', nodes: docsHubItems.map((item) => ({ kind: 'item' as const, ...item })) }];
+const products = Object.entries(publicProducts).map(([key, metadata]) => ({
+  key, label: docsProductName(key), href: metadata.docsPath, tone: `text-${metadata.tone}-400`,
+}));
+const docsHubNav = [{ group: 'Products', nodes: products.map((item) => ({ kind: 'item' as const, product: item.key, label: item.label, href: item.href })) }];
 const nav = navGroups ?? docsHubNav;
 
 // Localize canonical section keys used by generated nav groups; pass through
@@ -65,7 +57,7 @@ const nav = navGroups ?? docsHubNav;
 const groupLabel = (g: string) => docSectionLabel(g, lang);
 const productLabel = product === 'docs'
   ? 'Docs'
-  : products.find((p) => p.key === product)?.label || 'Docs';
+  : docsProductName(product);
 
 // Versioned docs: registry-driven selector + status banner for the product.
 const sourceVersionProduct = versionProduct
@@ -133,10 +125,10 @@ const banner =
         href={AWAKEN_GITHUB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        data-umami-event="github_star_selected"
-        data-umami-event-location="docs-header"
-        data-umami-event-product={product === 'docs' ? 'unselected' : product}
-        data-umami-event-destination="github"
+        data-awaken-event="github_star_selected"
+        data-awaken-event-location="docs-header"
+        data-awaken-event-product={product === 'docs' ? 'unselected' : product}
+        data-awaken-event-destination="github"
         class="hidden rounded-full border border-accent-500/40 px-3 py-1 font-mono text-xs text-accent-300 hover:border-accent-400 hover:text-accent-200 sm:block"
         aria-label={copy.starAria}
       ><FunctionalIcon icon={Star} /> Star</a>
@@ -203,10 +195,10 @@ const banner =
           href={AWAKEN_GITHUB_URL}
           target="_blank"
           rel="noopener noreferrer"
-          data-umami-event="github_star_selected"
-          data-umami-event-location="docs-mobile-nav"
-          data-umami-event-product={product === 'docs' ? 'unselected' : product}
-          data-umami-event-destination="github"
+          data-awaken-event="github_star_selected"
+          data-awaken-event-location="docs-mobile-nav"
+          data-awaken-event-product={product === 'docs' ? 'unselected' : product}
+          data-awaken-event-destination="github"
           class="col-span-3 rounded-full border border-accent-500/40 px-3 py-1 text-center text-accent-300 sm:col-span-1"
         ><FunctionalIcon icon={Star} /> {copy.mobileStar}</a>
       </nav>

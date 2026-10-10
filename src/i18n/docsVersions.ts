@@ -17,14 +17,16 @@ import type { Lang } from './locales';
 export type { Lang } from './locales';
 export type VersionStatus = 'dev' | 'stable' | 'archived';
 export type DocsProduct = 'flow' | 'harness' | 'platform';
-export type PublicProduct = 'agents' | 'objects' | 'workforce';
+// One public product catalog feeds navigation, cards, docs and request choices.
+// Objects retains its technical routes and domain ownership inside Workforce.
+export const publicProducts = {
+  agents: { copyKey: 'managed', path: '/agents', docsPath: '/docs/agents', tone: 'iris', status: 'open-source-release-coming-soon' },
+  workforce: { copyKey: 'workforce', path: '/workforce', docsPath: '/docs/workforce', tone: 'rust', status: 'early-preview' },
+} as const;
+export type PublicProduct = keyof typeof publicProducts;
+export type PublicCapability = 'objects';
 export type ProductStatus = 'open-source-release-coming-soon' | 'early-preview';
-
-const productStatus: Record<PublicProduct, ProductStatus> = {
-  agents: 'open-source-release-coming-soon',
-  objects: 'early-preview',
-  workforce: 'early-preview',
-};
+export const capabilityOwner: Record<PublicCapability, PublicProduct> = { objects: 'workforce' };
 
 export interface DocsVersion {
   /** 'current' for the latest (unversioned) path; otherwise the URL segment. */
@@ -94,8 +96,9 @@ const docsProductOwner: Record<DocsProduct, PublicProduct> = {
   platform: 'agents',
 };
 
-export function publicProductLabel(product: PublicProduct, lang: Lang): string {
-  if (productStatus[product] === 'open-source-release-coming-soon') {
+export function publicProductLabel(product: PublicProduct | PublicCapability, lang: Lang): string {
+  const owner = product in capabilityOwner ? capabilityOwner[product as PublicCapability] : product as PublicProduct;
+  if (publicProducts[owner].status === 'open-source-release-coming-soon') {
     return publicProductLabels[lang].openSource;
   }
   return publicProductLabels[lang].earlyPreview;

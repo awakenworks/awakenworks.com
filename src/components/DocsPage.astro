@@ -53,6 +53,7 @@ const pageUrl = new URL(localePath(lang, basePath), Astro.site).href;
     url: pageUrl,
     lang,
     product: productName,
+    productKey: publicId.product,
     dateModified: canonical.data.lastReviewed?.toISOString(),
   })}
 >

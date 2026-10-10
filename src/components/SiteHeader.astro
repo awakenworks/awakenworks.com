@@ -1,5 +1,5 @@
 ---
-import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
+import { AWAKEN_GITHUB_URL, content, publicProductEntries, localePath, type Lang } from '../i18n/content';
 import ProductMark from './ProductMark.astro';
 import AppearanceSelect from './AppearanceSelect.astro';
 import { LANGS, localeRegistry } from '../i18n/locales';
@@ -20,11 +20,9 @@ const enterpriseHref = localePath(lang, '/enterprise');
 const githubHref = AWAKEN_GITHUB_URL;
 const startHref = localePath(lang, '/docs/agents/get-started');
 
-const productLinks = [
-  { path: '/agents', label: t.nav.managed, status: t.products.managed.status, href: localePath(lang, '/agents') },
-  { path: '/objects', label: t.nav.objects, status: t.products.objects.status, href: localePath(lang, '/objects') },
-  { path: '/workforce', label: t.nav.workforce, status: t.products.workforce.status, href: localePath(lang, '/workforce') },
-];
+const productLinks = publicProductEntries(lang).map((product) => ({
+  path: product.path, label: product.name, status: product.status, href: localePath(lang, product.path),
+}));
 const resourceLinks = [
   { path: '/integrations', label: t.nav.integrations, href: localePath(lang, '/integrations') },
   { path: '/cases', label: t.nav.cases, href: localePath(lang, '/cases') },
@@ -35,11 +33,12 @@ const resourceLinks = [
   { path: '/enterprise', label: t.nav.enterprise, href: enterpriseHref },
 ];
 const isActive = (candidate: string) =>
-  path === candidate || path.startsWith(`${candidate}/`);
+  path === candidate || path.startsWith(`${candidate}/`)
+  || (candidate === '/workforce' && (path === '/objects' || path.startsWith('/objects/')));
 const productsActive = productLinks.some((link) => isActive(link.path));
 const resourcesActive = resourceLinks.some((link) => isActive(link.path));
 const analyticsProduct = path.startsWith('/objects')
-  ? 'objects'
+  ? 'workforce'
   : path.startsWith('/workforce')
     ? 'workforce'
     : path.startsWith('/agents') || path.startsWith('/docs')
@@ -79,18 +78,18 @@ const analyticsProduct = path.startsWith('/objects')
               <a
                 href={link.href}
                 aria-current={isActive(link.path) ? 'page' : undefined}
-                data-umami-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined}
-                data-umami-event-location={link.path === '/enterprise' ? 'header-resources' : undefined}
-                data-umami-event-product={link.path === '/enterprise' ? analyticsProduct : undefined}
-                data-umami-event-destination={link.path === '/enterprise' ? 'enterprise' : undefined}
+                data-awaken-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined}
+                data-awaken-event-location={link.path === '/enterprise' ? 'header-resources' : undefined}
+                data-awaken-event-product={link.path === '/enterprise' ? analyticsProduct : undefined}
+                data-awaken-event-destination={link.path === '/enterprise' ? 'enterprise' : undefined}
                 class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}
               >{link.label}</a>
             ))}
           </div>
         </details>
       </div>
-      <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="header" data-umami-event-product={analyticsProduct} data-umami-event-destination="github" class="hidden text-fog-300 hover:text-fog-100 sm:block">{t.nav.github}</a>
-      <a href={startHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="header" data-umami-event-product="agents" data-umami-event-destination="quickstart" class="hidden rounded-full bg-accent-500 px-3.5 py-1.5 text-xs font-semibold text-onaccent transition hover:bg-accent-400 md:inline-flex">{t.nav.run}</a>
+      <a href={githubHref} data-awaken-event="github_star_selected" data-awaken-event-location="header" data-awaken-event-product={analyticsProduct} data-awaken-event-destination="github" class="hidden text-fog-300 hover:text-fog-100 sm:block">{t.nav.github}</a>
+      <a href={startHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="header" data-awaken-event-product="agents" data-awaken-event-destination="quickstart" class="hidden rounded-full bg-accent-500 px-3.5 py-1.5 text-xs font-semibold text-onaccent transition hover:bg-accent-400 md:inline-flex">{t.nav.run}</a>
       <AppearanceSelect lang={lang} />
       {alternateLocales.map((alternateLang) => (
         <a
@@ -108,9 +107,9 @@ const analyticsProduct = path.startsWith('/objects')
           <p class="px-3 pt-1 font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">{t.nav.products}</p>
           {productLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
           <p class="mt-2 border-t border-ink-700 px-3 pt-3 font-mono text-[0.62rem] tracking-wider text-fog-600 uppercase">{t.nav.resources}</p>
-          {resourceLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} data-umami-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined} data-umami-event-location={link.path === '/enterprise' ? 'mobile-resources' : undefined} data-umami-event-product={link.path === '/enterprise' ? analyticsProduct : undefined} data-umami-event-destination={link.path === '/enterprise' ? 'enterprise' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
-          <a href={githubHref} data-umami-event="github_star_selected" data-umami-event-location="mobile-menu" data-umami-event-product={analyticsProduct} data-umami-event-destination="github" class="rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100">{t.nav.github}</a>
-          <a href={startHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="mobile-menu" data-umami-event-product="agents" data-umami-event-destination="quickstart" class="mt-1 rounded-lg bg-accent-500 px-3 py-2 font-semibold text-onaccent">{t.nav.run}</a>
+          {resourceLinks.map((link) => <a href={link.href} aria-current={isActive(link.path) ? 'page' : undefined} data-awaken-event={link.path === '/enterprise' ? 'enterprise_intent_selected' : undefined} data-awaken-event-location={link.path === '/enterprise' ? 'mobile-resources' : undefined} data-awaken-event-product={link.path === '/enterprise' ? analyticsProduct : undefined} data-awaken-event-destination={link.path === '/enterprise' ? 'enterprise' : undefined} class:list={['rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100', isActive(link.path) && 'bg-ink-850 text-fog-100']}>{link.label}</a>)}
+          <a href={githubHref} data-awaken-event="github_star_selected" data-awaken-event-location="mobile-menu" data-awaken-event-product={analyticsProduct} data-awaken-event-destination="github" class="rounded-lg px-3 py-2 text-fog-300 hover:bg-ink-850 hover:text-fog-100">{t.nav.github}</a>
+          <a href={startHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="mobile-menu" data-awaken-event-product="agents" data-awaken-event-destination="quickstart" class="mt-1 rounded-lg bg-accent-500 px-3 py-2 font-semibold text-onaccent">{t.nav.run}</a>
         </div>
       </details>
     </div>

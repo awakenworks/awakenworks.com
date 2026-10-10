@@ -17,7 +17,7 @@ lower-level derived feed of **open attention signals** and
 **pending subject approvals**. It is not a stored inbox entity and currently does
 not include mentions, comments, subscriptions, or general notifications.
 
-The three-product boundary remains explicit: Workforce owns the Issue,
+The two-product and internal-module boundaries remain explicit: Workforce owns the Issue,
 Attention, and business approval; Agents owns execution readiness and tool-call
 control; Objects owns the Resource facts and Actions whose state may resolve the
 underlying cause.

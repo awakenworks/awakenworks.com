@@ -38,10 +38,10 @@ const copy = ui[lang].landing;
       <h1 class="hero-title mt-6 max-w-3xl font-semibold text-fog-100">{o.title}</h1>
       <p class="mt-6 max-w-2xl text-lg text-fog-300 sm:text-xl">{o.subtitle}</p>
       <div class="mt-9 flex flex-wrap items-center gap-4">
-        <a href={localePath(lang, o.ctaPrimary.href)} data-umami-event="workforce_workspace_selected" data-umami-event-location="workforce-hero" data-umami-event-product="workforce" data-umami-event-destination="workspace-preview" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-semibold text-ink-950 hover:bg-accent-400">
+        <a href={localePath(lang, o.ctaPrimary.href)} data-awaken-event="workforce_workspace_selected" data-awaken-event-location="workforce-hero" data-awaken-event-product="workforce" data-awaken-event-destination="workspace-preview" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-semibold text-ink-950 hover:bg-accent-400">
           {o.ctaPrimary.label}
         </a>
-        <a href={localePath(lang, o.ctaSecondary.href)} data-umami-event="paid_validation_selected" data-umami-event-location="workforce-hero" data-umami-event-product="workforce" data-umami-event-destination="enterprise" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-semibold text-fog-200 hover:border-fog-500">
+        <a href={localePath(lang, o.ctaSecondary.href)} data-awaken-event="paid_validation_selected" data-awaken-event-location="workforce-hero" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-semibold text-fog-200 hover:border-fog-500">
           {o.ctaSecondary.label}
         </a>
       </div>
@@ -75,14 +75,14 @@ const copy = ui[lang].landing;
     </div>
   </section>
 
-  <section id="workforce-products" class="border-t border-ink-800 bg-ink-950">
+  <section id="workforce-capabilities" class="border-t border-ink-800 bg-ink-950">
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
       <p class="eyebrow text-rust-400">{o.products.eyebrow}</p>
       <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{o.products.title}</h2>
       <p class="mt-5 max-w-3xl text-base leading-8 text-fog-300">{o.products.body}</p>
       <div class="mt-10 grid gap-4 lg:grid-cols-3">
         {o.products.items.map((item, index) => (
-          <article data-workforce-product-card class="relative rounded-2xl border border-ink-700 bg-ink-850 p-6">
+          <article data-workforce-capability-card class="relative rounded-2xl border border-ink-700 bg-ink-850 p-6">
             <p class="font-mono text-[0.65rem] tracking-wider text-fog-500 uppercase">0{index + 1} · {item.role}</p>
             <h3 class="mt-3 text-xl font-semibold text-fog-100">{item.name}</h3>
             <p class="mt-3 text-sm leading-7 text-fog-300">{item.body}</p>
@@ -133,10 +133,10 @@ const copy = ui[lang].landing;
         {copy.workforceCloseBody}
       </p>
       <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-        <a href={localePath(lang, o.ctaPrimary.href)} data-umami-event="workforce_workspace_selected" data-umami-event-location="workforce-closing" data-umami-event-product="workforce" data-umami-event-destination="workspace-preview" class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-ink-950 transition hover:bg-accent-400">{o.ctaPrimary.label}</a>
-        <a href={localePath(lang, o.ctaSecondary.href)} data-umami-event="paid_validation_selected" data-umami-event-location="workforce-closing" data-umami-event-product="workforce" data-umami-event-destination="enterprise" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.ctaSecondary.label}</a>
-        <a href={localePath(lang, o.ctaDocs.href)} data-umami-event="developer_evaluation_selected" data-umami-event-location="workforce-closing" data-umami-event-product="workforce" data-umami-event-destination="docs" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400">{o.ctaDocs.label} <FunctionalIcon icon={ArrowRight} /></a>
-        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="workforce-close" data-umami-event-product="workforce" data-umami-event-destination="github" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400"><FunctionalIcon icon={Star} /> {copy.workforceStar}</a>
+        <a href={localePath(lang, o.ctaPrimary.href)} data-awaken-event="workforce_workspace_selected" data-awaken-event-location="workforce-closing" data-awaken-event-product="workforce" data-awaken-event-destination="workspace-preview" class="rounded-lg bg-accent-500 px-6 py-3 font-medium text-ink-950 transition hover:bg-accent-400">{o.ctaPrimary.label}</a>
+        <a href={localePath(lang, o.ctaSecondary.href)} data-awaken-event="paid_validation_selected" data-awaken-event-location="workforce-closing" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-lg border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{o.ctaSecondary.label}</a>
+        <a href={localePath(lang, o.ctaDocs.href)} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="workforce-closing" data-awaken-event-product="workforce" data-awaken-event-destination="docs" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400">{o.ctaDocs.label} <FunctionalIcon icon={ArrowRight} /></a>
+        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-awaken-event="github_star_selected" data-awaken-event-location="workforce-close" data-awaken-event-product="workforce" data-awaken-event-destination="github" class="px-2 py-3 text-sm font-medium text-fog-300 transition hover:text-rust-400"><FunctionalIcon icon={Star} /> {copy.workforceStar}</a>
       </div>
     </div>
   </section>

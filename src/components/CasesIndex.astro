@@ -82,7 +82,7 @@ const sourceHref = `${AWAKEN_GITHUB_URL}/tree/${agentsVersion.sourceRevision}`;
               <p class="mt-5 text-sm leading-7 text-fog-500"><strong class="text-fog-300">{copy.bestPrefix}</strong>{item.audience}</p>
               <a
                 href={localePath(lang, `/cases/${item.slug}`)}
-                data-umami-event={`cases-open-${item.slug}`}
+                data-awaken-event={`cases-open-${item.slug}`}
                 class="mt-7 inline-flex rounded-xl bg-iris-500 px-5 py-3 font-medium text-white transition hover:bg-iris-400"
               >{item.cta} <FunctionalIcon icon={ArrowRight} /></a>
             </div>

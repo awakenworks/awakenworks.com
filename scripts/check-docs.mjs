@@ -1016,14 +1016,14 @@ for (const locale of ['en', 'zh']) {
   requireText(overview, [
     [locale === 'zh' ? /^## 从眼前需要作出的决定进入/m : /^## Start from the decision in front of you/m, `${locale} Workforce overview must begin its UI map from user decisions`],
     [/Workspace \*\*Home\*\*[\s\S]*Workspace \*\*Work\*\*[\s\S]*Workspace \*\*Chats\*\*[\s\S]*Workspace \*\*Objects\*\*[\s\S]*Workspace \*\*Library\*\*[\s\S]*Project \*\*Overview\*\*[\s\S]*\*\*Outcomes\*\*[\s\S]*Project \*\*Canvases\*\*[\s\S]*\*\*Issues\*\*[\s\S]*\*\*Workbench\*\*/, `${locale} Workforce overview must map the current primary console surfaces`],
-    [/Awaken Workforce[\s\S]*Awaken Objects[\s\S]*Awaken Agents/, `${locale} Workforce overview must retain exactly named product owners`],
+    [/Awaken Workforce[\s\S]*Objects[\s\S]*Awaken Agents/, `${locale} Workforce overview must retain named products and the existing module owners`],
     [/Workforce.*Objects.*Agents.*Workforce/s, `${locale} Workforce overview must show one composed owner path`],
     [/\*\*Chats\*\*[\s\S]*(?:Awaken conversation|Awaken Session)[\s\S]*(?:not a Flow transcript|不是 Flow transcript)[\s\S]*\*\*Canvases\*\*[\s\S]*(?:Objects-owned|Objects 拥有)[\s\S]*(?:not a second Design backend|不是第二套 Design 后台)/, `${locale} Workforce overview must keep Chats and Canvases on their existing authorities`],
   ]);
   requireText(outcomes, [
     [locale === 'zh' ? /^## 在 Console 中从哪里查看/m : /^## Where this appears in the console/m, `${locale} Outcome guide must map Home, Outcomes, and Outcome Review`],
     [/Outcome Review[\s\S]*(?:正式交付物|formal deliverables)[\s\S]*(?:supporting|Supporting)/s, `${locale} Outcome guide must separate formal delivery from supporting work`],
-    [/Agents[\s\S]*Objects[\s\S]*Workforce|Workforce[\s\S]*Agents[\s\S]*Objects/s, `${locale} Outcome guide must preserve all three product owners`],
+    [/Agents[\s\S]*Objects[\s\S]*Workforce|Workforce[\s\S]*Agents[\s\S]*Objects/s, `${locale} Outcome guide must preserve existing execution, business-data and work owners`],
   ]);
   requireText(needsYou, [
     [/Workspace \*\*Work\*\*/, `${locale} operations guide must name the shipping Work surface`],
@@ -2441,7 +2441,7 @@ if (existsSync(obsoletePorter)) {
 // C4: the docs hub can hardcode translated responsibility labels that drift from
 //     the audience taxonomy used by every generated product page.
 // E1: Agents supports create, adopt, and connect without requiring Workforce.
-// E2: all three public products retain a distinct route and authority.
+// E2: both products retain their routes; the business-data module retains its domain authority.
 // E3: Coding fixtures can drift into the public product category.
 // E4: one taxonomy supplies localized responsibility labels to the hub and all
 //     generated documentation routes.
@@ -2466,8 +2466,8 @@ for (const locale of ['en', 'zh']) {
 const siteContentPath = join(root, 'src/i18n/content.ts');
 requireText(siteContentPath, [
   [/Awaken Agents is open-source, self-hostable infrastructure designed for building and operating production AI Agent applications\./, 'English public copy must own the canonical Agents category'],
-  [/en:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: 'Awaken Objects'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'English home must expose exactly the three public product owners'],
-  [/zh:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: 'Awaken Objects'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'Chinese home must expose exactly the three public product owners'],
+  [/en:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: '(?:Business Data & Actions \(Objects\)|业务数据与受控操作（Objects）)'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'English home must expose both products and the internal business-data capability'],
+  [/zh:\s*{[\s\S]*products:\s*{[\s\S]*managed:\s*{[\s\S]*name: 'Awaken Agents'[\s\S]*objects:\s*{[\s\S]*name: '(?:Business Data & Actions \(Objects\)|业务数据与受控操作（Objects）)'[\s\S]*workforce:\s*{[\s\S]*name: 'Awaken Workforce'/, 'Chinese home must expose both products and the internal business-data capability'],
   [/creating an Agent, adopting a supported Agent, or connecting behavior you already own/, 'English Awaken copy must preserve all Agent entry modes'],
   [/创建 Agent、采用受支持的 Agent，或接入已有行为/, 'Chinese Awaken copy must preserve all Agent entry modes'],
   [/en:\s*{[\s\S]*slug: 'pilot'[\s\S]*adoption: 'Create a thin Agent application'[\s\S]*slug: 'deepseek-harness'[\s\S]*adoption: 'Build an advanced Agent workbench'[\s\S]*slug: 'design'[\s\S]*adoption: 'Build a domain-rich AI product'/, 'English cases must cover thin app, workbench, and domain-rich product shapes'],
@@ -2558,8 +2558,8 @@ for (const [path, href] of [
 const docsIndexPath = join(root, 'src/components/DocsIndex.astro');
 const uiCatalogPath = join(root, 'src/i18n/ui.ts');
 requireText(uiCatalogPath, [
-  [/Build or connect an Agent application[\s\S]*Operate Agent infrastructure[\s\S]*Understand business objects[\s\S]*Manage work that must keep progressing/, 'English docs hub must route readers across all three product tasks'],
-  [/构建或接入 Agent 应用[\s\S]*运营 Agent 基础设施[\s\S]*理解业务对象[\s\S]*管理一项持续推进的工作/, 'Chinese docs hub must route readers across all three product tasks'],
+  [/Build or connect an Agent application[\s\S]*Operate Agent infrastructure[\s\S]*Understand business objects[\s\S]*Manage work that must keep progressing/, 'English docs hub must route readers across execution, business-data and work tasks'],
+  [/构建或接入 Agent 应用[\s\S]*运营 Agent 基础设施[\s\S]*理解业务对象[\s\S]*管理一项持续推进的工作/, 'Chinese docs hub must route readers across execution, business-data and work tasks'],
 ]);
 requireText(docsIndexPath, [
   [/docAudienceLabel\(audience, lang\)/, 'docs hub responsibility labels must derive from the canonical taxonomy'],
@@ -3431,12 +3431,12 @@ else {
       failures.push(`${relative(root, path)}: rendered description must contain 20-220 characters; found ${description.length}`);
     }
     if (!canonical) failures.push(`${relative(root, path)}: rendered route is missing a canonical URL`);
-    if (!html.includes('data-umami-event="github_star_selected"')) {
+    if (!html.includes('data-awaken-event="github_star_selected"')) {
       failures.push(`${relative(root, path)}: route is missing a measurable GitHub Star path`);
     }
     if (builtRelative.startsWith('docs/') || builtRelative.startsWith('zh/docs/')) {
       for (const placement of ['docs-header', 'docs-mobile-nav']) {
-        if (!html.includes(`data-umami-event-location="${placement}"`)) {
+        if (!html.includes(`data-awaken-event-location="${placement}"`)) {
           failures.push(`${relative(root, path)}: docs route is missing the ${placement} GitHub Star path`);
         }
       }

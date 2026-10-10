@@ -1,5 +1,5 @@
 ---
-import { content, localePath, type Lang } from '../i18n/content';
+import { content, publicProductEntries, localePath, type Lang } from '../i18n/content';
 import { ui } from '../i18n/ui';
 
 interface Props {
@@ -28,8 +28,8 @@ const chooseOption = ui[lang].landing.chooseOption;
 const formSteps = ui[lang].landing.formSteps;
 const selectedScenarioPrefix = ui[lang].landing.selectedScenario;
 const selectedProductPrefix = ui[lang].landing.selectedProduct;
-const productLabels = ui[lang].landing.productLabels;
-const productOptions = Object.entries(productLabels);
+const productOptions = publicProductEntries(lang).map((product) => [product.key, `${product.name} · ${product.status}`]);
+const caseLabels = Object.fromEntries(content[lang].cases.items.map((item) => [item.slug, item.name]));
 const scenarioLabels = Object.fromEntries(
   content[lang].home.scenarios.items.map((item) => [item.key, item.label]),
 );
@@ -46,8 +46,11 @@ const scenarioLabels = Object.fromEntries(
   data-error={w.error}
   data-submitting={variant.submitting}
   data-scenario-labels={JSON.stringify(scenarioLabels)}
+  data-case-labels={JSON.stringify(caseLabels)}
 >
   <input type="hidden" name="intent" value={intent} />
+  <input type="hidden" name="capability_context" value="" />
+  <input type="hidden" name="reference_case" value="" />
   <input type="hidden" name="lang" value={lang} />
   <input type="hidden" name="source_page" value={source} />
   <input type="hidden" name="landing_page" value="" />
@@ -196,6 +199,7 @@ const scenarioLabels = Object.fromEntries(
           source: form.dataset.source,
           scenario: form.elements.namedItem('scenario_context')?.value || undefined,
           product: form.elements.namedItem('product')?.value || undefined,
+          reference_case: form.elements.namedItem('reference_case')?.value || undefined,
           location: 'enterprise-apply',
           ...details,
         });
@@ -209,6 +213,13 @@ const scenarioLabels = Object.fromEntries(
       var requestedProduct = params.get('product');
       var scenario = form.elements.namedItem('scenario_context');
       var requestedScenario = params.get('scenario');
+      var requestedCase = params.get('reference_case');
+      var referenceCase = form.elements.namedItem('reference_case');
+      var caseLabels = {};
+      try { caseLabels = JSON.parse(form.dataset.caseLabels || '{}'); } catch (_error) {}
+      if (referenceCase && requestedCase && Object.prototype.hasOwnProperty.call(caseLabels, requestedCase)) {
+        referenceCase.value = requestedCase;
+      }
       var submissionId = form.elements.namedItem('submission_id');
       var submittedAt = form.elements.namedItem('submitted_at');
       var pageUrl = form.elements.namedItem('page_url');
@@ -226,7 +237,13 @@ const scenarioLabels = Object.fromEntries(
       }
       if (submittedAt) submittedAt.value = new Date().toISOString();
       if (pageUrl) pageUrl.value = window.location.href;
-      if (product && requestedProduct && ['agents', 'objects', 'workforce'].includes(requestedProduct)) {
+      // The existing handler retains old Objects intent inside Workforce.
+      var capability = form.elements.namedItem('capability_context');
+      if (requestedProduct === 'objects') {
+        requestedProduct = 'workforce';
+        if (capability) capability.value = 'objects';
+      }
+      if (product && requestedProduct && Array.from(product.options).some((option) => option.value === requestedProduct)) {
         product.value = requestedProduct;
       }
       if (scenario && requestedScenario && Object.prototype.hasOwnProperty.call(scenarioLabels, requestedScenario)) {

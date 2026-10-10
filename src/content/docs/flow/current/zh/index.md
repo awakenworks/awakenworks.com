@@ -27,19 +27,19 @@ Workforce 通过聚焦的提前体验合作提供。第一个有用结果是一�
 | 使用面向方案的运营界面 | 方案 **Workbench** | 查看已安装 value path、metric 与 queue，同时保持底层 Issue 和 Workflow 权威不变 |
 
 **Runs** 与 **Agent Center** 将 Agents 的执行健康投影到组合 Console；Workspace **Objects** 投影
-Objects 的业务事实与动作。Workforce 使用这些产品，但不拥有它们的 Session、Run、Resource
-或 Action 真相。
+Objects 的业务事实与动作。Workforce 使用 Agents 执行和内部 Objects 模块，各领域继续分别拥有 Session、Run、Resource
+与 Action 真相。
 
 **Chats** 是对 Awaken conversation 的命令工作台投影，不是 Flow transcript、Issue 或执行记录。
 **Canvases** 是 Objects 拥有的 Resource 界面，带不可变 revision、隔离 Preview、评审与明确的
 Send-to-Agent bridge；它不是第二套 Design 后台，也不是 Workforce aggregate。
 
-## 三个产品如何协作
+## Workforce 内部能力如何使用 Agents
 
-| 产品 | 拥有 | 在一个 Outcome 中的职责 |
+| 产品或内部能力 | 拥有 | 在一个 Outcome 中的职责 |
 | --- | --- | --- |
 | **Awaken Workforce** | Outcome、Issue、Workflow、责任、Attention、正式交付物、验收 | 委托结果、协调工作并记录最终决定 |
-| **Awaken Objects** | ResourceType、Resource、Relation、Action、Observation、provenance、精确业务 revision | 提供受治理上下文、允许的变化与外部业务证据 |
+| **Objects · Workforce 内部能力** | ResourceType、Resource、Relation、Action、Observation、provenance、精确业务 revision | 提供受治理上下文、允许的变化与外部业务证据 |
 | **Awaken Agents** | Agent publication、Session、Run、工具、Worker、Sandbox、已提交执行与恢复 | 执行被委托的 WorkUnit，并返回已提交执行证据 |
 
 组合路径是 **Workforce 委托 → Objects 提供上下文和动作 → Agents 执行 → 证据返回 →

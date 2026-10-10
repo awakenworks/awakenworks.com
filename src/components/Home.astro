@@ -1,7 +1,7 @@
 ---
 import FunctionalIcon from "./FunctionalIcon.astro";
 import { ArrowRight } from "@awaken/ui/icons/data";
-import { content, localePath, type Lang } from '../i18n/content';
+import { content, publicProductEntries, localePath, type Lang } from '../i18n/content';
 import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
 import ProductMark from './ProductMark.astro';
@@ -18,11 +18,7 @@ const home = t.home;
 const enterpriseHref = localePath(lang, '/enterprise');
 const agentsDocsHref = localePath(lang, '/docs/agents/get-started');
 const casesHref = localePath(lang, '/cases');
-const productCards = [
-  { key: 'agents', product: t.products.managed, tone: 'text-iris-400', border: 'hover:border-iris-500' },
-  { key: 'objects', product: t.products.objects, tone: 'text-amber-400', border: 'hover:border-amber-500' },
-  { key: 'workforce', product: t.products.workforce, tone: 'text-rust-400', border: 'hover:border-rust-500' },
-] as const;
+const productCards = publicProductEntries(lang);
 const featuredScenario = home.scenarios.items.find((item) => item.featured);
 const copy = ui[lang].home;
 ---
@@ -35,7 +31,7 @@ const copy = ui[lang].home;
     <div class="relative mx-auto max-w-6xl px-6 py-20 sm:py-24 lg:py-24">
       <div>
         <p class="eyebrow text-accent-400">{home.hero.eyebrow}</p>
-        <h1 data-home-speed-promise class={`home-display-title mt-6 font-semibold text-fog-100 ${copy.titleClass}`}>
+        <h1 data-home-production-promise class={`home-display-title mt-6 font-semibold text-fog-100 ${copy.titleClass}`}>
           <span class="home-display-title-line">
             {home.hero.title} <span data-home-title-highlight class="text-accent-400">{home.hero.titleHighlight}</span>
           </span>
@@ -56,19 +52,19 @@ const copy = ui[lang].home;
         </ul>
         <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
-            href={agentsDocsHref}
-            data-umami-event="developer_evaluation_selected"
-            data-umami-event-location="home-hero"
-            data-umami-event-product="agents"
-            data-umami-event-destination="quickstart"
+            href={enterpriseHref}
+            data-awaken-event="business_job_evaluation_selected"
+            data-awaken-event-location="home-hero"
+            data-awaken-event-product="workforce"
+            data-awaken-event-destination="enterprise"
             class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400"
           >{home.hero.ctaPrimary}</a>
           <a
-            href={enterpriseHref}
-            data-umami-event="private_deployment_cooperation_selected"
-            data-umami-event-location="home-hero"
-            data-umami-event-product="agents"
-            data-umami-event-destination="enterprise"
+            href={agentsDocsHref}
+            data-awaken-event="developer_evaluation_selected"
+            data-awaken-event-location="home-hero"
+            data-awaken-event-product="agents"
+            data-awaken-event-destination="quickstart"
             class="rounded-xl border border-ink-600 bg-ink-950/20 px-6 py-3 font-medium text-fog-100 backdrop-blur-sm transition hover:border-fog-500"
           >{home.hero.ctaSecondary}</a>
         </div>
@@ -85,19 +81,6 @@ const copy = ui[lang].home;
     </div>
   </section>
 
-  <ProductShowcase
-    lang={lang}
-    product="platform"
-    compact
-    caption={ui[lang].agentsLanding.showcase}
-    eyebrow={home.workflow.eyebrow}
-    title={home.workflow.title}
-    body={home.workflow.body}
-    steps={home.workflow.steps}
-    recovery={home.workflow.recovery}
-    concept={{ ...home.workflow.concept, href: localePath(lang, home.workflow.concept.href) }}
-  />
-
   <section id="home-value" class="scroll-mt-16 border-y border-ink-800 bg-ink-850">
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
       <div class="max-w-4xl">
@@ -113,10 +96,35 @@ const copy = ui[lang].home;
             <p class="text-sm leading-7 text-fog-400">{advantage.label}</p>
             <a
               href={localePath(lang, advantage.href)}
-              data-umami-event={`home-value-${advantage.key}`}
+              data-awaken-event={`home-value-${advantage.key}`}
               class="inline-flex whitespace-nowrap text-xs font-medium text-accent-400 hover:text-accent-300"
             >{advantage.proof} <FunctionalIcon icon={ArrowRight} /></a>
           </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="home-products" class="scroll-mt-16 border-b border-ink-800 bg-ink-900">
+    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <p class="eyebrow text-fog-500">{t.products.eyebrow}</p>
+      <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{t.products.title}</h2>
+      <div class="mt-10 grid gap-4 md:grid-cols-2">
+        {productCards.map((product) => (
+          <a
+            href={localePath(lang, product.href)}
+            data-awaken-event={`home-${product.key}-details`}
+            class={`group grid min-w-0 grid-cols-[auto_1fr] gap-4 rounded-xl border border-ink-700 bg-ink-850 p-5 transition hover:border-accent-500`}
+          >
+            <ProductMark product={product.key} class="h-7 w-7 text-accent-400" />
+            <span class="min-w-0">
+              <span class="text-base font-semibold text-fog-100">{product.name}</span>
+              <span class="mt-1 block font-mono text-[0.65rem] text-fog-600">{product.status}</span>
+              <span data-product-role class="mt-3 block text-xs text-fog-500">{product.role}</span>
+              <span class="mt-2 block text-sm leading-6 text-fog-400">{product.tagline}</span>
+              <span class="mt-4 inline-flex text-sm text-accent-400 transition group-hover:translate-x-1"><FunctionalIcon icon={ArrowRight} /></span>
+            </span>
+          </a>
         ))}
       </div>
     </div>
@@ -148,8 +156,8 @@ const copy = ui[lang].home;
               <p class="font-mono text-[0.65rem] tracking-wider text-fog-600 uppercase">{home.scenarios.labels.finish}</p>
               <p class="mt-2 text-sm leading-6 text-fog-300">{item.finish}</p>
               <a
-                href={item.href === '/enterprise' ? `${enterpriseHref}?product=agents&scenario=${item.key}#apply` : localePath(lang, item.href)}
-                data-umami-event={`scenario-${item.key}-selected`}
+                href={item.href === '/enterprise' ? `${enterpriseHref}?product=${item.product}&scenario=${item.key}#apply` : localePath(lang, item.href)}
+                data-awaken-event={`scenario-${item.key}-selected`}
                 class="mt-5 inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
               >{home.scenarios.cta} <FunctionalIcon icon={ArrowRight} /></a>
             </div>
@@ -158,6 +166,19 @@ const copy = ui[lang].home;
       </div>
     </div>
   </section>
+
+  <ProductShowcase
+    lang={lang}
+    product="platform"
+    compact
+    caption={ui[lang].agentsLanding.showcase}
+    eyebrow={home.workflow.eyebrow}
+    title={home.workflow.title}
+    body={home.workflow.body}
+    steps={home.workflow.steps}
+    recovery={home.workflow.recovery}
+    concept={{ ...home.workflow.concept, href: localePath(lang, home.workflow.concept.href) }}
+  />
 
   <section id="home-cases" class="scroll-mt-16 border-b border-ink-800 bg-ink-950">
     <div class="mx-auto max-w-6xl px-6 py-20 sm:py-28">
@@ -179,7 +200,7 @@ const copy = ui[lang].home;
               <p class="font-mono text-[0.68rem] uppercase tracking-wider text-fog-600">{item.status}</p>
               <a
                 href={localePath(lang, `/cases/${item.slug}`)}
-                data-umami-event={`home-case-${item.slug}`}
+                data-awaken-event={`home-case-${item.slug}`}
                 class="mt-4 inline-flex font-medium text-iris-400"
               >{item.cta} <FunctionalIcon icon={ArrowRight} /></a>
             </div>
@@ -187,34 +208,9 @@ const copy = ui[lang].home;
         ))}
       </div>
 
-      <a href={casesHref} data-umami-event="home-all-cases" class="mt-10 inline-flex rounded-xl border border-ink-600 px-5 py-3 font-medium text-fog-200 transition hover:border-iris-500">
+      <a href={casesHref} data-awaken-event="home-all-cases" class="mt-10 inline-flex rounded-xl border border-ink-600 px-5 py-3 font-medium text-fog-200 transition hover:border-iris-500">
         {copy.allCases} <FunctionalIcon icon={ArrowRight} />
       </a>
-    </div>
-  </section>
-
-  <section id="home-products" class="scroll-mt-16 border-b border-ink-800 bg-ink-900">
-    <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
-      <p class="eyebrow text-fog-500">{t.products.eyebrow}</p>
-      <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{t.products.title}</h2>
-      <div class="mt-10 grid gap-4 lg:grid-cols-3">
-        {productCards.map(({ key, product, tone, border }) => (
-          <a
-            href={localePath(lang, product.href)}
-            data-umami-event={`home-${key}-details`}
-            class={`group grid min-w-0 grid-cols-[auto_1fr] gap-4 rounded-xl border border-ink-700 bg-ink-850 p-5 transition ${border}`}
-          >
-            <ProductMark product={key} class={`h-7 w-7 ${tone}`} />
-            <span class="min-w-0">
-              <span class="text-base font-semibold text-fog-100">{product.name}</span>
-              <span class="mt-1 block font-mono text-[0.65rem] text-fog-600">{product.status}</span>
-              <span data-product-role class="mt-3 block text-xs text-fog-500">{product.role}</span>
-              <span class="mt-2 block text-sm leading-6 text-fog-400">{product.tagline}</span>
-              <span class={`mt-4 inline-flex text-sm transition group-hover:translate-x-1 ${tone}`}><FunctionalIcon icon={ArrowRight} /></span>
-            </span>
-          </a>
-        ))}
-      </div>
     </div>
   </section>
 
@@ -224,8 +220,8 @@ const copy = ui[lang].home;
       <h2 class="home-section-title mx-auto mt-5 max-w-4xl text-fog-100">{home.cta.title}</h2>
       <p class="mx-auto mt-7 max-w-2xl text-lg leading-8 text-fog-300">{home.cta.body}</p>
       <div class="mt-10 flex flex-wrap justify-center gap-4">
-        <a href={agentsDocsHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="home-closing" data-umami-event-product="agents" data-umami-event-destination="quickstart" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{home.cta.primary}</a>
-        <a href={enterpriseHref} data-umami-event="private_deployment_cooperation_selected" data-umami-event-location="home-closing" data-umami-event-product="agents" data-umami-event-destination="enterprise" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{home.cta.secondary}</a>
+        <a href={enterpriseHref} data-awaken-event="business_job_evaluation_selected" data-awaken-event-location="home-closing" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{home.cta.primary}</a>
+        <a href={agentsDocsHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="home-closing" data-awaken-event-product="agents" data-awaken-event-destination="quickstart" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{home.cta.secondary}</a>
       </div>
     </div>
   </section>
@@ -254,7 +250,7 @@ const copy = ui[lang].home;
 
   @media (min-width: 1024px) {
     .home-display-title-line {
-      white-space: nowrap;
+      white-space: normal;
     }
   }
 

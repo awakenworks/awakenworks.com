@@ -1,7 +1,7 @@
 ---
 import FunctionalIcon from "./FunctionalIcon.astro";
 import { ArrowRight, Check } from "@awaken/ui/icons/data";
-import { content, localePath, type Lang } from '../i18n/content';
+import { content, publicProductEntries, localePath, type Lang } from '../i18n/content';
 import OpportunityForm from './OpportunityForm.astro';
 import SiteFooter from './SiteFooter.astro';
 import SiteHeader from './SiteHeader.astro';
@@ -11,9 +11,12 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const page = content[lang].enterprise;
 const productHref = localePath(lang, '/agents');
+const paths = publicProductEntries(lang).map((product) => ({
+  ...page.paths.items.find((item) => item.query === product.key)!,
+  product: product.name, status: product.status, query: product.key, href: product.path,
+}));
 const pathTone = {
   agents: 'target:border-iris-500 target:bg-iris-500/5',
-  objects: 'target:border-amber-500 target:bg-amber-500/5',
   workforce: 'target:border-rust-500 target:bg-rust-500/5',
 } as const;
 ---
@@ -28,8 +31,8 @@ const pathTone = {
       <h1 class="hero-title mt-6 max-w-5xl font-semibold text-fog-100">{page.hero.title}</h1>
       <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300 sm:text-xl">{page.hero.body}</p>
       <div class="mt-10 flex flex-wrap gap-4">
-        <a href="#enterprise-paths" data-umami-event="private_deployment_cooperation_selected" data-umami-event-location="enterprise-hero" data-umami-event-product="unselected" data-umami-event-destination="enterprise-paths" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{page.hero.primary}</a>
-        <a href={productHref} data-umami-event="developer_evaluation_selected" data-umami-event-location="enterprise-hero" data-umami-event-product="agents" data-umami-event-destination="agents" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{page.hero.secondary}</a>
+        <a href="#enterprise-paths" data-awaken-event="private_deployment_cooperation_selected" data-awaken-event-location="enterprise-hero" data-awaken-event-product="unselected" data-awaken-event-destination="enterprise-paths" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{page.hero.primary}</a>
+        <a href={productHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="enterprise-hero" data-awaken-event-product="agents" data-awaken-event-destination="agents" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{page.hero.secondary}</a>
       </div>
       <p data-enterprise-now class="mt-8 max-w-3xl border-l-2 border-accent-500/60 pl-4 text-sm leading-6 text-fog-500">{page.boundary}</p>
     </div>
@@ -39,8 +42,8 @@ const pathTone = {
     <div class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
       <p class="eyebrow text-accent-400">{page.paths.eyebrow}</p>
       <h2 class="mt-5 max-w-4xl text-3xl font-semibold tracking-tight text-fog-100 sm:text-4xl">{page.paths.title}</h2>
-      <div class="mt-10 grid gap-5 lg:grid-cols-3">
-        {page.paths.items.map((item) => (
+      <div class="mt-10 grid gap-5 md:grid-cols-2">
+        {paths.map((item) => (
           <article
             id={`enterprise-${item.query}`}
             data-enterprise-product-path={item.query}
@@ -66,7 +69,7 @@ const pathTone = {
             <div class="mt-6 flex flex-wrap gap-x-4 gap-y-3 border-t border-ink-700 pt-5 text-sm">
               <a href={localePath(lang, item.href)} class="text-fog-300 hover:text-fog-100">{item.view} <FunctionalIcon icon={ArrowRight} /></a>
               <a href={localePath(lang, item.docsHref)} class="text-fog-300 hover:text-fog-100">{item.docs} <FunctionalIcon icon={ArrowRight} /></a>
-              <a href={`${localePath(lang, '/enterprise')}?product=${item.query}#apply`} data-umami-event="enterprise_intent_selected" data-umami-event-location={`enterprise-path-${item.query}`} data-umami-event-product={item.query} data-umami-event-destination="enterprise-form" class="font-medium text-accent-400 hover:text-accent-300">{item.apply} <FunctionalIcon icon={ArrowRight} /></a>
+              <a href={`${localePath(lang, '/enterprise')}?product=${item.query}#apply`} data-awaken-event="enterprise_intent_selected" data-awaken-event-location={`enterprise-path-${item.query}`} data-awaken-event-product={item.query} data-awaken-event-destination="enterprise-form" class="font-medium text-accent-400 hover:text-accent-300">{item.apply} <FunctionalIcon icon={ArrowRight} /></a>
             </div>
           </article>
         ))}
@@ -144,7 +147,7 @@ const pathTone = {
         </div>
       </div>
       <div class="rounded-2xl border border-ink-700 bg-ink-950 p-6 sm:p-8">
-        <OpportunityForm lang={lang} product="agents" />
+        <OpportunityForm lang={lang} product="workforce" />
       </div>
     </div>
   </section>

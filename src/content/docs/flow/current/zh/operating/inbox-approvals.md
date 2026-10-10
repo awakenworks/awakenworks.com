@@ -11,7 +11,7 @@ UI 读取 workspace Command Center。`GET /api/inbox` 仍是更底层、有界�
 approval** feed。它不是持久化 inbox entity，当前也不包含 mention、comment、subscription
 或通用 notification。
 
-三个产品边界保持明确：Workforce 拥有 Issue、Attention 与业务 approval；Agents 拥有执行
+两款产品与内部模块的边界保持明确：Workforce 拥有 Issue、Attention 与业务 approval；Agents 拥有执行
 readiness 与 tool-call control；Objects 拥有可以消除根因的 Resource fact 与 Action。
 
 ## Subject approvals

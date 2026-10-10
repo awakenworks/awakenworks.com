@@ -1,12 +1,15 @@
 # awakenworks.com
 
-AwakenWorks 的公司与产品官网，包含三条产品线：
+AwakenWorks 的公司与产品官网：让 AI 成为受控的生产力。
 
-- **Awaken Agents** 负责 Agent 的定义、运行、恢复与托管。
-- **Awaken Objects** 负责业务对象、关系、操作、权限与连接器。
-- **Awaken Workforce** 负责把需求转换为可持续推进、可恢复、可验收的工作。
+- **Awaken Agents**：独立采用的 AI 执行平台，负责发布、运行、权限与恢复。
+- **Awaken Workforce**：连接业务资料和允许的操作，按流程持续完成可验收的工作。
 
-产品边界由用户任务和产品契约决定，与代码仓、crate 或安装包的划分无关。
+Objects（含 Canvas）、Workflow、Automation 是 Workforce 内部模块；技术文档和领域
+权威保留，模块不建立独立产品或采购入口。Cloud 是托管交付方式。
+`src/i18n/docsVersions.ts` 的 `publicProducts` 是产品目录与可用状态的唯一站点权威；
+页头、页尾、首页、文档入口和申请选项都从它派生。产品命名与公开承诺以
+`~/docs/02-product/awakenworks-product-positioning.md` 为编辑依据，构建只读取仓内材料。
 
 站点使用 [Astro](https://astro.build) 和 [Tailwind CSS v4](https://tailwindcss.com)，
 默认英文，中文位于 `/zh/`。

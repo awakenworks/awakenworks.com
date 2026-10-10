@@ -1,5 +1,5 @@
 ---
-import { AWAKEN_GITHUB_URL, content, localePath, type Lang } from '../i18n/content';
+import { AWAKEN_GITHUB_URL, content, publicProductEntries, localePath, type Lang } from '../i18n/content';
 import ProductMark from './ProductMark.astro';
 
 interface Props {
@@ -8,6 +8,10 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = content[lang];
+const columns = [
+  { title: t.nav.products, links: publicProductEntries(lang).map((product) => ({ label: product.name, href: product.path })) },
+  ...t.footer.cols,
+];
 
 function externalEvent(href: string): string | undefined {
   if (href.includes('youtube.com')) return 'footer-youtube';
@@ -28,7 +32,7 @@ function externalEvent(href: string): string | undefined {
         <p class="mt-4 max-w-xs text-sm text-fog-500">{t.footer.tagline}</p>
       </div>
       {
-        t.footer.cols.map((col) => (
+        columns.map((col) => (
           <div>
             <h3 class="font-mono text-xs tracking-wider text-fog-500 uppercase">
               {col.title}
@@ -42,10 +46,10 @@ function externalEvent(href: string): string | undefined {
                         ? localePath(lang, link.href)
                         : link.href
                     }
-                    data-umami-event={externalEvent(link.href)}
-                    data-umami-event-location={link.href === AWAKEN_GITHUB_URL ? 'footer' : undefined}
-                    data-umami-event-product={link.href === AWAKEN_GITHUB_URL ? 'unselected' : undefined}
-                    data-umami-event-destination={link.href === AWAKEN_GITHUB_URL ? 'github' : undefined}
+                    data-awaken-event={externalEvent(link.href)}
+                    data-awaken-event-location={link.href === AWAKEN_GITHUB_URL ? 'footer' : undefined}
+                    data-awaken-event-product={link.href === AWAKEN_GITHUB_URL ? 'unselected' : undefined}
+                    data-awaken-event-destination={link.href === AWAKEN_GITHUB_URL ? 'github' : undefined}
                     class="text-fog-300 hover:text-fog-100"
                   >
                     {link.label}

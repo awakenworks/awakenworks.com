@@ -21,6 +21,8 @@ const failures = [];
 // can still point to a file absent from the uploaded artifact; C6 a custom
 // Actions workflow can accidentally retain a redundant public/CNAME even
 // though the repository Pages setting is the domain authority.
+// C7 the shared brand owner names the public product Agents; a retired
+// Managed label must not prevent an otherwise source-aligned deployment.
 // E1 prefix every internal browser URL exactly once; E2 leave external and
 // fragment URLs unchanged; E3 remove the prefix before route interpretation;
 // E4 keep canonical URLs on the configured site/base; E5 require every emitted
@@ -121,7 +123,7 @@ if (!index.includes('src="https://cloud.umami.is/script.js"')) {
 }
 
 const chineseAgents = readFileSync(resolve(dist, 'zh/agents/index.html'), 'utf8');
-if (!/<html lang="zh-CN" data-brand="managed"/u.test(chineseAgents)) {
+if (!/<html lang="zh-CN" data-brand="agents"/u.test(chineseAgents)) {
   failures.push('the deployment base must be removed before locale and product-brand selection');
 }
 if (!chineseAgents.includes(`<link rel="canonical" href="${siteHref('/zh/agents')}">`)) {

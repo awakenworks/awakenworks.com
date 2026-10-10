@@ -2,7 +2,7 @@
 import FunctionalIcon from "./FunctionalIcon.astro";
 import { ArrowRight, Star } from "@awaken/ui/icons/data";
 import { AWAKEN_GITHUB_URL, localePath, type Lang } from '../i18n/content';
-import { publicProductLabel, publicVersionLabel } from '../i18n/docsVersions';
+import { publicProducts, publicProductLabel } from '../i18n/docsVersions';
 import DocsShell from './DocsShell.astro';
 import { docAudienceLabel, type DocsAudience } from '../lib/docsTaxonomy';
 import { docsIndexCopy, ui } from '../i18n/ui';
@@ -12,13 +12,9 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = docsIndexCopy[lang];
 const startPaths = copy.startPaths;
-const products = copy.products.map((product) => ({
-  ...product,
-  status: product.key === 'agents'
-    ? publicVersionLabel('platform', lang)
-    : product.key === 'objects'
-      ? publicProductLabel('objects', lang)
-      : publicVersionLabel('flow', lang),
+const products = Object.entries(publicProducts).map(([key, metadata]) => ({
+  ...copy.products.find((item) => item.key === key),
+  key, tone: metadata.tone, status: publicProductLabel(key as keyof typeof publicProducts, lang),
 }));
 const agentsPaths = copy.agentsPaths as readonly (readonly [DocsAudience, string, string])[];
 
@@ -37,9 +33,9 @@ const toneClass: Record<string, string> = {
       <h1 class="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-fog-100 sm:text-6xl">{copy.heroTitle}</h1>
       <p class="mt-6 max-w-3xl text-lg leading-8 text-fog-300">{copy.heroBody}</p>
       <div class="mt-8 flex flex-wrap gap-4">
-        <a href="#start" data-umami-event="docs-task-path-selected" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent transition hover:bg-accent-400">{copy.startCta}</a>
-        <a href={localePath(lang, '/docs/agents')} data-umami-event="docs-agents-overview-selected" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-medium text-fog-100 transition hover:border-fog-500">{copy.agentsCta}</a>
-        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-umami-event="github_star_selected" data-umami-event-location="docs-index" data-umami-event-product="unselected" data-umami-event-destination="github" class="px-3 py-3 text-sm font-medium text-fog-300 transition hover:text-accent-400"><FunctionalIcon icon={Star} /> {ui[lang].common.githubStar} <FunctionalIcon icon={ArrowRight} /></a>
+        <a href="#start" data-awaken-event="docs-task-path-selected" class="rounded-lg bg-accent-500 px-5 py-3 text-sm font-medium text-onaccent transition hover:bg-accent-400">{copy.startCta}</a>
+        <a href={localePath(lang, '/docs/agents')} data-awaken-event="docs-agents-overview-selected" class="rounded-lg border border-ink-600 px-5 py-3 text-sm font-medium text-fog-100 transition hover:border-fog-500">{copy.agentsCta}</a>
+        <a href={AWAKEN_GITHUB_URL} target="_blank" rel="noopener noreferrer" data-awaken-event="github_star_selected" data-awaken-event-location="docs-index" data-awaken-event-product="unselected" data-awaken-event-destination="github" class="px-3 py-3 text-sm font-medium text-fog-300 transition hover:text-accent-400"><FunctionalIcon icon={Star} /> {ui[lang].common.githubStar} <FunctionalIcon icon={ArrowRight} /></a>
       </div>
     </div>
   </section>

@@ -90,6 +90,22 @@ const buildRevision = import.meta.env.PUBLIC_AWAKENWORKS_BUILD_REVISION ?? 'loca
       // One shared state transition owns first/last campaign attribution.
       // Forms project this session-scoped state; CRM owns qualification.
       captureAttribution();
+
+      // One layout owns click dispatch. Navigation and native controls never
+      // wait for an analytics request; the existing Umami SDK owns sending.
+      document.addEventListener('click', (event) => {
+        const element = event.target instanceof Element
+          ? event.target.closest('[data-awaken-event]') : null;
+        const name = element?.getAttribute('data-awaken-event');
+        if (!element || !name || !window.umami?.track) return;
+        const prefix = 'data-awaken-event-';
+        const data = Object.fromEntries(Array.from(element.attributes)
+          .filter((attribute) => attribute.name.startsWith(prefix))
+          .map((attribute) => [attribute.name.slice(prefix.length), attribute.value]));
+        try {
+          void Promise.resolve(window.umami.track(name, data)).catch(() => {});
+        } catch { /* Analytics failure leaves the native action intact. */ }
+      });
     </script>
     <link rel="icon" type="image/svg+xml" href={withSiteBase('/favicon.svg')} />
     <meta name="generator" content={Astro.generator} />

@@ -59,7 +59,9 @@ The site has two navigation layers with different ownership:
 
 1. the **adoption layer** starts from the reader's situation and links to
    canonical tasks;
-2. the **product layer** preserves Agents, Objects, and Workforce ownership.
+2. the **product layer** presents Agents and Workforce. Objects remains a Workforce
+   capability with its existing domain owner and technical routes. Public product
+   navigation and request choices derive from `publicProducts` in the version registry.
 
 The adoption layer may offer “start from work,” “create or adopt an Agent,”
 “connect an Agent,” and “operate in production.” It is navigation, not another
@@ -139,6 +141,16 @@ Current configuration terminology has one authoritative chain:
 `AgentConfig` (mutable authoring) → `ExecutableAgentSnapshot` (immutable
 publication) → `Runtime::run` (execution). Retired `ProjectAgentConfig` and
 `RunnableConfig` paths must not be restored from archived drafts.
+
+## Click measurement
+
+`Base.astro` is the single dispatcher for `data-awaken-event` declarations.
+It calls the existing Umami SDK with the existing event names and bounded
+attributes. It never cancels a native click or awaits the collector. SDK
+pageview tracking and the opportunity form's explicit submission events retain
+their existing owners. Do not restore `data-umami-event` on elements: its SDK
+auto-handler can couple navigation to a pending send and would create a second
+click dispatcher. There is no local analytics queue or retry state.
 
 ## Blog and brand
 

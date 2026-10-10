@@ -10,6 +10,6 @@ const { lang } = Astro.props as { lang: Lang };
 const o = content[lang].landing.workforce;
 ---
 
-<Base title={`Awaken Workforce — ${o.title}`} description={o.subtitle} jsonLd={softwareAppLd({ name: 'Awaken Workforce', description: o.subtitle, url: new URL(localePath(lang, '/workforce'), Astro.site).href })}>
+<Base title={`Awaken Workforce — ${o.title}`} description={o.subtitle} jsonLd={softwareAppLd({ product: 'workforce', description: o.subtitle, url: new URL(localePath(lang, '/workforce'), Astro.site).href })}>
   <AwakenFlowLanding lang={lang} />
 </Base>

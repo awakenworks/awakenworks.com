@@ -40,7 +40,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm check:pages
+        run: pnpm build
+
+      - name: Validate standalone content and Pages paths
+        run: |
+          pnpm check:standalone
+          node scripts/check-home.mjs
+          node scripts/check-docs.mjs
+          node scripts/check-pages-base.mjs
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

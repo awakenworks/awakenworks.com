@@ -27,7 +27,7 @@ export type DocsAudience = (typeof DOC_AUDIENCES)[number];
 // parallel product-label maps.
 export function docsProductName(product: string): string {
   if (product === 'agents' || product === 'platform' || product === 'harness') return 'Awaken Agents';
-  if (product === 'objects') return 'Awaken Objects';
+  if (product === 'objects') return 'Workforce · Business Data & Actions (Objects)';
   if (product === 'workforce' || product === 'flow') return 'Awaken Workforce';
   return 'AwakenWorks';
 }

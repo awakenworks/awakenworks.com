@@ -76,10 +76,23 @@ const isDeepSeek = item.slug === 'deepseek-harness';
         <p class="eyebrow text-accent-400">{copy.availability}</p>
         <h2 class="mt-4 text-3xl font-semibold text-fog-100">{copy.invest}</h2>
         <p class="mt-5 rounded-xl border border-ink-700 bg-ink-900 px-4 py-3 text-sm leading-6 text-fog-500">{item.sourceStatus}</p>
+        <dl data-case-source class="mt-5 rounded-xl border border-ink-700 bg-ink-900 p-4">
+          <dt class="text-xs text-fog-500">{copy.sourceBaseline}</dt>
+          <dd class="mt-2 break-all font-mono text-xs text-fog-300">{item.sourceBaseline}</dd>
+        </dl>
+        <p class="mt-3 text-xs leading-6 text-fog-500">{copy.sourceScope}</p>
+        {item.sourceArchive && <p data-case-source-digest class="mt-3 break-all font-mono text-xs leading-6 text-fog-500">{copy.sourceDigest}: {item.sourceArchive.sha256}</p>}
+        <a href={item.sourceArchive?.href ?? localePath(lang, item.sourceAccessHref)} download={item.sourceArchive ? true : undefined} data-awaken-event={item.sourceArchive ? "case_source_download_selected" : "case_source_access_selected"} data-awaken-event-location="case-availability" data-awaken-event-product="agents" data-awaken-event-destination={item.sourceArchive ? "source-archive" : "enterprise"} class="mt-4 inline-flex text-sm font-medium text-iris-400">{item.sourceArchive ? copy.sourceDownload : copy.sourceAccess}</a>
+        {item.walkthrough && (
+          <figure data-case-walkthrough class="mt-6">
+            <video controls preload="metadata" playsinline class="w-full rounded-xl border border-ink-700" src={item.walkthrough.src} aria-label={item.walkthrough.caption}></video>
+            <figcaption class="mt-3 text-sm leading-6 text-fog-400">{item.walkthrough.caption}</figcaption>
+          </figure>
+        )}
         {item.engineeringBlog && (
           <a
             href={localePath(lang, item.engineeringBlog.href)}
-            data-umami-event={`case-${slug}-engineering-blog`}
+            data-awaken-event={`case-${slug}-engineering-blog`}
             class="mt-5 inline-flex text-sm font-medium text-iris-400 hover:text-iris-300"
           >{item.engineeringBlog.label} <FunctionalIcon icon={ArrowRight} /></a>
         )}
@@ -100,8 +113,8 @@ const isDeepSeek = item.slug === 'deepseek-harness';
     <div class="mx-auto max-w-5xl px-6 py-20 text-center">
       <h2 class="text-4xl font-semibold tracking-tight text-fog-100">{item.firstWin}</h2>
       <div class="mt-8 flex flex-wrap justify-center gap-4">
-        <a href={localePath(lang, item.primary.href)} data-umami-event={`case-${slug}-primary`} class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent hover:bg-accent-400">{item.primary.label}</a>
-        <a href={localePath(lang, item.secondary.href)} data-umami-event={`case-${slug}-secondary`} class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 hover:border-fog-500">{item.secondary.label}</a>
+        <a href={localePath(lang, item.primary.href)} data-awaken-event={`case-${slug}-primary`} class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent hover:bg-accent-400">{item.primary.label}</a>
+        <a href={localePath(lang, item.secondary.href)} data-awaken-event={`case-${slug}-secondary`} class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 hover:border-fog-500">{item.secondary.label}</a>
       </div>
     </div>
   </section>

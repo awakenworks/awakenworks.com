@@ -2,6 +2,7 @@
 // @id references — Google stitches Organization/WebSite/Article into one graph.
 import { siteHref } from '../config/siteDeployment.mjs';
 import { canonicalEntities } from '../i18n/content';
+import { docsProductName } from './docsTaxonomy';
 
 const SITE = siteHref('/').replace(/\/$/u, '');
 const GITHUB = 'https://github.com/AwakenWorks';
@@ -11,6 +12,9 @@ const ORG_ID = `${SITE}/#organization`;
 const WEBSITE_ID = `${SITE}/#website`;
 const AGENTS_ID = `${SITE}/#awaken-agents`;
 const RUNTIME_ID = `${SITE}/#awaken-runtime`;
+const WORKFORCE_ID = `${SITE}/#awaken-workforce`;
+const OBJECTS_ID = `${SITE}/#workforce-objects`;
+type ApplicationKey = 'agents' | 'workforce' | 'objects';
 
 // The publishing entity — referenced by @id everywhere else so it stays a
 // single node in the knowledge graph.
@@ -58,44 +62,42 @@ const awakenAgents = {
   publisher: { '@id': ORG_ID },
 };
 
-// Home page: make company, product, and Runtime separate connected entities.
+const awakenWorkforce = {
+  '@type': 'SoftwareApplication', '@id': WORKFORCE_ID,
+  name: 'Awaken Workforce', description: canonicalEntities.en.workforce,
+  url: siteHref('/workforce/'), applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Cross-platform', publisher: { '@id': ORG_ID },
+  hasPart: { '@id': OBJECTS_ID },
+};
+const workforceObjects = {
+  '@type': 'SoftwareApplication', '@id': OBJECTS_ID,
+  name: docsProductName('objects'),
+  description: 'The Workforce capability for typed business data and permitted actions.',
+  url: siteHref('/objects/'), applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Cross-platform', publisher: { '@id': ORG_ID },
+  isPartOf: { '@id': WORKFORCE_ID },
+};
+const applications = { agents: awakenAgents, workforce: awakenWorkforce, objects: workforceObjects };
+
+// One entity owner serves landing and documentation graphs. Module routes never
+// create a third independent product, and labels cannot determine URL identity.
+function applicationGraph(product: ApplicationKey) {
+  return product === 'agents' ? [awakenAgents, awakenRuntime]
+    : product === 'objects' ? [awakenWorkforce, workforceObjects]
+      : [awakenWorkforce];
+}
 export function homeLd() {
-  return { '@context': 'https://schema.org', '@graph': [organization, website, awakenAgents, awakenRuntime] };
+  return { '@context': 'https://schema.org', '@graph': [organization, website, awakenAgents, awakenRuntime, awakenWorkforce] };
 }
 
-// Product pages. `offers`/`aggregateRating` are intentionally omitted: some
-// products are waitlist-only, and fabricating a price or rating would be a
-// false claim. The markup still anchors the product as an entity.
 export function softwareAppLd(opts: {
-  name: string;
+  product: ApplicationKey;
   description: string;
   url: string;
 }) {
-  const appId = opts.name === 'Awaken Agents'
-    ? AGENTS_ID
-    : `${SITE}/#${opts.name.toLowerCase().replaceAll(' ', '-')}`;
-  const app = {
-    '@type': 'SoftwareApplication',
-    '@id': appId,
-    name: opts.name,
-    description: opts.description,
-    url: opts.url,
-    applicationCategory: 'DeveloperApplication',
-    operatingSystem: 'Cross-platform',
-    publisher: { '@id': ORG_ID },
-  };
-  if (opts.name !== 'Awaken Agents') {
-    return { '@context': 'https://schema.org', '@graph': [organization, website, app] };
-  }
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      organization,
-      website,
-      { ...awakenAgents, description: opts.description, url: opts.url },
-      awakenRuntime,
-    ],
-  };
+  const graph = applicationGraph(opts.product).map((entity) => entity['@id'] === applications[opts.product]['@id']
+    ? { ...entity, description: opts.description, url: opts.url } : entity);
+  return { '@context': 'https://schema.org', '@graph': [organization, website, ...graph] };
 }
 
 export function docsPageLd(opts: {
@@ -104,24 +106,12 @@ export function docsPageLd(opts: {
   url: string;
   lang: string;
   product: string;
+  productKey: ApplicationKey;
   dateModified?: string;
 }) {
   const localePrefix = opts.lang.startsWith('zh') ? '/zh' : '';
-  const productSlug = opts.product.replace('Awaken ', '').toLowerCase();
-  const productId = opts.product === 'Awaken Agents'
-    ? AGENTS_ID
-    : `${SITE}/#${opts.product.toLowerCase().replaceAll(' ', '-')}`;
-  const productEntity = opts.product === 'Awaken Agents'
-    ? awakenAgents
-    : {
-        '@type': 'SoftwareApplication',
-        '@id': productId,
-        name: opts.product,
-        url: siteHref(`/${productSlug}/`),
-        applicationCategory: 'DeveloperApplication',
-        operatingSystem: 'Cross-platform',
-        publisher: { '@id': ORG_ID },
-      };
+  const productSlug = opts.productKey;
+  const productId = applications[opts.productKey]['@id'];
   const article = {
     '@type': 'TechArticle',
     '@id': `${opts.url}#article`,
@@ -149,8 +139,7 @@ export function docsPageLd(opts: {
     '@graph': [
       organization,
       website,
-      productEntity,
-      ...(opts.product === 'Awaken Agents' ? [awakenRuntime] : []),
+      ...applicationGraph(opts.productKey),
       article,
       breadcrumb,
     ],

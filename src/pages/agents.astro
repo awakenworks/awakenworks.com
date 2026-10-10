@@ -13,7 +13,7 @@ const p = t.landing.managed;
   title={`Awaken Agents — ${p.title}`}
   description={p.subtitle}
   jsonLd={softwareAppLd({
-    name: 'Awaken Agents',
+    product: 'agents',
     description: p.subtitle,
     url: new URL(localePath(DEFAULT_LANG, '/agents'), Astro.site).href,
   })}

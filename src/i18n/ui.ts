@@ -28,6 +28,7 @@ export const ui = {
     },
     cases: {
       disclaimer: 'These pages document our own builds. They are not customer stories and do not represent customer adoption or endorsement.',
+      sourceBaseline: 'Committed application baseline', sourceAccess: 'Request source access', sourceDownload: 'Download the fixed source', sourceDigest: 'Source archive SHA-256', sourceScope: 'Each application has its own code and qualification. The Agents documentation revision is a separate baseline.',
       all: 'All reference builds', bestFor: 'Best for: ', deepSeek: 'This is an independent reference reimplementation. It does not imply a DeepSeek partnership, sponsorship, or endorsement.',
       situation: 'The situation', firstResult: 'First useful result', productShape: 'Product shape', applicationKeeps: 'Your application keeps', awakenProvides: 'Awaken provides',
       tryPath: 'Try this path', smallest: 'Build the smallest useful version first.', availability: 'What is available today', invest: 'Check the status before you invest more.', checkAt: 'Where to check: ',
@@ -110,7 +111,6 @@ export const ui = {
       ],
       selectedScenario: 'Selected starting point:',
       selectedProduct: 'Selected product:',
-      productLabels: { agents: 'Awaken Agents · current implementation', objects: 'Awaken Objects · early preview', workforce: 'Awaken Workforce · early preview' },
       optionalDetails: 'Optional systems, risks, and timing',
     },
     agentsLanding: {
@@ -177,6 +177,7 @@ export const ui = {
       docs: '进入技术文档', archive: '文章列表', read: '阅读', empty: '还没有文章。', back: '博客',
     },
     cases: {
+      sourceBaseline: '已提交的应用源码基线', sourceAccess: '申请查看源码', sourceDownload: '下载固定版本源码', sourceDigest: '源码包 SHA-256', sourceScope: '每个应用分别绑定代码与验证；Agents 文档所引用的 revision 是另一份基线。',
       disclaimer: '这些页面记录我们自己的构建过程，不是客户案例，也不代表客户采用或背书。',
       all: '全部参考实现', bestFor: '适合：', deepSeek: '这是独立参考实现，不代表 DeepSeek 的合作、赞助或背书。',
       situation: '你可能正遇到', firstResult: '第一个可用结果', productShape: '产品形态', applicationKeeps: '应用保留', awakenProvides: 'Awaken 提供',
@@ -260,7 +261,6 @@ export const ui = {
       ],
       selectedScenario: '已选择的起点：',
       selectedProduct: '已选择产品：',
-      productLabels: { agents: 'Awaken Agents · 当前实施', objects: 'Awaken Objects · 提前预览', workforce: 'Awaken Workforce · 提前预览' },
       optionalDetails: '选填：系统、风险与计划时间',
     },
     agentsLanding: {
@@ -399,13 +399,12 @@ export const docsIndexCopy = {
     startPaths: [
       ['Build or connect an Agent application', 'Create an Agent and Session, or connect existing behavior to Agents, then read the same event history from your application.', '/docs/agents', 'Awaken Agents', 'agents'],
       ['Operate Agent infrastructure', 'Run AllInOne first. Split out Workers and choose Sandbox placement when load or isolation requires it.', '/docs/agents/how-to/self-host', 'Awaken Agents', 'agents'],
-      ['Understand business objects', 'Start with ResourceType, Resource, Relation, and Action, then identify which changes can become business facts.', '/docs/objects', 'Awaken Objects', 'objects'],
+      ['Understand business objects', 'Start with ResourceType, Resource, Relation, and Action, then identify which changes can become business facts.', '/docs/objects', 'Awaken Workforce · Objects', 'objects'],
       ['Manage work that must keep progressing', 'Create an Issue in Workforce, name its owner and acceptance conditions, then assign a person, rule, or Agent.', '/docs/workforce/quickstart', 'Awaken Workforce', 'workforce'],
     ],
     products: [
       { key: 'agents', tone: 'iris', label: 'Agent application infrastructure', title: 'Awaken Agents', body: canonicalEntities.en.agents, href: '/docs/agents', links: [['What is an Agent Runtime?', '/docs/agents/concepts/agent-runtime'], ['Get started', '/docs/agents/get-started'], ['Deploy and operate', '/docs/agents/how-to/self-host']] },
-      { key: 'objects', tone: 'amber', label: 'Business objects', title: 'Awaken Objects', body: 'Organize ResourceType, Resource, Relation, Action, and Connector into typed, versioned business facts with provenance.', href: '/docs/objects', links: [['Object model', '/docs/objects/concepts/object-model'], ['Resource model', '/docs/objects/concepts/resource-model'], ['Connectors', '/docs/objects/concepts/connectors']] },
-      { key: 'workforce', tone: 'rust', label: 'Work and acceptance', title: 'Awaken Workforce', body: 'Start from work that must be completed, retain responsibility and process, coordinate people, rules, and Agents, and accept outcomes from external facts.', href: '/docs/workforce', links: [['Get started', '/docs/workforce/quickstart'], ['Manage work', '/docs/workforce/how-to'], ['Handle exceptions', '/docs/workforce/operating/attention-recovery']] },
+      { key: 'workforce', tone: 'rust', label: 'Work and acceptance', title: 'Awaken Workforce', body: 'Start from work that must be completed, retain responsibility and process, coordinate people, rules, and Agents, and accept outcomes from external facts.', href: '/docs/workforce', links: [['Business data and actions', '/docs/objects'], ['Get started', '/docs/workforce/quickstart'], ['Manage work', '/docs/workforce/how-to'], ['Handle exceptions', '/docs/workforce/operating/attention-recovery']] },
     ],
     agentsPaths: [
       ['manual', 'Start local AllInOne, open Console, create a Session, and confirm Agents with one visible result.', '/docs/agents/get-started'],
@@ -421,13 +420,12 @@ export const docsIndexCopy = {
     startPaths: [
       ['构建或接入 Agent 应用', '创建一个 Agent 和 Session，或者把已有 Agent 接到 Agents，再从应用读取同一份事件记录。', '/docs/agents', 'Awaken Agents', 'agents'],
       ['运营 Agent 基础设施', '先运行 AllInOne；需要更高负载或隔离时，再拆分 Worker，并选择 Sandbox 的运行位置。', '/docs/agents/how-to/self-host', 'Awaken Agents', 'agents'],
-      ['理解业务对象', '从 ResourceType、Resource、Relation 与 Action 开始，明确什么是可提交的业务事实。', '/docs/objects', 'Awaken Objects', 'objects'],
+      ['理解业务对象', '从 ResourceType、Resource、Relation 与 Action 开始，明确什么是可提交的业务事实。', '/docs/objects', 'Awaken Workforce · Objects', 'objects'],
       ['管理一项持续推进的工作', '在 Workforce 中创建 Issue，写下负责人和验收条件，再选择人、规则或 Agent 执行。', '/docs/workforce/quickstart', 'Awaken Workforce', 'workforce'],
     ],
     products: [
       { key: 'agents', tone: 'iris', label: 'Agent 应用基础设施', title: 'Awaken Agents', body: canonicalEntities.zh.agents, href: '/docs/agents', links: [['什么是 Agent Runtime？', '/docs/agents/concepts/agent-runtime'], ['快速开始', '/docs/agents/get-started'], ['部署与运营', '/docs/agents/how-to/self-host']] },
-      { key: 'objects', tone: 'amber', label: '业务对象', title: 'Awaken Objects', body: '把 ResourceType、Resource、Relation、Action 与 Connector 组织成有类型、有版本、有来源的业务事实。', href: '/docs/objects', links: [['对象模型', '/docs/objects/concepts/object-model'], ['Resource 模型', '/docs/objects/concepts/resource-model'], ['Connector', '/docs/objects/concepts/connectors']] },
-      { key: 'workforce', tone: 'rust', label: '工作与验收', title: 'Awaken Workforce', body: '从必须完成的工作开始，保存责任与流程，协调人、规则和 Agent，并用外部事实验收结果。', href: '/docs/workforce', links: [['开始使用', '/docs/workforce/quickstart'], ['管理工作', '/docs/workforce/how-to'], ['处理例外', '/docs/workforce/operating/attention-recovery']] },
+      { key: 'workforce', tone: 'rust', label: '工作与验收', title: 'Awaken Workforce', body: '从必须完成的工作开始，保存责任与流程，协调人、规则和 Agent，并用外部事实验收结果。', href: '/docs/workforce', links: [['业务数据与受控操作', '/docs/objects'], ['开始使用', '/docs/workforce/quickstart'], ['管理工作', '/docs/workforce/how-to'], ['处理例外', '/docs/workforce/operating/attention-recovery']] },
     ],
     agentsPaths: [
       ['manual', '启动本地 AllInOne，打开 Console，创建 Session，并看到第一个结果。', '/docs/agents/get-started'],

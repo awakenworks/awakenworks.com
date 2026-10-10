@@ -33,8 +33,8 @@ to make:
 
 **Runs** and **Agent Center** project Agents execution health into the composed
 console. Workspace **Objects** projects Objects business facts and actions. Workforce
-uses those products without taking ownership of their Session, Run, Resource, or
-Action truth.
+uses Agents execution and its own Objects module without merging their Session,
+Run, Resource, or Action authorities.
 
 **Chats** is a command workbench projected over an Awaken conversation; it is
 not a Flow transcript, Issue, or execution record. **Canvases** is an Objects-owned
@@ -42,12 +42,12 @@ Resource surface with immutable revisions, isolated Preview, review, and an
 explicit Send-to-Agent bridge; it is not a second Design backend or Workforce
 aggregate.
 
-## How the three products work together
+## How Workforce capabilities use Agents
 
-| Product | Owns | Role in one Outcome |
+| Product or internal capability | Owns | Role in one Outcome |
 | --- | --- | --- |
 | **Awaken Workforce** | Outcome, Issue, Workflow, responsibility, Attention, formal deliverables, acceptance | commission the result, coordinate work, and record the final decision |
-| **Awaken Objects** | ResourceType, Resource, Relation, Action, Observation, provenance, exact business revision | supply governed context, allowed changes, and external business evidence |
+| **Objects · Workforce capability** | ResourceType, Resource, Relation, Action, Observation, provenance, exact business revision | supply governed context, allowed changes, and external business evidence |
 | **Awaken Agents** | Agent publication, Session, Run, tools, Worker, Sandbox, committed execution and recovery | perform the delegated WorkUnit and return committed execution evidence |
 
 The composed path is **Workforce commissions → Objects grounds context and
