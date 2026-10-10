@@ -128,8 +128,8 @@ builder 或 wake 字段复制到独立 `awaken-worker` 文件；严格的 Worker
 | `dispatch_wake` | `none`、`pg-notify` 或 `nats` |
 | `dispatch_wake_channel`, `nats_url`, `dispatch_owner` | wake channel/broker 与唯一 claim owner |
 
-任务说明见[配置 Sandbox tier](../how-to/configure-sandbox-tiers)和
-[使用 NATS wake signal](../how-to/use-nats-wake-signal)。
+任务说明见[配置 Sandbox tier](/zh/docs/agents/how-to/configure-sandbox-tiers)和
+[使用 NATS wake signal](/zh/docs/agents/how-to/use-nats-wake-signal)。
 
 ## Observability 与内容采集
 

@@ -1797,6 +1797,14 @@ for (const rule of integrationRules) {
 const analyticsGatePath = resolve(root, 'scripts/check-analytics-live.mjs');
 const liveGatePath = resolve(root, 'scripts/check-live.mjs');
 const pagesWorkflowPath = resolve(root, '.github/workflows/pages.yml');
+// Asset URL rules: shared non-localized case release fact + root/repository base
+// -> one deployment prefix, never a translated copy or raw-root bypass.
+requirePattern(resolve(root, 'src/components/CaseDetail.astro'), /src=\{withSiteBase\(item\.walkthrough\.src\)\}/, 'case videos must use the deployment URL authority');
+requirePattern(resolve(root, 'src/components/CaseDetail.astro'), /withSiteBase\(item\.sourceArchive\.href\)/, 'case source downloads must use the deployment URL authority');
+// Release decision table: browser failure -> no Pages artifact/deploy; browser
+// pass -> existing artifact upload -> exact-revision verification. No second suite.
+requireOrderedText(pagesWorkflowPath, ['Validate standalone content and Pages paths', 'Install browser test runtime', 'Verify browser journeys before publication', 'Upload Pages artifact'], 'browser qualification must block publication of the same built artifact');
+requirePattern(pagesWorkflowPath, /pnpm exec playwright install --with-deps chromium[\s\S]*pnpm exec playwright test/, 'Pages must run the existing browser suite with its pinned runtime');
 requirePattern(analyticsGatePath, /User-Agent[\s\S]*event-data-pivot[\s\S]*Authorization: `Bearer \$\{apiKey\}`/, 'analytics gate must send with a user agent and query authenticated event data');
 requirePattern(analyticsGatePath, /UMAMI_API_KEY is required[\s\S]*AWAKENWORKS_EXPECTED_REVISION is required/, 'analytics gate must reject missing credentials or release identity');
 // R1 public SITE ID only -> normal deployment plus explicit unconfigured API

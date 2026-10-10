@@ -67,6 +67,9 @@ flowchart LR
 Git 工作树。`config/source-provenance.json` 锁定已核对源码的精确 revision 和文档引用的
 实现证据。产品仓库中的类型、测试和可执行合约仍是技术行为的最终权威。
 
+文档正文链接使用 `docsRoutes` 对应的公开 URL；不使用以 Markdown 源文件目录为基准的
+相对路径。现有部署插件负责添加站点 base，页面与章节目标由同一 Pages 门禁验证。
+
 平台与 Runtime 文档集合共用一个 Agents 版本记录，源码 revision 只从
 `config/source-provenance.json` 读取。社交分享图由 `src/pages/og.svg.ts` 使用同一产品
 目录和共享品牌几何生成；更新产品文案后运行 `pnpm social:generate`，提交生成的
@@ -94,4 +97,6 @@ Awaken 页面引用的证据路径。更新后必须在同一变更中审查并�
 - `pnpm check:home`：检查产品路径、首页导航、GitHub Star 入口和逐页内容契约。
 - `pnpm check:standalone`：拒绝安装生命周期副作用、固定本机路径、兄弟仓读取和 Git 工作树依赖。
 - `pnpm check:docs`：检查文档路由、搜索索引、链接、架构图，以及仓内锁定的源码证据。
+- `pnpm check:pages`：按浏览器地址解析链接，检查输出文件、章节锚点和重复 ID。
+- `pnpm check:appearance`：检查浏览器阅读、搜索恢复、表单、语言切换及全部图表渲染；Pages 在上传构建产物前运行同一套浏览器测试。
 - `pnpm check:live`：只读检查正式域名是否返回当前 Git revision 的 AwakenWorks 站点，而非旧构建、停放页或错误重定向。

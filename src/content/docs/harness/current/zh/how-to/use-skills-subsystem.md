@@ -154,7 +154,7 @@ Session 创建时把 `skill_id + version + bundle_sha256` 固定进
 `ResolvedSessionResources.skills`。重试或重启加载同一版本，重新校验相对路径与 SHA-256，
 并把完整目录树物化到 `.skills/<skill-id>`。更新 catalog 只影响新 Session；已存在的
 Session 不会漂移到较新版本。整体资源关系见
-[Session、资源与事件](/zh/docs/agents/concepts/sessions-and-events/#资源在-session-创建时解析一次)。
+[Session、资源与事件](/zh/docs/agents/concepts/sessions-and-events/#资源在-session-运行前解析)。
 
 ## 把一个 skill 约束到工具子集
 

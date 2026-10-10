@@ -100,6 +100,6 @@ the way to distinguish accepted input from an entry that was withdrawn.
 
 ## Related
 
-- [Sessions and events](/docs/agents/concepts/sessions-and-events/#live-inbox)
+- [Sessions and events](/docs/agents/concepts/sessions-and-events/)
 - [Manage a Session](/docs/agents/how-to/manage-a-session/)
 - [Public HTTP API](/docs/agents/reference/api/)

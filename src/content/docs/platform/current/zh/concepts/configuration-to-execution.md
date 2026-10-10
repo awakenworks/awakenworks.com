@@ -112,7 +112,7 @@ Accepted receipt 才是持久边界，不是 streamed token 或 queue status。�
 Dispatch 之后，claim 丢失、commit response 丢失、过期 Worker 返回以及 retry exhaustion
 由 queue、稳定 receipt、Thread version 与 claim epoch 自动处理，不是彼此独立的修复流程。
 Persistent dependency failure、明确终态或不确定外部效果由
-[生产可靠性](./production-reliability)说明。
+[生产可靠性](/zh/docs/agents/concepts/production-reliability)说明。
 
 ## 验证一条执行路径
 
@@ -121,6 +121,6 @@ Persistent dependency failure、明确终态或不确定外部效果由
 takeover，应在 dispatch 已持久化后中断 Worker，并确认下一次 attempt 从最后一段已提交
 Thread prefix 继续。
 
-完整组件图见 [Awaken 架构](./architecture)。精确字段与 route 见
+完整组件图见 [Awaken 架构](/zh/docs/agents/concepts/architecture)。精确字段与 route 见
 [配置参考](/zh/docs/agents/reference/configuration/)和
 [HTTP API 参考](/zh/docs/agents/reference/api/)。

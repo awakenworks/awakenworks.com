@@ -62,7 +62,7 @@ curl http://127.0.0.1:8080/v1/capabilities
 
 连接显示 `ready`，且至少一个导入模型标记为 executable 后再继续。该命令会先检查凭据和
 endpoint，再保存 Provider、endpoint、credential reference 和 model offerings。若连接
-无法 ready，转到[配置 provider、模型与凭据](./how-to/configure-providers-models-credentials)
+无法 ready，转到[配置 provider、模型与凭据](/zh/docs/agents/how-to/configure-providers-models-credentials)
 排查。
 
 ## 4. 发布一个 Agent
@@ -91,7 +91,7 @@ npm install @anthropic-ai/sdk
 ```
 
 本 Node.js 指南已用 TypeScript SDK 0.122.0 验证。这个版本是验证坐标，不是依赖要求。
-请按自己的依赖治理选择 SDK 版本，并在[兼容矩阵](./compatibility)中核对应用会使用的资源族。
+请按自己的依赖治理选择 SDK 版本，并在[兼容矩阵](/zh/docs/agents/compatibility)中核对应用会使用的资源族。
 
 填入刚才记录的 id。本地 no-login 模式接受 `local`。在受保护的 self-managed 部署中，
 打开**访问控制**，创建专用的 Workspace Service API Key，并立即复制仅显示一次的明文。
@@ -192,8 +192,8 @@ node -e "import('@anthropic-ai/sdk').then(async ({default:Anthropic}) => { const
 
 ## 接下来
 
-- 如果来自旧版 Runtime 或本地 Server，请先按照 [Awaken 1.0 迁移指南](./how-to/migrate-to-1-0)处理配置和数据。
-- 通过其他应用协议[接入已发布 Agent](./how-to/connect-a-published-agent)。
-- 核对 [Managed Agents 兼容边界](./compatibility)。
-- 使用显式身份、数据库、备份和 Sandbox 边界[部署与运营 Awaken](./how-to/self-host)。
-- 使用生成的[管理 OpenAPI 契约](./reference/management-openapi)进行自动化。
+- 如果来自旧版 Runtime 或本地 Server，请先按照 [Awaken 1.0 迁移指南](/zh/docs/agents/how-to/migrate-to-1-0)处理配置和数据。
+- 通过其他应用协议[接入已发布 Agent](/zh/docs/agents/how-to/connect-a-published-agent)。
+- 核对 [Managed Agents 兼容边界](/zh/docs/agents/compatibility)。
+- 使用显式身份、数据库、备份和 Sandbox 边界[部署与运营 Awaken](/zh/docs/agents/how-to/self-host)。
+- 使用生成的[管理 OpenAPI 契约](/zh/docs/agents/reference/management-openapi)进行自动化。

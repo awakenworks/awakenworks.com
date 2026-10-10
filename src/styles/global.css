@@ -52,6 +52,13 @@ html {
   scroll-behavior: smooth;
   background-color: var(--aw-bg);
   --grid-dot: color-mix(in srgb, var(--aw-accent) 6%, transparent);
+  /* Native fragment navigation must clear the wrapped phone header before
+   * JavaScript starts. The existing ResizeObserver replaces this estimate. */
+  --site-header-offset: 7rem;
+}
+
+@media (min-width: 640px) {
+  html { --site-header-offset: 4rem; }
 }
 
 body {

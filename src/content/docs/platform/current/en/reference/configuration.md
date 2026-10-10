@@ -138,8 +138,8 @@ not copy its warm-pool, proxy, package-builder, or wake fields into a standalone
 | `dispatch_wake` | `none`, `pg-notify`, or `nats` |
 | `dispatch_wake_channel`, `nats_url`, `dispatch_owner` | wake channel/broker and unique claim owner |
 
-See [Configure Sandbox tiers](../how-to/configure-sandbox-tiers) and
-[Use a NATS wake signal](../how-to/use-nats-wake-signal) for task guidance.
+See [Configure Sandbox tiers](/docs/agents/how-to/configure-sandbox-tiers) and
+[Use a NATS wake signal](/docs/agents/how-to/use-nats-wake-signal) for task guidance.
 
 ## Observability and content capture
 

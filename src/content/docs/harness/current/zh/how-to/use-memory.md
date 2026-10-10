@@ -49,7 +49,7 @@ Workspace-scoped `MemoryRepository` 为数据真相：Memory mount、召回、�
 历史都读写同一个 path-addressed CAS repository，不存在需要同步的第二份 Memory 数据。
 
 资源绑定、配置版本和 Session activation 的整体生命周期由
-[Session、资源与事件](/zh/docs/agents/concepts/sessions-and-events/#资源在-session-创建时解析一次)
+[Session、资源与事件](/zh/docs/agents/concepts/sessions-and-events/#资源在-session-运行前解析)
 统一解释；本页只保留 Runtime 的具体使用方式。
 
 ## 启用召回

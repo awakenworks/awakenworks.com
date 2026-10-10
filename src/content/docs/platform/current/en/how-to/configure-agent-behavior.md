@@ -42,7 +42,7 @@ lifecycle remain in [Agent configuration reference](/docs/agents/runtime/referen
 - a Provider Connection whose model can be resolved;
 - any Tools, Skills, MCP servers, credentials, and resources the Agent will use.
 
-Complete [Configure providers, models, and credentials](./configure-providers-models-credentials)
+Complete [Configure providers, models, and credentials](/docs/agents/how-to/configure-providers-models-credentials)
 before publishing if the model readiness check does not yet succeed.
 
 ## 1. Edit and save the draft

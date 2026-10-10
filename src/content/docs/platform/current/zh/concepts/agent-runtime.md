@@ -65,7 +65,7 @@ sequenceDiagram
 ```
 
 事实提交前发生的失败不会变成持久历史。恢复从最后一批已提交 Thread 事实和适用的工具
-恢复策略开始。准确的 claim、重试与不确定副作用规则由[生产可靠性](./production-reliability)
+恢复策略开始。准确的 claim、重试与不确定副作用规则由[生产可靠性](/zh/docs/agents/concepts/production-reliability)
 说明，不在本定义页重复。
 
 ## Awaken 的实现
@@ -74,6 +74,6 @@ sequenceDiagram
 工具、类型化状态、权限检查、Plugin 与分阶段原子提交。Awaken Agents 在它周围增加持久
 Session、发布、协议 adapter、Worker、Sandbox、配置和恢复。
 
-选择所需层级时，阅读[Framework、Runtime 与 Agent 应用基础设施的区别](./framework-runtime-infrastructure)。
+选择所需层级时，阅读[Framework、Runtime 与 Agent 应用基础设施的区别](/zh/docs/agents/concepts/framework-runtime-infrastructure)。
 只有需要扩展执行行为时才进入 [Runtime 内部机制](/zh/docs/agents/runtime/)；需要接入应用时，
 从[运行第一个 Awaken Session](/zh/docs/agents/get-started/)开始。

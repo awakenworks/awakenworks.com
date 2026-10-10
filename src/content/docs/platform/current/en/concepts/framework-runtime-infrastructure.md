@@ -83,6 +83,6 @@ Agents, durable Sessions, protocol adapters, Workers, Sandboxes, configuration,
 and recovery around that core. It does not replace the product interface,
 domain model, or acceptance rules of the application built on top.
 
-Continue with [What is an AI Agent Runtime?](./agent-runtime) for the runtime
-boundary, [Sessions and events](./sessions-and-events) for durable identity, and
-[system architecture](./architecture) for deployment ownership.
+Continue with [What is an AI Agent Runtime?](/docs/agents/concepts/agent-runtime) for the runtime
+boundary, [Sessions and events](/docs/agents/concepts/sessions-and-events) for durable identity, and
+[system architecture](/docs/agents/concepts/architecture) for deployment ownership.

@@ -18,7 +18,7 @@ enabled by its configuration; a listed route is not proof that every deployment 
 | --- | --- | --- |
 | use the official Managed Agents SDK | Managed Agents families, then [compatibility](/docs/agents/compatibility/) | the SDK receives the documented resource or typed error |
 | connect an application protocol | Protocol adapters, then the matching protocol page | the wire result and committed Session state agree |
-| automate Agent, provider, model, credential, or resource configuration | Control-plane extensions, then the [generated OpenAPI contract](./management-openapi) | the intended revision is validated and explicitly published |
+| automate Agent, provider, model, credential, or resource configuration | Control-plane extensions, then the [generated OpenAPI contract](/docs/agents/reference/management-openapi) | the intended revision is validated and explicitly published |
 | operate readiness, drain, limits, or durable recovery | Operations and Durable runtime operations | readiness or committed Coordinator state shows the result |
 
 If you already know the route, follow its linked owner for request fields,
@@ -38,7 +38,7 @@ protocol payloads are owned by their protocol pages. This index does not repeat
 those contracts.
 
 Exact management-plane fields and schemas come from the
-[generated OpenAPI contract](./management-openapi); this route-family map must not
+[generated OpenAPI contract](/docs/agents/reference/management-openapi); this route-family map must not
 be expanded into a second hand-maintained field reference.
 
 ## Static route ownership
@@ -138,7 +138,7 @@ or cleanup prerequisite.
 It includes Agent draft/validate/publish, providers, models, inference profiles,
 credentials, resources, MCP/A2A configuration, and Awaken webhook subscriptions.
 Webhook subscription CRUD is `/v1/config/webhook-subscriptions[/{id}]`; it is an
-Awaken extension. Use [Send signed lifecycle events to your backend](../how-to/manage-webhooks)
+Awaken extension. Use [Send signed lifecycle events to your backend](/docs/agents/how-to/manage-webhooks)
 for the Console path, one-time secret, delivery states, and receiver acceptance
 test.
 

@@ -10,6 +10,10 @@ const docsPagePath = join(root, 'src/components/DocsPage.astro');
 const provenancePath = join(root, 'config/source-provenance.json');
 const failures = [];
 
+// Published URL/file/fragment validity has one owner: check-pages-base. The
+// docs command runs it after source, evidence and navigation qualification.
+requireText(join(root, 'package.json'), [[/"check:docs": "[^"\n]*node scripts\/check-docs\.mjs && node scripts\/check-pages-base\.mjs"/, 'docs qualification must call the canonical emitted-link gate']]);
+
 function requireText(path, patterns) {
   const text = readFileSync(path, 'utf8');
   for (const [pattern, message] of patterns) {
@@ -93,6 +97,12 @@ const retiredAwakenProductIdentity = /\bHarness\b|Agents Runtime|00-platform-ove
 
 for (const path of trackedWebsiteMarkdown) {
   const text = readFileSync(path, 'utf8');
+  // L1 source-relative Markdown path + directory-style public URL -> 404;
+  // L2 canonical public URL -> the existing deployment plugin prefixes it once.
+  // Routes remain owned by docsRoutes; do not add a second relative-link mapper.
+  if (path.startsWith(docsRoot) && /(?<!!)\[[^\]]+\]\(\.\.?\//u.test(text)) {
+    failures.push(`${relative(root, path)}: docs links must use canonical public URLs, not source-relative paths`);
+  }
   if (path.startsWith(join(root, 'src/content')) && retiredAwakenProductIdentity.test(text)) {
     failures.push(`${relative(root, path)}: content must use Awaken Agents as the sole product identity`);
   }
@@ -656,10 +666,10 @@ for (const [docsRel, patterns] of [
     [/\/zh\/docs\/agents\/how-to\/migrate-to-1-0\//, 'Chinese Agents Start must link the 1.0 migration owner'],
   ]],
   ['platform/current/en/compatibility.md', [
-    [/does not cover migration from an earlier Awaken runtime[\s\S]*\.\/how-to\/migrate-to-1-0/, 'Managed compatibility must delegate product migration'],
+    [/does not cover migration from an earlier Awaken runtime[\s\S]*\/docs\/agents\/how-to\/migrate-to-1-0/, 'Managed compatibility must delegate product migration'],
   ]],
   ['platform/current/zh/compatibility.md', [
-    [/不负责旧版 Awaken Runtime[\s\S]*\.\/how-to\/migrate-to-1-0/, 'Chinese Managed compatibility must delegate product migration'],
+    [/不负责旧版 Awaken Runtime[\s\S]*\/zh\/docs\/agents\/how-to\/migrate-to-1-0/, 'Chinese Managed compatibility must delegate product migration'],
   ]],
 ]) {
   requireText(join(docsRoot, docsRel), patterns);
@@ -2355,10 +2365,18 @@ for (const locale of ['en', 'zh']) {
   ]);
   requireText(join(flow, 'concepts/object-model.md'), [
     [/resource\.types[\s\S]*resource\.query[\s\S]*resource\.get[\s\S]*resource\.realize[\s\S]*resource\.changes/, `${locale} object model must preserve the five fixed scope-console tools`],
+    // O1 business attempt versus technical execution -> WorkUnit/Run remain
+    // separate and use the existing port; O2 current status is persisted by
+    // its owner, not universally dismissed as projection; O3 Run success ->
+    // completion still requires the Workflow/Issue's acceptance conditions.
+    [/WorkUnit[\s\S]*Awaken Run[\s\S]*AgentExecutionPort/, `${locale} object model must delegate technical execution to the existing Agents port`],
+    [/Run success alone is not business acceptance|Run 成功本身不是业务验收/, `${locale} object model must separate execution success from business acceptance`],
   ]);
   rejectText(join(flow, 'concepts/object-model.md'), [
     [/resource\.invoke/, `${locale} object model must not resurrect the absent ambient invoke tool`],
     [/six generic|\u516d\u4e2a\u901a\u7528/, `${locale} object model must not describe six fixed Resource tools`],
+    [/\*\*Run\*\*\s*[(（]`WorkUnit`/, `${locale} object model must not alias Run and WorkUnit`],
+    [/one engine every|每一个“这件事可以发生吗？”|What is forbidden is a stored|被禁止的是一个被存储/, `${locale} object model must not replace distinct governance/state owners with the retired kernel model`],
   ]);
   requireText(join(flow, 'how-to/manage-outcomes.md'), [
     [/\/api\/projects\/\{project\}\/outcomes/, `${locale} Outcome guide must name the read projection endpoint`],
@@ -3161,6 +3179,12 @@ for (const route of [
 requireText(docsShellPath, [
   [/data-docs-search-open[\s\S]*data-docs-search[\s\S]*aria-labelledby="docs-search-title"/, 'DocsShell must expose an accessible search dialog'],
   [/fetch\(dialog\.dataset\.indexUrl/, 'search must load the locale index'],
+  // S6 transport/schema/timeout failure -> retained input plus native retry;
+  // S7 pending request -> one loader; S8 Escape after typing -> close+focus.
+  [/import type \{ DocsSearchRecord \} from '\.\.\/lib\/docsSearch'/, 'search must share the generated index record type'],
+  [/data-docs-search-retry[\s\S]*records \|\| loading[\s\S]*Array\.isArray\(data\)[\s\S]*records = data/, 'search must validate records before caching and keep one pending loader'],
+  [/AbortSignal\.timeout\(15_000\)/, 'search index transport must have a bounded deadline'],
+  [/retry\?\.addEventListener\('click'[\s\S]*event\.key === 'Escape'[\s\S]*dialog\.close\(\)[\s\S]*'close', \(\) => openButton\?\.focus\(\)/, 'search retry, Escape and focus must reuse the existing dialog owner'],
   [/replaceChildren\(\)[\s\S]*textContent = record\.title/, 'search must render indexed text without HTML injection'],
   [/aria-label=\{copy\.header\}[\s\S]*label=\{copy\.sidebar\}[\s\S]*aria-label=\{copy\.productDocs\}[\s\S]*label=\{copy\.mobileNav\}[\s\S]*aria-label=\{copy\.mobileToc\}[\s\S]*aria-label=\{copy\.toc\}/, 'DocsShell must name every desktop and mobile navigation region from the locale catalog'],
 ]);
@@ -3456,12 +3480,6 @@ else {
         failures.push(`${relative(root, path)}: rendered docs page must have one or two distinct canonical neighbors`);
       }
     }
-    for (const match of html.matchAll(/href="([^"#?]+)[^"]*"/g)) {
-      const href = match[1];
-      if (!href.startsWith('/') || href.startsWith('//')) continue;
-      const target = extname(href) ? join(distRoot, href) : join(distRoot, href, 'index.html');
-      if (!existsSync(target)) failures.push(`${relative(root, path)}: broken internal link ${href}`);
-    }
   }
   if (renderedDocPages !== markdown.length) {
     failures.push(`dist: rendered ${renderedDocPages} purpose-marked docs pages for ${markdown.length} Markdown sources`);
@@ -3533,4 +3551,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-process.stdout.write(`Documentation checks passed: ${markdown.length} Markdown files and generated internal links.\n`);
+process.stdout.write(`Documentation checks passed: ${markdown.length} Markdown files, source evidence and navigation.\n`);

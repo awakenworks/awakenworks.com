@@ -172,6 +172,7 @@ const banner =
       />
     </label>
     <p data-docs-search-status class="mt-2 min-h-5 text-sm text-fog-500" aria-live="polite"></p>
+    <button type="button" data-docs-search-retry hidden class="mt-3 rounded-lg border border-ink-600 px-3 py-2 text-sm text-fog-200 hover:border-fog-500">{copy.retry}</button>
   </div>
   <div data-docs-search-results class="max-h-[min(60vh,34rem)] overflow-y-auto p-2 sm:p-3"></div>
 </dialog>
@@ -257,27 +258,23 @@ const banner =
 </style>
 
 <script>
-  interface SearchRecord {
-    title: string;
-    description: string;
-    href: string;
-    product: string;
-    text: string;
-  }
+  import type { DocsSearchRecord } from '../lib/docsSearch';
 
   const dialog = document.querySelector<HTMLDialogElement>('[data-docs-search]');
   const openButton = document.querySelector<HTMLButtonElement>('[data-docs-search-open]');
   const input = dialog?.querySelector<HTMLInputElement>('[data-docs-search-input]');
   const status = dialog?.querySelector<HTMLElement>('[data-docs-search-status]');
   const results = dialog?.querySelector<HTMLElement>('[data-docs-search-results]');
+  const retry = dialog?.querySelector<HTMLButtonElement>('[data-docs-search-retry]');
   const messages = dialog?.dataset;
-  let records: SearchRecord[] | null = null;
+  let records: DocsSearchRecord[] | null = null;
+  let loading = false;
 
   function setStatus(message: string) {
     if (status) status.textContent = message;
   }
 
-  function score(record: SearchRecord, terms: string[]): number {
+  function score(record: DocsSearchRecord, terms: string[]): number {
     const title = record.title.toLocaleLowerCase();
     const description = record.description.toLocaleLowerCase();
     const product = record.product.toLocaleLowerCase();
@@ -329,15 +326,26 @@ const banner =
   }
 
   async function loadIndex() {
-    if (!dialog || records) return;
+    if (!dialog || records || loading) return;
+    loading = true;
+    if (retry) { retry.hidden = true; retry.disabled = true; }
     setStatus(messages?.loading ?? 'Loading index…');
     try {
-      const response = await fetch(dialog.dataset.indexUrl ?? '');
+      const response = await fetch(dialog.dataset.indexUrl ?? '', { signal: AbortSignal.timeout(15_000) });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      records = await response.json() as SearchRecord[];
+      const data: unknown = await response.json();
+      const fields = ['title', 'description', 'href', 'product', 'text'] as const satisfies readonly (keyof DocsSearchRecord)[];
+      if (!Array.isArray(data) || !data.every((record) => record && fields.every((field) => typeof record[field] === 'string'))) {
+        throw new Error('Invalid search index');
+      }
+      records = data;
       renderResults();
     } catch {
       setStatus(messages?.failed ?? 'Search index failed to load. Please try again.');
+      if (retry) retry.hidden = false;
+    } finally {
+      loading = false;
+      if (retry) retry.disabled = false;
     }
   }
 
@@ -349,6 +357,7 @@ const banner =
   }
 
   openButton?.addEventListener('click', openSearch);
+  retry?.addEventListener('click', () => { void loadIndex(); input?.focus(); });
   input?.addEventListener('input', renderResults);
   document.addEventListener('keydown', (event) => {
     const target = event.target as HTMLElement | null;
@@ -361,4 +370,11 @@ const banner =
   dialog?.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
   });
+  dialog?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      dialog.close();
+    }
+  });
+  dialog?.addEventListener('close', () => openButton?.focus());
 </script>

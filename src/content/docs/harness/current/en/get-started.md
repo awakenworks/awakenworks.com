@@ -106,4 +106,4 @@ call. A short-lived Tool error is not a maintenance task by itself.
 
 - You need recovery, distributed Workers, or Sandboxes: use [Awaken Agents production reliability](/docs/agents/concepts/production-reliability/).
 - You need HTTP, protocol, or frontend integration: use [Awaken Agents](/docs/agents/).
-- You are preparing a deployment: use [Deploy and operate Awaken](/docs/agents/how-to/self-host#production-hardening).
+- You are preparing a deployment: use [Deploy and operate Awaken](/docs/agents/how-to/self-host#2-harden-a-single-node).

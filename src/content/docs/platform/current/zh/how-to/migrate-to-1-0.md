@@ -11,9 +11,9 @@ evidence:
 这里开始。第一个迁移目标是用 Awaken 1.0 AllInOne 跑通并恢复一份 Session；拆分部署是之后的
 运营决定，不是另一条应用迁移路径。
 
-本页是 **Awaken 产品版本迁移** 的唯一公开权威。[Managed Agents 兼容矩阵](../compatibility)
-负责 SDK 与 wire 兼容；[Agents 架构](../concepts/architecture)负责组件权威；
-[自托管指南](./self-host)负责部署配置与运营。本页只链接这些权威，不复制其内容。
+本页是 **Awaken 产品版本迁移** 的唯一公开权威。[Managed Agents 兼容矩阵](/zh/docs/agents/compatibility)
+负责 SDK 与 wire 兼容；[Agents 架构](/zh/docs/agents/concepts/architecture)负责组件权威；
+[自托管指南](/zh/docs/agents/how-to/self-host)负责部署配置与运营。本页只链接这些权威，不复制其内容。
 
 ## 目标
 
@@ -45,7 +45,7 @@ Coordinator 与 Worker。
 | 其他 `AWAKEN_*` 部署设置 | 类型化 TOML 配置 | 用 `awaken config --json` 检查脱敏后的生效配置；环境变量不是备用部署 schema。 |
 | Application startup 自动创建共享 schema | 拆分服务启动前运行 `awaken database migrate` | 本地 embedded store 在 local startup 时迁移；共享 server schema 只能由显式 migration command 写入。 |
 
-完整当前字段见[部署配置](../reference/configuration)。不要根据旧环境变量名称猜测 1.0 key。
+完整当前字段见[部署配置](/zh/docs/agents/reference/configuration)。不要根据旧环境变量名称猜测 1.0 key。
 
 ## 改变行为前先保全数据
 
@@ -75,8 +75,8 @@ Coordinator 与 Worker。
 6. 运行代表性输入，等待 `session.status_idle` 或明确的终态或 attention 结果，并保存 Session id。
 7. 使用同一 data directory 重启 AllInOne，再次读取同一批已提交 event。
 
-Anthropic 客户端还要在 [Managed Agents 兼容矩阵](../compatibility)中单独完成兼容判断。其他
-客户端使用[协议接入矩阵](../protocols/connect)及对应 adapter 指南。
+Anthropic 客户端还要在 [Managed Agents 兼容矩阵](/zh/docs/agents/compatibility)中单独完成兼容判断。其他
+客户端使用[协议接入矩阵](/zh/docs/agents/protocols/connect)及对应 adapter 指南。
 
 ## 行为一致后再选择部署
 
@@ -93,7 +93,7 @@ flowchart LR
 ```
 
 AllInOne 与拆分部署使用同一 publication、Session、dispatch 和 commit 权威。
-[架构页](../concepts/architecture)拥有静态与动态组件模型；[自托管指南](./self-host)拥有加固、
+[架构页](/zh/docs/agents/concepts/architecture)拥有静态与动态组件模型；[自托管指南](/zh/docs/agents/how-to/self-host)拥有加固、
 PostgreSQL migration、私有服务认证、Worker、wake-up 与恢复的精确步骤。
 
 ## 切换或回滚

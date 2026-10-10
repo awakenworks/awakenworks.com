@@ -4,6 +4,175 @@ import { currentVersion } from "../src/i18n/docsVersions";
 import { content, REFUND_SCENARIO_KEY } from "../src/i18n/content";
 import { localeNavigationHref } from "../src/i18n/locales";
 import { brandMarkPalette } from "@awaken/ui/brand";
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+
+// Browser qualification must never send a real inquiry or inflate live traffic.
+// A case's later route overrides this baseline when it tests transport failures.
+test.beforeEach(async ({ context }) => {
+  await context.route('https://cloud.umami.is/**', route => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+  await context.route('https://formspree.io/**', route => route.abort());
+});
+
+// A1 each published case archive x en/zh -> one downloadable, reachable source
+// asset; A2 walkthrough present -> reachable video with native controls and its
+// qualification caption. The Pages guard checks the same outputs under a base
+// path; locale changes presentation, not the archive/media identity.
+for (const lang of ['en', 'zh']) {
+  test(`${lang} reference source and walkthrough assets are reachable`, async ({ page }) => {
+    const base = lang === 'zh' ? '/zh' : '';
+    for (const item of content[lang].cases.items) {
+      if (!item.sourceArchive) continue;
+      await page.goto(`${base}/cases/${item.slug}/`);
+      const download = page.locator('a[data-awaken-event=case_source_download_selected]');
+      await expect(download).toHaveAttribute('href', item.sourceArchive.href);
+      await expect(download).toHaveAttribute('download', '');
+      const response = await page.request.get((await download.getAttribute('href'))!);
+      expect(response.status()).toBe(200);
+      expect(response.headers()['content-type']).toContain('application/zip');
+      if (item.walkthrough) {
+        const video = page.locator('[data-case-walkthrough] video');
+        await expect(video).toHaveAttribute('controls', '');
+        await expect(video).toHaveAttribute('src', item.walkthrough.src);
+        const media = await page.request.get((await video.getAttribute('src'))!, { headers: { Range: 'bytes=0-1023' } });
+        expect([200, 206]).toContain(media.status());
+        expect(media.headers()['content-type']).toContain('video/mp4');
+      }
+    }
+  });
+}
+
+// Historical regression graph: renamed headings/source-relative links + a
+// directory-style public URL -> 404/wrong scroll target. N1 en/zh x JS on/off
+// -> native Quickstart/provider navigation and real resource/compatibility
+// headings; N2 wrapped phone header -> the destination remains below it.
+// The Pages guard covers every emitted target; these cases exercise real clicks.
+for (const lang of ['en', 'zh']) {
+  for (const javaScriptEnabled of [true, false]) {
+    test(`${lang} canonical documentation links with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
+      const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 390, height: 900 }, reducedMotion: 'reduce' });
+      try {
+        await context.route('https://cloud.umami.is/**', route => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+        const page = await context.newPage();
+        const base = lang === 'zh' ? '/zh' : '';
+        await page.goto(`${base}/docs/agents/get-started/`);
+        const provider = `${base}/docs/agents/how-to/configure-providers-models-credentials`;
+        await page.locator(`.prose a[href="${provider}"]`).first().click();
+        await expect(page).toHaveURL(new RegExp(`${provider}/?$`));
+        await expect(page.locator('[data-doc-purpose]')).toHaveCount(1);
+
+        for (const [from, href] of [
+          ['/docs/agents/runtime/how-to/use-memory/', `/docs/agents/concepts/sessions-and-events/#${lang === 'zh' ? '资源在-session-运行前解析' : 'resources-are-resolved-before-the-session-runs'}`],
+          ['/docs/agents/how-to/connect-a-published-agent/', `/docs/agents/how-to/self-host/#${lang === 'zh' ? '2-加固单节点' : '2-harden-a-single-node'}`],
+          ['/docs/agents/reference/api/', `/docs/agents/compatibility/#${lang === 'zh' ? '兼容矩阵' : 'compatibility-matrix'}`],
+        ]) {
+          await page.goto(`${base}${from}`);
+          await page.locator(`.prose a[href="${base}${encodeURI(href!)}"]`).first().click();
+          const id = decodeURIComponent(new URL(page.url()).hash.slice(1));
+          const target = page.locator(`[id="${id}"]`);
+          await expect(target).toBeInViewport();
+          const headerBottom = await page.getByRole('banner').evaluate(node => node.getBoundingClientRect().bottom);
+          expect(await target.evaluate(node => node.getBoundingClientRect().top)).toBeGreaterThanOrEqual(headerBottom);
+        }
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      } finally { await context.close(); }
+    });
+  }
+}
+
+// Search decision table: S1 HTTP error; S2 invalid JSON; S3 non-array JSON;
+// S4 record missing a required field. Every rule x en/zh -> no poisoned cache
+// or page error, retained query, visible native retry -> valid generated index.
+// S5 cached success + no matches -> clear status, no second fetch; S6 Escape
+// after typing -> close in one press and restore trigger focus, query retained.
+for (const lang of ['en', 'zh']) {
+  for (const failure of ['http', 'json', 'shape', 'record'] as const) {
+    test(`${lang} documentation search recovers from ${failure}`, async ({ page }) => {
+      const base = lang === 'zh' ? '/zh' : '';
+      const messages = (await import('../src/i18n/ui')).ui[lang].docsShell;
+      let requests = 0;
+      const errors: string[] = [];
+      page.on('pageerror', error => errors.push(error.message));
+      await page.route(`**${base}/docs/search-index.json`, async route => {
+        requests++;
+        if (requests > 1) return route.continue();
+        await route.fulfill({ status: failure === 'http' ? 503 : 200, contentType: 'application/json', body: failure === 'json' ? '{' : failure === 'record' ? '[{"title":"Incomplete"}]' : '{}' });
+      });
+      await page.goto(`${base}/docs/`);
+      const trigger = page.getByRole('button', { name: messages.search, exact: true });
+      await trigger.click();
+      const dialog = page.getByRole('dialog');
+      const input = dialog.getByRole('searchbox');
+      await input.fill('Session');
+      await expect(dialog.locator('[data-docs-search-status]')).toHaveText(messages.failed);
+      const retry = dialog.getByRole('button', { name: messages.retry });
+      await retry.click();
+      await expect(input).toBeFocused();
+      await expect(dialog.locator('[data-docs-search-results] a').first()).toBeVisible();
+      await expect(input).toHaveValue('Session');
+      await input.fill('zzzz_no_matching_document_123');
+      await expect(dialog.locator('[data-docs-search-status]')).toHaveText(messages.noResults);
+      await expect(dialog.locator('[data-docs-search-results] a')).toHaveCount(0);
+      await page.keyboard.press('Escape');
+      await expect(dialog).not.toBeVisible();
+      await expect(trigger).toBeFocused();
+      await trigger.click();
+      await expect(input).toHaveValue('zzzz_no_matching_document_123');
+      expect(requests).toBe(2);
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
+// S7 stalled index + close/reopen while pending -> one request and usable
+// dialog; 15s deadline -> retained query and retry; recovery uses the same loader.
+test('documentation search bounds a stalled request and shares the pending load', async ({ page }) => {
+  let requests = 0;
+  await page.route('**/docs/search-index.json', route => {
+    requests++;
+    if (requests > 1) return route.continue();
+  });
+  await page.goto('/docs/');
+  const trigger = page.getByRole('button', { name: 'Search', exact: true });
+  await trigger.click();
+  const dialog = page.getByRole('dialog');
+  const input = dialog.getByRole('searchbox');
+  await input.fill('Session');
+  await expect.poll(() => requests).toBe(1);
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await trigger.click();
+  expect(requests).toBe(1);
+  await expect(dialog.locator('[data-docs-search-status]')).toContainText('failed', { timeout: 20_000 });
+  await dialog.getByRole('button', { name: 'Retry search' }).click();
+  await expect(dialog.locator('[data-docs-search-results] a').first()).toBeVisible();
+  await expect(input).toHaveValue('Session');
+  expect(requests).toBe(2);
+});
+
+// Diagram regression rules: D1 every emitted docs/blog diagram page -> every
+// diagram completes, no parser/runtime error; D2 docs code-copy enhancement ->
+// no control is appended to Mermaid source; D3 390px -> no page overflow.
+// Discover from the same build artifact, without a second hand-maintained corpus.
+const diagramPages = (readdirSync('dist', { recursive: true }) as string[])
+  .filter(file => file.endsWith('.html') && readFileSync(join('dist', file), 'utf8').includes('class="mermaid"'))
+  .map(file => `/${file.replace(/index\.html$/u, '')}`);
+for (const route of diagramPages) {
+  test(`all diagrams render on ${route}`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.setViewportSize({ width: 390, height: 900 });
+    await page.goto(route);
+    const diagrams = page.locator('.mermaid');
+    const count = await diagrams.count();
+    expect(count).toBeGreaterThan(0);
+    await expect(diagrams.locator('svg')).toHaveCount(count);
+    await expect(diagrams.filter({ hasText: /Syntax error|Parse error/ })).toHaveCount(0);
+    await expect(diagrams.locator('button')).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+  });
+}
 
 // Site integration decision table: language en/zh x desktop/narrow, across all
 // four route identities and the documentation shell. Legacy stored light wins

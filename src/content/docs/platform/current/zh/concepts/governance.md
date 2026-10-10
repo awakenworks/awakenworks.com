@@ -115,5 +115,5 @@ Configuration history 回答谁修改了已发布行为；authorization record �
 成一份可变日志，会抹去各自不同的 consistency 与 retention 边界。
 
 Credential reference 只标识 material 及其允许的交付路径，不会授权 ingress 或 tool
-action。继续阅读[凭据保管](./credential-custody)与
+action。继续阅读[凭据保管](/zh/docs/agents/concepts/credential-custody)与
 [Provider model 配置](/zh/docs/agents/reference/provider-model-config/)。

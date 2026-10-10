@@ -18,8 +18,8 @@ same `ExecutableAgentSnapshot`; the Console is not another configuration store.
 | Apply the same change from automation | call the management API with a trusted Workspace identity | the API returns the `publication_id` and `fingerprint`, and your automation records them |
 
 The process serves the embedded React application at `/` and `/w/*`. Exact
-routes belong to the [public API index](./api), and exact management fields belong
-to the [generated OpenAPI contract](./management-openapi).
+routes belong to the [public API index](/docs/agents/reference/api), and exact management fields belong
+to the [generated OpenAPI contract](/docs/agents/reference/management-openapi).
 
 ## Static structure
 

@@ -100,10 +100,10 @@ Sandbox，也不会切换 backend。
 Session 因此可能直到出现本地需求时才拥有 Sandbox。
 
 工具已经 dispatch 后，如果 channel 丢失，系统不会静默 replay，因为外部效果可能已经
-发生。该 Run 按[生产可靠性](./production-reliability)中的不确定外部效果规则处理。
+发生。该 Run 按[生产可靠性](/zh/docs/agents/concepts/production-reliability)中的不确定外部效果规则处理。
 Environment 一旦终态释放便不可恢复。
 
-继续阅读[执行模式](./execution-modes)、
+继续阅读[执行模式](/zh/docs/agents/concepts/execution-modes)、
 [配置 Sandbox tier](/zh/docs/agents/how-to/configure-sandbox-tiers/)与
-[生产可靠性](./production-reliability)。Managed Agents 的精确 wire 差异由
+[生产可靠性](/zh/docs/agents/concepts/production-reliability)。Managed Agents 的精确 wire 差异由
 [兼容矩阵](/zh/docs/agents/compatibility/)统一维护。

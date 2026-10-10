@@ -115,7 +115,7 @@ Connection state and executable-model readiness are server-owned projections:
 
 > `/v1/config/executable-models` currently reports Native-executor readiness
 > only. Publication validates the exact ACP capability when an ACP runtime is
-> selected. See [Select models and ACP runtimes through the API](./select-models-and-acp-runtimes)
+> selected. See [Select models and ACP runtimes through the API](/docs/agents/how-to/select-models-and-acp-runtimes)
 > for the selector and this boundary.
 
 | Result | Meaning | Action |
@@ -163,8 +163,8 @@ contacting support. Do not include the provider secret or OAuth material.
 
 ## Next steps
 
-- [Configure and publish Agent behavior](./configure-agent-behavior);
-- [Select models and ACP runtimes through the API](./select-models-and-acp-runtimes);
-- [Run the official-SDK quickstart](../get-started);
-- inspect the [model publication and credential boundary](../reference/provider-model-config);
-- use the generated [management OpenAPI contract](../reference/management-openapi) for exact request schemas.
+- [Configure and publish Agent behavior](/docs/agents/how-to/configure-agent-behavior);
+- [Select models and ACP runtimes through the API](/docs/agents/how-to/select-models-and-acp-runtimes);
+- [Run the official-SDK quickstart](/docs/agents/get-started);
+- inspect the [model publication and credential boundary](/docs/agents/reference/provider-model-config);
+- use the generated [management OpenAPI contract](/docs/agents/reference/management-openapi) for exact request schemas.

@@ -91,6 +91,6 @@ Snapshot 之后提交的编辑并不保证一定赶在消费之前。HTTP 结果
 
 ## 相关
 
-- [Session 与事件](/zh/docs/agents/concepts/sessions-and-events/#live-inbox)
+- [Session 与事件](/zh/docs/agents/concepts/sessions-and-events/)
 - [管理 Session](/zh/docs/agents/how-to/manage-a-session/)
 - [公共 HTTP API](/zh/docs/agents/reference/api/)

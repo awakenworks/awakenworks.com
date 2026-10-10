@@ -16,7 +16,7 @@ evidence:
 | --- | --- | --- |
 | 使用官方 Managed Agents SDK | Managed Agents 路由族，然后看[兼容页](/zh/docs/agents/compatibility/) | SDK 收到文档定义的 resource 或 typed error |
 | 连接应用协议 | 应用 adapter，然后看对应协议页 | wire result 与已提交 Session state 一致 |
-| 自动化配置 Agent、provider、model、credential 或 resource | Control-plane 扩展，然后看[生成的 OpenAPI 契约](./management-openapi) | 预期 revision 已校验并显式发布 |
+| 自动化配置 Agent、provider、model、credential 或 resource | Control-plane 扩展，然后看[生成的 OpenAPI 契约](/zh/docs/agents/reference/management-openapi) | 预期 revision 已校验并显式发布 |
 | 处理 readiness、drain、限额或 durable recovery | Process operations 与持久运行控制 | readiness 或已提交 Coordinator state 显示结果 |
 
 已经知道路由时，继续到链接的权威页面查 request field、认证、状态转换和错误。不要从相邻
@@ -33,7 +33,7 @@ Managed 兼容、beta header 与差异由
 [Anthropic Managed Agents 兼容性](/zh/docs/agents/compatibility/)维护。协议 payload
 细节由各协议页维护，本索引不重复这些 contract。
 
-管理平面的精确字段与 schema 由[生成的 OpenAPI 契约](./management-openapi)提供；本 route-family
+管理平面的精确字段与 schema 由[生成的 OpenAPI 契约](/zh/docs/agents/reference/management-openapi)提供；本 route-family
 map 不得扩写成第二份手工字段参考。
 
 ## 静态路由所有权
@@ -64,7 +64,7 @@ map 不得扩写成第二份手工字段参考。
 
 不要从该表推断统一 CRUD 规则。不同资源族的方法、archive/delete 语义、beta 值、
 multipart body 与 response media type 都不同。请使用已测试版本的官方 SDK，并查阅
-[兼容矩阵](/zh/docs/agents/compatibility/#compatibility-matrix)。
+[兼容矩阵](/zh/docs/agents/compatibility/#兼容矩阵)。
 
 ## Awaken Session 与 policy 扩展
 
@@ -126,7 +126,7 @@ Thread 的全部 dead-lettered dispatch 及其 pending input，不是重试或�
 draft/validate/publish、provider、model、inference profile、credential、resource、
 MCP/A2A 配置与 Awaken webhook subscription。Webhook subscription CRUD 是
 `/v1/config/webhook-subscriptions[/{id}]`；它是 Awaken 扩展。Console 路径、一次性
-密钥、投递状态与接收端验收方法参见[向你的后端发送签名生命周期事件](../how-to/manage-webhooks)。
+密钥、投递状态与接收端验收方法参见[向你的后端发送签名生命周期事件](/zh/docs/agents/how-to/manage-webhooks)。
 
 Application access token 使用 `/v1/application-access-tokens[/{id}]`。Workspace
 path addressing 把同一条公共路由投影到 `/v1/workspaces/{workspace}/{rest}` 下，

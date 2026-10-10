@@ -73,6 +73,6 @@ Awaken Agents 同时覆盖 **Runtime** 与 **Agent 应用基础设施**两层。
 协议 adapter、Worker、Sandbox、配置和恢复。它不会取代上层应用的产品界面、领域模型
 或验收规则。
 
-继续阅读[什么是 AI Agent Runtime？](./agent-runtime)了解 Runtime 边界，阅读
-[Session 与事件](./sessions-and-events)了解持久身份，并通过[系统架构](./architecture)
+继续阅读[什么是 AI Agent Runtime？](/zh/docs/agents/concepts/agent-runtime)了解 Runtime 边界，阅读
+[Session 与事件](/zh/docs/agents/concepts/sessions-and-events)了解持久身份，并通过[系统架构](/zh/docs/agents/concepts/architecture)
 确认部署责任。

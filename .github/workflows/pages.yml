@@ -49,6 +49,12 @@ jobs:
           node scripts/check-docs.mjs
           node scripts/check-pages-base.mjs
 
+      - name: Install browser test runtime
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Verify browser journeys before publication
+        run: pnpm exec playwright test
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

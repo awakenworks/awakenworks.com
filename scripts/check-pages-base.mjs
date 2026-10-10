@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { extname, resolve } from 'node:path';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { extname, relative, resolve } from 'node:path';
 import {
   normalizeBasePath,
   siteBasePath,
@@ -23,6 +23,12 @@ const failures = [];
 // though the repository Pages setting is the domain authority.
 // C7 the shared brand owner names the public product Agents; a retired
 // Managed label must not prevent an otherwise source-aligned deployment.
+// C8 the page exists but a renamed/deleted heading leaves a dead fragment;
+// C9 duplicate IDs make a fragment ambiguous; C10 Chinese fragments are URL-encoded.
+// C11 Markdown-relative links resolve from the emitted directory URL, not the
+// source file directory; checking only leading-slash URLs misses live 404s.
+// C12 HTML-escaped query separators must decode before URL parsing, otherwise
+// &#38; invents a fragment and destroys preserved request context.
 // E1 prefix every internal browser URL exactly once; E2 leave external and
 // fragment URLs unchanged; E3 remove the prefix before route interpretation;
 // E4 keep canonical URLs on the configured site/base; E5 require every emitted
@@ -37,6 +43,11 @@ const failures = [];
 // | P5 | repo | internal | any | any | missing | reject |
 // | P6 | repo | internal | doubled | any | any | reject |
 // | P7 | any | public/CNAME present under Actions | n/a | n/a | n/a | reject |
+// P8 internal HTML + missing fragment -> reject even when the page exists;
+// P9 duplicate emitted ID -> reject; P10 encoded fragment + decoded ID -> accept.
+// P11 relative URL -> resolve as the browser does, then require the same target.
+// P12 escaped query separator -> decode, preserving the actual fragment.
+// External fragments and browser text directives remain outside HTML-ID validation.
 const helperRules = [
   { base: '/', input: '/agents?x=1#proof', expected: '/agents?x=1#proof' },
   { base: '/awakenworks.com', input: '/agents?x=1#proof', expected: '/awakenworks.com/agents?x=1#proof' },
@@ -70,42 +81,69 @@ function filesBelow(path, predicate = () => true) {
 }
 
 function emittedTarget(url) {
-  const pathname = withoutSiteBase(url.split(/[?#]/u, 1)[0], siteBasePath);
+  const pathname = withoutSiteBase(decodeURIComponent(url.split(/[?#]/u, 1)[0]), siteBasePath);
   const direct = resolve(dist, `.${pathname}`);
-  if (existsSync(direct)) return direct;
+  if (existsSync(direct) && statSync(direct).isFile()) return direct;
   return resolve(direct, 'index.html');
 }
 
-function isInternal(url) {
-  return url.startsWith('/') && !url.startsWith('//');
+function decodeAttribute(value) {
+  const entities = { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>' };
+  return value.replace(/&(?:#(\d+)|#x([\da-f]+)|(amp|quot|apos|lt|gt));/giu,
+    (_match, decimal, hex, name) => name
+      ? entities[name.toLowerCase()]
+      : String.fromCodePoint(Number.parseInt(decimal ?? hex, decimal ? 10 : 16)));
 }
 
 const htmlFiles = filesBelow(dist, (path) => extname(path) === '.html');
+const htmlByPath = new Map(htmlFiles.map((path) => [path, readFileSync(path, 'utf8')]));
+const idsByPath = new Map();
+for (const [path, html] of htmlByPath) {
+  const ids = [...html.matchAll(/\sid="([^"]+)"/gu)].map((match) => match[1]);
+  const uniqueIds = new Set(ids);
+  if (uniqueIds.size !== ids.length) failures.push(`${path}: duplicate HTML IDs make navigation ambiguous`);
+  idsByPath.set(path, uniqueIds);
+}
 if (existsSync(resolve(root, 'public/CNAME'))) {
   failures.push('public/CNAME duplicates the GitHub Pages custom-domain setting used by the Actions workflow');
 }
 const attributePattern = /\b(?:href|src|poster|action|data-index-url|data-console-image)="([^"]+)"/gu;
 for (const path of htmlFiles) {
-  const html = readFileSync(path, 'utf8');
+  const html = htmlByPath.get(path);
+  const browserUrl = new URL(relative(dist, path).replace(/index\.html$/u, ''), siteHref('/'));
   for (const match of html.matchAll(attributePattern)) {
-    const url = match[1];
-    if (!isInternal(url)) continue;
-    if (siteBasePath !== '/' && withSiteBase(url) !== url) {
+    const url = decodeAttribute(match[1]);
+    if (/^[a-z][a-z\d+.-]*:/iu.test(url) || url.startsWith('//')) continue;
+    const resolved = new URL(url, browserUrl);
+    const target = emittedTarget(resolved.pathname);
+    if (match[0].startsWith('href=') && resolved.hash) {
+      const rawFragment = resolved.hash.slice(1).split(':~:text=', 1)[0];
+      if (rawFragment && idsByPath.has(target)) {
+        try {
+          if (!idsByPath.get(target).has(decodeURIComponent(rawFragment))) {
+            failures.push(`${path}: emitted HTML fragment does not exist: ${url}`);
+          }
+        } catch {
+          failures.push(`${path}: invalid encoded HTML fragment: ${url}`);
+        }
+      }
+    }
+    if (siteBasePath !== '/' && withSiteBase(resolved.pathname) !== resolved.pathname) {
       failures.push(`${path}: internal URL is missing ${siteBasePath}: ${url}`);
       continue;
     }
-    if (siteBasePath !== '/' && url.includes(`${siteBasePath}${siteBasePath}`)) {
+    if (siteBasePath !== '/' && resolved.pathname.includes(`${siteBasePath}${siteBasePath}`)) {
       failures.push(`${path}: internal URL contains the deployment base twice: ${url}`);
       continue;
     }
-    if (!existsSync(emittedTarget(url))) {
+    if (!existsSync(target)) {
       failures.push(`${path}: emitted internal target does not exist: ${url}`);
     }
   }
 }
 
 const indexPath = resolve(dist, 'index.html');
-const index = readFileSync(indexPath, 'utf8');
+const index = htmlByPath.get(indexPath);
 const expectedCanonical = siteHref('/');
 if (!index.includes(`<link rel="canonical" href="${expectedCanonical}">`)) {
   failures.push(`home canonical must use the configured site/base: ${expectedCanonical}`);
@@ -153,7 +191,8 @@ for (const match of sitemap.matchAll(/<loc>([^<]+)<\/loc>/gu)) {
 }
 if (failures.length) {
   process.stderr.write(`${failures.join('\n')}\n`);
-  process.exit(1);
+  // Let the output drain so a large audit preserves every failed link.
+  process.exitCode = 1;
+} else {
+  process.stdout.write(`Pages base-path and fragment checks passed for ${htmlFiles.length} HTML files at ${siteHref('/')}\n`);
 }
-
-process.stdout.write(`Pages base-path checks passed for ${htmlFiles.length} HTML files at ${siteHref('/')}\n`);

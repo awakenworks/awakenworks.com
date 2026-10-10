@@ -167,7 +167,7 @@ Session creation pins `skill_id + version + bundle_sha256` into
 `ResolvedSessionResources.skills`. Retry or restart loads that same version,
 revalidates relative paths and SHA-256, and materializes the full tree under
 `.skills/<skill-id>`. Catalog updates affect new Sessions only. See
-[Sessions, resources, and events](/docs/agents/concepts/sessions-and-events/#resources-resolve-once-when-the-session-is-created)
+[Sessions, resources, and events](/docs/agents/concepts/sessions-and-events/#resources-are-resolved-before-the-session-runs)
 for the owning resource lifecycle.
 
 ## Constrain a skill to a tool subset

@@ -123,7 +123,7 @@ DTOs, batch limits, and Managed Agents differences belong to the
 [compatibility matrix](/docs/agents/compatibility/). Exact MCP attachment
 states and transport behavior belong to [MCP protocol](/docs/agents/protocols/mcp/).
 Claim takeover, commit ambiguity, and indeterminate effects belong to
-[Production reliability](./production-reliability).
+[Production reliability](/docs/agents/concepts/production-reliability).
 
 For application wiring, continue with
 [Connect one published Agent](/docs/agents/how-to/connect-a-published-agent/).

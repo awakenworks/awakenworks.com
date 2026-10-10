@@ -37,7 +37,7 @@ evidence:
 - 已有能够解析目标模型的 Provider Connection；
 - Agent 将使用的 Tools、Skills、MCP servers、凭据与资源已经存在。
 
-如果模型尚未就绪，先完成[配置 provider、模型与凭据](./configure-providers-models-credentials)。
+如果模型尚未就绪，先完成[配置 provider、模型与凭据](/zh/docs/agents/how-to/configure-providers-models-credentials)。
 
 ## 1. 编辑并保存草稿
 

@@ -74,7 +74,7 @@ sequenceDiagram
 A failure before a fact is committed does not become durable history. Recovery
 starts from the last committed Thread facts and the applicable tool-recovery
 policy. Exact claim, retry, and indeterminate-effect rules belong to
-[Production reliability](./production-reliability), not to this definition.
+[Production reliability](/docs/agents/concepts/production-reliability), not to this definition.
 
 ## Awaken's implementation
 
@@ -83,7 +83,7 @@ the Agent loop, tools, typed state, permission checks, plugins, and staged atomi
 commits. Awaken Agents adds durable Sessions, publication, protocol adapters,
 Workers, Sandboxes, configuration, and recovery around that core.
 
-Use [Framework vs Runtime vs Agent application infrastructure](./framework-runtime-infrastructure)
+Use [Framework vs Runtime vs Agent application infrastructure](/docs/agents/concepts/framework-runtime-infrastructure)
 when choosing the layer you need. Then read [Runtime internals](/docs/agents/runtime/)
 only when you need to extend execution behavior, or [Run your first Awaken
 Session](/docs/agents/get-started/) when you want to integrate an application.

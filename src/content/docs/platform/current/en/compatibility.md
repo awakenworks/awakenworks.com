@@ -13,7 +13,7 @@ below. Do not treat “the request reached the server” as proof that the whole
 client is compatible.
 
 This page does not cover migration from an earlier Awaken runtime or local
-server. Use the [Awaken 1.0 migration guide](./how-to/migrate-to-1-0) for product,
+server. Use the [Awaken 1.0 migration guide](/docs/agents/how-to/migrate-to-1-0) for product,
 configuration, storage, and deployment changes, then return here for the
 Managed client decision.
 

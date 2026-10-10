@@ -10,64 +10,44 @@ Awaken Workforce's kernel is **domain-neutral**: it knows a small set of primiti
 nothing about "marketing", "customer", or "coder". Domain meaning is added by
 [domain packs](/docs/workforce/concepts/domain-packs). Understanding the few core
 objects — and how they connect — is the key to everything else. If you haven't
-read [A type system for agents](/docs/objects/concepts/type-system) yet, read it
+read [Types as operational contracts](/docs/objects/concepts/type-system) yet, read it
 first: this page is that model made concrete.
 
-## Facts, projections, and the two planes
+## Committed state, history, and live checks
 
-Before the objects, the substrate they all sit on.
+Domain owners preserve their current state and the committed facts needed to
+explain it. A history record and a projection do not replace that state:
 
-- **Fact** — an append-only, immutable, typed ledger entry. Facts are the stored
-  **history**: no `UPDATE`, no `DELETE`; a correction is a new fact that supersedes.
-  Every object below records its truth as facts.
-- **Fact log** — the per-subject append-only stream; the authoritative history the
-  audit trail, reactions, and outbox all read from.
-- **Projection** — a pure, total, replayable derivation *over* facts (a board, a
-  backlog, a metric). A projection is the **derived** read layer — display-only,
-  rebuildable from the log, never the source of truth and never repaired in place.
+- **Current state** includes an Issue's Workflow position and a WorkUnit's
+  business execution status. The owning domain validates and persists changes.
+- **History** records committed transitions and execution observations. Workforce
+  consumes Awaken lifecycle facts through its existing inbox and execution link.
+- **Projection** derives a read model from committed state and history. It does
+  not become another owner of the underlying work or execution.
+- **Live checks** verify current lease, credential availability and permission at
+  the relevant execution boundary. An old observation is not current authority.
 
-Two **planes** keep the replayable world separate from runtime reality:
-
-- **Pure plane** — facts and their projections: deterministic, replayable,
-  clock-free.
-- **Live plane** — runtime reality: a run's **lease**, a credential's availability,
-  a connector's connection. Wall-clock-bound and non-replayable.
-
-A reference is **typed by the plane it points into**, and a Pure (replayable)
-computation cannot read a Live thing — so "is it alive right now?" is a **Live view**
-over a lease, never a stored flag. This is the two-plane fence from the
-[type system](/docs/objects/concepts/type-system#two-planes-replayable-vs-live).
-
-> **A subtlety worth getting right.** It is *not* true that "everything is a
-> projection." An Issue's own **workflow position** — its `state_key` and whether it
-> is terminal — is **authoritative typed state**, held under a **version** and
-> updated in place; every transition also appends one immutable state-entry fact in
-> the same step (that is the history). What is forbidden is a stored *run-status*
-> column: run status, "is it live?", scheduling status, and the inbox are all
-> **derived** — projections or Live views, never mutated fields.
+[Types as operational contracts](/docs/objects/concepts/type-system#where-types-carry-authority)
+lists the types and checks that the current contracts validate.
 
 ## Kernel objects
 
-The kernel is anchored on a **bounded, justified set of aggregate roots** — each a
-consistency boundary with its own fact stream. The set is deliberately small:
-adding a new root requires an explicit design decision showing an invariant the
-existing roots can't carry.
+Each object retains its domain owner. The [core-object guide](/docs/workforce/concepts/core-concepts)
+owns the full work model; this overview connects that work to governed Resources.
 
-- **Actor** — an identity that can raise issues, react, or own runs (a User, Agent,
+- **Actor** — an identity that can raise issues, react, or perform work (a User, Agent,
   or Team).
 - **Resource** — a governed thing that issues are raised against (a repo, a
   connector, a work product, a script, a credential kind — one catalog, facet-typed).
 - **Issue** — a durable, visible unit of work against a resource; the primary
   process-backed **Subject**.
 - **Reaction** — the system's declared response to an issue; the automation spine.
-- **Run** — a leased, accountable, event-streamed execution that produces a declared
-  output which advances a Subject.
+- **WorkUnit** — one Workforce business execution responsibility; an Agent-backed
+  WorkUnit links to an Awaken Run rather than owning another Agent worker kernel.
 
-Plus one mechanism root, not a data object:
-
-- **The decision maker** — the one engine every "may this happen?" routes through
-  (authorization, admission, readiness, selection, egress). See
-  [Permissions & resources](/docs/objects/concepts/permissions-resources).
+Identity, authorization, admission, readiness, selection, approval and live
+execution checks answer different questions. Their boundaries are described in
+[Authorization, readiness, and Resources](/docs/objects/concepts/permissions-resources).
 
 ### Typed structure inside the process layer
 
@@ -128,29 +108,19 @@ the tenant boundary; a **Workspace** groups work inside it; a **Project** is the
 innermost container an object belongs to. A single-node deployment seeds a singleton
 Org, so the local and hosted shapes are one model.
 
-## Work & execution objects
+## Work and execution ownership
 
-How work actually runs:
+- **Assignment** identifies the responsibility slot for an Issue's Workflow state.
+- **WorkUnit** owns the corresponding business attempt, its status and accepted outputs.
+- **Awaken Run** owns Agent execution, placement, await/resume and terminal execution facts.
+  An Agent-backed WorkUnit starts or reconnects it through `AgentExecutionPort` and
+  retains one exact execution link.
+- **Workflow and Issue** decide how accepted outputs advance the work and what
+  obligations must be satisfied before completion. Run success alone is not business acceptance.
 
-- **Assignment** (`Assignment`) — who is responsible for a state on an
-  Issue, created when the state is entered.
-- **Run** (`WorkUnit`) — one execution instance bound to a Subject;
-  `queued → active → succeeded | failed | cancelled`. Approval/pause are events,
-  not status variants.
-- **Dispatch & lease** — a run waits in the dispatch queue behind typed gates
-  (credential, plan, lock, WIP, approval), then holds a **lease** — the single
-  authority binding its worker token and side effects.
-- **Accepted output** — the WorkUnit's structured JSON completion record. Named
-  exports, variants, required inputs, and Resource production make its contract
-  explicit.
-- **Work product ref** — a typed, attestable reference to a deliverable
-  (`{kind, locator}`); the kernel carries and compares it, never interprets it.
-- **Cycle / Delivery target** — planning and release surfaces. They are members of
-  the same process-backed `Subject` family as an Issue, so their workflow position is
-  authoritative typed state too; what's *derived* is their scheduling/rollup status —
-  a projection over the spine, never a separately stored enum.
-- **Attention signal** — an operator-visible record when work stalls
-  (stalled run, stale lease, missing credential), with typed recovery actions.
+[Agents, WorkUnits, and Awaken Runs](/docs/workforce/concepts/agents-runs) owns the
+execution sequence, recovery and current integration status. The [core-object
+guide](/docs/workforce/concepts/core-concepts) owns planning and human-obligation objects.
 
 ## Identity & assignment objects
 
@@ -171,7 +141,8 @@ Who can be assigned and who can act:
 
 ```mermaid
 flowchart TD
-    O["Observation"] --> I["Issue"] --> S["Workflow state"] --> A["Assignment"] --> R["Run"]
+    O["Observation"] --> I["Issue"] --> S["Workflow state"] --> A["Assignment"] --> R["WorkUnit"]
+    R -. "AgentExecutionPort / execution link" .-> E["Awaken Run · Agents authority"]
     R --> W["output + Work product"] --> V["Verdict (verified / approved)"] --> T["Transition (CEL when)"]
     T --> S
     T --> D["Done"]
@@ -181,13 +152,13 @@ flowchart TD
    lands as an **Issue** bound to a workflow.
 2. Entering a **state** creates **assignments** from its slots; each waits behind
    dispatch gates.
-3. A cleared assignment starts a **run** under a **lease**; the agent works and
-   may call approval-gated **tools**.
-4. The run produces a structured **output** and a **work product ref**, checked by
-   a **verdict**.
-5. A **transition**'s CEL `when` reads the structured output and routes to the
-   next state — never guessing from free text.
-6. The Issue reaches a **terminal** state (`completed` or `canceled`).
+3. A cleared assignment starts a **WorkUnit**. Agent-backed execution starts or
+   reconnects an Awaken Run through the existing execution port; Agents owns its lease and worker.
+4. Committed lifecycle facts return through the inbox to the same WorkUnit. Its
+   structured outputs remain subject to the Workflow's checks and human decisions.
+5. A **transition** reads declared outputs and guards, not a guess from free text.
+6. The Issue reaches its declared terminal state only when the completion conditions
+   and remaining obligations are satisfied. An Agent's terminal result alone is insufficient.
 
 Next: [the parts of a workflow](/docs/workforce/concepts/workflow-parts) ·
 [Issues](/docs/workforce/concepts/issues) ·

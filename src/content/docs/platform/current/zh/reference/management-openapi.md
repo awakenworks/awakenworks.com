@@ -25,9 +25,9 @@ router 一致。
 | 需要查什么 | 使用什么 |
 | --- | --- |
 | `/v1/config/*` 的精确字段与 operation | `contracts/openapi.generated.json` |
-| 所有公共 route family | [公共 HTTP API](./api) |
-| Managed Agents request/response type | 已测试的 Anthropic SDK 与[兼容页](../compatibility) |
-| AI SDK、AG-UI、A2A、ACP 或 MCP payload | 对应的[协议页](../protocols/) |
+| 所有公共 route family | [公共 HTTP API](/zh/docs/agents/reference/api) |
+| Managed Agents request/response type | 已测试的 Anthropic SDK 与[兼容页](/zh/docs/agents/compatibility) |
+| AI SDK、AG-UI、A2A、ACP 或 MCP payload | 对应的[协议页](/zh/docs/agents/protocols) |
 
 生成契约覆盖 `/v1/config/*` 下的 provider connections、executable models、credentials、
 pools、inference profiles、resolution 与 Agent resource bindings。其他 surface 继续使用
@@ -82,6 +82,6 @@ revision，使部署可以重现当时使用的精确 schema。
 
 ## 相关
 
-- [公共 HTTP API](./api)：所有公共 surface 的 route-family map；
-- [Provider connection 指南](../how-to/configure-providers-models-credentials)：唯一 provider 写入路径；
-- [模型发布与凭据边界](./provider-model-config)：发布时所有权与执行行为。
+- [公共 HTTP API](/zh/docs/agents/reference/api)：所有公共 surface 的 route-family map；
+- [Provider connection 指南](/zh/docs/agents/how-to/configure-providers-models-credentials)：唯一 provider 写入路径；
+- [模型发布与凭据边界](/zh/docs/agents/reference/provider-model-config)：发布时所有权与执行行为。

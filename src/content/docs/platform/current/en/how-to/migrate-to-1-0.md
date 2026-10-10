@@ -15,9 +15,9 @@ target is one verified Awaken 1.0 AllInOne Session. Split deployment is a later
 operating decision, not a separate application migration.
 
 This page is the public owner of the **Awaken release migration**. The
-[Managed Agents compatibility matrix](../compatibility) owns SDK and wire
-compatibility. [Agents architecture](../concepts/architecture) owns component
-authority, and [self-hosting](./self-host) owns deployment configuration and
+[Managed Agents compatibility matrix](/docs/agents/compatibility) owns SDK and wire
+compatibility. [Agents architecture](/docs/agents/concepts/architecture) owns component
+authority, and [self-hosting](/docs/agents/how-to/self-host) owns deployment configuration and
 operations. This page links to those owners instead of copying them.
 
 ## Goal
@@ -52,7 +52,7 @@ configuration surface:
 | Other `AWAKEN_*` deployment settings | Typed TOML configuration | Use `awaken config --json` to inspect the redacted effective configuration. Environment variables are not an alternate deployment schema. |
 | Application startup that creates shared schemas | `awaken database migrate` before split services | Local embedded stores migrate during local startup. Shared server schemas are written only by the explicit migration command. |
 
-Use [Deployment configuration](../reference/configuration) for the complete
+Use [Deployment configuration](/docs/agents/reference/configuration) for the complete
 current key set. Do not infer a 1.0 key from an earlier environment-variable
 name.
 
@@ -95,8 +95,8 @@ by itself prove an earlier product store is importable.
    events again.
 
 For an Anthropic client, make the separate compatibility decision in the
-[Managed Agents compatibility matrix](../compatibility). For other clients,
-use the [protocol connection matrix](../protocols/connect) and its adapter-owned
+[Managed Agents compatibility matrix](/docs/agents/compatibility). For other clients,
+use the [protocol connection matrix](/docs/agents/protocols/connect) and its adapter-owned
 guide.
 
 ## Choose the deployment after behavior matches
@@ -114,8 +114,8 @@ flowchart LR
 ```
 
 AllInOne and split deployment use the same publication, Session, dispatch, and
-commit authorities. The [architecture page](../concepts/architecture) owns the
-static and dynamic component model. The [self-hosting guide](./self-host) owns
+commit authorities. The [architecture page](/docs/agents/concepts/architecture) owns the
+static and dynamic component model. The [self-hosting guide](/docs/agents/how-to/self-host) owns
 the exact hardening, PostgreSQL migration, private service authentication,
 Worker, wake-up, and recovery steps.
 

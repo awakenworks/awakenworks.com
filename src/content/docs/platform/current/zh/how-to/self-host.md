@@ -30,9 +30,9 @@ Coordinator、Resources、Worker 与 Runtime 职责。
 
 ## 前置条件
 
-- 完成[开始使用](../get-started)，并让同一个 Agent 在 AllInOne 中运行成功；
+- 完成[开始使用](/zh/docs/agents/get-started)，并让同一个 Agent 在 AllInOne 中运行成功；
 - 替换旧版 Runtime 或本地 Server 时，先在独立数据边界中完成
-  [Awaken 1.0 迁移](./migrate-to-1-0)；
+  [Awaken 1.0 迁移](/zh/docs/agents/how-to/migrate-to-1-0)；
 - 明确持久存储、secret 托管、入口、身份与备份的负责人；
 - 拆分服务需要 PostgreSQL 和经过认证的私有网络；
 - schema migration 前确定维护窗口与回滚点。
@@ -60,7 +60,7 @@ awaken all-in-one --config /etc/awaken/config.toml
 ```
 
 `awaken config --json` 适合部署断言，因为 secret 与数据库 URL 会保持脱敏。完整 key
-见[部署配置](../reference/configuration)。
+见[部署配置](/zh/docs/agents/reference/configuration)。
 
 ## 2. 加固单节点
 
@@ -128,13 +128,13 @@ token。它注册 capability、claim/renew leased work、只 materialize 精确�
 Resource、通过 fenced Coordinator 协议 commit，并在同一 epoch 下 settle。
 
 Container tier 还要添加匹配的 feature/runtime 与 `container_image`。见
-[配置 Sandbox tier](./configure-sandbox-tiers)。
+[配置 Sandbox tier](/zh/docs/agents/how-to/configure-sandbox-tiers)。
 
 ## 6. Durable dispatch 通过后再配跨节点 wake-up
 
 Dispatch database 拥有工作真相。`dispatch_wake = "pg-notify"` 或 `"nats"` 只缩短
 空闲 Worker 等待下一次 poll 的时间。每个进程使用唯一 `dispatch_owner`；在依赖 wake
-降低延迟前，先关闭 wake channel 验证 takeover。见[使用 NATS wake signal](./use-nats-wake-signal)。
+降低延迟前，先关闭 wake channel 验证 takeover。见[使用 NATS wake signal](/zh/docs/agents/how-to/use-nats-wake-signal)。
 
 ## 验证
 
@@ -168,8 +168,8 @@ seal key、credential file 或 database URL。
 
 ## 下一步
 
-- [查看完整部署配置](../reference/configuration)；
-- [选择 Sandbox tier](./configure-sandbox-tiers)；
-- [只把 NATS 用作 wake signal](./use-nats-wake-signal)；
-- [查看生产可靠性与恢复](../concepts/production-reliability)；
-- [查看平台架构与权威边界](../concepts/architecture)。
+- [查看完整部署配置](/zh/docs/agents/reference/configuration)；
+- [选择 Sandbox tier](/zh/docs/agents/how-to/configure-sandbox-tiers)；
+- [只把 NATS 用作 wake signal](/zh/docs/agents/how-to/use-nats-wake-signal)；
+- [查看生产可靠性与恢复](/zh/docs/agents/concepts/production-reliability)；
+- [查看平台架构与权威边界](/zh/docs/agents/concepts/architecture)。

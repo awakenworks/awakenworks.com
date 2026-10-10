@@ -3,38 +3,30 @@ title: "对象模型"
 description: "Awaken Workforce 领域中立的内核，以及其对象如何关联——从一条入站观察到一个经过验证、已完成的 Issue。"
 ---
 
-Awaken Objects 的内核是**领域中立**的：它只认识一小组原语，对“营销”、“客户”或“程序员”一无所知。领域含义由[领域包](/zh/docs/workforce/concepts/domain-packs)添加。理解这少数几个核心对象，以及它们如何连接，是掌握其他一切的关键。如果你还没读过[面向 Agent 的类型系统](/zh/docs/objects/concepts/type-system)，请先读它：本页是那个模型的具体化。
+Awaken Workforce 的内核是**领域中立**的：它只认识一小组原语，对“营销”、“客户”或“程序员”一无所知。领域含义由[领域包](/zh/docs/workforce/concepts/domain-packs)添加。理解这少数几个核心对象，以及它们如何连接，是掌握其他一切的关键。如果你还没读过[作为运营契约的类型](/zh/docs/objects/concepts/type-system)，请先读它：本页是那个模型的具体化。
 
-## 事实、投影与两个平面
+## 已提交状态、历史与实时检查
 
-在讲对象之前，先讲它们全都栖身其上的基底。
+各领域保存自己的当前状态与解释变化所需的已提交事实。历史记录和投影不会替代这些状态：
 
-- **事实（Fact）**——一条仅追加、不可变、带类型的账本条目。事实是被存储的**历史**：没有 `UPDATE`，没有 `DELETE`；一次更正是一条取代旧事实的新事实。下面每个对象都以事实来记录其真相。
-- **事实日志（Fact log）**——按主体划分的仅追加流；是审计轨迹、反应与 outbox 都从中读取的权威历史。
-- **投影（Projection）**——一个*对*事实的纯粹、全总、可重放的派生（一块看板、一个待办列表、一项指标）。投影是**派生的**读取层——只用于展示、可从日志重建、绝非真相之源，也绝不就地修复。
+- **当前状态**包括 Issue 的 Workflow 位置，以及 WorkUnit 的业务执行状态；由所属领域校验并持久化变化。
+- **历史**记录已提交的转移和执行观察。Workforce 通过既有 inbox 与执行关联消费 Awaken lifecycle facts。
+- **投影**从已提交状态和历史派生读取模型，不成为业务工作或技术执行的另一份权威。
+- **实时检查**在相应执行边界验证当前 lease、credential 可用性与权限；旧观察不是当前授权。
 
-两个**平面（plane）**让可重放的世界与运行时现实保持分离：
-
-- **Pure 平面**——事实及其投影：确定性、可重放、无时钟。
-- **Live 平面**——运行时现实：一个 run 的 **lease**、一份凭证的可用性、一个连接器的连接。受挂钟约束、不可重放。
-
-一个引用**由它所指向的平面定型**，而一个 Pure（可重放）计算无法读取一个 Live 的东西，因此“它此刻还活着吗？”是对一个 lease 的 **Live 视图**，绝非一个被存储的标志。这就是来自[类型系统](/zh/docs/objects/concepts/type-system#two-planes-replayable-vs-live)的两平面围栏。
-
-> **一个值得弄清楚的细微之处。** “一切皆投影”这句话*并不*成立。一个 Issue 自身的**工作流位置**——它的 `state_key` 以及它是否终止——是**权威的带类型状态**，在一个**版本**下持有并就地更新；每一次转移也会在同一步骤中追加一条不可变的状态条目事实（那就是历史）。被禁止的是一个被存储的*运行状态*列：运行状态、“它是活的吗？”、调度状态以及收件箱，全都是**派生的**——是投影或 Live 视图，绝非被改动的字段。
+[作为运营契约的类型](/zh/docs/objects/concepts/type-system#类型在哪里承载权威)列出当前契约实际验证的类型与检查。
 
 ## 内核对象
 
-内核锚定在一个**有界、有据可依的一组聚合根（aggregate root）**上——每个都是一个带有自身事实流的一致性边界。这组根被刻意保持得很小：新增一个根需要一个显式的设计决策，以证明存在一个现有的根无法承载的不变量。
+每个对象保留所属领域的权威。[核心对象指南](/zh/docs/workforce/concepts/core-concepts)维护完整工作模型；本页说明这些工作如何连接受治理的 Resource。
 
-- **Actor** — 一个能提出 issue、做出反应或拥有 run 的身份（一个 User、Agent 或 Team）。
+- **Actor** — 一个能提出 issue、做出反应或执行工作的身份（一个 User、Agent 或 Team）。
 - **Resource** — 一个受治理的东西，issue 针对它被提出（一个仓库、一个连接器、一个工作产物、一个脚本、一种凭证种类——同一份目录，按 facet 定型）。
 - **Issue** — 针对某个 resource 的、持久且可见的工作单元；主要的、由流程支撑的 **Subject**。
 - **Reaction** — 系统对某个 issue 声明的响应；自动化的主干。
-- **Run** — 一次持有租约、可问责、以事件流形式呈现的执行，产出一份推进某个 Subject 的声明式输出。
+- **WorkUnit** — Workforce 中的一项业务执行责任；Agent-backed WorkUnit 关联 Awaken Run，不拥有另一套 Agent worker kernel。
 
-外加一个机制根，它不是一个数据对象：
-
-- **决策者（the decision maker）** - 每一个“这件事可以发生吗？”都经由的那一个引擎（authorization、admission、readiness、selection、egress）。见[权限与资源](/zh/docs/objects/concepts/permissions-resources)。
+Identity、authorization、admission、readiness、selection、approval 与实时执行检查分别回答不同问题。边界由[授权、就绪与资源](/zh/docs/objects/concepts/permissions-resources)说明。
 
 ### 流程层内部的带类型结构
 
@@ -84,18 +76,14 @@ agent 操作的是**拥有精确 Action 与计算属性的带类型领域对象*
 一个对象所属的最内层容器。一个单节点部署会播种一个单例的
 Org，于是本地形态与托管形态是同一个模型。
 
-## 工作与执行对象
+## 工作与执行的权威
 
-工作实际上如何运行：
+- **Assignment** 指定 Issue 的 Workflow state 中的责任槽位。
+- **WorkUnit** 保存对应业务尝试、状态和已接受输出。
+- **Awaken Run** 负责 Agent 技术执行、placement、await/resume 与终态事实。Agent-backed WorkUnit 通过 `AgentExecutionPort` 启动或重连它，并保存唯一精确执行关联。
+- **Workflow 与 Issue** 决定已接受输出怎样推进工作，以及完成前需要满足哪些义务。Run 成功本身不是业务验收。
 
-- **Assignment**（`Assignment`）— 谁对某个 Issue 上的某个状态负责，在进入该状态时创建。
-- **Run**（`WorkUnit`）— 绑定到 Subject 的一个执行实例；
-  `queued → active → succeeded | failed | cancelled`。Approval/pause 是 event，不是 status variant。
-- **Dispatch 与 lease** — 一个 run 在分发队列中排在若干带类型的门（凭证、计划、锁、WIP、审批）之后等待，然后持有一个 **lease**——绑定其 worker token 与副作用的唯一权威。
-- **Accepted output** — WorkUnit 的结构化 JSON 完成记录；named export、variant、required input 与 Resource production 显式组成契约。
-- **Work product ref** — 对某个交付物的带类型、可证实的引用（`{kind, locator}`）；内核携带并比较它，但从不解释它。
-- **Cycle / Delivery target** — 规划与发布的表面。它们与 Issue 同属那个由流程支撑的 `Subject` 家族，因此它们的工作流位置也是权威的带类型状态；*派生的*是它们的调度/汇总状态——一个对主干的投影，绝非单独存储的枚举。
-- **Attention signal** — 当工作停滞（run 卡住、lease 过期、缺失凭证）时一条对操作员可见的记录，附带带类型的恢复操作。
+[Agent、WorkUnit 与 Awaken Run](/zh/docs/workforce/concepts/agents-runs)维护执行顺序、恢复与当前集成状态；[核心对象指南](/zh/docs/workforce/concepts/core-concepts)维护规划与人工义务对象。
 
 ## 身份与指派对象
 
@@ -112,7 +100,8 @@ Org，于是本地形态与托管形态是同一个模型。
 
 ```mermaid
 flowchart TD
-    O["Observation"] --> I["Issue"] --> S["工作流状态"] --> A["Assignment"] --> R["Run"]
+    O["Observation"] --> I["Issue"] --> S["工作流状态"] --> A["Assignment"] --> R["WorkUnit"]
+    R -. "AgentExecutionPort / execution link" .-> E["Awaken Run · Agents 权威"]
     R --> W["output + Work product"] --> V["Verdict (verified / approved)"] --> T["Transition (CEL when)"]
     T --> S
     T --> D["Done"]
@@ -120,10 +109,10 @@ flowchart TD
 
 1. 一条入站**观察**（webhook、报告、计划任务）被去重，并作为一个绑定到某工作流的 **Issue** 落地。
 2. 进入一个**状态**会从它的槽位创建出多个 **assignment**；每个都在分发门之后等待。
-3. 一个已放行的 assignment 在某个 **lease** 下启动一个 **run**；Agent 开始工作，并可能调用受审批门控的**工具**。
-4. 该 run 产出一份结构化的 **output** 和一个 **work product ref**，由一个 **verdict** 检查。
-5. 一个 **transition** 的 CEL `when` 读取结构化输出并路由到下一个状态——绝不从自由文本中猜测。
-6. 该 Issue 到达一个**终止**状态（`completed` 或 `canceled`）。
+3. 已放行的 assignment 启动 **WorkUnit**。Agent-backed execution 通过既有执行 port 启动或重连 Awaken Run；lease 与 worker 由 Agents 管理。
+4. 已提交 lifecycle facts 通过 inbox 返回同一个 WorkUnit；结构化输出仍须经过 Workflow 检查和人工决定。
+5. **Transition** 读取声明的输出和 guard，不从自由文本猜测。
+6. 完成条件与剩余义务得到满足后，Issue 才到达声明的终态。Agent 的终态结果本身不足以完成业务工作。
 
 下一步：[工作流的各部分](/zh/docs/workforce/concepts/workflow-parts) ·
 [Issues](/zh/docs/workforce/concepts/issues) ·

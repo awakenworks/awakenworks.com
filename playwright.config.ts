@@ -4,6 +4,7 @@ export default defineConfig({
   testDir: "./tests",
   workers: 1,
   retries: 0,
+  globalTimeout: 15 * 60 * 1000,
   reporter: "line",
   use: { baseURL: "http://127.0.0.1:18284", trace: "retain-on-failure" },
   webServer: {

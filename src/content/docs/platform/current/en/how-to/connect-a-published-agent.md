@@ -64,7 +64,7 @@ drift.
 
 For local work, `awaken all-in-one` serves the API and Console together. Before an
 internet-facing application calls the service, complete [self-hosting and
-authentication](/docs/agents/how-to/self-host/#authentication).
+authentication](/docs/agents/how-to/self-host/#2-harden-a-single-node).
 
 ## 3. Connect through the canonical matrix
 
@@ -126,6 +126,6 @@ contacting support. Do not include tokens, service keys, or message content.
 ## Next steps
 
 - Keep the selected integration guide beside the application code.
-- [Manage the resulting Session](./manage-a-session).
-- Review production [credential custody](../concepts/credential-custody) and
-  [deployment](./self-host).
+- [Manage the resulting Session](/docs/agents/how-to/manage-a-session).
+- Review production [credential custody](/docs/agents/concepts/credential-custody) and
+  [deployment](/docs/agents/how-to/self-host).

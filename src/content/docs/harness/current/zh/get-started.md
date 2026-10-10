@@ -96,4 +96,4 @@ loop 可以在下一次调用中自行纠正。一次短暂的 Tool error 本身
 
 - 需要恢复、分布式 Worker 或 Sandbox：使用 [Awaken Agents 生产可靠性](/zh/docs/agents/concepts/production-reliability/)。
 - 需要 HTTP、协议或前端集成：使用 [Awaken Agents](/zh/docs/agents/)。
-- 准备部署：使用[部署与运营 Awaken](/zh/docs/agents/how-to/self-host#production-hardening)。
+- 准备部署：使用[部署与运营 Awaken](/zh/docs/agents/how-to/self-host#2-加固单节点)。

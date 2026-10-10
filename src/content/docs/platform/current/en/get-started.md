@@ -73,7 +73,7 @@ method, then choose **Verify & import models**.
 Continue when the connection reads `ready` and at least one imported model is
 marked executable. The command checks the credential and endpoint before it
 saves the Provider, endpoint, credential reference, and model offerings. Use
-[Configure providers, models, and credentials](./how-to/configure-providers-models-credentials)
+[Configure providers, models, and credentials](/docs/agents/how-to/configure-providers-models-credentials)
 if the connection does not become ready.
 
 ## 4. Publish an Agent
@@ -105,7 +105,7 @@ npm install @anthropic-ai/sdk
 This Node.js guide was validated with TypeScript SDK 0.122.0. That is a
 validation coordinate, not a dependency requirement. Choose the SDK version
 under your own dependency policy and check its resource families in the
-[compatibility matrix](./compatibility).
+[compatibility matrix](/docs/agents/compatibility).
 
 Set the ids you recorded in the Console. Local no-login mode accepts `local` as
 the key. In a self-managed protected deployment, open **Access**, create a
@@ -214,8 +214,8 @@ need. Never remove a broad parent directory.
 
 ## Continue from here
 
-- Coming from an earlier runtime or local server? Follow the [Awaken 1.0 migration guide](./how-to/migrate-to-1-0) before reusing configuration or data.
-- [Connect the published Agent](./how-to/connect-a-published-agent) through another application protocol.
-- Check the [Managed Agents compatibility boundary](./compatibility).
-- [Deploy and operate Awaken](./how-to/self-host) with explicit identity, database, backup, and Sandbox boundaries.
-- Use the generated [management OpenAPI contract](./reference/management-openapi) for automation.
+- Coming from an earlier runtime or local server? Follow the [Awaken 1.0 migration guide](/docs/agents/how-to/migrate-to-1-0) before reusing configuration or data.
+- [Connect the published Agent](/docs/agents/how-to/connect-a-published-agent) through another application protocol.
+- Check the [Managed Agents compatibility boundary](/docs/agents/compatibility).
+- [Deploy and operate Awaken](/docs/agents/how-to/self-host) with explicit identity, database, backup, and Sandbox boundaries.
+- Use the generated [management OpenAPI contract](/docs/agents/reference/management-openapi) for automation.

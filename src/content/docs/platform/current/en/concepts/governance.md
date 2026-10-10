@@ -130,5 +130,5 @@ mutable log would erase their different consistency and retention boundaries.
 
 A credential reference only identifies material and its permitted delivery
 path. It does not authorize ingress or a tool action. See
-[Credential custody](./credential-custody) and
+[Credential custody](/docs/agents/concepts/credential-custody) and
 [Provider model configuration](/docs/agents/reference/provider-model-config/).

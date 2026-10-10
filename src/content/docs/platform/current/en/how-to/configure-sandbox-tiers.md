@@ -26,7 +26,7 @@ Confirm three facts:
 
 ## Prerequisites
 
-- Choose the boundary in [Execution backends and Sandbox placement](../concepts/execution-modes#sandbox-tiers).
+- Choose the boundary in [Execution backends and Sandbox placement](/docs/agents/concepts/execution-modes#sandbox-boundary).
 - Use an Awaken build with the matching `container-docker`, `container-podman`,
   or `container-k8s` feature when selecting a container tier. The default
   `namespace` tier needs working `bwrap` user namespaces on Linux or Seatbelt on
@@ -68,7 +68,7 @@ container_image = "registry.example/awaken-hand@sha256:<digest>"
 sandbox_allow_local_fallback = false
 ```
 
-The complete field list belongs to the [configuration reference](../reference/configuration).
+The complete field list belongs to the [configuration reference](/docs/agents/reference/configuration).
 Do not copy product-launcher warm-pool, proxy, package-builder, or wake fields
 into a standalone Worker file; unknown keys are rejected.
 
@@ -157,6 +157,6 @@ registry credentials, request credentials, tokens, or Session content.
 
 ## Next steps
 
-- [Review all deployment configuration fields](../reference/configuration).
-- [Run the self-hosting checklist](./self-host).
-- [Understand Brain, Hand, and Session Environment](../concepts/brain-and-hand).
+- [Review all deployment configuration fields](/docs/agents/reference/configuration).
+- [Run the self-hosting checklist](/docs/agents/how-to/self-host).
+- [Understand Brain, Hand, and Session Environment](/docs/agents/concepts/brain-and-hand).

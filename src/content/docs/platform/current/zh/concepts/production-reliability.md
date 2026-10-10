@@ -184,7 +184,7 @@ Remote Hand 还能用稳定 operation id 和自身幂等账本抑制重复执行
 
 Dead letter 只用于一项显式维护决定：把已经耗尽重试的任务移出自动 terminal resolution。
 不要把 quarantine 当作普通重试后的固定动作。只有明确希望停止自动 terminalization 时才
-使用它。[公共 HTTP API](../reference/api)是 quarantine、检查、requeue 与 purge 精确路由、
+使用它。[公共 HTTP API](/zh/docs/agents/reference/api)是 quarantine、检查、requeue 与 purge 精确路由、
 参数和删除边界的唯一说明。
 
 取消同样先持久化意图。running dispatch 的 cancel 会推进 epoch 并释放旧 lease，使旧

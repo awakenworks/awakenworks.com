@@ -107,6 +107,6 @@ Receipt 是完成标志。已有 subject 的 removed count 为零是合法结果
 
 ## 相关
 
-- [部署与运营 Awaken](../how-to/self-host)：拓扑、store、migration、secret 与 rollback；
-- [生产可靠性](../concepts/production-reliability)：dispatch、fencing、恢复与 side-effect 边界；
-- [Managed Agents 兼容性](../compatibility)：beta selector 与兼容资源族。
+- [部署与运营 Awaken](/zh/docs/agents/how-to/self-host)：拓扑、store、migration、secret 与 rollback；
+- [生产可靠性](/zh/docs/agents/concepts/production-reliability)：dispatch、fencing、恢复与 side-effect 边界；
+- [Managed Agents 兼容性](/zh/docs/agents/compatibility)：beta selector 与兼容资源族。

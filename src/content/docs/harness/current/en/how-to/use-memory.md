@@ -57,7 +57,7 @@ Memory mounts, recall, extraction, API, and version history all use the same
 path-addressed CAS repository; there is no second Memory data track to synchronize.
 
 The resource binding, configuration-version, and Session-activation lifecycle is
-owned by [Sessions, resources, and events](/docs/agents/concepts/sessions-and-events/#resources-resolve-once-when-the-session-is-created).
+owned by [Sessions, resources, and events](/docs/agents/concepts/sessions-and-events/#resources-are-resolved-before-the-session-runs).
 This page retains only the concrete Runtime usage.
 
 ## Enable recall

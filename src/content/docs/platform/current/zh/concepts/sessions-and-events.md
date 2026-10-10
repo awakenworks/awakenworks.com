@@ -110,7 +110,7 @@ reconciler 会重试这份 projection，不会要求客户端创建第二个 Ses
 Managed Agents 差异由[兼容矩阵](/zh/docs/agents/compatibility/)维护；MCP attachment
 的精确状态与 transport 行为由 [MCP protocol](/zh/docs/agents/protocols/mcp/)维护；
 claim takeover、commit ambiguity 与 indeterminate effect 由
-[生产可靠性](./production-reliability)维护。
+[生产可靠性](/zh/docs/agents/concepts/production-reliability)维护。
 
 接入应用时，继续阅读
 [把一个已发布 Agent 接入应用](/zh/docs/agents/how-to/connect-a-published-agent/)。

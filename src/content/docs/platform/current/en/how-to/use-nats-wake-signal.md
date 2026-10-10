@@ -66,5 +66,5 @@ If NATS does not reduce measured claim latency, set `dispatch_wake = "none"` or
 continues through polling. Do not move pending records into NATS or introduce a
 second queue.
 
-See [Production reliability](../concepts/production-reliability) for claim and
+See [Production reliability](/docs/agents/concepts/production-reliability) for claim and
 commit semantics.

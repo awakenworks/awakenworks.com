@@ -31,15 +31,15 @@ boundaries differ. The Agent publication and execution model stays the same.
 If you are deploying one machine, continue with the
 [self-hosted guide](/docs/agents/how-to/self-host/). If you are
 changing how configuration becomes a running Agent, read
-[Configuration to committed execution](./configuration-to-execution) after this
+[Configuration to committed execution](/docs/agents/concepts/configuration-to-execution) after this
 page.
 If you are upgrading an earlier runtime or local server, first use the
 [Awaken 1.0 migration guide](/docs/agents/how-to/migrate-to-1-0/); this page
 remains the owner of the deployment model it references.
 
 This page owns the whole-system context map. The exact publication-to-commit
-state machine belongs to [Configuration to committed execution](./configuration-to-execution),
-while [Production reliability](./production-reliability) owns lease, retry, and
+state machine belongs to [Configuration to committed execution](/docs/agents/concepts/configuration-to-execution),
+while [Production reliability](/docs/agents/concepts/production-reliability) owns lease, retry, and
 recovery semantics. Runtime-loop detail remains in the
 [Runtime internal documentation](/docs/agents/runtime/).
 
@@ -155,7 +155,7 @@ use the same activation and commit contracts.
 
 At the application surface, a Session either shows the action needed to resume
 an Awaiting Run or exposes its committed terminal `RunState`. The exact states
-and events remain in [Sessions and events](./sessions-and-events); this page only
+and events remain in [Sessions and events](/docs/agents/concepts/sessions-and-events); this page only
 shows where that outcome becomes authoritative.
 
 ## Consistency, retry, and failure boundaries
@@ -262,5 +262,5 @@ outcome is acceptable; Workforce or the adopting application owns that decision.
 Streams, queues, deployment labels, and Cloud billing records can observe,
 wake, package, or charge for work, but they do not become Agent execution truth.
 
-Continue with [Configuration to committed execution](./configuration-to-execution)
+Continue with [Configuration to committed execution](/docs/agents/concepts/configuration-to-execution)
 for the detailed state machine and failure matrix.

@@ -111,10 +111,10 @@ therefore have no Sandbox until local demand appears.
 
 After a tool has been dispatched, a lost channel is not silently replayed
 because the external effect may already have happened. That Run result follows
-the indeterminate-effect rules in [Production reliability](./production-reliability).
+the indeterminate-effect rules in [Production reliability](/docs/agents/concepts/production-reliability).
 Terminal Environment release is irreversible.
 
-Continue with [Execution modes](./execution-modes),
+Continue with [Execution modes](/docs/agents/concepts/execution-modes),
 [Configure Sandbox tiers](/docs/agents/how-to/configure-sandbox-tiers/), and
-[Production reliability](./production-reliability). Exact Managed Agents wire
+[Production reliability](/docs/agents/concepts/production-reliability). Exact Managed Agents wire
 differences belong to the [compatibility matrix](/docs/agents/compatibility/).

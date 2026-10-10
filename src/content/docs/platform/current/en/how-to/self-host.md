@@ -36,9 +36,9 @@ responsibilities.
 
 ## Prerequisites
 
-- complete [Get started](../get-started) and run the same Agent in AllInOne;
+- complete [Get started](/docs/agents/get-started) and run the same Agent in AllInOne;
 - when replacing an earlier runtime or local server, complete the
-  [Awaken 1.0 migration](./migrate-to-1-0) against a separate data boundary first;
+  [Awaken 1.0 migration](/docs/agents/how-to/migrate-to-1-0) against a separate data boundary first;
 - choose persistent storage, secret custody, ingress, identity, and backup owners;
 - for split services, provide PostgreSQL and a private authenticated network;
 - choose a maintenance window and rollback point before schema migration.
@@ -68,7 +68,7 @@ awaken all-in-one --config /etc/awaken/config.toml
 
 `awaken config --json` is suitable for deployment assertions because secrets and
 database URLs remain redacted. The complete key reference is
-[Deployment configuration](../reference/configuration).
+[Deployment configuration](/docs/agents/reference/configuration).
 
 ## 2. Harden a single node
 
@@ -144,14 +144,14 @@ leased work, materialize only exact referenced credentials/Resources, commit
 through the fenced Coordinator protocol, and settle under the same epoch.
 
 For container tiers, add the matching feature/runtime and `container_image`.
-See [Configure Sandbox tiers](./configure-sandbox-tiers).
+See [Configure Sandbox tiers](/docs/agents/how-to/configure-sandbox-tiers).
 
 ## 6. Configure cross-node wake-up only after durable dispatch works
 
 The dispatch database owns work. `dispatch_wake = "pg-notify"` or `"nats"`
 only reduces the time an idle Worker waits before polling. Use a unique
 `dispatch_owner` per process and verify takeover with the wake channel disabled
-before relying on it for latency. See [Use a NATS wake signal](./use-nats-wake-signal).
+before relying on it for latency. See [Use a NATS wake signal](/docs/agents/how-to/use-nats-wake-signal).
 
 ## Verify
 
@@ -192,8 +192,8 @@ invent a second warm-install path.
 
 ## Next steps
 
-- [Review the complete deployment configuration](../reference/configuration).
-- [Choose a Sandbox tier](./configure-sandbox-tiers).
-- [Add NATS only as a wake signal](./use-nats-wake-signal).
-- [Review production reliability and recovery](../concepts/production-reliability).
-- [Review the platform architecture and authority boundaries](../concepts/architecture).
+- [Review the complete deployment configuration](/docs/agents/reference/configuration).
+- [Choose a Sandbox tier](/docs/agents/how-to/configure-sandbox-tiers).
+- [Add NATS only as a wake signal](/docs/agents/how-to/use-nats-wake-signal).
+- [Review production reliability and recovery](/docs/agents/concepts/production-reliability).
+- [Review the platform architecture and authority boundaries](/docs/agents/concepts/architecture).

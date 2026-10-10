@@ -201,7 +201,7 @@ This is the automatic path. It does not create a dead letter.
 Dead letters exist only for an explicit maintenance decision that removes
 already exhausted work from automatic terminal resolution. Do not quarantine as
 a routine response to retries. Use it only when you intentionally want to stop
-automatic terminalization. The [Public HTTP API](../reference/api) is the single
+automatic terminalization. The [Public HTTP API](/docs/agents/reference/api) is the single
 owner of the exact quarantine, inspection, requeue, and purge routes, including
 their parameters and destructive boundaries.
 

@@ -100,7 +100,7 @@ Connection state 与 executable-model readiness 都是服务器拥有的 project
 
 > 当前 `/v1/config/executable-models` 只报告 Native executor readiness。选择 ACP runtime
 > 时，publish 会再校验精确 ACP capability。selector 与该边界见
-> [通过 API 选择模型与 ACP runtime](./select-models-and-acp-runtimes)。
+> [通过 API 选择模型与 ACP runtime](/zh/docs/agents/how-to/select-models-and-acp-runtimes)。
 
 | 结果 | 含义 | 处理 |
 | --- | --- | --- |
@@ -145,8 +145,8 @@ provider kind、dialect、connection state、executable-model state、upstream H
 
 ## 下一步
 
-- [配置并发布 Agent 行为](./configure-agent-behavior)；
-- [通过 API 选择模型与 ACP runtime](./select-models-and-acp-runtimes)；
-- [运行官方 SDK 快速开始](../get-started)；
-- 理解[模型发布与凭据边界](../reference/provider-model-config)；
-- 用生成的[管理 OpenAPI 契约](../reference/management-openapi)获取精确 request schema。
+- [配置并发布 Agent 行为](/zh/docs/agents/how-to/configure-agent-behavior)；
+- [通过 API 选择模型与 ACP runtime](/zh/docs/agents/how-to/select-models-and-acp-runtimes)；
+- [运行官方 SDK 快速开始](/zh/docs/agents/get-started)；
+- 理解[模型发布与凭据边界](/zh/docs/agents/reference/provider-model-config)；
+- 用生成的[管理 OpenAPI 契约](/zh/docs/agents/reference/management-openapi)获取精确 request schema。

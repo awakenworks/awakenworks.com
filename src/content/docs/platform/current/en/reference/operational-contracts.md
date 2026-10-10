@@ -120,6 +120,6 @@ cleanup procedure must be run.
 
 ## Related
 
-- [Deploy and operate Awaken](../how-to/self-host): topology, stores, migrations, secrets, and rollback;
-- [Production reliability](../concepts/production-reliability): dispatch, fencing, recovery, and side-effect boundaries;
-- [Managed Agents compatibility](../compatibility): beta selectors and compatible resource families.
+- [Deploy and operate Awaken](/docs/agents/how-to/self-host): topology, stores, migrations, secrets, and rollback;
+- [Production reliability](/docs/agents/concepts/production-reliability): dispatch, fencing, recovery, and side-effect boundaries;
+- [Managed Agents compatibility](/docs/agents/compatibility): beta selectors and compatible resource families.

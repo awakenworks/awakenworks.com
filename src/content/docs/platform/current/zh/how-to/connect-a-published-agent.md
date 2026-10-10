@@ -55,7 +55,7 @@ Awaken Agents 启动后，先在 Console 或 API 中准备 provider、model 和 
 - [Console、认证与配置权威](/zh/docs/agents/reference/admin-console/)。
 
 在本地可用 `awaken all-in-one` 同时启动 API 和 Console。面向公网时，先完成
-[自托管与认证](/zh/docs/agents/how-to/self-host/#authentication)，再让应用调用服务。
+[自托管与认证](/zh/docs/agents/how-to/self-host/#2-加固单节点)，再让应用调用服务。
 
 ## 3. 通过权威矩阵接入
 
@@ -110,5 +110,5 @@ event type 与 correlation ID，再联系支持。不要附带 token、service k
 ## 下一步
 
 - 把所选集成指南放在应用代码旁边。
-- [管理产生的 Session](./manage-a-session)。
-- 检查生产环境的[凭据保管](../concepts/credential-custody)与[部署](./self-host)。
+- [管理产生的 Session](/zh/docs/agents/how-to/manage-a-session)。
+- 检查生产环境的[凭据保管](/zh/docs/agents/concepts/credential-custody)与[部署](/zh/docs/agents/how-to/self-host)。

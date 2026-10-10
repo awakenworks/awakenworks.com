@@ -28,9 +28,9 @@ second proves that the document and the mounted router agree in both directions.
 | You need | Use |
 | --- | --- |
 | Exact `/v1/config/*` fields and operations | `contracts/openapi.generated.json` |
-| All application route families | [HTTP API](./api) |
-| Managed Agents request and response types | the tested Anthropic SDK plus [compatibility](../compatibility) |
-| AI SDK, AG-UI, A2A, ACP, or MCP payloads | the matching [protocol page](../protocols/) |
+| All application route families | [HTTP API](/docs/agents/reference/api) |
+| Managed Agents request and response types | the tested Anthropic SDK plus [compatibility](/docs/agents/compatibility) |
+| AI SDK, AG-UI, A2A, ACP, or MCP payloads | the matching [protocol page](/docs/agents/protocols) |
 
 The generated contract covers provider connections, executable models,
 credentials, pools, inference profiles, resolution, and Agent resource bindings
@@ -87,6 +87,6 @@ exact schema it used.
 
 ## Related
 
-- [Public HTTP API](./api): route-family map across all public surfaces;
-- [Provider connection guide](../how-to/configure-providers-models-credentials): canonical provider write path;
-- [Model publication and credential boundary](./provider-model-config): publication-time ownership and execution behavior.
+- [Public HTTP API](/docs/agents/reference/api): route-family map across all public surfaces;
+- [Provider connection guide](/docs/agents/how-to/configure-providers-models-credentials): canonical provider write path;
+- [Model publication and credential boundary](/docs/agents/reference/provider-model-config): publication-time ownership and execution behavior.

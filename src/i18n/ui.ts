@@ -137,7 +137,7 @@ export const ui = {
       searchTitle: 'Search documentation', closeSearch: 'Close search', searchPrompt: 'Enter a title, task, or error message', searchPlaceholder: 'Enter a title, task, or error message…',
       sidebar: 'Documentation sidebar', productDocs: 'Product documentation', mobileStar: 'Star on GitHub',
       browse: (product: string) => `Browse ${product} docs`, mobileNav: 'Mobile documentation navigation', onPage: 'On this page', mobileToc: 'Mobile table of contents', note: 'Note', toc: 'On this page', landing: 'Landing page.',
-      searchEmpty: 'Type a keyword to search.', resultOne: '{count} result', resultMany: '{count} results', noResults: 'No matches. Try a task name, error message, or API.', loading: 'Loading index…', failed: 'Search index failed to load. Please try again.',
+      searchEmpty: 'Type a keyword to search.', resultOne: '{count} result', resultMany: '{count} results', noResults: 'No matches. Try a task name, error message, or API.', loading: 'Loading index…', failed: 'Search index failed to load. Please try again.', retry: 'Retry search',
     },
     objectsDocs: {
       toc: 'Current documentation',
@@ -289,7 +289,7 @@ export const ui = {
       searchTitle: '搜索文档', closeSearch: '关闭搜索', searchPrompt: '输入标题、任务或错误信息', searchPlaceholder: '输入标题、任务或错误信息…',
       sidebar: '文档目录', productDocs: '产品文档', mobileStar: '在 GitHub Star',
       browse: (product: string) => `浏览 ${product} 文档`, mobileNav: '移动文档目录', onPage: '本页', mobileToc: '移动本页目录', note: '提示', toc: '本页目录', landing: '本页为入口页。',
-      searchEmpty: '输入关键词开始搜索。', resultOne: '找到 {count} 个结果', resultMany: '找到 {count} 个结果', noResults: '没有匹配结果。请尝试任务名称、错误信息或 API。', loading: '正在加载索引…', failed: '搜索索引加载失败，请重试。',
+      searchEmpty: '输入关键词开始搜索。', resultOne: '找到 {count} 个结果', resultMany: '找到 {count} 个结果', noResults: '没有匹配结果。请尝试任务名称、错误信息或 API。', loading: '正在加载索引…', failed: '搜索索引加载失败，请重试。', retry: '重试搜索',
     },
     objectsDocs: {
       toc: '当前文档',

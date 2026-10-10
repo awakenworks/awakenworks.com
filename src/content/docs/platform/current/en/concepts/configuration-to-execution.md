@@ -121,7 +121,7 @@ After dispatch, claim loss, a lost commit response, stale Worker return, and
 retry exhaustion are handled by the queue, stable receipt, Thread version, and
 claim epoch. They are not separate repair procedures. Persistent dependency
 failure, an explicit terminal result, or an indeterminate external effect is
-explained in [Production reliability](./production-reliability).
+explained in [Production reliability](/docs/agents/concepts/production-reliability).
 
 ## Verify one execution path
 
@@ -131,6 +131,6 @@ recognizable input, and read the committed result after reconnecting. If testing
 takeover, interrupt the Worker only after the dispatch is durable and verify
 that the next attempt continues from the last committed Thread prefix.
 
-For the whole component map, read [Awaken architecture](./architecture). For
+For the whole component map, read [Awaken architecture](/docs/agents/concepts/architecture). For
 exact fields and routes, use [Configuration reference](/docs/agents/reference/configuration/)
 and [HTTP API reference](/docs/agents/reference/api/).

@@ -56,4 +56,4 @@ dispatch_owner = "coordinator-a"
 `"pg-notify"`，再重启 Coordinator。Pending work 仍留在 PostgreSQL，并继续通过 polling
 处理。不要把 pending record 移进 NATS，也不要引入第二条 queue。
 
-Claim 与 commit 语义见[生产可靠性](../concepts/production-reliability)。
+Claim 与 commit 语义见[生产可靠性](/zh/docs/agents/concepts/production-reliability)。

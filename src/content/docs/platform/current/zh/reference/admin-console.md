@@ -15,7 +15,7 @@ evidence:
 | 从自动化应用同一变更 | 使用 trusted Workspace identity 调用管理 API | API 返回 `publication_id` 与 `fingerprint`，自动化记录它们 |
 
 进程在 `/` 与 `/w/*` 提供内嵌 React application。精确 route 由[公共 API
-索引](./api)维护，精确管理字段由[生成的 OpenAPI 契约](./management-openapi)维护。
+索引](/zh/docs/agents/reference/api)维护，精确管理字段由[生成的 OpenAPI 契约](/zh/docs/agents/reference/management-openapi)维护。
 
 ## 静态结构
 

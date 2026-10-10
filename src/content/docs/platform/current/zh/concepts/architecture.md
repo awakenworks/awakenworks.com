@@ -24,13 +24,13 @@ Coordinator 与 Worker。Agent 的发布和执行方式不会随部署形态改�
 
 如果要在一台机器上部署，下一步进入
 [自托管指南](/zh/docs/agents/how-to/self-host/)。如果要修改配置如何变成一次
-Agent 运行，读完本页后进入[从配置到已提交执行](./configuration-to-execution)。
+Agent 运行，读完本页后进入[从配置到已提交执行](/zh/docs/agents/concepts/configuration-to-execution)。
 如果要升级旧版 Runtime 或本地 Server，请先使用
 [Awaken 1.0 迁移指南](/zh/docs/agents/how-to/migrate-to-1-0/)；本页继续作为其引用的部署模型权威。
 
 本文只说明全局 context map。发布到提交的精确状态机见
-[从配置到已提交执行](./configuration-to-execution)；租约、重试与恢复见
-[生产可靠性](./production-reliability)。Runtime loop 的细节见
+[从配置到已提交执行](/zh/docs/agents/concepts/configuration-to-execution)；租约、重试与恢复见
+[生产可靠性](/zh/docs/agents/concepts/production-reliability)。Runtime loop 的细节见
 [Runtime 内部文档](/zh/docs/agents/runtime/)。
 
 ## 静态结构：每项持久职责只有一个所有者
@@ -141,7 +141,7 @@ sequenceDiagram
 相同 activation 和 commit contract。
 
 在应用界面，Session 要么告诉使用者 Awaiting Run 需要什么操作才能继续，要么显示已提交的
-终态 `RunState`。精确状态和 event 属于[Session 与 event](./sessions-and-events)；本页只说明
+终态 `RunState`。精确状态和 event 属于[Session 与 event](/zh/docs/agents/concepts/sessions-and-events)；本页只说明
 这个结果在哪里变成权威事实。
 
 ## 一致性、重试与失败边界
@@ -229,4 +229,4 @@ Awaken 不定义团队的业务 Workflow，也不判断业务结果是否可接�
 Workforce 或采用 Awaken 的应用。stream、queue、部署标签和 Cloud billing record 可以
 观测、唤醒、打包或计费，但不会变成 Agent 执行事实。
 
-继续阅读[从配置到已提交执行](./configuration-to-execution)，查看完整状态机与失败矩阵。
+继续阅读[从配置到已提交执行](/zh/docs/agents/concepts/configuration-to-execution)，查看完整状态机与失败矩阵。

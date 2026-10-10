@@ -22,7 +22,7 @@ evidence:
 
 ## 前置条件
 
-- 在[执行 backend 与 Sandbox placement](../concepts/execution-modes#sandbox-tier)中选择边界。
+- 在[执行 backend 与 Sandbox placement](/zh/docs/agents/concepts/execution-modes#sandbox-边界)中选择边界。
 - 选择 container tier 时，Awaken build 需要匹配的 `container-docker`、
   `container-podman` 或 `container-k8s` feature。默认 `namespace` tier 在 Linux 上
   需要可用的 `bwrap` user namespace，在 macOS 上使用 Seatbelt。
@@ -63,7 +63,7 @@ container_image = "registry.example/awaken-hand@sha256:<digest>"
 sandbox_allow_local_fallback = false
 ```
 
-完整字段清单由[配置参考](../reference/configuration)维护。不要把 product launcher 的
+完整字段清单由[配置参考](/zh/docs/agents/reference/configuration)维护。不要把 product launcher 的
 warm pool、proxy、package builder 或 wake 字段复制到独立 Worker 文件；未知 key 会被拒绝。
 
 ## 2. 启动前校验配置
@@ -142,6 +142,6 @@ config report、所选 tier、Worker 与 Session ID、Environment revision 和�
 
 ## 下一步
 
-- [查看完整部署配置字段](../reference/configuration)。
-- [执行自托管检查清单](./self-host)。
-- [理解 Brain、Hand 与 Session Environment](../concepts/brain-and-hand)。
+- [查看完整部署配置字段](/zh/docs/agents/reference/configuration)。
+- [执行自托管检查清单](/zh/docs/agents/how-to/self-host)。
+- [理解 Brain、Hand 与 Session Environment](/zh/docs/agents/concepts/brain-and-hand)。
