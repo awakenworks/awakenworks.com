@@ -51,7 +51,7 @@ export const content = {
       resources: 'Resources',
       enterprise: 'Deployment & support',
       cases: 'Reference builds',
-      integrations: 'Integrations',
+      integrations: 'Developer integrations',
       blog: 'Blog',
       book: 'Book',
       principles: 'Reliability',
@@ -98,7 +98,7 @@ export const content = {
         title: 'Make AI part of',
         titleHighlight: 'enterprise production.',
         definition: "Business teams use Workforce to connect information and keep work moving. Developers use Agents to build and run AI applications. People keep important decisions.",
-        ctaPrimary: "Business teams: see the workflow",
+        ctaPrimary: "See a customer refund workflow",
         ctaSecondary: 'Developer quickstart',
       },
       workflow: {
@@ -239,13 +239,13 @@ export const content = {
     },
     integrations: {
       meta: {
-        title: 'Awaken Agents integrations | AwakenWorks',
-        description: 'Choose a verified protocol or application integration path, then follow the canonical Awaken Agents documentation for its current scope.',
+        title: 'Developer integrations for Awaken Agents | AwakenWorks',
+        description: 'Connect clients, frontends, tools and execution runtimes to Awaken Agents through the existing developer guides.',
       },
-      eyebrow: 'Integration paths',
+      eyebrow: 'Developer integrations',
       title: 'Connect through the protocol your application already uses.',
-      body: 'Use this directory to choose an entry point. Each card links to the canonical technical guide that owns current behavior, limits, configuration, and verification.',
-      boundary: 'This is a navigation surface, not a second compatibility matrix. Linked documentation remains authoritative, and documented support is not evidence of a customer deployment.',
+      body: 'Connect an application or tool to Agents. Choose the interface below, then follow its guide for setup, supported behavior and a result you can check.',
+      boundary: 'These are developer interfaces. To connect your business systems with Workforce, describe the systems and work you need on the deployment and support page. We will discuss the integration scope with you.',
       quickstart: 'Run the Agents quickstart',
       compatibility: 'Review the tested compatibility baseline',
       items: [
@@ -702,7 +702,7 @@ export const content = {
       resources: '资源',
       enterprise: '部署与合作',
       cases: '参考实现',
-      integrations: '集成',
+      integrations: '开发者接入',
       blog: '博客',
       book: '书籍',
       principles: '可靠运行',
@@ -749,7 +749,7 @@ export const content = {
         title: '让 AI 成为',
         titleHighlight: '受控的生产力。',
         definition: "业务团队用 Workforce 连接资料、按流程推进工作；开发团队用 Agents 构建和运行 AI 应用。重要决定由人掌握。",
-        ctaPrimary: "业务团队：看工作流程",
+        ctaPrimary: "看客户异常与退款流程",
         ctaSecondary: '开发者开始使用',
       },
       workflow: {
@@ -890,13 +890,13 @@ export const content = {
     },
     integrations: {
       meta: {
-        title: 'Awaken Agents 集成｜AwakenWorks',
-        description: '选择经过验证的协议或应用集成入口，再进入 Awaken Agents 权威文档查看当前支持范围。',
+        title: 'Awaken Agents 开发者接入｜AwakenWorks',
+        description: '通过现有开发指南，把客户端、前端、工具和执行环境接入 Awaken Agents。',
       },
-      eyebrow: '集成入口',
+      eyebrow: '开发者接入',
       title: '从应用已经使用的协议接入。',
-      body: '这个目录只负责选择入口。每张卡片都链接到拥有当前行为、限制、配置和验证方法的权威技术指南。',
-      boundary: '这里不是第二份兼容矩阵。链接的文档仍是权威；文档中的支持范围也不代表已有客户部署。',
+      body: '把应用或工具接入 Agents。选择下面的接口，按对应指南完成配置、确认支持范围并检查结果。',
+      boundary: '这些是开发者接口。如果要通过 Workforce 连接业务系统，请在部署与合作页面说明涉及的系统和工作，我们会与你确认接入范围。',
       quickstart: '运行 Agents 快速开始',
       compatibility: '查看经测试的兼容基线',
       items: [

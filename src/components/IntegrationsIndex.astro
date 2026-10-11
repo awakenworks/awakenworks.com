@@ -21,6 +21,7 @@ const page = content[lang].integrations;
       <h1 class="mt-5 max-w-5xl text-5xl font-semibold tracking-tight text-fog-100 sm:text-7xl">{page.title}</h1>
       <p class="mt-7 max-w-3xl text-lg leading-8 text-fog-300">{page.body}</p>
       <p data-integration-authority class="mt-7 max-w-3xl border-l-2 border-accent-500/60 pl-4 text-sm leading-7 text-fog-500">{page.boundary}</p>
+      <a href={localePath(lang, '/enterprise?product=workforce#apply')} data-awaken-event="enterprise_intent_selected" data-awaken-event-location="integrations-business" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise-form" class="mt-3 inline-flex text-sm font-medium text-accent-400 underline underline-offset-4">{content[lang].home.cta.primary} <FunctionalIcon icon={ArrowRight} /></a>
       <div class="mt-9 flex flex-wrap gap-4">
         <a href={localePath(lang, '/docs/agents/get-started')} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="integrations-hero" data-awaken-event-product="agents" data-awaken-event-destination="quickstart" class="rounded-xl bg-accent-500 px-5 py-3 font-medium text-onaccent hover:bg-accent-400">{page.quickstart}</a>
         <a href={localePath(lang, '/docs/agents/compatibility')} data-awaken-event="awaken-view-compatibility" data-awaken-event-location="integrations-hero" data-awaken-event-product="agents" data-awaken-event-destination="compatibility" class="rounded-xl border border-ink-600 px-5 py-3 font-medium text-fog-100 hover:border-fog-500">{page.compatibility}</a>

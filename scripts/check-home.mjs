@@ -660,7 +660,7 @@ requireOccurrenceCount(siteHeaderPath, 'aria-current=', 4, 'grouped desktop and 
 const rules = [
   {
     path: resolve(root, 'dist/index.html'),
-    primary: 'Business teams: see the workflow',
+    primary: 'See a customer refund workflow',
     primaryHref: '#workforce-preview',
     secondary: 'Developer quickstart',
     secondaryHref: '/docs/agents/get-started',
@@ -674,7 +674,7 @@ const rules = [
   },
   {
     path: resolve(root, 'dist/zh/index.html'),
-    primary: '业务团队：看工作流程',
+    primary: '看客户异常与退款流程',
     primaryHref: '#workforce-preview',
     secondary: '开发者开始使用',
     secondaryHref: '/zh/docs/agents/get-started',
@@ -1216,6 +1216,9 @@ for (const rule of enterpriseRules) {
   // C-Read5 legacy URLs -> migrated context labels without a retired home catalog.
   requireOccurrenceCount(rule.path, 'data-adoption-question=', 4, 'adoption questions must cover starting, preparation, setup and fees');
   requireOccurrenceCount(rule.path, 'data-contact-next-steps', 1, 'pre-contact guidance must reuse the one submission follow-up owner');
+  // R-Contact: first visit + no interaction -> the existing follow-up sequence
+  // is already disclosed; closing it remains a native, reversible action.
+  requirePattern(rule.path, /<details open data-contact-next-steps/, 'contact next steps must be visible before a visitor submits');
   requireOccurrenceCount(rule.path, 'id="enterprise-process"', 0, 'duplicated contact-process section must stay removed');
   requirePattern(rule.path, /data-product-help/, 'existing product selector must explain the business and developer choices');
   requirePattern(rule.path, /scenario=solution-delivery#apply/, 'partners must use the existing scenario-aware request');
@@ -1803,9 +1806,12 @@ for (const path of filesBelow(resolve(root, 'src/components'), (candidate) => ca
 // canonical Docs owners; C3 locale routes can drift; C4 an empty SEO page could
 // imply unsupported integrations. E1 render six verified entry cards in both
 // locales; E2 link each card to existing Docs; E3 state that this directory is
-// not a compatibility authority; E4 expose one measurable Quickstart path.
+// not a compatibility authority; E4 expose one measurable Quickstart path;
+// C5 business visitor expects ready business-system connectors -> E5 the label
+// names developer interfaces and the visitor reaches the sole Workforce form.
 // Decision table: bilingual route + six Docs links + boundary + CTA -> accept;
 // missing peer, copied matrix, missing target, or unmeasured CTA -> reject.
+// R-I5 C5 -> one scoped business exit, never an invented connector catalogue.
 const integrationRules = [
   { path: resolve(root, 'dist/integrations/index.html'), prefix: '', title: 'Connect through the protocol your application already uses.' },
   { path: resolve(root, 'dist/zh/integrations/index.html'), prefix: '/zh', title: '从应用已经使用的协议接入。' },
@@ -1814,7 +1820,10 @@ for (const rule of integrationRules) {
   requirePattern(rule.path, new RegExp(rule.title), 'integration directory must render its localized decision headline');
   requireOccurrenceCount(rule.path, 'data-integration-card=', 6, 'integration directory must project six verified documentation entries');
   requireOccurrenceCount(rule.path, 'data-awaken-event="integration_selected"', 6, 'every integration entry must be measurable');
-  requireOccurrenceCount(rule.path, 'data-integration-authority', 1, 'integration directory must state its non-authoritative projection boundary once');
+  requireOccurrenceCount(rule.path, 'data-integration-authority', 1, 'integration directory must explain its developer-interface scope once');
+  requirePattern(rule.path, /Developer integrations|开发者接入/, 'integration labels must identify the intended developer audience');
+  requirePattern(rule.path, /developer interfaces|开发者接口/, 'integration page must distinguish developer interfaces from business-system connections');
+  requirePattern(rule.path, new RegExp(`href="${rule.prefix}/enterprise\\?product=workforce#apply"[^>]*data-awaken-event="enterprise_intent_selected"[^>]*data-awaken-event-location="integrations-business"`), 'business integration questions must use the sole localized Workforce form');
   for (const href of [
     '/docs/agents/protocols/managed-agents',
     '/docs/agents/how-to/integrate-ai-sdk-frontend',

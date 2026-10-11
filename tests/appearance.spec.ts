@@ -818,7 +818,7 @@ for (const lang of ['en', 'zh']) {
 }
 
 // Reading/navigation decision table (not a simulated human study):
-// C1 en/zh x JS on/off x 390px; C2 business/developer purpose; C3 self-evaluation
+// C1 en/zh x JS on/off x 390/1280px; C2 business/developer purpose; C3 self-evaluation
 // versus requested preview; C4 prepare/setup/fees question; C5 known/unknown
 // request context after the old homepage catalog is removed.
 // E1 early two-product choice before one example, no duplicated value/chooser;
@@ -830,62 +830,104 @@ for (const lang of ['en', 'zh']) {
 // then describe who each product serves, what it does, current access, and the
 // next step. Record wrong assumptions and their navigation before explaining.
 // These browser rules verify delivery/navigation, not human comprehension.
+// Benchmark additions: C6 desktop versus phone; C7 first contact before submit;
+// C8 business visitor opens developer integrations. E5 desktop product purposes
+// share the hero's row, phone preserves reading order; E6 the named refund CTA
+// opens the one labelled illustration; E7 next steps are visible and can be
+// collapsed/reopened by keyboard; E8 six developer guides plus one business exit,
+// with no second form. R5 wide C6 -> E5 row, narrow -> E5 order; R6 C2 -> E6;
+// R7 C7 x JS on/off -> E7; R8 C8 -> E8. Form transport already has its own
+// success/failure suite; these cases never send a real inquiry.
 for (const lang of ['en', 'zh']) {
   for (const javaScriptEnabled of [true, false]) {
-    test(`${lang} clear product choices and adoption questions with JS ${javaScriptEnabled}`, async ({ browser }) => {
-      const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 390, height: 900 } });
-      try {
-        await context.route('https://cloud.umami.is/**', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
-        await context.route('https://formspree.io/**', (route) => route.abort());
-        const page = await context.newPage();
-        const base = lang === 'zh' ? '/zh' : '';
-        await page.goto(`${base}/`);
-        const products = page.locator('#home-products');
-        await expect(products.locator('[data-product-role]')).toHaveCount(2);
-        await expect(products).toContainText(lang === 'zh' ? '构建和运行 AI 应用' : 'Build and run AI applications');
-        await expect(products).toContainText(lang === 'zh' ? '让 AI 按流程完成业务工作' : 'Complete business work with AI');
-        await expect(products).toContainText(lang === 'zh' ? '尚无稳定发布包' : 'pre-release');
-        await expect(products).toContainText(lang === 'zh' ? '需申请预览' : 'Preview access by request');
-        const positions = await page.locator('#home-products, #workforce-preview').evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().top + scrollY));
-        expect(positions[0]).toBeLessThan(850);
-        expect(positions[0]).toBeLessThan(positions[1]!);
-        await expect(page.locator('#home-value, #home-adoption')).toHaveCount(0);
-        await expect(page.locator('main')).not.toContainText(/平台生命周期|具名验收人|Reference Reimplementation|责任与验收/);
-        await page.locator('[data-awaken-event-location=home-questions]').click();
-        await expect(page).toHaveURL(/enterprise#enterprise-questions$/);
-        await expect(page.locator('#enterprise-questions h2')).toBeInViewport();
-        const questions = page.locator('[data-adoption-question]');
-        await expect(questions).toHaveCount(4);
-        for (const question of await questions.all()) {
-          await question.locator('summary').focus();
+    for (const width of [390, 1280]) {
+      test(`${lang} clear product choices and adoption questions at ${width}px with JS ${javaScriptEnabled}`, async ({ browser }) => {
+        const context = await browser.newContext({ javaScriptEnabled, viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+        try {
+          await context.route('https://cloud.umami.is/**', (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+          await context.route('https://formspree.io/**', (route) => route.abort());
+          const page = await context.newPage();
+          const base = lang === 'zh' ? '/zh' : '';
+          await page.goto(`${base}/`);
+          const products = page.locator('#home-products');
+          await expect(products.locator('[data-product-role]')).toHaveCount(2);
+          await expect(products).toContainText(lang === 'zh' ? '构建和运行 AI 应用' : 'Build and run AI applications');
+          await expect(products).toContainText(lang === 'zh' ? '让 AI 按流程完成业务工作' : 'Complete business work with AI');
+          await expect(products).toContainText(lang === 'zh' ? '尚无稳定发布包' : 'pre-release');
+          await expect(products).toContainText(lang === 'zh' ? '需申请预览' : 'Preview access by request');
+          const positions = await page.locator('#home-products, #workforce-preview').evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().top + scrollY));
+          expect(positions[0]).toBeLessThan(850);
+          expect(positions[0]).toBeLessThan(positions[1]!);
+          const heroBox = (await page.locator('#home-hero').boundingBox())!;
+          const productsBox = (await products.boundingBox())!;
+          if (width === 1280) {
+            expect(Math.abs(heroBox.y - productsBox.y)).toBeLessThan(1);
+            expect(productsBox.x).toBeGreaterThanOrEqual(heroBox.x + heroBox.width);
+            for (const card of await products.locator('[data-product-role]').all()) await expect(card).toBeInViewport();
+          } else {
+            expect(productsBox.y).toBeGreaterThanOrEqual(heroBox.y + heroBox.height);
+          }
+          const refundAction = page.locator('#home-hero [data-awaken-event=workforce_workspace_selected]');
+          await expect(refundAction).toHaveText(content[lang].home.hero.ctaPrimary);
+          await refundAction.click();
+          await expect(page).toHaveURL(/#workforce-preview$/);
+          await expect(page.locator('#workforce-preview')).toContainText(lang === 'zh' ? '虚构记录' : 'fictional records');
+          await expect(page.locator('[data-workforce-refund-example]')).toHaveCount(1);
+          await expect(page.locator('#home-value, #home-adoption')).toHaveCount(0);
+          await expect(page.locator('main')).not.toContainText(/平台生命周期|具名验收人|Reference Reimplementation|责任与验收/);
+          await page.locator('[data-awaken-event-location=home-questions]').click();
+          await expect(page).toHaveURL(/enterprise#enterprise-questions$/);
+          await expect(page.locator('#enterprise-questions h2')).toBeInViewport();
+          const questions = page.locator('[data-adoption-question]');
+          await expect(questions).toHaveCount(4);
+          for (const question of await questions.all()) {
+            await question.locator('summary').focus();
+            await page.keyboard.press('Enter');
+            await expect(question.locator('p')).toBeVisible();
+          }
+          await expect(page.locator('[data-adoption-question=agent]')).toContainText(lang === 'zh' ? '可以先从想完成的工作开始' : 'You can start with the work you want done');
+          await expect(page.locator('[data-adoption-question=cost]')).toContainText(lang === 'zh' ? '付费实施开始前' : 'before a paid implementation starts');
+          const nextSteps = page.locator('[data-contact-next-steps]');
+          await expect(nextSteps).toHaveAttribute('open', '');
+          await expect(nextSteps.locator('ul li')).toHaveCount(3);
+          await expect(nextSteps.locator('ul')).toBeVisible();
+          await nextSteps.locator('summary').focus();
           await page.keyboard.press('Enter');
-          await expect(question.locator('p')).toBeVisible();
-        }
-        await expect(page.locator('[data-adoption-question=agent]')).toContainText(lang === 'zh' ? '可以先从想完成的工作开始' : 'You can start with the work you want done');
-        await expect(page.locator('[data-adoption-question=cost]')).toContainText(lang === 'zh' ? '付费实施开始前' : 'before a paid implementation starts');
-        const partnerLink = page.locator('#enterprise-partners a');
-        if (javaScriptEnabled) {
-          await partnerLink.click();
-        } else {
-          // R3 with JS absent: exercise native keyboard navigation after the
-          // expanded answers, without forcing a click during smooth scrolling.
-          await partnerLink.focus();
+          await expect(nextSteps.locator('ul')).toBeHidden();
           await page.keyboard.press('Enter');
-        }
-        await expect(page).toHaveURL(/product=agents&scenario=solution-delivery#apply$/);
-        const form = page.locator('[data-opportunity-form]');
-        await expect(form).toHaveCount(1);
-        await expect(form.locator('[data-product-help]')).toContainText('Workforce');
-        if (javaScriptEnabled) {
-          await expect(form).toHaveAttribute('data-initial-product', 'agents');
-          await expect(form.locator('[name=scenario_context]')).toHaveValue('solution-delivery');
-          await page.goto(`${base}/enterprise?scenario=unknown`);
-          await expect(form).toHaveAttribute('data-initial-product', 'workforce');
-          await expect(form.locator('[name=scenario_context]')).toHaveValue('');
-        }
-        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      } finally { await context.close(); }
-    });
+          await expect(nextSteps.locator('ul')).toBeVisible();
+          const partnerLink = page.locator('#enterprise-partners a');
+          if (javaScriptEnabled) {
+            await partnerLink.click();
+          } else {
+            // R3 with JS absent: exercise native keyboard navigation after the
+            // expanded answers, without forcing a click during smooth scrolling.
+            await partnerLink.focus();
+            await page.keyboard.press('Enter');
+          }
+          await expect(page).toHaveURL(/product=agents&scenario=solution-delivery#apply$/);
+          const form = page.locator('[data-opportunity-form]');
+          await expect(form).toHaveCount(1);
+          await expect(form.locator('[data-product-help]')).toContainText('Workforce');
+          if (javaScriptEnabled) {
+            await expect(form).toHaveAttribute('data-initial-product', 'agents');
+            await expect(form.locator('[name=scenario_context]')).toHaveValue('solution-delivery');
+            await page.goto(`${base}/enterprise?scenario=unknown`);
+            await expect(form).toHaveAttribute('data-initial-product', 'workforce');
+            await expect(form.locator('[name=scenario_context]')).toHaveValue('');
+          }
+          await page.goto(`${base}/integrations`);
+          await expect(page.locator('main')).toContainText(lang === 'zh' ? '开发者接口' : 'developer interfaces');
+          await expect(page.locator('[data-integration-card]')).toHaveCount(6);
+          await expect(page.locator('header')).toContainText(content[lang].nav.integrations);
+          await page.locator('[data-awaken-event-location=integrations-business]').click();
+          await expect(page).toHaveURL(/enterprise\?product=workforce#apply$/);
+          await expect(page.locator('form')).toHaveCount(1);
+          await expect(page.locator('[data-opportunity-form] [name=product]')).toHaveValue('workforce');
+          expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        } finally { await context.close(); }
+      });
+    }
   }
 }
 

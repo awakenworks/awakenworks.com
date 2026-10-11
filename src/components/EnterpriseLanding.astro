@@ -45,7 +45,7 @@ const pathTone = {
         <p class="eyebrow text-accent-400">{page.form.eyebrow}</p>
         <h2 class="mt-5 text-3xl font-semibold tracking-tight text-fog-100 sm:text-5xl">{page.form.title}</h2>
         <p class="mt-6 text-lg leading-8 text-fog-300">{page.form.body}</p>
-        <details data-contact-next-steps class="mt-5 rounded-xl border border-ink-700 bg-ink-950/70 p-4">
+        <details open data-contact-next-steps class="mt-5 rounded-xl border border-ink-700 bg-ink-950/70 p-4">
           <summary class="cursor-pointer font-semibold text-fog-100">{page.form.prepareTitle}</summary>
           <ul class="mt-4 space-y-3 text-sm leading-6 text-fog-400">
             {followUp.successSteps.map((item) => <li class="flex gap-3"><span class="text-accent-400"><FunctionalIcon icon={Check} /></span><span>{item}</span></li>)}
