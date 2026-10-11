@@ -62,3 +62,17 @@ healthy; the same resolution clears its scheduling overlay for affected work.
 
 To abandon the work, use the Issue or WorkUnit cancel endpoint. Cancellation is a
 real terminal decision; resolving attention is not.
+
+## Implementation evidence
+
+At the current Workforce documentation source baseline,
+`crates/domain/awaken-flow-work/tests/g106_attention_overlay.rs` contains:
+
+- `attention_overlay_derives_from_open_signal_not_state_key`: an open signal
+  changes the scheduling view while preserving the business state.
+- `only_a_resolved_signal_drops_the_overlay_not_an_acknowledged_one`: seeing the
+  exception does not clear it; resolution clears the hold.
+- `closed_wins_over_attention_and_waiting`: terminal work remains closed.
+
+These cases pin the state and scheduling boundary. They do not decide whether an
+external payment, notification or other business action has actually succeeded.

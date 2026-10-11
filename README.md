@@ -81,9 +81,9 @@ Git 工作树。`config/source-provenance.json` 锁定已核对源码的精确 r
 pnpm provenance:refresh --awaken /path/to/awaken --flow /path/to/awaken-flow
 ```
 
-该维护命令不属于安装、构建或发布门禁。它在本地核对两个精确 revision，并验证
-Awaken 页面引用的证据路径。更新后必须在同一变更中审查并提交 revision、证据坐标和
-相关文档。
+该维护命令不属于安装、构建或发布门禁。它在本地核对两个精确 revision，分别验证
+Agents 与 Workforce（含 Objects 模块）的实现证据，并将坐标保存到各自的源码锁记录。
+更新后必须在同一变更中审查并提交 revision、证据坐标和相关文档；证据不会跨仓库借用。
 
 ## Rights
 

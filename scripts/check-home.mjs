@@ -1097,6 +1097,40 @@ for (const rule of [
   rejectPattern(rule.path, /Apply for design partnership|申请设计伙伴/, 'Workforce must not restore a separate design-partner funnel');
 }
 
+// Evidence presentation cause/effect graph:
+// C1 documented implementation with named tests; C2 locale; C3 the existing
+// refund illustration; C4 unsupported economic/budget/responsibility promises;
+// C5 the generic comparison renderer's optional proof link.
+// E1 three bounded mechanisms link to their current localized guides;
+// E2 source/test references stay in those owning guides; E3 illustration and
+// preview status remain qualified; E4 no claimed customer ROI or budget guarantee.
+// Decision rules: V1 C1+C2 -> E1+E2; V2 C3 -> E3, never customer evidence;
+// V3 C4 -> reject; V4 Workforce+C5 -> exactly three source links; Agents without
+// C5 -> ordinary text. These check website contracts, not product E2E or ROI.
+const workforceMechanismEvidence = [
+  { product: 'workforce', route: '/concepts/issue-based-workflows', coordinate: 'crates/domain/awaken-flow-work/src/handoff.rs', test: 'output_projection_separates_business_values_from_settled_resources' },
+  { product: 'objects', route: '/concepts/permissions-resources', coordinate: 'crates/app/awaken-flow-server/src/resource_content_api.rs', test: 'agent_tools_complete_submission_and_reauthorize_content_reads' },
+  { product: 'workforce', route: '/operating/attention-recovery', coordinate: 'crates/domain/awaken-flow-work/tests/g106_attention_overlay.rs', test: 'only_a_resolved_signal_drops_the_overlay_not_an_acknowledged_one' },
+];
+for (const [lang, prefix] of [['en', ''], ['zh', '/zh']]) {
+  const productPath = resolve(root, `dist${prefix}/workforce/index.html`);
+  requireOccurrenceCount(productPath, 'id="workforce-evidence"', 1, 'Workforce must reuse one implementation-evidence section');
+  requireOccurrenceCount(productPath, 'data-capability-evidence-link', 3, 'every bounded mechanism must have a visible guide link');
+  for (const evidence of workforceMechanismEvidence) {
+    requirePattern(productPath, new RegExp(`href="${prefix}/docs/${evidence.product}${evidence.route}"`), 'mechanism evidence must preserve its locale and canonical route');
+    const doc = resolve(root, `src/content/docs/flow/current/${lang}${evidence.route}.md`);
+    requirePattern(doc, new RegExp(evidence.coordinate.replaceAll('.', '\\.')), 'the owning guide must identify implementation evidence');
+    requirePattern(doc, new RegExp(evidence.test), 'the owning guide must identify the reviewed regression case');
+  }
+  for (const route of ['/index.html', '/workforce/index.html']) {
+    const path = resolve(root, `dist${prefix}${route}`);
+    requirePattern(path, new RegExp(`href="${prefix}/workforce#workforce-evidence"`), 'the illustration must lead to the one implementation-evidence section');
+    rejectPattern(path, /Less manual coordination|减少人工交接与催办|收益可验证|成本可预测|责任可追溯|verifiable returns|predictable costs|traceable responsibility/i, 'unqualified economic, budget or responsibility promises must not return');
+  }
+}
+requirePattern(resolve(root, 'src/components/AdvantageSection.astro'), /proofHref\?: string/, 'evidence links must extend the existing renderer');
+requirePattern(resolve(root, 'src/components/Home.astro'), /concept=\{\{ label: ui\[lang\]\.landing\.workforceEvidence/, 'Home must use the existing showcase guide slot');
+
 // Refund illustration cause/effect decision table:
 // R1 Home/Workforce x en/zh -> same one-owned stages, three roles and records.
 // R2 illustration + missing real-business qualification -> disclose fictional

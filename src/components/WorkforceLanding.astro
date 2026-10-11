@@ -56,6 +56,7 @@ const copy = ui[lang].landing;
     eyebrow={o.loop.eyebrow}
     title={o.loop.title}
     body={o.loop.body}
+    concept={{ label: copy.workforceEvidence, href: localePath(lang, '/workforce#workforce-evidence') }}
   />
 
   <section id="workforce-capabilities" class="border-t border-ink-800 bg-ink-950">
@@ -96,13 +97,14 @@ const copy = ui[lang].landing;
   </section>
 
   <AdvantageSection
+    id="workforce-evidence"
     eyebrow={o.advantage.eyebrow}
     title={o.advantage.title}
     body={o.advantage.body}
     commonLabel={o.advantage.commonLabel}
     awakenLabel={o.advantage.awakenLabel}
     proofLabel={o.advantage.proofLabel}
-    items={o.advantage.items}
+    items={o.advantage.items.map((item) => ({ ...item, proofHref: localePath(lang, item.proofHref) }))}
     tone="rust"
   />
 

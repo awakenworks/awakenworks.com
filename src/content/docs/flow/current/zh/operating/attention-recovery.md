@@ -56,3 +56,16 @@ API 会为每个 signal 补充注册表中的 label、remedy 与 behavior。应�
 
 若要放弃工作，使用 Issue 或 WorkUnit cancel endpoint。Cancel 是真实终态决定；resolve
 attention 不是。
+
+## 实现依据
+
+当前 Workforce 文档源码基线中的
+`crates/domain/awaken-flow-work/tests/g106_attention_overlay.rs` 包含：
+
+- `attention_overlay_derives_from_open_signal_not_state_key`：未解除的异常改变
+  调度视图，业务状态保持原样。
+- `only_a_resolved_signal_drops_the_overlay_not_an_acknowledged_one`：确认已看到
+  不会清除异常；解除异常后才清除暂停。
+- `closed_wins_over_attention_and_waiting`：终态工作仍保持关闭。
+
+这些用例固定业务状态与调度的边界，不判断外部支付、通知或其他业务操作是否实际成功。

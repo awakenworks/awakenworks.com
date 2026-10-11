@@ -508,7 +508,7 @@ export const content = {
               title: 'Adopt with the official SDK model',
               common: 'Use the official Managed Agents API and SDK resource model.',
               awaken: 'Point a reviewed SDK version to Awaken, configure Awaken authentication, and keep the named compatible request and response shapes.',
-              proof: 'Reduce migration work while keeping exact differences reviewable',
+              proof: 'Check supported requests, required selectors and known differences',
             },
             {
               title: 'Connect more than one application surface',
@@ -526,7 +526,7 @@ export const content = {
               title: 'Choose who owns the platform boundary',
               common: 'The service control plane and persistent service are operated by Anthropic.',
               awaken: 'Deploy and operate the API, Session data, credentials, model routes, Workers, and Sandboxes yourself or through an AwakenWorks delivery mode.',
-              proof: 'Meet enterprise deployment and operating-responsibility requirements',
+              proof: 'Choose where the API, Session data, credentials and execution run',
             },
           ],
         },
@@ -688,30 +688,33 @@ export const content = {
           ]
         },
         advantage: {
-          eyebrow: "Less manual coordination",
-          title: "See the next step and the evidence that completes it.",
-          body: "Agree on the work, its owner and completion conditions before execution. Progress, approvals and returned results remain available for review.",
-          commonLabel: "Manual follow-up",
-          awakenLabel: "With Workforce",
-          proofLabel: "What you can check",
+          eyebrow: "Implementation mechanisms",
+          title: "Check delivery requirements, access and exceptions.",
+          body: "These mechanisms have corresponding implementations and tests. The linked guides explain their conditions and boundaries.",
+          commonLabel: "Condition",
+          awakenLabel: "Implemented behavior",
+          proofLabel: "Guide",
           items: [
             {
-              title: "Know what still needs attention",
-              common: "People piece together messages and system records to learn what remains open.",
-              awaken: "Keep the responsible person, current progress and missing information together.",
-              proof: "Who is responsible and what is missing"
+              title: "Check required deliverables",
+              common: "The workflow declares the outputs required for completion.",
+              awaken: "Missing required outputs prevent the completion check from passing. A finished Agent task cannot substitute for those outputs.",
+              proof: "Delivery and completion checks",
+              proofHref: "/docs/workforce/concepts/issue-based-workflows",
             },
             {
-              title: "Keep important decisions with people",
-              common: "Approval requests and supporting information are passed between chats and tickets.",
-              awaken: "Present the proposal and its evidence to the responsible person; wait for the decision before the action.",
-              proof: "The approved action and its decision record"
+              title: "Authorize reads and changes",
+              common: "An Agent requests access to a business record or a declared operation.",
+              awaken: "Resource reads and changes use their own access checks. Permission to run a tool does not grant access to business data.",
+              proof: "Resource access checks",
+              proofHref: "/docs/objects/concepts/permissions-resources",
             },
             {
-              title: "Confirm the actual result",
-              common: "Someone checks the payment result, sends the notification and closes the case.",
-              awaken: "Collect the system results required by the workflow and retain the completion record for review.",
-              proof: "Refund confirmation, notification and case closure"
+              title: "Keep unresolved exceptions visible",
+              common: "An exception on open work is acknowledged while someone investigates.",
+              awaken: "Acknowledgement keeps the scheduling hold in place. Resolving the cause clears that hold without rewriting the business state.",
+              proof: "Attention and recovery",
+              proofHref: "/docs/workforce/operating/attention-recovery",
             }
           ]
         },
@@ -1188,7 +1191,7 @@ export const content = {
               title: '沿用官方 SDK 应用模型',
               common: '使用官方 Managed Agents API 与 SDK 资源模型。',
               awaken: '把已审阅的 SDK 版本指向 Awaken，配置 Awaken 认证，并保留具名兼容范围内的请求与响应结构。',
-              proof: '减少迁移工作，同时让精确差异可检查',
+              proof: '检查支持的请求、必需 selector 与已知差异',
             },
             {
               title: '接入不止一种产品界面',
@@ -1206,7 +1209,7 @@ export const content = {
               title: '选择由谁掌握平台边界',
               common: '平台控制面与持久服务由 Anthropic 运营。',
               awaken: 'API、Session 数据、凭据、模型路由、Worker 与 Sandbox 可以由您的团队部署运营，也可以采用 AwakenWorks 交付方式。',
-              proof: '满足企业部署和运营责任要求',
+              proof: '选择 API、Session 数据、凭据与执行的部署位置',
             },
           ],
         },
@@ -1368,30 +1371,33 @@ export const content = {
           ]
         },
         advantage: {
-          eyebrow: "减少人工交接与催办",
-          title: "看清下一步，保留完成工作的依据。",
-          body: "执行前约定工作、负责人和完成条件。过程中保留进度、批准和返回结果，方便团队检查。",
-          commonLabel: "人工跟进",
-          awakenLabel: "使用 Workforce",
-          proofLabel: "你可以检查",
+          eyebrow: "已有实现机制",
+          title: "检查交付条件、访问权限与异常处理。",
+          body: "这些机制有对应实现与测试。可以通过下列指南检查它们的使用条件和边界。",
+          commonLabel: "检查条件",
+          awakenLabel: "实现行为",
+          proofLabel: "指南",
           items: [
             {
-              title: "知道还有什么需要处理",
-              common: "人从消息和系统记录中重新整理剩余工作。",
-              awaken: "把负责人、当前进度和缺少的资料放在一起。",
-              proof: "谁负责、还缺什么"
+              title: "检查必需交付物",
+              common: "流程声明完成时必须具备的交付物。",
+              awaken: "必需交付物缺失时，完成检查不通过。Agent 任务结束不能替代这些交付物。",
+              proof: "交付物与完成检查",
+              proofHref: "/docs/workforce/concepts/issue-based-workflows",
             },
             {
-              title: "重要决定由人掌握",
-              common: "批准请求和相关依据在聊天与工单之间传递。",
-              awaken: "把方案和依据交给负责人，等决定明确后再执行操作。",
-              proof: "获准的操作与批准记录"
+              title: "分别授权读取与变更",
+              common: "Agent 请求读取业务记录或执行已声明操作。",
+              awaken: "业务数据的读取与变更经过各自的访问检查。允许运行工具，不会自动授予业务数据访问权。",
+              proof: "业务数据访问检查",
+              proofHref: "/docs/objects/concepts/permissions-resources",
             },
             {
-              title: "确认实际处理结果",
-              common: "人查询退款状态、通知客户，再关闭工单。",
-              awaken: "收集流程要求的系统结果，保存完成记录供团队检查。",
-              proof: "退款确认、客户通知与工单关闭"
+              title: "保留尚未处理的异常",
+              common: "未完成工作的负责人确认已看到异常，并开始调查。",
+              awaken: "确认已看到不会解除调度暂停。处理原因并解除异常后，工作保留原有业务状态。",
+              proof: "异常处理与恢复",
+              proofHref: "/docs/workforce/operating/attention-recovery",
             }
           ]
         },

@@ -93,5 +93,19 @@ Resource scripts, policies or integrations. The guarantee is that once a check
 is declared, the workflow can use its structured result without reinterpreting
 a transcript.
 
+## Implementation evidence
+
+These references use the current Workforce source baseline shown in the docs
+header. Required deliverables and business completion share one assessment.
+
+| Check | Implementation and regression reference |
+| --- | --- |
+| No declared output or a missing required output cannot satisfy formal delivery | `crates/domain/awaken-flow-work/src/handoff.rs`: `FormalDeliveryAssessment::is_complete` and `output_projection_separates_business_values_from_settled_resources` |
+| A fulfilled output is not accepted until the root work reaches its completion boundary | `crates/app/awaken-flow-server/src/outcome_api.rs`: `acceptance_state` and `deliverable_acceptance_state_follows_root_lifecycle_and_fulfillment_only` |
+
+The tests distinguish absent, fulfilled, accepted and canceled deliverables.
+They check the platform's declared-output mechanism; each business integration
+still supplies and verifies its own external evidence.
+
 Continue with [Issues](/docs/workforce/concepts/issues/) and
 [Workflows](/docs/workforce/concepts/workflows/).

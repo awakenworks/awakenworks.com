@@ -225,7 +225,14 @@
       ]
     },
     "flow": {
-      "revision": "b75e0ff924b17231d712860ead910970f4c098de"
+      "revision": "b75e0ff924b17231d712860ead910970f4c098de",
+      "evidenceCoordinates": [
+        "crates/app/awaken-flow-server/src/mcp_api/agent_interaction.rs",
+        "crates/app/awaken-flow-server/src/outcome_api.rs",
+        "crates/app/awaken-flow-server/src/resource_content_api.rs",
+        "crates/domain/awaken-flow-work/src/handoff.rs",
+        "crates/domain/awaken-flow-work/tests/g106_attention_overlay.rs"
+      ]
     }
   }
 }

@@ -41,6 +41,18 @@ while managed secret values remain in the vault and materialize only at the
 governed connector/sandbox boundary. Readiness reports a missing Resource or link
 before use rather than allowing ambient credentials or guessed defaults.
 
+## Implementation evidence
+
+At the current Workforce documentation source baseline,
+`crates/app/awaken-flow-server/src/mcp_api/agent_interaction.rs` owns the live
+Agent grant checks before Resource reads and mutations.
+
+`crates/app/awaken-flow-server/src/resource_content_api.rs` contains
+`agent_tools_complete_submission_and_reauthorize_content_reads`. Its decision
+table covers an allowed submission and read, a removed submission grant, and a
+removed content-read grant. Removing one permission does not grant the other.
+The test checks Resource access; tool availability alone is not authorization.
+
 The benefit is practical: operators can tell whether a failure is access,
 configuration, capacity, approval, or expired live authority—and fix the right
 thing without weakening every other boundary.

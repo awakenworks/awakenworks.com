@@ -79,5 +79,18 @@ Workforce 不从自由形式的模型文本路由。State 声明具名 output、
 领域检查并不全是内建的。作者仍需提供对应 test、Resource script、policy 或 integration。
 保证在于：检查一旦声明，workflow 就能使用其结构化结果，而不必重新解释 transcript。
 
+## 实现依据
+
+以下引用使用文档页头所列的当前 Workforce 源码基线。必需交付物与业务完成共用
+同一项检查。
+
+| 检查条件 | 实现与回归用例 |
+| --- | --- |
+| 未声明交付物或缺少必需交付物，均不能满足正式交付 | `crates/domain/awaken-flow-work/src/handoff.rs`：`FormalDeliveryAssessment::is_complete` 与 `output_projection_separates_business_values_from_settled_resources` |
+| 交付物已形成，仍需根工作到达完成边界才显示已接受 | `crates/app/awaken-flow-server/src/outcome_api.rs`：`acceptance_state` 与 `deliverable_acceptance_state_follows_root_lifecycle_and_fulfillment_only` |
+
+用例区分交付物缺失、已形成、已接受与已取消，检查的是平台的声明交付物机制。
+具体业务集成仍需提供并核对自己的外部证据。
+
 继续阅读 [Issues](/zh/docs/workforce/concepts/issues/)和
 [Workflows](/zh/docs/workforce/concepts/workflows/)。

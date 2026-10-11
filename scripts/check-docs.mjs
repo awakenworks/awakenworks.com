@@ -262,11 +262,25 @@ try {
 const verifiedAwakenCoordinates = new Set(
   provenance.repositories?.awaken?.evidenceCoordinates ?? [],
 );
+// Source-owner decision table: P1 platform/harness + Awaken coordinate -> accept;
+// P2 Flow (including Objects public routes) + Flow coordinate -> accept;
+// P3 coordinate present only in the other repository -> reject;
+// P4 missing lock, missing coordinate or unknown collection -> reject.
+// Frontmatter and inline references share this lookup; locale never changes
+// the repository owner. This validates the committed manifest, not runtime or
+// customer results. Refresh verifies paths at the exact source pin.
+const verifiedCoordinatesByProduct = {
+  platform: verifiedAwakenCoordinates,
+  harness: verifiedAwakenCoordinates,
+  flow: new Set(provenance.repositories?.flow?.evidenceCoordinates ?? []),
+};
+const unverifiedCoordinates = new Set();
 
 for (const path of markdown) {
   const rel = relative(root, path);
   const docsRel = relative(docsRoot, path);
   const [product, , documentLocale] = docsRel.split('/');
+  const verifiedCoordinates = verifiedCoordinatesByProduct[product] ?? unverifiedCoordinates;
   const text = readFileSync(path, 'utf8');
   const { frontmatter, evidence, title, description, section, order } = frontmatterData(text);
   if (!frontmatter) failures.push(`${rel}: missing YAML frontmatter`);
@@ -291,8 +305,8 @@ for (const path of markdown) {
     for (const coordinate of evidence) {
       if (coordinate.startsWith('docs/') || extname(coordinate) === '.md') {
         failures.push(`${rel}: design prose is not implementation evidence: ${coordinate}`);
-      } else if (!verifiedAwakenCoordinates.has(coordinate)) {
-        failures.push(`${rel}: evidence is not in the verified Awaken coordinate lock: ${coordinate}`);
+      } else if (!verifiedCoordinates.has(coordinate)) {
+        failures.push(`${rel}: evidence is not in the verified ${product} source coordinate lock: ${coordinate}`);
       }
     }
   }
@@ -345,7 +359,7 @@ for (const path of markdown) {
   for (const match of text.matchAll(/`((?:crates|web|e2e|packs|docs|adr)\/[^`\s#)]+)`/g)) {
     const coordinate = match[1].replace(/[.,;:]$/, '');
     if (coordinate.includes('*')) continue;
-    if (!verifiedAwakenCoordinates.has(coordinate)) {
+    if (!verifiedCoordinates.has(coordinate)) {
       failures.push(`${rel}: missing verified source coordinate ${coordinate}`);
     }
   }
@@ -3344,6 +3358,9 @@ for (const pattern of [
 if (/sourceRevision: '[0-9a-f]{40}'/.test(versionRegistry)) failures.push('docsVersions.ts duplicates a source pin outside the provenance lock');
 if (!provenance.repositories?.awaken?.evidenceCoordinates?.length) {
   failures.push('config/source-provenance.json: Awaken evidence coordinates are empty');
+}
+if (!provenance.repositories?.flow?.evidenceCoordinates?.length) {
+  failures.push('config/source-provenance.json: Workforce evidence coordinates are empty');
 }
 if (!existsSync(distRoot)) failures.push('dist: missing; run the Astro build before this check');
 else {

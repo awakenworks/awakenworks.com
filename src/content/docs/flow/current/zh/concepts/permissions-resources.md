@@ -34,5 +34,16 @@ Credential Resource 保存 opaque backing reference，托管 secret 值留在 va
 受治理的 Connector/sandbox 边界 materialize。Readiness 会在使用前报告缺失 Resource
 或 link，而不会依赖 ambient credential 或猜测默认值。
 
+## 实现依据
+
+当前 Workforce 文档源码基线中的
+`crates/app/awaken-flow-server/src/mcp_api/agent_interaction.rs`，在读取和变更
+Resource 前拥有 live Agent grant 检查。
+
+`crates/app/awaken-flow-server/src/resource_content_api.rs` 中的
+`agent_tools_complete_submission_and_reauthorize_content_reads`，用原因—效果表
+覆盖获准提交与读取、移除提交权限、移除内容读取权限。撤去一种权限不会授予另一种权限。
+该用例检查 Resource 访问边界；工具可见不等于已经授权。
+
 实际收益是：operator 可以区分 access、configuration、capacity、approval 或过期 live
 authority，并修复正确问题，而无需削弱其他边界。

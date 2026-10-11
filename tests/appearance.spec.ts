@@ -343,6 +343,62 @@ for (const lang of ["en", "zh"]) {
   }
 }
 
+// Mechanism evidence decision table:
+// V1 en/zh x narrow/wide x JavaScript on/off -> the existing showcase guide
+// reaches one evidence section, and each of three mechanisms reaches the
+// correct local-language implementation/test references.
+// V2 missing proof link or wrong locale -> reject; V3 old economic/budget/
+// responsibility headline -> reject; V4 fictional refund + source references
+// -> preserve fictional/preview scope, never infer real payment or customer ROI.
+// V5 generic Agents comparison without proofHref -> preserve ordinary text.
+// These tests cover website reading/navigation; they do not execute Workforce.
+for (const lang of ['en', 'zh'] as const) {
+  for (const width of [390, 1280]) {
+    for (const javaScriptEnabled of [true, false]) {
+      test(`${lang} implementation evidence at ${width}px with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
+        const context = await browser.newContext({ javaScriptEnabled, viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+        try {
+          await context.route('https://cloud.umami.is/**', route => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
+          await context.route('https://formspree.io/**', route => route.abort());
+          const page = await context.newPage();
+          const base = lang === 'zh' ? '/zh' : '';
+          await page.goto(`${base}/`);
+          const showcaseGuide = page.locator('#workforce-preview [data-product-guide]');
+          await expect(showcaseGuide).toHaveAttribute('href', `${base}/workforce#workforce-evidence`);
+          await showcaseGuide.click();
+          const evidence = page.locator('#workforce-evidence');
+          await expect(evidence).toBeInViewport();
+          await expect(evidence.locator('[data-capability-evidence-link]')).toHaveCount(3);
+          await expect(evidence).not.toContainText(/Less manual coordination|减少人工交接与催办|收益可验证|成本可预测|责任可追溯/i);
+          await expect(evidence).toContainText(lang === 'zh' ? '必需交付物缺失' : 'Missing required outputs');
+          await expect(evidence).toContainText(lang === 'zh' ? '不会自动授予业务数据访问权' : 'does not grant access to business data');
+          await expect(evidence).toContainText(lang === 'zh' ? '确认已看到不会解除调度暂停' : 'Acknowledgement keeps the scheduling hold');
+          expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+          await evidence.screenshot({ path: `test-results/evidence-workforce-${lang}-${width}-${javaScriptEnabled}.png` });
+          for (const [index, route, testName] of [
+            [0, '/docs/workforce/concepts/issue-based-workflows', 'output_projection_separates_business_values_from_settled_resources'],
+            [1, '/docs/objects/concepts/permissions-resources', 'agent_tools_complete_submission_and_reauthorize_content_reads'],
+            [2, '/docs/workforce/operating/attention-recovery', 'only_a_resolved_signal_drops_the_overlay_not_an_acknowledged_one'],
+          ] as const) {
+            await page.goto(`${base}/workforce#workforce-evidence`);
+            const link = page.locator('#workforce-evidence [data-capability-evidence-link]').nth(index);
+            await expect(link).toHaveAttribute('href', `${base}${route}`);
+            await link.click();
+            await expect(page).toHaveURL(new RegExp(`${base}${route}/?$`));
+            await expect(page.locator('.prose')).toContainText(testName);
+            expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+          }
+          await page.goto(`${base}/workforce`);
+          await expect(page.locator('#workforce-preview')).toContainText(lang === 'zh' ? '虚构记录' : 'fictional records');
+          await expect(page.locator('#workforce-hero')).toContainText(lang === 'zh' ? '需申请预览' : 'Preview access by request');
+          await page.goto(`${base}/agents`);
+          await expect(page.locator('[data-capability-evidence-link]')).toHaveCount(0);
+        } finally { await context.close(); }
+      });
+    }
+  }
+}
+
 // Product/intent cause-effect graph:
 // C1 en/zh; C2 business/developer intent; C3 valid, legacy Objects or unknown
 // URL context; C4 JavaScript present/absent; C5 narrow/wide; C6 module metadata.

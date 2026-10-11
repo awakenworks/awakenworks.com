@@ -27,9 +27,9 @@ function filesBelow(dir) {
   return files;
 }
 
-function publicAwakenEvidence() {
+function publicEvidence(products) {
   const coordinates = new Set();
-  for (const product of ['platform', 'harness']) {
+  for (const product of products) {
     for (const path of filesBelow(resolve(root, 'src/content/docs', product))) {
       const text = readFileSync(path, 'utf8');
       const frontmatter = text.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
@@ -48,7 +48,7 @@ function verifyCoordinates(repo, ref, coordinates) {
     try {
       execFileSync('git', ['-C', repo, 'cat-file', '-e', `${ref}:${coordinate}`], { stdio: 'ignore' });
     } catch {
-      throw new Error(`Awaken public evidence is missing at ${ref}: ${coordinate}`);
+      throw new Error(`Public source evidence is missing at ${ref}: ${coordinate}`);
     }
   }
 }
@@ -60,8 +60,10 @@ if (![awakenRevision, flowRevision].every((value) => /^[0-9a-f]{40}$/.test(value
 
 const actualAwaken = revision(awaken, awakenRevision);
 const actualFlow = revision(flow, flowRevision);
-const awakenEvidence = publicAwakenEvidence();
+const awakenEvidence = publicEvidence(['platform', 'harness']);
+const flowEvidence = publicEvidence(['flow']);
 verifyCoordinates(awaken, awakenRevision, awakenEvidence);
+verifyCoordinates(flow, flowRevision, flowEvidence);
 
 const manifest = {
   schemaVersion: 1,
@@ -73,6 +75,7 @@ const manifest = {
     },
     flow: {
       revision: actualFlow,
+      evidenceCoordinates: flowEvidence,
     },
   },
 };
