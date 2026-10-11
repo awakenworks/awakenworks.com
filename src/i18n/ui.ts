@@ -33,23 +33,10 @@ export const ui = {
       situation: 'The situation', firstResult: 'First useful result', productShape: 'Product shape', applicationKeeps: 'Your application keeps', awakenProvides: 'Awaken provides',
       tryPath: 'Use this reference', smallest: 'Start with one clear build and validation path.', availability: 'What is available today', invest: 'Check the status before you invest more.', checkAt: 'Where to check: ',
       situationPrefix: 'The situation: ', startPrefix: 'Start with: ', bestPrefix: 'Best for: ',
-      sourceEvidence: {
-        eyebrow: 'Documentation source baseline',
-        title: 'Check the documentation and application baselines.',
-        body: 'This revision identifies the Agents documentation baseline. Product captures and reference applications each disclose their own source and validation scope.',
-        revisionLabel: 'Agents documentation revision', verifiedLabel: 'Documentation checked on', sourceAction: 'Inspect the pinned source', quickstart: 'Run the matching quickstart',
-        standardsTitle: 'How to read the evidence',
-        standards: [
-          { level: 'Source or test checked', body: 'A named source coordinate or automated check supports the claim. This does not prove a current live deployment.' },
-          { level: 'Externally reproducible', body: 'A public pinned revision, steps, inputs, and expected result let another team repeat the check.' },
-          { level: 'Externally accepted', body: 'A named outside user or customer accepts a same-definition result, with permission to publish the evidence.' },
-        ],
-      },
     },
     landing: {
       exploreObjects: 'Explore the product model',
       workforceStar: 'Star the Awaken open foundation',
-      workforceCaption: 'Workflow illustration · fictional records',
       workforceCloseTitle: 'Evaluate Workforce with one recurring job and its acceptance result.',
       workforceCloseBody: 'See the complete outcome loop first. Apply for a focused validation when the job needs real system connections, exceptions, and acceptance facts.',
       objectsCaption: 'Product model preview · example content, with type, provenance, and revision semantics from the current implementation',
@@ -185,23 +172,10 @@ export const ui = {
       situation: '你可能正遇到', firstResult: '第一个可用结果', productShape: '产品形态', applicationKeeps: '应用保留', awakenProvides: 'Awaken 提供',
       tryPath: '如何使用这份参考', smallest: '从一条明确的构建与验证路径开始。', availability: '当前可以使用什么', invest: '先看状态，再决定投入多少。', checkAt: '检查位置：',
       situationPrefix: '你可能正遇到：', startPrefix: '先得到：', bestPrefix: '适合谁：',
-      sourceEvidence: {
-        eyebrow: '技术文档源码基线',
-        title: '检查文档与参考应用的验证基线。',
-        body: '这里的 revision 对应 Agents 技术文档基线。产品截图与各参考应用分别标注自己的源码、验证环境与范围。',
-        revisionLabel: 'Agents 文档源码 revision', verifiedLabel: '文档核对日期', sourceAction: '检查固定源码', quickstart: '运行对应快速开始',
-        standardsTitle: '怎样理解证据等级',
-        standards: [
-          { level: '源码或测试已核对', body: '具名源码位置或自动化检查支持该项主张，但这不证明当前存在真实线上部署。' },
-          { level: '外部可复现', body: '公开固定 revision、步骤、输入与预期结果，让另一支团队能够重复验证。' },
-          { level: '外部已验收', body: '外部用户或客户按同一口径验收结果，并明确允许发布相关证据。' },
-        ],
-      },
     },
     landing: {
       exploreObjects: '查看产品模型',
       workforceStar: 'Star Awaken 开源基础',
-      workforceCaption: '工作流程示意 · 虚构记录',
       workforceCloseTitle: '用一项重复工作及其验收结果评估 Workforce。',
       workforceCloseBody: '先看完整结果闭环；当工作需要连接真实系统、处理例外并取得验收事实时，再申请一次聚焦验证。',
       objectsCaption: '产品模型预览 · 示例内容，类型、来源与 revision 语义来自当前实现',
@@ -385,7 +359,7 @@ export const productPreviewCopy = {
         ]
       ],
       decision: "The customer issue is resolved",
-      boundary: "Illustration using fictional records. Customer validation of this refund scenario is pending. Product access, system connections and delivery scope must be agreed."
+      boundary: "Illustration using fictional records. Customer validation of this refund scenario is pending."
     },
   },
   zh: {
@@ -436,7 +410,7 @@ export const productPreviewCopy = {
         ]
       ],
       decision: "这项客户异常已处理完成",
-      boundary: "流程示意，使用虚构记录。这个退款场景尚待客户验证；实际产品访问、系统接入与交付范围需确认。"
+      boundary: "流程示意，使用虚构记录。这个退款场景尚待客户验证。"
     },
   },
 } as const satisfies Record<Lang, object>;

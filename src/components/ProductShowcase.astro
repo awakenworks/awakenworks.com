@@ -1,7 +1,7 @@
 ---
 import FunctionalIcon from "./FunctionalIcon.astro";
 import { ArrowRight } from "@awaken/ui/icons/data";
-import type { Lang } from '../i18n/content';
+import { content, localePath, type Lang } from '../i18n/content';
 import { withSiteBase } from '../config/siteDeployment.mjs';
 import ProductPreview from './ProductPreview.astro';
 import { agentsConsoleTour } from '../i18n/ui';
@@ -113,12 +113,20 @@ const consoleDetails = consoleTour.details.map((item) => ({
         <ProductPreview lang={lang} product={product} compact={compact} />
       </div>
     )}
-    {concept && <div class="mt-6">
-            <a
-              data-product-guide
-              href={withSiteBase(concept.href)}
-              class="mt-5 inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
-            >{concept.label} <FunctionalIcon icon={ArrowRight} /></a>
+    {(concept || product === 'workforce') && <div class="mt-6 flex flex-wrap items-center gap-4">
+      {product === 'workforce' && <a
+        href={localePath(lang, content[lang].landing.workforce.ctaSecondary.href)}
+        data-awaken-event="business_job_evaluation_selected"
+        data-awaken-event-location="workforce-example"
+        data-awaken-event-product="workforce"
+        data-awaken-event-destination="enterprise"
+        class="inline-flex rounded-xl bg-accent-500 px-5 py-3 font-medium text-onaccent hover:bg-accent-400"
+      >{content[lang].landing.workforce.ctaSecondary.label} <FunctionalIcon icon={ArrowRight} /></a>}
+      {concept && <a
+        data-product-guide
+        href={withSiteBase(concept.href)}
+        class="inline-flex text-sm font-medium text-accent-400 hover:text-accent-300"
+      >{concept.label} <FunctionalIcon icon={ArrowRight} /></a>}
     </div>}
 
   </div>

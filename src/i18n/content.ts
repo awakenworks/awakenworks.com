@@ -74,7 +74,7 @@ export const content = {
         timing: 'When would you like to start? (optional)',
         additional: 'Anything else we should know? (optional)',
       },
-      jobPlaceholder: 'For example: review daily support tickets and flag the ones that need a person.',
+      jobPlaceholder: 'For example: handle cancellation and refund requests for delayed orders.',
       draftBlocked: 'Your browser cannot retain this draft. Your entries are still here; submit or clear them before changing language.',
       draftRestored: 'Your entries were kept when you changed language.',
       additionalPlaceholder: 'Add a constraint, expected result, or question.',
@@ -140,13 +140,13 @@ export const content = {
           },
           {
             key: "setup",
-            question: "Who connects the systems and configures the work?",
-            answer: "For self-managed evaluation, your technical team handles setup. For an implementation, we agree on system access, configuration, deployment and support responsibilities before starting."
+            question: "How do we confirm which systems can be connected?",
+            answer: "Describe your support, order or payment systems, the information needed and the actions to perform. We confirm the available integration scope, then agree on who handles setup, deployment and support."
           },
           {
             key: "cost",
             question: "How are costs agreed?",
-            answer: "Software and model usage, infrastructure, system integration and implementation support are scoped separately. We agree on fees and responsibilities before a paid implementation starts."
+            answer: "Software and model usage, infrastructure, system integration and implementation support are scoped separately. The systems, work frequency, deployment and deliverables shape the scope. We agree on fees and responsibilities before a paid implementation starts."
           }
         ]
       },
@@ -263,7 +263,7 @@ export const content = {
         description: 'Choose a reference build by product shape, try its smallest useful path, and see what the application keeps versus what Awaken provides.',
       },
       eyebrow: 'Built on Awaken',
-      title: 'Reference applications built with Awaken.',
+      title: 'Reference applications built with Awaken Agents.',
       body: 'See how we use Agents to build task interfaces, workbenches and design tools. Each reference application explains its purpose, source access and current validation scope.',
       items: [
         {
@@ -694,7 +694,7 @@ export const content = {
   zh: {
     meta: {
       title: 'AwakenWorks｜让 AI 成为受控的生产力',
-      description: 'AwakenWorks 构建面向生产级 AI Agent 应用的开放基础设施。当前可从 Awaken Agents 的持久 Session、受控执行与恢复能力开始。',
+      description: '用 Awaken Agents 构建和运行 AI；用 Awaken Workforce 连接业务资料、执行允许的操作，并组织工作直到验收。',
     },
     nav: {
       awaken: 'Awaken 内部机制',
@@ -725,7 +725,7 @@ export const content = {
         timing: '希望何时开始（选填）',
         additional: '还有什么需要说明？（选填）',
       },
-      jobPlaceholder: '例如：每天整理客户工单，标出需要人工处理的问题。',
+      jobPlaceholder: '例如：处理订单延期引发的取消和退款申请。',
       draftBlocked: '浏览器无法暂存草稿。填写内容仍在当前页面，请先提交或清空再切换语言。',
       draftRestored: '已保留切换语言前的填写内容。',
       additionalPlaceholder: '可补充约束、预期结果或问题。',
@@ -791,13 +791,13 @@ export const content = {
           },
           {
             key: "setup",
-            question: "谁负责系统接入和配置？",
-            answer: "自行评估时由你的技术团队配置；需要实施时，双方在开始前约定系统访问、配置、部署和支持责任。"
+            question: "如何确认能接入哪些系统？",
+            answer: "说明你的客服、订单或付款系统，以及需要读取的资料和执行的操作。双方先确认可提供的接入范围，再约定配置、部署和支持责任。"
           },
           {
             key: "cost",
             question: "费用怎样确认？",
-            answer: "软件与模型用量、机器、系统接入和实施支持按范围分别确认。付费实施开始前，双方先约定费用和责任。"
+            answer: "软件与模型用量、机器、系统接入和实施支持按范围分别确认。涉及的系统、工作频率、部署方式与交付物决定评估范围。付费实施开始前，双方先约定费用和责任。"
           }
         ]
       },
@@ -914,7 +914,7 @@ export const content = {
         description: '按产品形态选择参考实现，尝试最小可用路径，并看清应用保留什么、Awaken 提供什么。',
       },
       eyebrow: 'Built on Awaken',
-      title: '基于 Awaken 构建的参考应用。',
+      title: '基于 Awaken Agents 构建的参考应用。',
       body: '看看我们怎样基于 Agents 构建任务界面、工作台和设计工具。每个参考应用分别说明用途、源码获取方式与当前验证范围。',
       items: [
         {

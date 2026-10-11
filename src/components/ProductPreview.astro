@@ -26,6 +26,7 @@ const loop = content[lang].landing.workforce.loop;
         </div>
         <span class="rounded-full border border-ink-600 px-3 py-1 text-sm text-fog-400">{workforce.status}</span>
       </header>
+      <p data-refund-example-boundary class="border-b border-ink-700 bg-ink-900 px-4 py-3 text-sm leading-7 text-fog-400 sm:px-6">{workforce.boundary}</p>
 
       <div class="min-w-0 p-4 sm:p-6">
         <p class="text-sm text-fog-400">{workforce.requestLabel}</p>
@@ -77,7 +78,6 @@ const loop = content[lang].landing.workforce.loop;
           <p class="mt-4 font-medium text-fog-100">{workforce.decision}</p>
         </section>
       </div>
-      <p data-refund-example-boundary class="border-t border-ink-700 bg-ink-900 px-4 py-4 text-sm leading-7 text-fog-400 sm:px-6">{workforce.boundary}</p>
     </section>
   ) : (
   <div class="grid min-h-[390px] overflow-hidden rounded-xl border border-ink-700 bg-ink-850 sm:grid-cols-[165px_1fr]">

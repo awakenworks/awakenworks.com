@@ -6,6 +6,7 @@ import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
 import ProductMark from './ProductMark.astro';
 import ProductShowcase from './ProductShowcase.astro';
+import AdoptionQuestions from './AdoptionQuestions.astro';
 import { ui } from '../i18n/ui';
 
 interface Props {
@@ -93,12 +94,13 @@ const businessHref = localePath(lang, t.landing.workforce.ctaSecondary.href);
     lang={lang}
     product="workforce"
     compact
-    caption={ui[lang].landing.workforceCaption}
     eyebrow={home.workflow.eyebrow}
     title={home.workflow.title}
     body={home.workflow.body}
     concept={{ label: t.landing.workforce.ctaDocs.label, href: localePath(lang, t.landing.workforce.ctaDocs.href) }}
   />
+
+  <AdoptionQuestions lang={lang} />
 
   <section id="home-cases" class="scroll-mt-16 border-b border-ink-800 bg-ink-950">
     <div class="mx-auto max-w-6xl px-6 py-10 sm:py-14">
@@ -132,7 +134,7 @@ const businessHref = localePath(lang, t.landing.workforce.ctaSecondary.href);
         <a href={businessHref} data-awaken-event="business_job_evaluation_selected" data-awaken-event-location="home-closing" data-awaken-event-product="workforce" data-awaken-event-destination="enterprise" class="rounded-xl bg-accent-500 px-6 py-3 font-medium text-onaccent transition hover:bg-accent-400">{home.cta.primary}</a>
         <a href={agentsDocsHref} data-awaken-event="developer_evaluation_selected" data-awaken-event-location="home-closing" data-awaken-event-product="agents" data-awaken-event-destination="quickstart" class="rounded-xl border border-ink-600 px-6 py-3 font-medium text-fog-100 transition hover:border-fog-500">{home.cta.secondary}</a>
       </div>
-      <a href={localePath(lang, '/enterprise#enterprise-questions')} data-awaken-event="enterprise_intent_selected" data-awaken-event-location="home-questions" data-awaken-event-product="unselected" data-awaken-event-destination="adoption-questions" class="mt-5 inline-flex text-sm text-fog-400 underline underline-offset-4">{home.cta.questions}</a>
+      <a href="#enterprise-questions" data-awaken-event="enterprise_intent_selected" data-awaken-event-location="home-questions" data-awaken-event-product="unselected" data-awaken-event-destination="adoption-questions" class="mt-5 inline-flex text-sm text-fog-400 underline underline-offset-4">{home.cta.questions}</a>
     </div>
   </section>
 </main>

@@ -6,6 +6,7 @@ import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
 import ProductMark from './ProductMark.astro';
 import ProductShowcase from './ProductShowcase.astro';
+import AdoptionQuestions from './AdoptionQuestions.astro';
 import { ui } from '../i18n/ui';
 
 interface Props {
@@ -51,7 +52,6 @@ const copy = ui[lang].landing;
   <ProductShowcase
     lang={lang}
     product="workforce"
-    caption={copy.workforceCaption}
     eyebrow={o.loop.eyebrow}
     title={o.loop.title}
     body={o.loop.body}
@@ -94,6 +94,8 @@ const copy = ui[lang].landing;
       </div>
     </div>
   </section>
+
+  <AdoptionQuestions lang={lang} />
 
   <section class="relative overflow-hidden border-t border-ink-800">
     <div class="grid-backdrop absolute inset-0"></div>

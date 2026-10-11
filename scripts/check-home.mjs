@@ -708,6 +708,7 @@ for (const rule of rules) {
     'id="home-hero"',
     'id="home-products"',
     'id="workforce-preview"',
+    'id="enterprise-questions"',
     'id="home-cases"',
     'id="home-cta"',
   ], 'home must move from the primary promise through product purposes, the shared example, references, and contact');
@@ -742,6 +743,10 @@ for (const rule of rules) {
   // -> no repeated value section. Width and JS cases live in the browser tests.
   rejectPattern(rule.path, /id="home-adoption"|id="home-value"|data-home-adoption=|data-home-value=/, 'retired overlapping home sections must stay removed');
   requireOccurrenceCount(rule.path, 'data-product-role', 2, 'every product card must retain one visible role');
+  // H-Q: questions about access, preparation, connections and fees -> native
+  // answers on this page, using the same owner as Enterprise, before references.
+  requireOccurrenceCount(rule.path, 'data-adoption-question=', 4, 'home must expose the four shared adoption answers');
+  requirePattern(rule.path, /href="#enterprise-questions"[^>]*data-awaken-event-location="home-questions"/, 'home questions must reach its own shared answers');
   requireOccurrenceCount(rule.path, 'data-awaken-event-location="home-hero"', 2, 'both existing home hero intents must identify their placement without adding a third action');
   requireOccurrenceCount(rule.path, 'data-awaken-event-location="home-closing"', 2, 'both existing closing intents must identify their placement without adding another action');
   requireOccurrenceCount(rule.path, 'data-awaken-event-location="header"', 2, 'desktop GitHub and Quickstart exits must identify their placement');
@@ -783,7 +788,16 @@ for (const path of [resolve(root, 'dist/index.html'), resolve(root, 'dist/zh/ind
 }
 
 requirePattern(resolve(root, 'src/layouts/Base.astro'), /import \{ captureAttribution \} from '\.\.\/lib\/attribution\.mjs'[\s\S]*captureAttribution\(\)/, 'the shared layout must capture attribution through the canonical module');
-requireOrderedText(homeSourcePath, ['id="home-hero"', 'id="home-products"', '<ProductShowcase', 'id="home-cases"'], 'source must show the existing product catalog before the shared example and references');
+requireOrderedText(homeSourcePath, ['id="home-hero"', 'id="home-products"', '<ProductShowcase', '<AdoptionQuestions', 'id="home-cases"'], 'source must show product purposes, the shared example and answers before technical references');
+const adoptionQuestionsSourcePath = resolve(root, 'src/components/AdoptionQuestions.astro');
+// Consolidation rule Q1: Home/Workforce/Enterprise need the same answers -> extract the
+// existing renderer once; reuse enterprise.questions, with no copied FAQ model.
+requirePattern(adoptionQuestionsSourcePath, /content\[lang\]\.enterprise\.questions/, 'shared questions must retain their existing copy owner');
+requireOccurrenceCount(adoptionQuestionsSourcePath, 'data-adoption-question=', 1, 'the shared renderer must own the one question template');
+for (const path of [homeSourcePath, resolve(root, 'src/components/EnterpriseLanding.astro'), resolve(root, 'src/components/WorkforceLanding.astro')]) {
+  requireOccurrenceCount(path, '<AdoptionQuestions lang={lang}', 1, 'each page must project the shared questions once');
+  rejectPattern(path, /questions\.items\.map|data-adoption-question=/, 'page components must not recreate the shared FAQ renderer');
+}
 rejectPattern(homeSourcePath, /id="home-work"|id="home-paths"|id="home-scenarios"|data-scenario-card/, 'source must not restore overlapping homepage choosers');
 requireOccurrenceCount(homeSourcePath, 'data-awaken-event-location="home-hero"', 2, 'home source must measure the existing two hero intents without adding another action');
 requireOccurrenceCount(homeSourcePath, 'data-awaken-event-location="home-closing"', 2, 'home source must measure the existing two closing intents without adding another action');
@@ -985,10 +999,10 @@ for (const rule of [
 for (const rule of [
   { path: resolve(root, 'dist/agents/index.html'), id: 'platform-preview', label: 'Captured from the local Awaken v1.0.0-dev Console at revision' },
   { path: resolve(root, 'dist/objects/index.html'), id: 'objects-preview', label: 'Product model preview · example content' },
-  { path: resolve(root, 'dist/workforce/index.html'), id: 'workforce-preview', label: 'Workflow illustration · fictional records' },
+  { path: resolve(root, 'dist/workforce/index.html'), id: 'workforce-preview', label: 'Illustration using fictional records' },
   { path: resolve(root, 'dist/zh/agents/index.html'), id: 'platform-preview', label: '截图来自 Awaken v1.0.0-dev revision' },
   { path: resolve(root, 'dist/zh/objects/index.html'), id: 'objects-preview', label: '产品模型预览 · 示例内容' },
-  { path: resolve(root, 'dist/zh/workforce/index.html'), id: 'workforce-preview', label: '工作流程示意 · 虚构记录' },
+  { path: resolve(root, 'dist/zh/workforce/index.html'), id: 'workforce-preview', label: '流程示意，使用虚构记录' },
 ]) {
   requirePattern(rule.path, new RegExp(`id="${rule.id}"`), 'each product must expose one identifiable product preview');
   requirePattern(rule.path, new RegExp(rule.label), 'each product preview must disclose its capture or illustration kind');
@@ -1088,6 +1102,7 @@ for (const rule of [
   requireOccurrenceCount(rule.path, 'data-workforce-role', 3, 'Workforce example must distinguish AI, the approving person and the source systems');
   requireOccurrenceCount(rule.path, 'data-workforce-acceptance-preview', 1, 'Workforce preview must show the formal-deliverable acceptance boundary');
   requireOccurrenceCount(rule.path, 'data-workforce-stage', 4, 'Workforce must reuse all four content-owned refund stages');
+  requireOccurrenceCount(rule.path, 'data-adoption-question=', 4, 'Workforce must reuse the shared adoption answers before contact');
   requireOccurrenceCount(rule.path, 'data-workforce-capability-card', 3, 'Workforce must name two Workforce capability groups and the Agents execution dependency');
   requireOccurrenceCount(rule.path, 'data-workforce-composition-path', 1, 'Workforce must show one composed path without a second architecture');
   for (const product of ['Awaken Agents', 'Objects', 'Awaken Workforce']) {
@@ -1141,6 +1156,10 @@ for (const [prefix, boundary] of [['', 'Customer validation of this refund scena
   for (const route of ['/index.html', '/workforce/index.html']) {
     const path = resolve(root, `dist${prefix}${route}`);
     requireOccurrenceCount(path, 'data-refund-example-boundary', 1, 'each story must disclose its research boundary');
+    // R5 first look -> qualification precedes the steps and illustrative result;
+    // R6 finished reading -> one native, scenario-preserving evaluation exit.
+    requireOrderedText(path, ['data-refund-example-boundary', 'data-workforce-outcome-path', 'data-workforce-acceptance-preview'], 'illustration scope must appear before the steps and result');
+    requirePattern(path, new RegExp(`href="${prefix}/enterprise\\?product=workforce(?:&amp;|&#38;|&)scenario=customer-exception-refund#apply"[^>]*data-awaken-event="business_job_evaluation_selected"[^>]*data-awaken-event-location="workforce-example"`), 'the story must lead to the one context-preserving evaluation form');
     requirePattern(path, new RegExp(boundary), 'refund example must remain research, not customer acceptance');
     requireOccurrenceCount(path, 'data-workforce-role', 3, 'the story must state AI, human and system responsibilities');
     requireOccurrenceCount(path, 'data-refund-result-record', 3, 'completion must explain all three required result records');
@@ -1150,6 +1169,7 @@ for (const [prefix, boundary] of [['', 'Customer validation of this refund scena
   }
 }
 requirePattern(resolve(root, 'src/components/ProductPreview.astro'), /loop\.stages\.map/, 'one existing content owner must supply the stage renderer');
+requirePattern(resolve(root, 'src/components/ProductShowcase.astro'), /content\[lang\]\.landing\.workforce\.ctaSecondary\.href/, 'the example action must reuse the existing scenario-aware evaluation destination');
 rejectPattern(resolve(root, 'src/components/WorkforceLanding.astro'), /loop\.stages\.map|workforce-how-it-works/, 'Workforce must not duplicate the shared stage renderer');
 if (/\bpath\s*:|"path"\s*:|\bnavigation\s*:|"navigation"\s*:/.test(modelPreviewCopy)) failures.push('preview copy must not retain its parallel phase or navigation catalog');
 
@@ -1338,27 +1358,25 @@ for (const path of [
   );
 }
 
-// Cause/effect design for public evidence:
-// C1 moving product main can make a claim unrepeatable; C2 a source check can
-// be mistaken for a live deployment; C3 a local reference build can be mistaken
-// for customer acceptance. E1 expose the exact registry-owned source revision
-// and verification date; E2 define three increasing evidence thresholds; E3
-// keep each case's narrower limitation. Decision table: pin + date + three
-// levels + disclaimer -> accept; floating source or collapsed levels -> reject.
+// Reference-index consolidation design:
+// C1 index-level documentation pins and evidence lessons overlap Docs and the
+// application detail; C2 reference apps can be mistaken for customer results.
+// E1 index owns three recognizable apps and one qualification, not a second
+// evidence hub; E2 each detail still owns application source, availability and
+// reproduction, verified by the case/source rules below and browser asset tests.
+// R1 index -> E1; R2 inspect a case -> E2; R3 customer inference -> reject.
 for (const rule of [
-  { path: resolve(root, 'dist/cases/index.html'), disclaimer: 'do not represent customer adoption or endorsement', quickstart: '/docs/agents/get-started' },
-  { path: resolve(root, 'dist/zh/cases/index.html'), disclaimer: '不代表客户采用或背书', quickstart: '/zh/docs/agents/get-started' },
+  { path: resolve(root, 'dist/cases/index.html'), disclaimer: 'do not represent customer adoption or endorsement' },
+  { path: resolve(root, 'dist/zh/cases/index.html'), disclaimer: '不代表客户采用或背书' },
 ]) {
-  requireOrderedText(rule.path, ['id="reference-hero"', 'id="reference-builds"', 'id="reference-source"'], 'reference-build index must show the applications before the documentation baseline');
+  requireOrderedText(rule.path, ['id="reference-hero"', 'id="reference-builds"'], 'reference-build index must move from app purpose to the reference catalog');
   requireOccurrenceCount(rule.path, 'data-reference-disclaimer', 1, 'reference-build index must disclose its non-customer boundary once');
   requirePattern(rule.path, new RegExp(rule.disclaimer), 'reference-build index must reject customer-adoption inference');
-  requirePattern(rule.path, /50d5035c68456c9106626f748cf4c169c2057beb/, 'reference-build index must expose the registry-owned Awaken source revision');
-  requirePattern(rule.path, /2026-08-31/, 'reference-build index must expose when product claims were checked');
-  requirePattern(rule.path, new RegExp(`href="${rule.quickstart}"`), 'reference evidence must lead to the matching localized quickstart');
-  requireOccurrenceCount(rule.path, 'data-evidence-source-revision', 1, 'reference evidence must link the exact public source revision once');
-  requireOccurrenceCount(rule.path, 'data-evidence-standard', 3, 'reference evidence must distinguish source checks, external reproduction, and external acceptance');
+  requirePattern(rule.path, /Reference applications built with Awaken Agents|基于 Awaken Agents 构建的参考应用/, 'references must identify the Agents product instead of implying more products');
+  rejectPattern(rule.path, /id="reference-source"|data-evidence-source-revision|data-evidence-standard|Documentation source baseline|技术文档源码基线/, 'reference index must not retain the redundant evidence tutorial');
   requireOccurrenceCount(rule.path, 'data-case-index=', 3, 'reference-build index must expose exactly three product shapes');
 }
+rejectPattern(resolve(root, 'src/i18n/ui.ts'), /sourceEvidence:/, 'removed reference-index evidence copy must not remain as an unused parallel catalog');
 
 for (const rule of [
   { path: resolve(root, 'dist/docs/index.html'), architectureHref: '/docs/agents/concepts/architecture', star: 'Star on GitHub' },

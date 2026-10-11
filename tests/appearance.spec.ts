@@ -351,6 +351,11 @@ for (const lang of ["en", "zh"]) {
 // V3 fictional refund + current availability -> preserve illustration/preview
 // scope; V4 unsupported economic claims -> reject. These tests cover website
 // reading/navigation, not Workforce execution or observed customer ROI.
+// V6 business landing + access/setup/fee question -> the same four native
+// answers and keyboard disclosure, including when JavaScript is absent.
+// V5 reference index + technical provenance already owned by Docs/detail ->
+// three apps, one non-customer label and no parallel evidence tutorial; a
+// published app still reaches its own fixed source baseline and archive.
 for (const lang of ['en', 'zh'] as const) {
   for (const width of [390, 1280]) {
     for (const javaScriptEnabled of [true, false]) {
@@ -392,6 +397,24 @@ for (const lang of ['en', 'zh'] as const) {
           await page.goto(`${base}/workforce`);
           await expect(page.locator('#workforce-preview')).toContainText(lang === 'zh' ? '虚构记录' : 'fictional records');
           await expect(page.locator('#workforce-hero')).toContainText(lang === 'zh' ? '需申请预览' : 'Preview access by request');
+          await expect(page.locator('[data-adoption-question]')).toHaveCount(4);
+          const feeQuestion = page.locator('[data-adoption-question=cost]');
+          await feeQuestion.locator('summary').focus();
+          await page.keyboard.press('Enter');
+          await expect(feeQuestion.locator('p')).toBeVisible();
+          await expect(feeQuestion).toContainText(lang === 'zh' ? '付费实施开始前' : 'before a paid implementation starts');
+          await page.locator('#workforce-preview [data-awaken-event-location=workforce-example]').click();
+          await expect(page).toHaveURL(new RegExp(`${base}/enterprise\\?product=workforce&scenario=${REFUND_SCENARIO_KEY}#apply$`));
+          await expect(page.locator('form[data-opportunity-form]')).toHaveCount(1);
+          await page.goto(`${base}/cases`);
+          await expect(page.locator('h1')).toContainText('Awaken Agents');
+          await expect(page.locator('[data-case-index]')).toHaveCount(3);
+          await expect(page.locator('[data-reference-disclaimer]')).toHaveCount(1);
+          await expect(page.locator('#reference-source, [data-evidence-standard], [data-evidence-source-revision]')).toHaveCount(0);
+          await expect(page.locator('main')).not.toContainText(/Documentation source baseline|How to read the evidence|技术文档源码基线|怎样理解证据等级/);
+          await page.locator('[data-awaken-event=cases-open-pilot]').click();
+          await expect(page.locator('[data-case-source]')).toContainText(content[lang].cases.items[0].sourceBaseline);
+          await expect(page.locator('[data-awaken-event=case_source_download_selected]')).toHaveAttribute('href', content[lang].cases.items[0].sourceArchive!.href);
         } finally { await context.close(); }
       });
     }
@@ -416,6 +439,12 @@ for (const lang of ["en", "zh"]) {
     await page.setViewportSize({ width: lang === "zh" ? 390 : 1280, height: 900 });
     await page.goto(`${base}/`);
     const actions = page.locator("#home-hero a");
+    // P9 localized search/share descriptions -> both products, never the
+    // former Agents-only company description retained in one language.
+    for (const selector of ['meta[name=description]', 'meta[property="og:description"]']) {
+      await expect(page.locator(selector)).toHaveAttribute('content', /Agents/);
+      await expect(page.locator(selector)).toHaveAttribute('content', /Workforce/);
+    }
     await expect(actions).toHaveCount(2);
     await expect(actions.nth(0)).toHaveAttribute("href", '#workforce-preview');
     await expect(actions.nth(1)).toHaveAttribute("href", `${base}/docs/agents/get-started`);
@@ -742,6 +771,9 @@ for (const lang of ['en', 'zh']) {
 // turn this business judgment example back into a mechanical correction.
 // These are website comprehension cues and navigation contracts, not proof
 // of a deployed refund solution or observed user comprehension.
+// R7 first look -> fictional/pending scope appears before any staged result;
+// R8 finished example -> native CTA reaches the same form with product and
+// scenario retained; no-JS preserves the URL and existing Workforce default.
 for (const lang of ['en', 'zh']) {
   for (const javaScriptEnabled of [true, false]) {
     test(`${lang} refund story with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
@@ -769,6 +801,9 @@ for (const lang of ['en', 'zh']) {
           await expect(page.locator('main')).not.toContainText(/重复扣款|扣了两次|duplicate charge|charged twice/i);
           await expect(story.locator('[data-workforce-stage]').first()).toContainText(lang === 'zh' ? '物流进度' : 'shipment progress');
           await expect(story.locator('[data-refund-example-boundary]')).toContainText(lang === 'zh' ? '尚待客户验证' : 'Customer validation of this refund scenario is pending');
+          const scopeTop = await story.locator('[data-refund-example-boundary]').evaluate(node => node.getBoundingClientRect().top + scrollY);
+          const requestTop = await story.locator('blockquote').evaluate(node => node.getBoundingClientRect().top + scrollY);
+          expect(scopeTop).toBeLessThan(requestTop);
           await expect(story.locator('[data-workforce-stage]')).toHaveCount(4);
           const approval = story.locator('[data-workforce-stage]').nth(1);
           await approval.locator('summary').focus();
@@ -797,6 +832,23 @@ for (const lang of ['en', 'zh']) {
           await expect(story.locator('[data-refund-result-record]').nth(2)).toContainText(lang === 'zh' ? '工单已关闭' : 'Case closed');
           await expect(story.locator('button, input, form, [aria-disabled]')).toHaveCount(0);
           expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+          const evaluation = page.locator('#workforce-preview [data-awaken-event-location=workforce-example]');
+          if (javaScriptEnabled) {
+            await evaluation.click();
+          } else {
+            // R8 native keyboard activation does not depend on Playwright's
+            // pointer stability polling while native smooth scrolling is active.
+            // Reduced-motion pointer fallback is covered by the buyer matrix.
+            await evaluation.focus();
+            await page.keyboard.press('Enter');
+          }
+          await expect(page).toHaveURL(new RegExp(`${base}/enterprise\\?product=workforce&scenario=${REFUND_SCENARIO_KEY}#apply$`));
+          const request = page.locator('form[data-opportunity-form]');
+          await expect(request).toHaveCount(1);
+          await expect(request.locator('[name=product]')).toHaveValue('workforce');
+          await expect(request.locator('[name=job]')).toHaveValue('');
+          await expect(request.locator('[name=job]')).toHaveAttribute('placeholder', lang === 'zh' ? /延期.*退款/ : /refund.*delayed/);
+          if (javaScriptEnabled) await expect(request.locator('[name=scenario_context]')).toHaveValue(REFUND_SCENARIO_KEY);
         }
         expect(businessWrites).toEqual([]);
         if (javaScriptEnabled) {
@@ -836,7 +888,11 @@ for (const lang of ['en', 'zh']) {
 // opens the one labelled illustration; E7 next steps are visible and can be
 // collapsed/reopened by keyboard; E8 six developer guides plus one business exit,
 // with no second form. R5 wide C6 -> E5 row, narrow -> E5 order; R6 C2 -> E6;
-// R7 C7 x JS on/off -> E7; R8 C8 -> E8. Form transport already has its own
+// R7 C7 x JS on/off -> E7; R8 C8 -> E8; C9 questions before contact -> E9
+// four native answers on Home from the same content and renderer as Enterprise,
+// including quoted scope rather than invented connector or price promises.
+// R9 C9 -> E9 locally, then ordinary contact retains the same one-form path.
+// Form transport already has its own
 // success/failure suite; these cases never send a real inquiry.
 for (const lang of ['en', 'zh']) {
   for (const javaScriptEnabled of [true, false]) {
@@ -876,7 +932,7 @@ for (const lang of ['en', 'zh']) {
           await expect(page.locator('#home-value, #home-adoption')).toHaveCount(0);
           await expect(page.locator('main')).not.toContainText(/平台生命周期|具名验收人|Reference Reimplementation|责任与验收/);
           await page.locator('[data-awaken-event-location=home-questions]').click();
-          await expect(page).toHaveURL(/enterprise#enterprise-questions$/);
+          await expect(page).toHaveURL(/\/#enterprise-questions$/);
           await expect(page.locator('#enterprise-questions h2')).toBeInViewport();
           const questions = page.locator('[data-adoption-question]');
           await expect(questions).toHaveCount(4);
@@ -887,6 +943,11 @@ for (const lang of ['en', 'zh']) {
           }
           await expect(page.locator('[data-adoption-question=agent]')).toContainText(lang === 'zh' ? '可以先从想完成的工作开始' : 'You can start with the work you want done');
           await expect(page.locator('[data-adoption-question=cost]')).toContainText(lang === 'zh' ? '付费实施开始前' : 'before a paid implementation starts');
+          await expect(page.locator('[data-adoption-question=setup]')).toContainText(lang === 'zh' ? '先确认可提供的接入范围' : 'confirm the available integration scope');
+          const homeAnswers = await questions.allTextContents();
+          await page.locator('#home-cta [data-awaken-event=business_job_evaluation_selected]').click();
+          await expect(page).toHaveURL(/enterprise\?product=workforce&scenario=customer-exception-refund#apply$/);
+          expect(await page.locator('[data-adoption-question]').allTextContents()).toEqual(homeAnswers);
           const nextSteps = page.locator('[data-contact-next-steps]');
           await expect(nextSteps).toHaveAttribute('open', '');
           await expect(nextSteps.locator('ul li')).toHaveCount(3);
