@@ -343,19 +343,18 @@ for (const lang of ["en", "zh"]) {
   }
 }
 
-// Mechanism evidence decision table:
-// V1 en/zh x narrow/wide x JavaScript on/off -> the existing showcase guide
-// reaches one evidence section, and each of three mechanisms reaches the
-// correct local-language implementation/test references.
-// V2 missing proof link or wrong locale -> reject; V3 old economic/budget/
-// responsibility headline -> reject; V4 fictional refund + source references
-// -> preserve fictional/preview scope, never infer real payment or customer ROI.
-// V5 generic Agents comparison without proofHref -> preserve ordinary text.
-// These tests cover website reading/navigation; they do not execute Workforce.
+// Buyer-facing explanation decision table:
+// V1 en/zh x narrow/wide x JavaScript on/off -> ordinary docs navigation,
+// existing capability cards explain required results, separate permissions and
+// pending work; no separate audit section or implementation/test copy.
+// V2 technical docs -> retain named source/test references under their owners.
+// V3 fictional refund + current availability -> preserve illustration/preview
+// scope; V4 unsupported economic claims -> reject. These tests cover website
+// reading/navigation, not Workforce execution or observed customer ROI.
 for (const lang of ['en', 'zh'] as const) {
   for (const width of [390, 1280]) {
     for (const javaScriptEnabled of [true, false]) {
-      test(`${lang} implementation evidence at ${width}px with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
+      test(`${lang} buyer-facing explanation at ${width}px with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
         const context = await browser.newContext({ javaScriptEnabled, viewport: { width, height: 900 }, reducedMotion: 'reduce' });
         try {
           await context.route('https://cloud.umami.is/**', route => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' }));
@@ -364,26 +363,28 @@ for (const lang of ['en', 'zh'] as const) {
           const base = lang === 'zh' ? '/zh' : '';
           await page.goto(`${base}/`);
           const showcaseGuide = page.locator('#workforce-preview [data-product-guide]');
-          await expect(showcaseGuide).toHaveAttribute('href', `${base}/workforce#workforce-evidence`);
+          await expect(showcaseGuide).toHaveAttribute('href', `${base}/docs/workforce`);
           await showcaseGuide.click();
-          const evidence = page.locator('#workforce-evidence');
-          await expect(evidence).toBeInViewport();
-          await expect(evidence.locator('[data-capability-evidence-link]')).toHaveCount(3);
-          await expect(evidence).not.toContainText(/Less manual coordination|减少人工交接与催办|收益可验证|成本可预测|责任可追溯/i);
-          await expect(evidence).toContainText(lang === 'zh' ? '必需交付物缺失' : 'Missing required outputs');
-          await expect(evidence).toContainText(lang === 'zh' ? '不会自动授予业务数据访问权' : 'does not grant access to business data');
-          await expect(evidence).toContainText(lang === 'zh' ? '确认已看到不会解除调度暂停' : 'Acknowledgement keeps the scheduling hold');
+          await expect(page).toHaveURL(new RegExp(`${base}/docs/workforce/?$`));
+          for (const route of ['/', '/workforce']) {
+            await page.goto(`${base}${route}`);
+            await expect(page.locator('#workforce-evidence, [data-capability-evidence-link]')).toHaveCount(0);
+            await expect(page.locator('main')).not.toContainText(/Implementation mechanisms|Implemented behavior|已有实现机制|实现行为|查看已有实现机制|收益可验证|成本可预测|责任可追溯/i);
+            await expect(page.locator('#workforce-preview [data-product-guide]')).toHaveAttribute('href', `${base}/docs/workforce`);
+          }
+          const capabilities = page.locator('#workforce-capabilities');
+          await expect(capabilities.locator('[data-workforce-capability-card]')).toHaveCount(3);
+          await expect(capabilities).toContainText(lang === 'zh' ? '缺少资料、批准或约定结果' : 'pending decisions and unresolved exceptions');
+          await expect(capabilities).toContainText(lang === 'zh' ? '读取和变更分别授权' : 'Reading data and changing it require separate permissions');
+          await expect(capabilities).toContainText(lang === 'zh' ? '重要操作按配置的审批要求处理' : 'configured approvals apply to important operations');
           expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-          await evidence.screenshot({ path: `test-results/evidence-workforce-${lang}-${width}-${javaScriptEnabled}.png` });
-          for (const [index, route, testName] of [
-            [0, '/docs/workforce/concepts/issue-based-workflows', 'output_projection_separates_business_values_from_settled_resources'],
-            [1, '/docs/objects/concepts/permissions-resources', 'agent_tools_complete_submission_and_reauthorize_content_reads'],
-            [2, '/docs/workforce/operating/attention-recovery', 'only_a_resolved_signal_drops_the_overlay_not_an_acknowledged_one'],
+          await capabilities.screenshot({ path: `test-results/capabilities-workforce-${lang}-${width}-${javaScriptEnabled}.png` });
+          for (const [route, testName] of [
+            ['/docs/workforce/concepts/issue-based-workflows', 'output_projection_separates_business_values_from_settled_resources'],
+            ['/docs/objects/concepts/permissions-resources', 'agent_tools_complete_submission_and_reauthorize_content_reads'],
+            ['/docs/workforce/operating/attention-recovery', 'only_a_resolved_signal_drops_the_overlay_not_an_acknowledged_one'],
           ] as const) {
-            await page.goto(`${base}/workforce#workforce-evidence`);
-            const link = page.locator('#workforce-evidence [data-capability-evidence-link]').nth(index);
-            await expect(link).toHaveAttribute('href', `${base}${route}`);
-            await link.click();
+            await page.goto(`${base}${route}`);
             await expect(page).toHaveURL(new RegExp(`${base}${route}/?$`));
             await expect(page.locator('.prose')).toContainText(testName);
             expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -391,8 +392,6 @@ for (const lang of ['en', 'zh'] as const) {
           await page.goto(`${base}/workforce`);
           await expect(page.locator('#workforce-preview')).toContainText(lang === 'zh' ? '虚构记录' : 'fictional records');
           await expect(page.locator('#workforce-hero')).toContainText(lang === 'zh' ? '需申请预览' : 'Preview access by request');
-          await page.goto(`${base}/agents`);
-          await expect(page.locator('[data-capability-evidence-link]')).toHaveCount(0);
         } finally { await context.close(); }
       });
     }

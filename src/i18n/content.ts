@@ -646,13 +646,13 @@ export const content = {
             {
               name: "Automation & Workflow",
               role: "Keep work moving",
-              body: "Start work when a request arrives or a schedule is due. Retain progress while information or approval is missing, then continue.",
+              body: "Start work from a request or schedule. Keep missing records, pending decisions and unresolved exceptions visible; completion depends on the required results.",
               proof: "Trigger · wait · continue · review"
             },
             {
               name: "Business Data & Actions (Objects)",
               role: "Connect records and allowed actions",
-              body: "Give AI the order, shipment, payment and policy information it is allowed to use, together with explicitly permitted operations.",
+              body: "Connect the records AI is allowed to read and the operations it may request. Reading data and changing it require separate permissions; configured approvals apply to important operations.",
               proof: "Records · relationships · permissions · system results"
             },
             {
@@ -687,38 +687,6 @@ export const content = {
             }
           ]
         },
-        advantage: {
-          eyebrow: "Implementation mechanisms",
-          title: "Check delivery requirements, access and exceptions.",
-          body: "These mechanisms have corresponding implementations and tests. The linked guides explain their conditions and boundaries.",
-          commonLabel: "Condition",
-          awakenLabel: "Implemented behavior",
-          proofLabel: "Guide",
-          items: [
-            {
-              title: "Check required deliverables",
-              common: "The workflow declares the outputs required for completion.",
-              awaken: "Missing required outputs prevent the completion check from passing. A finished Agent task cannot substitute for those outputs.",
-              proof: "Delivery and completion checks",
-              proofHref: "/docs/workforce/concepts/issue-based-workflows",
-            },
-            {
-              title: "Authorize reads and changes",
-              common: "An Agent requests access to a business record or a declared operation.",
-              awaken: "Resource reads and changes use their own access checks. Permission to run a tool does not grant access to business data.",
-              proof: "Resource access checks",
-              proofHref: "/docs/objects/concepts/permissions-resources",
-            },
-            {
-              title: "Keep unresolved exceptions visible",
-              common: "An exception on open work is acknowledged while someone investigates.",
-              awaken: "Acknowledgement keeps the scheduling hold in place. Resolving the cause clears that hold without rewriting the business state.",
-              proof: "Attention and recovery",
-              proofHref: "/docs/workforce/operating/attention-recovery",
-            }
-          ]
-        },
-
       },
     },
   },
@@ -1329,13 +1297,13 @@ export const content = {
             {
               name: "自动触发与流程推进",
               role: "让工作持续推进",
-              body: "收到请求或到达约定时间时启动工作。缺资料或需要批准时保留进度，条件满足后继续。",
+              body: "收到请求或到达约定时间时启动工作。缺少资料、批准或约定结果时，保留进度和待处理事项，齐备后再检查是否完成。",
               proof: "触发 · 等待 · 继续 · 检查"
             },
             {
               name: "业务数据与受控操作（Objects）",
               role: "连接资料和允许的操作",
-              body: "把 AI 可以使用的订单、物流、付款与规则资料连起来，并明确允许它执行哪些操作。",
+              body: "连接 AI 获准读取的业务资料与可执行操作。读取和变更分别授权，重要操作按配置的审批要求处理。",
               proof: "记录 · 关系 · 权限 · 系统结果"
             },
             {
@@ -1370,38 +1338,6 @@ export const content = {
             }
           ]
         },
-        advantage: {
-          eyebrow: "已有实现机制",
-          title: "检查交付条件、访问权限与异常处理。",
-          body: "这些机制有对应实现与测试。可以通过下列指南检查它们的使用条件和边界。",
-          commonLabel: "检查条件",
-          awakenLabel: "实现行为",
-          proofLabel: "指南",
-          items: [
-            {
-              title: "检查必需交付物",
-              common: "流程声明完成时必须具备的交付物。",
-              awaken: "必需交付物缺失时，完成检查不通过。Agent 任务结束不能替代这些交付物。",
-              proof: "交付物与完成检查",
-              proofHref: "/docs/workforce/concepts/issue-based-workflows",
-            },
-            {
-              title: "分别授权读取与变更",
-              common: "Agent 请求读取业务记录或执行已声明操作。",
-              awaken: "业务数据的读取与变更经过各自的访问检查。允许运行工具，不会自动授予业务数据访问权。",
-              proof: "业务数据访问检查",
-              proofHref: "/docs/objects/concepts/permissions-resources",
-            },
-            {
-              title: "保留尚未处理的异常",
-              common: "未完成工作的负责人确认已看到异常，并开始调查。",
-              awaken: "确认已看到不会解除调度暂停。处理原因并解除异常后，工作保留原有业务状态。",
-              proof: "异常处理与恢复",
-              proofHref: "/docs/workforce/operating/attention-recovery",
-            }
-          ]
-        },
-
       },
     },
   },

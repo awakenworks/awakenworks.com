@@ -4,7 +4,6 @@ interface Item {
   common: string;
   awaken: string;
   proof: string;
-  proofHref?: string;
 }
 
 interface Props {
@@ -91,9 +90,7 @@ const c = tones[tone];
               <div class="mt-5 flex items-start gap-2.5 border-t border-ink-700/80 pt-4">
                 <span class={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${c.dot}`} />
                 <p class="min-w-0 break-words font-mono text-xs leading-5 text-fog-500">
-                  <span class="text-fog-400">{proofLabel}:</span> {item.proofHref
-                    ? <a data-capability-evidence-link href={item.proofHref} class="text-fog-200 underline decoration-fog-500 underline-offset-4 hover:text-fog-100">{item.proof}</a>
-                    : item.proof}
+                  <span class="text-fog-400">{proofLabel}:</span> {item.proof}
                 </p>
               </div>
             </div>

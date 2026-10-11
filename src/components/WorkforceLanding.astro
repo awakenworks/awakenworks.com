@@ -6,7 +6,6 @@ import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
 import ProductMark from './ProductMark.astro';
 import ProductShowcase from './ProductShowcase.astro';
-import AdvantageSection from './AdvantageSection.astro';
 import { ui } from '../i18n/ui';
 
 interface Props {
@@ -56,7 +55,7 @@ const copy = ui[lang].landing;
     eyebrow={o.loop.eyebrow}
     title={o.loop.title}
     body={o.loop.body}
-    concept={{ label: copy.workforceEvidence, href: localePath(lang, '/workforce#workforce-evidence') }}
+    concept={{ label: o.ctaDocs.label, href: localePath(lang, o.ctaDocs.href) }}
   />
 
   <section id="workforce-capabilities" class="border-t border-ink-800 bg-ink-950">
@@ -95,18 +94,6 @@ const copy = ui[lang].landing;
       </div>
     </div>
   </section>
-
-  <AdvantageSection
-    id="workforce-evidence"
-    eyebrow={o.advantage.eyebrow}
-    title={o.advantage.title}
-    body={o.advantage.body}
-    commonLabel={o.advantage.commonLabel}
-    awakenLabel={o.advantage.awakenLabel}
-    proofLabel={o.advantage.proofLabel}
-    items={o.advantage.items.map((item) => ({ ...item, proofHref: localePath(lang, item.proofHref) }))}
-    tone="rust"
-  />
 
   <section class="relative overflow-hidden border-t border-ink-800">
     <div class="grid-backdrop absolute inset-0"></div>
